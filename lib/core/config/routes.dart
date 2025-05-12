@@ -4,8 +4,8 @@ import 'package:musculo_app/modules/auth/sign_in/screen/sign_in_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/bottom_navigation_bar_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/congratulation_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/training_screen.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/screen/traning_preview_screen.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/screen/filter_screen.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/traning_preview_screen.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/filter_screen.dart';
 import 'package:musculo_app/modules/onboarding/get_started.dart';
 import 'package:musculo_app/modules/onboarding/splash_screen.dart';
 

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:musculo_app/components/logo_app_bar.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/home_screen.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/screen/discover_screen.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/discover_screen.dart';
 
 class BottomNavigationScreen extends StatefulWidget {
   const BottomNavigationScreen({super.key});
