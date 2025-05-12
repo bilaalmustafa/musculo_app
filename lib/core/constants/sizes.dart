@@ -4,6 +4,7 @@ class Sizes {
   static const double s1 = 1.0;
   static const double s1_5 = 1.5;
   static const double s2 = 2.0;
+  static const double s3 = 3.0;
   static const double s4 = 4.0;
   static const double s5 = 5.0;
 
@@ -14,6 +15,7 @@ class Sizes {
   static const double s12 = 12.0;
   static const double s13 = 13.0;
   static const double s14 = 14.0;
+  static const double s15 = 15.0;
   static const double s16 = 16.0;
   static const double s17 = 17.0;
   static const double s18 = 18.0;
@@ -41,6 +43,9 @@ class Sizes {
   static const double s120 = 120.0;
   static const double s132 = 132.0;
   static const double s140 = 140.0;
+  static const double s145 = 145.0;
+  static const double s150 = 150.0;
+
   static const double s160 = 160.0;
   static const double s172 = 172.0;
   static const double s180 = 180.0;

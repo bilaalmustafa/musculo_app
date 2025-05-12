@@ -67,7 +67,7 @@ class _CongratulationScreenState extends State<CongratulationScreen> {
                   textColor: ConstColors.black,
                   onTap: () {
                     showModalBottomSheet(
-                      barrierColor: ConstColors.black.withOpacity(0.8),
+                      barrierColor: ConstColors.black.withValues(alpha: 0.8),
                       constraints: BoxConstraints(maxHeight: 300),
                       backgroundColor: ConstColors.white,
                       context: context,
@@ -89,7 +89,9 @@ class _CongratulationScreenState extends State<CongratulationScreen> {
                         onTap: () {
                           showModalBottomSheet(
                             isScrollControlled: true,
-                            barrierColor: ConstColors.black.withOpacity(0.8),
+                            barrierColor: ConstColors.black.withValues(
+                              alpha: 0.8,
+                            ),
                             constraints: BoxConstraints(maxHeight: 500),
                             backgroundColor: ConstColors.white,
                             context: context,
