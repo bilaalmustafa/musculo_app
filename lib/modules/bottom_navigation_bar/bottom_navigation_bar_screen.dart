@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:musculo_app/components/logo_app_bar.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/home_screens/home_screen.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/home_screen.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/screen/discover_screen.dart';
 
 class BottomNavigationScreen extends StatefulWidget {
   const BottomNavigationScreen({super.key});
@@ -10,13 +12,22 @@ class BottomNavigationScreen extends StatefulWidget {
 }
 
 class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
-  final int _selectedIndex = 0;
-  final List<Widget> _screens = [HomeScreen()];
+  int _selectedIndex = 0;
+  final List<Widget> _screens = [HomeScreen(), DiscoverScreen()];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
+      // appBar:
+      //     _selectedIndex == 0
+      //         ? null
+      //         : LogoAppBar(
+      //           selectedindex: tabselect,
+      //           onSelected:
+      //               (value) => setState(() {
+      //                 tabselect = value;
+      //               }),
+      //         ),
       body: _screens[_selectedIndex],
       backgroundColor: ConstColors.white,
       bottomNavigationBar: BottomNavigationBar(
@@ -39,6 +50,11 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
             label: 'Profile',
           ),
         ],
+        currentIndex: _selectedIndex,
+        onTap:
+            (value) => setState(() {
+              _selectedIndex = value;
+            }),
       ),
     );
   }

@@ -7,11 +7,12 @@ import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/home_screens/widgets/carasoul_container.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/home_screens/widgets/custom_chip.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/home_screens/widgets/item_container.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/home_screens/widgets/video_item.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/widgets/home_app_bar.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/carasoul_container.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/custom_chip.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/item_container.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/show_bottom_sheet.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/video_item.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/component/home_app_bar.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -92,73 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         builder: (_) {
-                          return Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: Sizes.s20,
-                              vertical: Sizes.s8,
-                            ),
-                            height: 600,
-                            decoration: BoxDecoration(
-                              color: ConstColors.white,
-                              borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(32),
-                              ),
-                            ),
-
-                            child: Column(
-                              spacing: Sizes.s20,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Container(
-                                  height: 4,
-                                  width: 50,
-                                  color: ConstColors.secondary,
-                                ),
-                                PoppinsText(
-                                  text: "Choose Program",
-                                  fontSize: Sizes.s20,
-                                  fontWeight: TextWeight.semiBold,
-                                  color: ConstColors.black,
-                                ),
-                                Divider(
-                                  color: ConstColors.secondary,
-                                  thickness: 2,
-                                ),
-                                Expanded(
-                                  child: ListView.separated(
-                                    shrinkWrap: true,
-                                    itemCount: 10,
-                                    itemBuilder:
-                                        (context, index) => VideoItem(),
-                                    separatorBuilder:
-                                        (context, index) =>
-                                            SizedBox(height: 20),
-                                  ),
-                                ),
-
-                                Divider(
-                                  color: ConstColors.secondary,
-                                  thickness: 2,
-                                ),
-                                Row(
-                                  spacing: Sizes.s10,
-                                  children: [
-                                    Expanded(
-                                      child: CustomButton(
-                                        buttonText: "Back",
-                                        buttonColor: ConstColors.secondary,
-                                        textColor: ConstColors.black,
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: CustomButton(buttonText: "Start"),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: Sizes.s5),
-                              ],
-                            ),
-                          );
+                          return ShowBottomSheet();
                         },
                       );
                     },

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
+import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 
 class SharedAppBar extends StatelessWidget implements PreferredSizeWidget {
-  SharedAppBar({super.key, this.progress});
+  SharedAppBar({super.key, this.progress, this.title});
   double? progress;
-
+  String? title;
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -17,7 +19,13 @@ class SharedAppBar extends StatelessWidget implements PreferredSizeWidget {
         },
       ),
       title:
-          progress != null
+          title != null
+              ? PoppinsText(
+                text: title!,
+                fontSize: Sizes.s20,
+                fontWeight: TextWeight.semiBold,
+              )
+              : progress != null
               ? SizedBox(
                 width: 250,
                 child: LinearProgressIndicator(

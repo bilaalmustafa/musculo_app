@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:musculo_app/components/custom_button.dart';
+import 'package:musculo_app/components/share_picture.dart';
+import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 
 class SocialIconButton extends StatelessWidget {
-  const SocialIconButton({super.key, required this.imagePath, this.onTap});
-  final String imagePath;
+  const SocialIconButton({super.key, required this.imagepath, this.onTap});
+  final String imagepath;
   final VoidCallback? onTap;
   @override
   Widget build(BuildContext context) {
@@ -17,7 +20,7 @@ class SocialIconButton extends StatelessWidget {
           border: Border.all(color: ConstColors.secondary),
           borderRadius: BorderRadius.circular(Sizes.s10),
         ),
-        child: Center(child: Image.asset(imagePath, height: 25)),
+        child: Center(child:  SharePicture(imagePath: imagepath),),
       ),
     );
   }

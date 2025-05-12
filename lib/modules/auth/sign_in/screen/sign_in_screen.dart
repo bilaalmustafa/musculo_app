@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:musculo_app/components/customTextField.dart';
 import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/poppins_text.dart';
+import 'package:musculo_app/components/share_picture.dart';
 import 'package:musculo_app/components/shared_appbar.dart';
-import 'package:musculo_app/modules/auth/sign_in/widgets/social_button_row.dart';
+import 'package:musculo_app/modules/auth/sign_in/component/social_button_row.dart';
 import 'package:musculo_app/core/config/routes.dart';
 import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
@@ -29,7 +30,7 @@ class _SignInScreenState extends State<SignInScreen> {
           child: Column(
             spacing: Sizes.s20,
             children: [
-              Image.asset(Assets.monogram),
+              SharePicture(imagePath: Assets.monogram),
               PoppinsText(
                 text: "Log Into You Account",
                 fontSize: Sizes.s24,

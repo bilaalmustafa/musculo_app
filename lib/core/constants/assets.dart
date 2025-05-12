@@ -14,7 +14,16 @@ class Assets {
   static const String playbutton = "$_assets/PlayButton.png";
   static const String workout = "$_assets/workuot.png";
 
-  static const String google = "$_icons/google.png";
-  static const String apple = "$_icons/apple.png";
   static const String facebook = "$_svgs/facebook.svg";
+  static const String google = "$_svgs/google.svg";
+  static const String apple = "$_svgs/apple.svg";
+  static const String previous = "$_svgs/previous.svg";
+  static const String next = "$_svgs/next.svg";
+  static const String swap = "$_svgs/Swap.svg";
+  static const String congrate = "$_svgs/cong.svg";
+  static const String whatsapp = "$_svgs/whatsApp.svg";
+  static const String twitter = "$_svgs/x.svg";
+  static const String insta = "$_svgs/meta.svg";
+  static const String official = "$_svgs/official.svg";
+  static const String monugram = "$_svgs/monugram.svg";
 }

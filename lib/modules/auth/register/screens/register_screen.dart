@@ -10,7 +10,7 @@ import 'package:musculo_app/modules/auth/register/screens/fitness_level_screen.d
 import 'package:musculo_app/modules/auth/register/screens/gender_screen.dart';
 import 'package:musculo_app/modules/auth/register/screens/name_Screen.dart';
 import 'package:musculo_app/modules/auth/register/screens/sign_up_screen.dart';
-import 'package:musculo_app/modules/auth/register/widgets/show_dialog_box.dart';
+import 'package:musculo_app/modules/auth/register/component/show_dialog_box.dart';
 
 class RegisterScren extends StatefulWidget {
   const RegisterScren({super.key});

@@ -8,7 +8,7 @@ class ConstColors {
   static const Color secondary = Color(0xfff3f3f3);
   static const Color primaryLight = Color(0xff557484);
   static const Color primaryE7F = Color(0xffE7F4F0);
-  static const Color primary0769 = Color(0xff0769AF);
+  static const Color primary0769 = Color(0xFF82F0DD);
   static const Color transparent = Colors.transparent;
   static const Color homeBackground = Color(0xffF9FAFB);
   static const Color dividerColor = Color(0xffE6EAED);
@@ -73,7 +73,7 @@ class ConstColors {
   static const Color greyEDE = Color(0xffEFECF0);
   static const Color greyF0F0 = Color(0xffF0F0F0);
   static const Color greyF4F4 = Color(0xffF4F4F4);
-  static const Color orange = Color(0xffFF9800);
+  static const Color orange = Color(0xFFFF6600);
   static const Color green = Color(0xff8BC34A);
   static const Color green10 = Color(0x1A8BC34A);
   static const Color amber = Color(0xffDEB754);
@@ -82,6 +82,6 @@ class ConstColors {
   static const Color amberD08 = Color(0xffD08800);
 
   static const Color red = Color(0xffE01500);
-  static const Color redF52 = Color(0xffF5222D);
+  static const Color redF52 = Color(0xFFE46369);
   static const Color red10 = Color(0x1AE01500);
 }

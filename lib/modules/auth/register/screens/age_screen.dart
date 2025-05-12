@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:musculo_app/modules/auth/register/widgets/age_selection.dart';
-import 'package:musculo_app/modules/auth/register/widgets/question_text.dart';
+import 'package:musculo_app/modules/auth/register/component/age_selection.dart';
+import 'package:musculo_app/modules/auth/register/component/question_text.dart';
 import 'package:musculo_app/core/config/extensions.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 

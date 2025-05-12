@@ -3,8 +3,8 @@ import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
-import 'package:musculo_app/modules/auth/register/widgets/agreement_check.dart';
-import 'package:musculo_app/modules/auth/register/widgets/question_text.dart';
+import 'package:musculo_app/modules/auth/register/component/agreement_check.dart';
+import 'package:musculo_app/modules/auth/register/component/question_text.dart';
 
 class AgreementScreen extends StatefulWidget {
   const AgreementScreen({super.key});
