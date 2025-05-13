@@ -2,14 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:musculo_app/modules/auth/register/screens/register_screen.dart';
 import 'package:musculo_app/modules/auth/sign_in/screen/sign_in_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/bottom_navigation_bar_screen.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/feedback/screens/feedback.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/congratulation_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/training_screen.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/profile/user_profile_screens/accountinfo.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/profile/user_profile_screens/myprogramworkout.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/profile/user_profile_screens/user_profile.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/creater_screen/notification.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/creater_screen/setting.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/traning_preview_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/filter_screen.dart';
 import 'package:musculo_app/modules/onboarding/get_started.dart';
 import 'package:musculo_app/modules/onboarding/splash_screen.dart';
+
+import '../../modules/bottom_navigation_bar/profile/user_profile_screens/favorites_screen.dart';
 
 class Routes {
   static const String splash = "/";
@@ -24,6 +30,11 @@ class Routes {
   static const String programdetailscreen = "/program_detail_screen";
   static const String settingScreen = "/setting_screen";
   static const String notificationScreen = "/notification_screen";
+  static const String userProfileScreen = "/user_profile_screen";
+  static const String feedBackScreen = "/feedback_screen";
+  static const String accountInfoScreen = "/accountinfo_screen";
+  static const String myProgramWorkout = "/myprogramworkout_screen";
+  static const String favoriteScreen = "/favorites_screen";
 }
 
 class RouteGenerator {
@@ -55,6 +66,16 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const SettingScreen());
       case Routes.notificationScreen:
         return MaterialPageRoute(builder: (_) => const NotificationScreen());
+      case Routes.userProfileScreen:
+        return MaterialPageRoute(builder: (_) => const UserProfile());
+      case Routes.feedBackScreen:
+        return MaterialPageRoute(builder: (_) => const FeedbackScreen());
+      case Routes.accountInfoScreen:
+        return MaterialPageRoute(builder: (_) => const AccountinfoScreen());
+      case Routes.myProgramWorkout:
+        return MaterialPageRoute(builder: (_) => const Myprogramworkout());
+      case Routes.favoriteScreen:
+        return MaterialPageRoute(builder: (_) => const FavoritesScreen());
       default:
         return MaterialPageRoute(
           builder:

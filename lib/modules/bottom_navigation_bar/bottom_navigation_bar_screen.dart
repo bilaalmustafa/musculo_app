@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/logo_app_bar.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/feedback/screens/feedback.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/home_screen.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/profile/user_profile_screens/user_profile.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/discover_screen.dart';
 
 class BottomNavigationScreen extends StatefulWidget {
@@ -13,7 +15,12 @@ class BottomNavigationScreen extends StatefulWidget {
 
 class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   int _selectedIndex = 0;
-  final List<Widget> _screens = [HomeScreen(), DiscoverScreen()];
+  final List<Widget> _screens = [
+    HomeScreen(),
+    DiscoverScreen(),
+    FeedbackScreen(),
+    UserProfile(),
+  ];
 
   @override
   Widget build(BuildContext context) {

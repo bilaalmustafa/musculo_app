@@ -51,28 +51,30 @@ class LogoutBottomSheet extends StatelessWidget {
             Divider(height: Sizes.s1, color: ConstColors.greyE5E5),
             SizedBox(height: Sizes.s26),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              spacing: Sizes.s10,
               children: [
-                CustomButton(
-                  buttonText: 'Cancel',
-                  textColor: Colors.black,
-                  buttonColor: ConstColors.secondary,
-                  buttonWidth: Sizes.s150,
-                  buttonHeight: Sizes.s54,
-                  onTap: () {
-                    // logout logic here
-                    Navigator.pop(context);
-                  },
+                Expanded(
+                  child: CustomButton(
+                    buttonText: 'Cancel',
+                    textColor: Colors.black,
+                    buttonColor: ConstColors.secondary,
+
+                    onTap: () {
+                      // logout logic here
+                      Navigator.pop(context);
+                    },
+                  ),
                 ),
 
-                CustomButton(
-                  buttonText: 'Logout',
-                  //   buttonWidth: 184,
-                  buttonWidth: Sizes.s150,
-                  buttonHeight: Sizes.s54,
-                  onTap: () {
-                    // logout Logic here
-                  },
+                Expanded(
+                  child: CustomButton(
+                    buttonText: 'Logout',
+
+                    //   buttonWidth: 184,
+                    onTap: () {
+                      // logout Logic here
+                    },
+                  ),
                 ),
               ],
             ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
+import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 
 class CustomListTile extends StatelessWidget {
@@ -51,9 +52,9 @@ class CustomListTile extends StatelessWidget {
                 children: [
                   PoppinsText(
                     text: title,
-                    fontSize: titleFont ?? Sizes.s18,
+                    fontSize: Sizes.s16,
                     color: titleColor ?? ConstColors.black,
-                    fontWeight: titleFontweight ?? FontWeight.w600,
+                    fontWeight: TextWeight.medium,
                   ),
                   if (subtitle != null) ...[
                     SizedBox(height: Sizes.s4),

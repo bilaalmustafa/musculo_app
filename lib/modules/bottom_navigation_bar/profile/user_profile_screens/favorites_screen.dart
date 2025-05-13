@@ -1,0 +1,64 @@
+import 'package:flutter/material.dart';
+
+import '../../../../core/constants/const_colors.dart';
+import '../component/profileappbar.dart';
+import 'programes.dart';
+import 'workouts.dart';
+
+class FavoritesScreen extends StatefulWidget {
+  const FavoritesScreen({super.key});
+
+  @override
+  State<FavoritesScreen> createState() => _FavoritesScreenState();
+}
+
+class _FavoritesScreenState extends State<FavoritesScreen> {
+  final PageController _pageController = PageController();
+  int _currentPage = 0;
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: ConstColors.white,
+      appBar: ProfileAppBar(
+        appbarTitle: 'Favorites',
+        selectedindex: _currentPage,
+        onSelected: (value) {
+          setState(() {
+            _currentPage = value;
+          });
+          _pageController.animateToPage(
+            value,
+            duration: const Duration(milliseconds: 700),
+            curve: Curves.easeInOut,
+          );
+        },
+      ),
+      body: PageView(
+        controller: _pageController,
+        physics: const NeverScrollableScrollPhysics(),
+        children: [WorkOuts(), Programs(tabselect: _currentPage)],
+
+        onPageChanged: (index) {
+          setState(() {
+            _currentPage = index;
+          });
+        },
+      ),
+
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: ConstColors.black,
+        shape: const CircleBorder(),
+
+        onPressed: () {},
+        child: Icon(Icons.add, color: ConstColors.white),
+      ),
+    );
+  }
+}

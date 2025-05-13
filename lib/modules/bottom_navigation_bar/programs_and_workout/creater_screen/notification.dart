@@ -38,13 +38,14 @@ class NotificationScreen extends StatelessWidget {
               titleFont: Sizes.s15,
 
               trailing: Transform.scale(
-                scale: 0.7,
+                scale: 0.8,
                 child: Switch(
                   activeColor: ConstColors.white,
                   activeTrackColor: ConstColors.green4AD,
 
                   inactiveTrackColor: ConstColors.greyEEE,
                   inactiveThumbColor: ConstColors.white,
+
                   value: true,
 
                   onChanged: (value) {},
@@ -82,6 +83,7 @@ class NotificationScreen extends StatelessWidget {
                 scale: 0.7,
                 child: Switch(
                   activeColor: ConstColors.green10,
+
                   value: false,
                   onChanged: (value) {},
                 ),
