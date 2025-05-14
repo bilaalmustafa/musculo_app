@@ -13,6 +13,8 @@ class Assets {
   static const String discovery = "$_assets/Discovery.png";
   static const String playbutton = "$_assets/PlayButton.png";
   static const String workout = "$_assets/workuot.png";
+  static const String gpayment = "$_assets/gpayment.png";
+  static const String ellipse = "$_assets/Ellipse.png";
 
   static const String facebook = "$_svgs/facebook.svg";
   static const String google = "$_svgs/google.svg";

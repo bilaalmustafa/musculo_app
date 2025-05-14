@@ -23,7 +23,7 @@ class CustomDropdown extends StatefulWidget {
     this.backgroundColor = const Color(0xFFF9F9F9),
     this.textColor = Colors.black,
     this.iconColor = Colors.black,
-    this.padding = const EdgeInsets.symmetric(horizontal: Sizes.s20),
+    this.padding = const EdgeInsets.symmetric(horizontal: Sizes.s14),
   });
 
   @override

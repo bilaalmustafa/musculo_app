@@ -9,10 +9,14 @@ class AgreementCheck extends StatelessWidget {
     super.key,
     this.isChecked = false,
     required this.onChanged,
+    required this.title,
+    this.fontSize,
   });
 
   final bool isChecked;
   final ValueChanged onChanged;
+  final String title;
+  final double? fontSize;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -21,8 +25,8 @@ class AgreementCheck extends StatelessWidget {
         ListTile(
           contentPadding: EdgeInsets.zero,
           title: PoppinsText(
-            text: "Consequat id porta nibh venenatis cras sed. I",
-            fontSize: Sizes.s16,
+            text: title,
+            fontSize: fontSize ?? Sizes.s16,
             fontWeight: TextWeight.medium,
           ),
           leading: Checkbox(

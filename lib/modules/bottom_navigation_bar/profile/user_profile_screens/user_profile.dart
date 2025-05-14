@@ -44,27 +44,22 @@ class UserProfile extends StatelessWidget {
                           color: Colors.black,
                         ),
                       ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        // left: 0,
-                        child: Transform.translate(
-                          offset: Offset(-100, -6),
-                          child: InkWell(
-                            onTap: () {},
-                            child: Container(
-                              width: 25,
-                              height: 25,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.rectangle,
-                                borderRadius: BorderRadius.circular(4),
-                                color: Colors.black,
-                              ),
-                              child: Icon(
-                                Icons.edit,
-                                color: Colors.white,
-                                size: 20,
-                              ),
+                      Transform.translate(
+                        offset: Offset(40, 40),
+                        child: InkWell(
+                          onTap: () {},
+                          child: Container(
+                            width: 20,
+                            height: 20,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(4),
+                              color: Colors.black,
+                            ),
+                            child: Icon(
+                              Icons.edit,
+                              color: Colors.white,
+                              size: 20,
                             ),
                           ),
                         ),

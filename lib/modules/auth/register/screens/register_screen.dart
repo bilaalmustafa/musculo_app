@@ -12,6 +12,8 @@ import 'package:musculo_app/modules/auth/register/screens/name_Screen.dart';
 import 'package:musculo_app/modules/auth/register/screens/sign_up_screen.dart';
 import 'package:musculo_app/modules/auth/register/component/show_dialog_box.dart';
 
+import '../../../../core/constants/assets.dart';
+
 class RegisterScren extends StatefulWidget {
   const RegisterScren({super.key});
 
@@ -75,9 +77,13 @@ class _RegisterScrenState extends State<RegisterScren> {
             } else {
               showDialog(
                 context: context,
-                barrierColor: Colors.black.withOpacity(0.9),
+                barrierColor: Colors.black.withValues(alpha: 0.9),
                 builder: (BuildContext context) {
-                  return ShowDialogBox();
+                  return ShowDialogBox(
+                    message:
+                        "Your account is ready to use. You will be redirected to the home page in a few seconds.",
+                    bottomWidget: Image(image: AssetImage(Assets.vector)),
+                  );
                 },
               );
             }

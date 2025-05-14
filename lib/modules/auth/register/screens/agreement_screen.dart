@@ -27,10 +27,26 @@ class _AgreementScreenState extends State<AgreementScreen> {
                 "By checking the box, you agree to our terms and conditions.",
           ),
           SizedBox(height: Sizes.s20),
-          AgreementCheck(onChanged: (value) {}, isChecked: true),
-          AgreementCheck(onChanged: (value) {}),
-          AgreementCheck(onChanged: (value) {}),
-          AgreementCheck(onChanged: (value) {}),
+          AgreementCheck(
+            title: "Consequat id porta nibh venenatis cras sed. I",
+            onChanged: (value) {},
+            isChecked: true,
+          ),
+          AgreementCheck(
+            title: "Consequat id porta nibh venenatis cras sed. I",
+            onChanged: (value) {},
+            isChecked: true,
+          ),
+          AgreementCheck(
+            title: "Consequat id porta nibh venenatis cras sed. I",
+            onChanged: (value) {},
+            isChecked: true,
+          ),
+          AgreementCheck(
+            title: "Consequat id porta nibh venenatis cras sed. I",
+            onChanged: (value) {},
+            isChecked: true,
+          ),
         ],
       ),
     );

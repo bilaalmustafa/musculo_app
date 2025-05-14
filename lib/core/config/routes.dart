@@ -6,6 +6,8 @@ import 'package:musculo_app/modules/bottom_navigation_bar/feedback/screens/feedb
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/congratulation_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/training_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/creator_profile_screens/becomecreator.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/profile/creator_profile_screens/creatorinfo_screen.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/profile/creator_profile_screens/payment_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/user_profile_screens/accountinfo.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/user_profile_screens/myprogramworkout.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/user_profile_screens/user_profile.dart';
@@ -42,6 +44,8 @@ class Routes {
   // static const String programdetailscreen = "/program_detail_screen";
   static const String programDetailPageView = "/program_detail_pageview_screen";
   static const String coachProfile = "/coach_profile_screen";
+  static const String creatorInfoScreen = "/creatorinfo_screen";
+  static const String paymentScreen = "/payment_screen";
 }
 
 class RouteGenerator {
@@ -90,6 +94,10 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const ProgramDetailPageView());
       case Routes.coachProfile:
         return MaterialPageRoute(builder: (_) => const CoachProfile());
+      case Routes.creatorInfoScreen:
+        return MaterialPageRoute(builder: (_) => const CreatorinfoScreen());
+      case Routes.paymentScreen:
+        return MaterialPageRoute(builder: (_) => const PaymentScreen());
       default:
         return MaterialPageRoute(
           builder:
