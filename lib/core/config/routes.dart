@@ -5,6 +5,7 @@ import 'package:musculo_app/modules/bottom_navigation_bar/bottom_navigation_bar_
 import 'package:musculo_app/modules/bottom_navigation_bar/feedback/screens/feedback.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/congratulation_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/training_screen.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/profile/creator_profile_screens/becomecreator.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/user_profile_screens/accountinfo.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/user_profile_screens/myprogramworkout.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/user_profile_screens/user_profile.dart';
@@ -35,6 +36,7 @@ class Routes {
   static const String accountInfoScreen = "/accountinfo_screen";
   static const String myProgramWorkout = "/myprogramworkout_screen";
   static const String favoriteScreen = "/favorites_screen";
+  static const String becomeCreatorScreen = "/becomecreator_screen";
 }
 
 class RouteGenerator {
@@ -76,6 +78,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const Myprogramworkout());
       case Routes.favoriteScreen:
         return MaterialPageRoute(builder: (_) => const FavoritesScreen());
+      case Routes.becomeCreatorScreen:
+        return MaterialPageRoute(builder: (_) => const BecomecreatorScreen());
       default:
         return MaterialPageRoute(
           builder:

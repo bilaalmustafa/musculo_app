@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:musculo_app/core/constants/const_colors.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/profile/component/profileappbar.dart';
+import 'package:musculo_app/components/profileappbar.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/user_profile_screens/programes.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/user_profile_screens/workouts.dart';
 

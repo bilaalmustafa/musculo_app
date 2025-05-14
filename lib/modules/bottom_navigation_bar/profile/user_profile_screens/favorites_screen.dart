@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/const_colors.dart';
-import '../component/profileappbar.dart';
+import '../../../../components/profileappbar.dart';
 import 'programes.dart';
 import 'workouts.dart';
 

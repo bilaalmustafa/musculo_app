@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:musculo_app/components/poppins_text.dart';
+import 'package:musculo_app/core/constants/sizes.dart';
 
 class CustomDropdown extends StatefulWidget {
   final String value;
@@ -16,12 +18,12 @@ class CustomDropdown extends StatefulWidget {
     required this.value,
     required this.items,
     required this.onChanged,
-    this.height = 60,
-    this.borderRadius = 8,
+    this.height = Sizes.s60,
+    this.borderRadius = Sizes.s8,
     this.backgroundColor = const Color(0xFFF9F9F9),
     this.textColor = Colors.black,
     this.iconColor = Colors.black,
-    this.padding = const EdgeInsets.symmetric(horizontal: 20),
+    this.padding = const EdgeInsets.symmetric(horizontal: Sizes.s20),
   });
 
   @override
@@ -91,8 +93,8 @@ class _CustomDropdownState extends State<CustomDropdown> {
                 borderRadius: BorderRadius.circular(widget.borderRadius),
                 color: Colors.white,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  constraints: BoxConstraints(maxHeight: 200),
+                  padding: const EdgeInsets.symmetric(vertical: Sizes.s4),
+                  constraints: BoxConstraints(maxHeight: Sizes.s200),
                   child: ListView(
                     padding: EdgeInsets.zero,
                     shrinkWrap: true,
@@ -107,14 +109,14 @@ class _CustomDropdownState extends State<CustomDropdown> {
                               _toggleDropdown();
                             },
                             child: Container(
-                              height: 50,
+                              height: Sizes.s50,
                               padding: widget.padding,
                               alignment: Alignment.centerLeft,
                               child: Text(
                                 item,
                                 style: TextStyle(
                                   color: widget.textColor,
-                                  fontSize: 16,
+                                  fontSize: Sizes.s16,
                                 ),
                               ),
                             ),
@@ -147,10 +149,8 @@ class _CustomDropdownState extends State<CustomDropdown> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                _currentValue,
-                style: TextStyle(color: widget.textColor, fontSize: 16),
-              ),
+              PoppinsText(text: _currentValue, fontSize: Sizes.s16),
+
               Icon(Icons.keyboard_arrow_down, color: widget.iconColor),
             ],
           ),

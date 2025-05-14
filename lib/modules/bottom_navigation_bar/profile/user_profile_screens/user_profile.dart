@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/custom_button.dart';
+import 'package:musculo_app/components/logo_title_appbar.dart';
 
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/components/share_picture.dart';
@@ -20,6 +21,7 @@ class UserProfile extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         backgroundColor: ConstColors.white,
+        appBar: LogoTitleAppBar(title: 'Profile'),
 
         body: Padding(
           padding: EdgeInsets.all(16),
@@ -103,6 +105,9 @@ class UserProfile extends StatelessWidget {
               CustomButton(
                 buttonText: 'Become a Creator',
                 buttonColor: ConstColors.sky22B,
+                onTap: () {
+                  Navigator.pushNamed(context, Routes.becomeCreatorScreen);
+                },
               ),
               SizedBox(height: 5),
 
