@@ -8,6 +8,7 @@ import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/creator_list_tile.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/rating_star.dart';
 
 class ShowRatingBottomSheet extends StatefulWidget {
   const ShowRatingBottomSheet({super.key});
@@ -47,26 +48,11 @@ class _ShowRatingBottomSheetState extends State<ShowRatingBottomSheet> {
             color: ConstColors.greyA1A1,
           ),
 
-          Row(
-            spacing: Sizes.s20,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: List.generate(5, (index) {
-              return GestureDetector(
-                onTap: () {
-                  setState(() {
-                    selectedRating = index + 1;
-                  });
-                },
-                child: Icon(
-                  index < selectedRating ? Icons.star : Icons.star_border,
-                  color: ConstColors.orange,
-
-                  size: Sizes.s32,
-                ),
-              );
-            }),
-          ),
+        RatingStars( selectedRating:selectedRating ,  onRatingSelected: (newvalue){
+           setState(() {
+                                    selectedRating = newvalue;
+                                  });
+        },),
           CustomTextField(title: "review"),
           Divider(color: ConstColors.secondary, height: 2),
           Row(

@@ -26,4 +26,6 @@ class Assets {
   static const String insta = "$_svgs/meta.svg";
   static const String official = "$_svgs/official.svg";
   static const String monugram = "$_svgs/monugram.svg";
+  static const String empty = "$_svgs/empty.svg";
+  static const String profilebg = "$_svgs/profilebg.svg";
 }

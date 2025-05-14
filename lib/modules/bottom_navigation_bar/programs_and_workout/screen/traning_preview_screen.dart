@@ -40,31 +40,28 @@ class _TraningPreviewScreenState extends State<TraningPreviewScreen> {
               Positioned(
                 top: context.screenheight * 0.05,
                 right: 10,
-                child: PopupMenuButton<String>(
-                  color: ConstColors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  onSelected: (value) {
-                    print(value);
-                  },
-                  itemBuilder:
-                      (context) => [
-                        PopupMenuItem(
-                          value: 'edit',
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.favorite_border,
-                                color: ConstColors.black,
-                              ),
-                              Text('  Like workout'),
-                            ],
-                          ),
-                        ),
-                      ],
-                  icon: Icon(Icons.more_vert, color: Colors.white),
-                ),
+                child:PopupMenuButton<String>(
+      color: ConstColors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      onSelected: (value) {},
+      itemBuilder:
+          (context) => [
+            PopupMenuItem(
+              value: 'Like',
+              child: Row(
+                children: [
+                  Icon(Icons.favorite_border, color: ConstColors.black),
+                  Text('  Like workout'),
+                ],
+              ),
+            ),
+          ],
+      icon: Icon(Icons.more_vert, color: Colors.white),
+    ),
+                
+                
+                
+               
               ),
             ],
           ),

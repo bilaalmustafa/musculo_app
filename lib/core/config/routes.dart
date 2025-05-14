@@ -4,6 +4,9 @@ import 'package:musculo_app/modules/auth/sign_in/screen/sign_in_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/bottom_navigation_bar_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/congratulation_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/training_screen.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/screen/coach_profile.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/screen/tab/description_tab.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/screen/proram_detail_pageview.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/screen/traning_preview_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/screen/filter_screen.dart';
 import 'package:musculo_app/modules/onboarding/get_started.dart';
@@ -19,7 +22,9 @@ class Routes {
   static const String congrate = "/congrate_screen";
   static const String filterscreen = "/filter_screen";
   static const String traningpreviewscreen = "/training_preview_screen";
-  static const String programdetailscreen = "/program_detail_screen";
+  // static const String programdetailscreen = "/program_detail_screen";
+   static const String programDetailPageView = "/program_detail_pageview_screen";
+    static const String coachProfile = "/coach_profile_screen";
 }
 
 class RouteGenerator {
@@ -45,8 +50,11 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const FilterScreen());
       case Routes.traningpreviewscreen:
         return MaterialPageRoute(builder: (_) => const TraningPreviewScreen());
-      case Routes.programdetailscreen:
-        return MaterialPageRoute(builder: (_) => const TraningPreviewScreen());
+   
+          case Routes.programDetailPageView:
+        return MaterialPageRoute(builder: (_) => const ProgramDetailPageView());
+          case Routes.coachProfile:
+        return MaterialPageRoute(builder: (_) => const CoachProfile());
       default:
         return MaterialPageRoute(
           builder:

@@ -5,9 +5,10 @@ import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 
 class SharedAppBar extends StatelessWidget implements PreferredSizeWidget {
-  SharedAppBar({super.key, this.progress, this.title});
+  SharedAppBar({super.key, this.progress, this.title, this.actionIcon});
   double? progress;
   String? title;
+  IconData? actionIcon;
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -36,6 +37,10 @@ class SharedAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               )
               : null,
+      actions: [
+        actionIcon != null ? Icon(actionIcon) : Container(),
+        SizedBox(width: 20),
+      ],
     );
   }
 

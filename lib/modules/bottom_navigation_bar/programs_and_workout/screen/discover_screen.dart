@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/logo_app_bar.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/screen/program_tab.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/screen/work_out_tab.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/screen/tab/program_tab.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/screen/tab/work_out_tab.dart';
 
 class DiscoverScreen extends StatefulWidget {
   const DiscoverScreen({super.key});
@@ -24,6 +24,9 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: LogoAppBar(
+        title: "Discover",
+        huintText: "Search workouts",
+        buttonTabList: ["Workouts", "Programs"],
         selectedindex: _currentPage,
         onSelected: (value) {
           setState(() {
