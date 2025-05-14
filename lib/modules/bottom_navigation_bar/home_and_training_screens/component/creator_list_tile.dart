@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/components/share_picture.dart';
+import 'package:musculo_app/core/config/routes.dart';
 import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 
 class CreatorListTile extends StatelessWidget {
-  const CreatorListTile({
-    super.key,
-  });
+  const CreatorListTile({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +50,9 @@ class CreatorListTile extends StatelessWidget {
         buttonText: "See Profile",
         buttonHeight: Sizes.s36,
         buttonWidth: Sizes.s120,
+        onTap: () {
+          Navigator.pushNamed(context, Routes.coachProfile);
+        },
       ),
     );
   }

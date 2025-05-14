@@ -24,6 +24,9 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: LogoAppBar(
+        title: "Discover",
+        huintText: "Search workouts",
+        buttonTabList: ["Workouts", "Programs"],
         selectedindex: _currentPage,
         onSelected: (value) {
           setState(() {

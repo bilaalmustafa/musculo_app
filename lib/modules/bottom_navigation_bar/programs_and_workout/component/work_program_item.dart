@@ -79,11 +79,19 @@ class WorkProgramItem extends StatelessWidget {
                     buttonText: "See details",
                     buttonHeight: Sizes.s30,
                     buttonWidth: Sizes.s120,
-                    onTap:
-                        () => Navigator.pushNamed(
+                    onTap: () {
+                      if (tabselect == 1) {
+                        Navigator.pushNamed(
+                          context,
+                          Routes.programDetailPageView,
+                        );
+                      } else {
+                        Navigator.pushNamed(
                           context,
                           Routes.traningpreviewscreen,
-                        ),
+                        );
+                      }
+                    },
                   ),
                 ],
               ),

@@ -17,6 +17,8 @@ import 'package:musculo_app/modules/onboarding/get_started.dart';
 import 'package:musculo_app/modules/onboarding/splash_screen.dart';
 
 import '../../modules/bottom_navigation_bar/profile/user_profile_screens/favorites_screen.dart';
+import '../../modules/bottom_navigation_bar/programs_and_workout/user_screen/coach_profile.dart';
+import '../../modules/bottom_navigation_bar/programs_and_workout/user_screen/proram_detail_pageview.dart';
 
 class Routes {
   static const String splash = "/";
@@ -37,6 +39,9 @@ class Routes {
   static const String myProgramWorkout = "/myprogramworkout_screen";
   static const String favoriteScreen = "/favorites_screen";
   static const String becomeCreatorScreen = "/becomecreator_screen";
+  // static const String programdetailscreen = "/program_detail_screen";
+  static const String programDetailPageView = "/program_detail_pageview_screen";
+  static const String coachProfile = "/coach_profile_screen";
 }
 
 class RouteGenerator {
@@ -80,6 +85,11 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const FavoritesScreen());
       case Routes.becomeCreatorScreen:
         return MaterialPageRoute(builder: (_) => const BecomecreatorScreen());
+
+      case Routes.programDetailPageView:
+        return MaterialPageRoute(builder: (_) => const ProgramDetailPageView());
+      case Routes.coachProfile:
+        return MaterialPageRoute(builder: (_) => const CoachProfile());
       default:
         return MaterialPageRoute(
           builder:

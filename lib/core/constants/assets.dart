@@ -36,4 +36,6 @@ class Assets {
   static const String heartIcon = "$_svgs/Heart.svg";
   static const String calendarIcon = "$_svgs/Calendar.svg";
   static const String documentIcon = "$_svgs/Document.svg";
+  static const String empty = "$_svgs/empty.svg";
+  static const String profilebg = "$_svgs/profilebg.svg";
 }
