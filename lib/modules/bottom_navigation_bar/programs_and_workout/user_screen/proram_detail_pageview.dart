@@ -9,9 +9,9 @@ import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/rating_star.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/show_rating_bottomsheet.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/screen/tab/description_tab.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/screen/tab/history_tab.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/screen/traning_preview_screen.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/tab/description_tab.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/tab/history_tab.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/traning_preview_screen.dart';
 
 class ProgramDetailPageView extends StatefulWidget {
   const ProgramDetailPageView({super.key});

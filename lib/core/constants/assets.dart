@@ -26,6 +26,16 @@ class Assets {
   static const String insta = "$_svgs/meta.svg";
   static const String official = "$_svgs/official.svg";
   static const String monugram = "$_svgs/monugram.svg";
+  static const String addUser = "$_svgs/Add User.svg";
+  static const String switchUser = "$_svgs/switch_user.svg";
+  static const String notification = "$_svgs/Notification.svg";
+  static const String condition = "$_svgs/condition.svg";
+  static const String logout = "$_svgs/Logout.svg";
+  static const String groupCircle = "$_svgs/Groupcircle.svg";
+  static const String profileIcon = "$_svgs/Profile.svg";
+  static const String heartIcon = "$_svgs/Heart.svg";
+  static const String calendarIcon = "$_svgs/Calendar.svg";
+  static const String documentIcon = "$_svgs/Document.svg";
   static const String empty = "$_svgs/empty.svg";
   static const String profilebg = "$_svgs/profilebg.svg";
 }

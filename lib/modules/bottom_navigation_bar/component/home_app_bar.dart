@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/poppins_text.dart';
+import 'package:musculo_app/core/config/routes.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
@@ -41,7 +42,12 @@ class HomeAppBar extends StatelessWidget {
               onChanged: (vlue) {},
             ),
           ),
-          IconButton(onPressed: () {}, icon: Icon(Icons.settings)),
+          IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, Routes.settingScreen);
+            },
+            icon: Icon(Icons.settings),
+          ),
         ],
       ),
     );

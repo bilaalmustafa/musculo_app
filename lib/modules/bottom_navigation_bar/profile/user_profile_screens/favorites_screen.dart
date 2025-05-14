@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:musculo_app/components/logo_app_bar.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/screen/tab/program_tab.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/screen/tab/work_out_tab.dart';
 
-class DiscoverScreen extends StatefulWidget {
-  const DiscoverScreen({super.key});
+import '../../../../core/constants/const_colors.dart';
+import '../../../../components/profileappbar.dart';
+import 'programes.dart';
+import 'workouts.dart';
+
+class FavoritesScreen extends StatefulWidget {
+  const FavoritesScreen({super.key});
 
   @override
-  State<DiscoverScreen> createState() => _DiscoverScreenState();
+  State<FavoritesScreen> createState() => _FavoritesScreenState();
 }
 
-class _DiscoverScreenState extends State<DiscoverScreen> {
+class _FavoritesScreenState extends State<FavoritesScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
@@ -23,10 +25,9 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: LogoAppBar(
-        title: "Discover",
-        huintText: "Search workouts",
-        buttonTabList: ["Workouts", "Programs"],
+      backgroundColor: ConstColors.white,
+      appBar: ProfileAppBar(
+        appbarTitle: 'Favorites',
         selectedindex: _currentPage,
         onSelected: (value) {
           setState(() {
@@ -42,13 +43,21 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
       body: PageView(
         controller: _pageController,
         physics: const NeverScrollableScrollPhysics(),
-        children: [WorkOutTab(), ProgramTab(tabselect: _currentPage)],
+        children: [WorkOuts(), Programs(tabselect: _currentPage)],
 
         onPageChanged: (index) {
           setState(() {
             _currentPage = index;
           });
         },
+      ),
+
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: ConstColors.black,
+        shape: const CircleBorder(),
+
+        onPressed: () {},
+        child: Icon(Icons.add, color: ConstColors.white),
       ),
     );
   }
