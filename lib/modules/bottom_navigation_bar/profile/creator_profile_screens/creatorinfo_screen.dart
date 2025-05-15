@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
-import 'package:musculo_app/modules/auth/register/component/agreement_check.dart';
 
 import '../../../../components/customTextField.dart';
 import '../../../../components/custom_button.dart';
@@ -26,22 +25,26 @@ class _CreatorinfoScreenState extends State<CreatorinfoScreen> {
       backgroundColor: ConstColors.white,
       appBar: SharedAppBar(title: 'Become a Creator'),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(Sizes.s16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: Sizes.s15,
           children: [
             Center(
               child: SizedBox(
-                height: 120,
-                width: 300,
+                height: Sizes.s120,
+                width: Sizes.s300,
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
                     CircleAvatar(
                       maxRadius: 55,
                       backgroundColor: Colors.grey[200],
-                      child: Icon(Icons.person, size: 50, color: Colors.black),
+                      child: Icon(
+                        Icons.person,
+                        size: Sizes.s50,
+                        color: Colors.black,
+                      ),
                     ),
                     Transform.translate(
                       offset: Offset(40, 40),
@@ -50,8 +53,8 @@ class _CreatorinfoScreenState extends State<CreatorinfoScreen> {
                           // edit code here
                         },
                         child: Container(
-                          width: 20,
-                          height: 20,
+                          width: Sizes.s20,
+                          height: Sizes.s20,
                           decoration: BoxDecoration(
                             shape: BoxShape.rectangle,
                             borderRadius: BorderRadius.circular(4),
@@ -99,6 +102,7 @@ class _CreatorinfoScreenState extends State<CreatorinfoScreen> {
                 value: _isChecked,
                 onChanged: (value) {
                   _isChecked = value!;
+                  setState(() {});
                 },
                 controlAffinity: ListTileControlAffinity.leading,
                 activeColor: ConstColors.black,
@@ -109,7 +113,7 @@ class _CreatorinfoScreenState extends State<CreatorinfoScreen> {
       ),
 
       bottomNavigationBar: Padding(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.all(Sizes.s16),
         child: CustomButton(
           onTap: () {
             // navigation handle here

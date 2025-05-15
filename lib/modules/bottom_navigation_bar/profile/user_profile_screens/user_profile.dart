@@ -13,9 +13,15 @@ import '../../../../core/constants/fonts.dart';
 import '../../home_and_training_screens/component/congrate_container.dart';
 import '../../programs_and_workout/component/customlisttile.dart';
 
-class UserProfile extends StatelessWidget {
+class UserProfile extends StatefulWidget {
   const UserProfile({super.key});
 
+  @override
+  State<UserProfile> createState() => _UserProfileState();
+}
+
+class _UserProfileState extends State<UserProfile> {
+  bool isCreator = false;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -79,7 +85,7 @@ class UserProfile extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   PoppinsText(
-                    text: "User",
+                    text: isCreator ? "Creator" : "User",
                     fontSize: Sizes.s14,
                     fontWeight: TextWeight.semiBold,
                   ),
@@ -91,17 +97,29 @@ class UserProfile extends StatelessWidget {
 
                       inactiveTrackColor: ConstColors.greyEEE,
                       inactiveThumbColor: ConstColors.white,
-                      value: true,
-                      onChanged: (vlue) {},
+                      value: isCreator,
+                      onChanged: (value) {
+                        setState(() {
+                          isCreator = value;
+                        });
+                      },
                     ),
                   ),
                 ],
               ),
               CustomButton(
-                buttonText: 'Become a Creator',
-                buttonColor: ConstColors.sky22B,
+                buttonText:
+                    isCreator
+                        ? 'Cancel creator subscription'
+                        : 'Become a Creator',
+                buttonColor:
+                    isCreator ? ConstColors.redFF4 : ConstColors.sky22B,
                 onTap: () {
-                  Navigator.pushNamed(context, Routes.becomeCreatorScreen);
+                  if (!isCreator) {
+                    Navigator.pushNamed(context, Routes.becomeCreatorScreen);
+                  } else {
+                    // here creator button logic here
+                  }
                 },
               ),
               SizedBox(height: 5),
@@ -109,73 +127,144 @@ class UserProfile extends StatelessWidget {
               Row(
                 children: [
                   CongrateContainer(
-                    iconData: Icons.run_circle_outlined,
+                    imagePath:
+                        isCreator ? Assets.runnerIcon : Assets.runnerIcon,
                     digit: "15",
-                    text: "Finished Workout",
+                    text: isCreator ? "Programs Sold" : "Finished Workout",
                   ),
                   CongrateContainer(
-                    iconData: Icons.alarm,
-                    digit: "20",
-                    text: "Minutes Spent",
+                    imagePath:
+                        isCreator ? Assets.walletIcon : Assets.timeCircle,
+                    digit: isCreator ? '250£' : "20",
+                    text: isCreator ? "Earnings" : "Minutes Spent",
                   ),
                 ],
               ),
               SizedBox(height: 10),
               Divider(height: Sizes.s1, color: ConstColors.greyE5E5),
               SizedBox(height: 10),
-              CustomListTile(
-                leading: SharePicture(
-                  imagePath: Assets.profileIcon,
-                  width: Sizes.s24,
-                  height: Sizes.s24,
-                ),
-                title: "Account Information",
-                trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
-                onTap: () {
-                  // Add Account information code here
-                  Navigator.pushNamed(context, Routes.accountInfoScreen);
-                },
-              ),
-              CustomListTile(
-                leading: SharePicture(
-                  imagePath: Assets.calendarIcon,
-                  width: Sizes.s24,
-                  height: Sizes.s24,
-                ),
-                title: "My Programs/Workouts",
 
-                trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
-                onTap: () {
-                  Navigator.pushNamed(context, Routes.myProgramWorkout);
-                  // program workout code here
-                },
-              ),
-              CustomListTile(
-                leading: SharePicture(
-                  imagePath: Assets.heartIcon,
-                  width: Sizes.s24,
-                  height: Sizes.s24,
+              if (!isCreator) ...[
+                CustomListTile(
+                  leading: SharePicture(
+                    imagePath: Assets.profileIcon,
+                    width: Sizes.s24,
+                    height: Sizes.s24,
+                  ),
+                  title: "Account Information",
+                  trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
+                  onTap: () {
+                    // Add Account information code here
+                    Navigator.pushNamed(context, Routes.accountInfoScreen);
+                  },
                 ),
-                title: "Favorites",
+                CustomListTile(
+                  leading: SharePicture(
+                    imagePath: Assets.calendarIcon,
+                    width: Sizes.s24,
+                    height: Sizes.s24,
+                  ),
+                  title: "My Programs/Workouts",
 
-                trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
-                onTap: () {
-                  // faverate code here
-                  Navigator.pushNamed(context, Routes.favoriteScreen);
-                },
-              ),
-              CustomListTile(
-                leading: SharePicture(
-                  imagePath: Assets.documentIcon,
-                  width: Sizes.s24,
-                  height: Sizes.s24,
+                  trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
+                  onTap: () {
+                    Navigator.pushNamed(context, Routes.myProgramWorkout);
+                    // program workout code here
+                  },
                 ),
-                title: "Motivational Text",
-                trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
-                onTap: () {
-                  // motivvational text code here
-                },
-              ),
+                CustomListTile(
+                  leading: SharePicture(
+                    imagePath: Assets.heartIcon,
+                    width: Sizes.s24,
+                    height: Sizes.s24,
+                  ),
+                  title: "Favorites",
+
+                  trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
+                  onTap: () {
+                    // faverate code here
+                    Navigator.pushNamed(context, Routes.favoriteScreen);
+                  },
+                ),
+                CustomListTile(
+                  leading: SharePicture(
+                    imagePath: Assets.documentIcon,
+                    width: Sizes.s24,
+                    height: Sizes.s24,
+                  ),
+                  title: "Motivational Text",
+                  trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
+                  onTap: () {
+                    // motivvational text code here
+                  },
+                ),
+              ] else ...[
+                CustomListTile(
+                  leading: SharePicture(
+                    imagePath: Assets.editIcon,
+                    width: Sizes.s24,
+                    height: Sizes.s24,
+                  ),
+                  title: "Modify creator profile",
+                  trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
+                  onTap: () {
+                    // Add modify creator profile  code here
+                    Navigator.pushNamed(context, Routes.creatorProfileScreen);
+                  },
+                ),
+                CustomListTile(
+                  leading: SharePicture(
+                    imagePath: Assets.documentIcon,
+                    width: Sizes.s24,
+                    height: Sizes.s24,
+                  ),
+                  title: "Motivational Text",
+                  trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
+                  onTap: () {
+                    // motivvational text code here
+                  },
+                ),
+                CustomListTile(
+                  leading: SharePicture(
+                    imagePath: Assets.calendarIcon,
+                    width: Sizes.s24,
+                    height: Sizes.s24,
+                  ),
+                  title: "My Programs/Workouts",
+
+                  trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
+                  onTap: () {
+                    // Navigator.pushNamed(context, Routes.myProgramWorkout);
+                    // program workout code here
+                  },
+                ),
+                CustomListTile(
+                  leading: SharePicture(
+                    imagePath: Assets.walletIcon,
+                    width: Sizes.s24,
+                    height: Sizes.s24,
+                  ),
+                  title: "Earnings",
+                  trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
+                  onTap: () {
+                    // motivvational text code here
+                  },
+                ),
+                CustomListTile(
+                  leading: SharePicture(
+                    imagePath: Assets.heartIcon,
+                    width: Sizes.s24,
+                    height: Sizes.s24,
+                  ),
+                  title: "Favorites",
+
+                  trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
+                  onTap: () {
+                    // faverate code here
+                    // Navigator.pushNamed(context, Routes.favoriteScreen);
+                  },
+                ),
+              ],
             ],
           ),
         ),

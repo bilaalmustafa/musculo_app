@@ -25,7 +25,7 @@ class _BecomecreatorScreenState extends State<BecomecreatorScreen> {
       appBar: SharedAppBar(title: 'Become a Creator'),
 
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(Sizes.s16),
         child: SingleChildScrollView(
           child: Column(
             spacing: Sizes.s20,
@@ -49,7 +49,7 @@ class _BecomecreatorScreenState extends State<BecomecreatorScreen> {
                     ),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(Sizes.s8),
                     child: Column(
                       children: [
                         SizedBox(height: Sizes.s10),
@@ -95,7 +95,7 @@ class _BecomecreatorScreenState extends State<BecomecreatorScreen> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(Sizes.s12),
                     border: Border.all(
                       color:
                           selectPlan == 1
@@ -105,7 +105,7 @@ class _BecomecreatorScreenState extends State<BecomecreatorScreen> {
                     ),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(Sizes.s8),
                     child: Column(
                       children: [
                         SizedBox(height: Sizes.s10),
@@ -151,7 +151,7 @@ class _BecomecreatorScreenState extends State<BecomecreatorScreen> {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.all(Sizes.s16),
         child: CustomButton(
           onTap:
               selectPlan != null

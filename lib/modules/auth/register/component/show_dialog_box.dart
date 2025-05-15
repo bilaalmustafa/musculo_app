@@ -8,7 +8,13 @@ import 'package:musculo_app/core/constants/sizes.dart';
 class ShowDialogBox extends StatelessWidget {
   final String message;
   final Widget? bottomWidget;
-  const ShowDialogBox({super.key, required this.message, this.bottomWidget});
+  final String? title;
+  const ShowDialogBox({
+    super.key,
+    required this.message,
+    this.bottomWidget,
+    this.title,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +26,7 @@ class ShowDialogBox extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           PoppinsText(
-            text: "Congratulation!",
+            text: title ?? "Congratulation!",
             fontSize: Sizes.s24,
             fontWeight: TextWeight.semiBold,
           ),

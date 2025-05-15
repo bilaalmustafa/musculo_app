@@ -87,4 +87,7 @@ class ConstColors {
   static const Color redF52 = Color(0xFFE46369);
   static const Color red10 = Color(0x1AE01500);
   static const Color sky22B = Color(0xff22BB9C);
+  static const Color redFF4 = Color(0xffFF4D67);
+  static const Color gre9E9E = Color(0xff9E9E9E);
+  static const Color greyFAFA = Color(0xffFAFAFA);
 }

@@ -25,7 +25,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       backgroundColor: ConstColors.white,
       appBar: SharedAppBar(title: 'Payment Method'),
       body: Padding(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.all(Sizes.s16),
         child: Column(
           spacing: Sizes.s20,
           children: [
@@ -36,23 +36,23 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 });
               },
               child: Container(
-                height: 90,
+                height: Sizes.s90,
                 decoration: BoxDecoration(
                   border: Border.all(
                     width: 1,
                     color:
                         _selectpay == 0 ? Colors.black : Colors.grey.shade300,
                   ),
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(Sizes.s10),
                 ),
                 child: Row(
-                  spacing: 20,
+                  spacing: Sizes.s20,
                   children: [
                     SizedBox(width: 0),
                     SharePicture(
                       imagePath: Assets.gpayment,
-                      width: 50,
-                      height: 50,
+                      width: Sizes.s50,
+                      height: Sizes.s50,
                     ),
                     PoppinsText(
                       text: 'Google Pay',
@@ -69,7 +69,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 setState(() {});
               },
               child: Container(
-                height: 90,
+                height: Sizes.s90,
                 decoration: BoxDecoration(
                   border: Border.all(
                     width: 1,
@@ -79,13 +79,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Row(
-                  spacing: 20,
+                  spacing: Sizes.s20,
                   children: [
                     SizedBox(width: 0),
                     SharePicture(
                       imagePath: Assets.ellipse,
-                      width: 50,
-                      height: 50,
+                      width: Sizes.s50,
+                      height: Sizes.s50,
                     ),
                     PoppinsText(
                       text: 'Apple Pay',

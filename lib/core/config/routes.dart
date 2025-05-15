@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:musculo_app/modules/auth/register/screens/register_screen.dart';
 import 'package:musculo_app/modules/auth/sign_in/screen/sign_in_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/bottom_navigation_bar_screen.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/feedback/screens/company_feedback.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/feedback/screens/feedback.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/congratulation_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/training_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/creator_profile_screens/becomecreator.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/profile/creator_profile_screens/creator_profile.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/creator_profile_screens/creatorinfo_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/creator_profile_screens/payment_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/user_profile_screens/accountinfo.dart';
@@ -18,6 +20,7 @@ import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/u
 import 'package:musculo_app/modules/onboarding/get_started.dart';
 import 'package:musculo_app/modules/onboarding/splash_screen.dart';
 
+import '../../modules/bottom_navigation_bar/feedback/screens/training_feedback.dart';
 import '../../modules/bottom_navigation_bar/profile/user_profile_screens/favorites_screen.dart';
 import '../../modules/bottom_navigation_bar/programs_and_workout/user_screen/coach_profile.dart';
 import '../../modules/bottom_navigation_bar/programs_and_workout/user_screen/proram_detail_pageview.dart';
@@ -46,6 +49,9 @@ class Routes {
   static const String coachProfile = "/coach_profile_screen";
   static const String creatorInfoScreen = "/creatorinfo_screen";
   static const String paymentScreen = "/payment_screen";
+  static const String creatorProfileScreen = "/creator_profile_screen";
+  static const String companyFeedbackScreen = "/company_feedback_screen";
+  static const String trainingFeedbackScreen = "/training_feedback_screen";
 }
 
 class RouteGenerator {
@@ -98,6 +104,14 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const CreatorinfoScreen());
       case Routes.paymentScreen:
         return MaterialPageRoute(builder: (_) => const PaymentScreen());
+      case Routes.creatorProfileScreen:
+        return MaterialPageRoute(builder: (_) => const CreatorProfileScreen());
+      case Routes.companyFeedbackScreen:
+        return MaterialPageRoute(builder: (_) => const CompanyFeedbackScreen());
+      case Routes.trainingFeedbackScreen:
+        return MaterialPageRoute(
+          builder: (_) => const TrainingFeedbackScreen(),
+        );
       default:
         return MaterialPageRoute(
           builder:
