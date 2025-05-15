@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/poppins_text.dart';
+import 'package:musculo_app/components/share_picture.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
@@ -9,10 +10,12 @@ class CongrateContainer extends StatelessWidget {
     super.key,
     required this.text,
     required this.digit,
-    required this.iconData,
+    this.iconData,
+    this.imagePath,
   });
   final String text, digit;
-  final IconData iconData;
+  final IconData? iconData;
+  final String? imagePath;
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -27,7 +30,16 @@ class CongrateContainer extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(iconData, color: ConstColors.black, size: 30),
+            if (imagePath != null)
+              SharePicture(
+                imagePath: imagePath!,
+                width: Sizes.s30,
+                height: Sizes.s30,
+              ),
+
+            if (iconData != null)
+              Icon(iconData, color: ConstColors.black, size: 30),
+
             PoppinsText(
               text: digit,
               fontSize: Sizes.s18,

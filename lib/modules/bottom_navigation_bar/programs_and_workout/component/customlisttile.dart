@@ -25,7 +25,10 @@ class CustomListTile extends StatelessWidget {
     this.trailing,
     this.onTap,
     this.backgroundColor = Colors.white,
-    this.padding = const EdgeInsets.all(Sizes.s16),
+    this.padding = const EdgeInsets.symmetric(
+      horizontal: Sizes.s16,
+      vertical: Sizes.s12,
+    ),
     this.borderRadius = 12.0,
     this.titleColor,
     this.titleFont,

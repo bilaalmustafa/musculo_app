@@ -55,6 +55,7 @@ class ConstColors {
   static const Color greyf6f6 = Color(0xfff6f6f6);
   static const Color grey6A7 = Color(0xff6A798A);
   static const Color grey758 = Color(0xff75808A);
+  static const Color grey7575 = Color(0xff757575);
 
   static const Color greyE8E8 = Color(0xffe8e8e8);
   static const Color greyE5E5 = Color(0xffe5e5e5);
@@ -86,4 +87,7 @@ class ConstColors {
   static const Color redF52 = Color(0xFFE46369);
   static const Color red10 = Color(0x1AE01500);
   static const Color sky22B = Color(0xff22BB9C);
+  static const Color redFF4 = Color(0xffFF4D67);
+  static const Color gre9E9E = Color(0xff9E9E9E);
+  static const Color greyFAFA = Color(0xffFAFAFA);
 }
