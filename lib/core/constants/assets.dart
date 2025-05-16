@@ -3,6 +3,11 @@ const String _icons = "assets/icons";
 const String _svgs = "assets/svgs";
 
 class Assets {
+  static const String editIcon = '$_icons/Edit.svg';
+  static const String runnerIcon = "$_icons/runner.svg";
+  static const String walletIcon = "$_icons/Wallet.svg";
+  static const String timeCircle = "$_icons/Time Circle.svg";
+
   static const String logo = '$_assets/applogo.png';
   static const String maskgroup = "$_assets/maskgroup.png";
   static const String monogram = "$_assets/monogram.png";
@@ -13,7 +18,9 @@ class Assets {
   static const String discovery = "$_assets/Discovery.png";
   static const String playbutton = "$_assets/PlayButton.png";
   static const String workout = "$_assets/workuot.png";
-   static const String profilebg = "$_assets/profilebg.png";
+  static const String profilebgpng = "$_assets/profilebg.png";
+  static const String gpayment = "$_assets/gpayment.png";
+  static const String ellipse = "$_assets/Ellipse.png";
 
   static const String facebook = "$_svgs/facebook.svg";
   static const String google = "$_svgs/google.svg";
@@ -38,5 +45,9 @@ class Assets {
   static const String calendarIcon = "$_svgs/Calendar.svg";
   static const String documentIcon = "$_svgs/Document.svg";
   static const String empty = "$_svgs/empty.svg";
- 
+
+  static const String profilebg = "$_svgs/profilebg.svg";
+  static const String tWallet = "$_svgs/tWallet.svg";
+  static const String downSquare = "$_svgs/Down Square.svg";
+  static const String rdownSquare = "$_svgs/RDown Square.svg";
 }

@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:musculo_app/components/logo_title_appbar.dart';
-import 'package:musculo_app/core/constants/const_colors.dart';
+import 'package:musculo_app/components/shared_appbar.dart';
+import 'package:musculo_app/components/tab_buttons.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/profile/creator_profile_screens/informationtab.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/profile/creator_profile_screens/paymenttab.dart';
 
-import 'package:musculo_app/core/constants/sizes.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/feedback/screens/feedbacktab.dart';
+import '../../../../components/customTextField.dart';
+import '../../../../core/constants/const_colors.dart';
+import '../../../../core/constants/sizes.dart';
+import '../component/customdropdown.dart';
 
-import '../../../../components/tab_buttons.dart';
-
-class FeedbackScreen extends StatefulWidget {
-  const FeedbackScreen({super.key});
+class CreatorProfileScreen extends StatefulWidget {
+  const CreatorProfileScreen({super.key});
 
   @override
-  State<FeedbackScreen> createState() => _FeedbackScreenState();
+  State<CreatorProfileScreen> createState() => _CreatorProfileScreenState();
 }
 
-class _FeedbackScreenState extends State<FeedbackScreen> {
+class _CreatorProfileScreenState extends State<CreatorProfileScreen> {
   int _selectIndex = 0;
   late PageController _pageController;
   @override
@@ -33,14 +35,12 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ConstColors.white,
-      appBar: LogoTitleAppBar(title: 'Feedback'),
+      appBar: SharedAppBar(title: 'Creator Profile'),
       body: Padding(
         padding: EdgeInsets.all(Sizes.s16),
         child: Column(
           spacing: Sizes.s20,
-
           children: [
-            SizedBox(),
             TabButtons(
               selecttab: _selectIndex,
               onChange: (index) {
@@ -53,14 +53,14 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                   );
                 });
               },
-              tabNames: ['Feedback', 'Reports'],
+              tabNames: ['Information', 'Payment'],
             ),
 
             Expanded(
               child: PageView(
                 controller: _pageController,
                 physics: NeverScrollableScrollPhysics(),
-                children: [Feedbacktab()],
+                children: [Informationtab(), Paymenttab()],
               ),
             ),
           ],

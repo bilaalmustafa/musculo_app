@@ -40,7 +40,7 @@ class _CoachProfileState extends State<CoachProfile> {
             decoration: BoxDecoration(
               //color: ConstColors.amber,
               image: DecorationImage(
-                image: AssetImage(Assets.profilebg),
+                image: AssetImage(Assets.profilebgpng),
                 fit: BoxFit.contain,
               ),
             ),
