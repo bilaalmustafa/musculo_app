@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/modules/auth/register/screens/register_screen.dart';
+import 'package:musculo_app/modules/auth/sign_in/screen/changepassword_screen.dart';
+import 'package:musculo_app/modules/auth/sign_in/screen/resetpassword_screen.dart';
 import 'package:musculo_app/modules/auth/sign_in/screen/sign_in_screen.dart';
+import 'package:musculo_app/modules/auth/sign_in/screen/verifypassword_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/bottom_navigation_bar_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/feedback/screens/feedb_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/feedback/screens/feedback.dart';
@@ -53,6 +56,9 @@ class Routes {
   static const String creatorProfileScreen = "/creator_profile_screen";
   static const String feedbScreen = "/feedb_screen";
   static const String programScreen = "/program_screen";
+  static const String resetPasswordScreen = "/resetpassword_screen";
+  static const String verifyPasswordScreen = "/verifypassword_screen";
+  static const String changePasswordScreen = "/changepassword_screen";
 }
 
 class RouteGenerator {
@@ -116,6 +122,12 @@ class RouteGenerator {
 
       case Routes.programScreen:
         return MaterialPageRoute(builder: (_) => const ProgramScreen());
+      case Routes.resetPasswordScreen:
+        return MaterialPageRoute(builder: (_) => const ResetpasswordScreen());
+      case Routes.verifyPasswordScreen:
+        return MaterialPageRoute(builder: (_) => const VerifypasswordScreen());
+      case Routes.changePasswordScreen:
+        return MaterialPageRoute(builder: (_) => const ChangepasswordScreen());
 
       default:
         return MaterialPageRoute(

@@ -48,4 +48,5 @@ class Assets {
   static const String tWallet = "$_svgs/tWallet.svg";
   static const String downSquare = "$_svgs/Down Square.svg";
   static const String rdownSquare = "$_svgs/RDown Square.svg";
+  static const String mailDraw = "$_svgs/mailDraw.svg";
 }

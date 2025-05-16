@@ -52,7 +52,9 @@ class Sizes {
   static const double s180 = 180.0;
   static const double s192 = 192.0;
   static const double s200 = 200.0;
+  static const double s230 = 230.0;
   static const double s240 = 240.0;
+  static const double s250 = 250.0;
   static const double s270 = 270.0;
   static const double s300 = 300.0;
   static const double s350 = 350.0;

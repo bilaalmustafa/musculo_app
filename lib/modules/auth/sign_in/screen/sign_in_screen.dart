@@ -62,10 +62,21 @@ class _SignInScreenState extends State<SignInScreen> {
                           }
                         },
                       ),
-                      PoppinsText(
-                        text: "Forgot the Password?",
-                        fontSize: Sizes.s13,
-                        fontWeight: TextWeight.semiBold,
+                      TextButton(
+                        onPressed: () {
+                          // navigate to forgot password screen
+                          Navigator.pushNamed(
+                            context,
+                            Routes.resetPasswordScreen,
+                          );
+                        },
+                        child: PoppinsText(
+                          text: "Forgot the Password?",
+                          color: ConstColors.black,
+
+                          fontSize: Sizes.s13,
+                          fontWeight: TextWeight.semiBold,
+                        ),
                       ),
                     ],
                   ),
