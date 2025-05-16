@@ -13,6 +13,7 @@ class Assets {
   static const String discovery = "$_assets/Discovery.png";
   static const String playbutton = "$_assets/PlayButton.png";
   static const String workout = "$_assets/workuot.png";
+   static const String profilebg = "$_assets/profilebg.png";
 
   static const String facebook = "$_svgs/facebook.svg";
   static const String google = "$_svgs/google.svg";
@@ -37,5 +38,5 @@ class Assets {
   static const String calendarIcon = "$_svgs/Calendar.svg";
   static const String documentIcon = "$_svgs/Document.svg";
   static const String empty = "$_svgs/empty.svg";
-  static const String profilebg = "$_svgs/profilebg.svg";
+ 
 }

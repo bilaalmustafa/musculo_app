@@ -3,8 +3,11 @@ import 'package:musculo_app/modules/auth/register/screens/register_screen.dart';
 import 'package:musculo_app/modules/auth/sign_in/screen/sign_in_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/bottom_navigation_bar_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/feedback/screens/feedback.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/congratulation_screen.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/training_screen.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_program/add_program_pageView.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_workout/add_workout_pageview.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_workout/type_of_workout.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/user_mode/congratulation_screen.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/user_mode/training_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/creator_profile_screens/becomecreator.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/user_profile_screens/accountinfo.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/user_profile_screens/myprogramworkout.dart';
@@ -17,7 +20,7 @@ import 'package:musculo_app/modules/onboarding/get_started.dart';
 import 'package:musculo_app/modules/onboarding/splash_screen.dart';
 
 import '../../modules/bottom_navigation_bar/profile/user_profile_screens/favorites_screen.dart';
-import '../../modules/bottom_navigation_bar/programs_and_workout/user_screen/coach_profile.dart';
+import '../../modules/bottom_navigation_bar/programs_and_workout/coach/coach_profile.dart';
 import '../../modules/bottom_navigation_bar/programs_and_workout/user_screen/proram_detail_pageview.dart';
 
 class Routes {
@@ -42,6 +45,8 @@ class Routes {
   // static const String programdetailscreen = "/program_detail_screen";
   static const String programDetailPageView = "/program_detail_pageview_screen";
   static const String coachProfile = "/coach_profile_screen";
+   static const String addworkoutpageview = "/add_workout_pageview_screen";
+    static const String addprogrampageview = "/add_program_pageview_screen";
 }
 
 class RouteGenerator {
@@ -90,6 +95,10 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const ProgramDetailPageView());
       case Routes.coachProfile:
         return MaterialPageRoute(builder: (_) => const CoachProfile());
+         case Routes.addworkoutpageview:
+        return MaterialPageRoute(builder: (_) => const AddWorkoutPageView());
+          case Routes.addprogrampageview:
+        return MaterialPageRoute(builder: (_) => const AddProgramPageview ());
       default:
         return MaterialPageRoute(
           builder:

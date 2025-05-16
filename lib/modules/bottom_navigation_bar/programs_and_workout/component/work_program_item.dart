@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/poppins_text.dart';
+import 'package:musculo_app/core/config/extensions.dart';
 import 'package:musculo_app/core/config/routes.dart';
 import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
@@ -15,9 +16,9 @@ class WorkProgramItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: Sizes.s20, vertical: Sizes.s10),
-
-      height: Sizes.s160,
-      padding: EdgeInsets.all(Sizes.s20),
+      width: double.infinity,
+      height: Sizes.s150,
+      padding: EdgeInsets.all(Sizes.s12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         color: ConstColors.white,
@@ -26,7 +27,7 @@ class WorkProgramItem extends StatelessWidget {
         spacing: Sizes.s10,
         children: [
           Container(
-            width: 100,
+            width: context.screenheight * 0.12,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               color: ConstColors.amber,
@@ -38,10 +39,11 @@ class WorkProgramItem extends StatelessWidget {
           ),
 
           Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Row(
+                spacing: context.screenwidth * 0.15,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   PoppinsText(
@@ -68,6 +70,7 @@ class WorkProgramItem extends StatelessWidget {
                 ],
               ),
               Row(
+                spacing: context.screenwidth * 0.15,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   PoppinsText(
