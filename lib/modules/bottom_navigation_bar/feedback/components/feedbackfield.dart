@@ -84,7 +84,7 @@ class Feedbackfield extends StatelessWidget {
               sufIcon != null
                   ? GestureDetector(
                     onTap: onSufixTap,
-                    child: Icon(sufIcon, size: 18, color: ConstColors.black),
+                    child: Icon(sufIcon, size: 18, color: ConstColors.gre9E9E),
                   )
                   : null,
           contentPadding: EdgeInsets.zero,

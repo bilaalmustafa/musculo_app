@@ -3,7 +3,7 @@ import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 
 class CustomDropdown extends StatefulWidget {
-  final String value;
+  final String? value;
   final List<String> items;
   final Function(String) onChanged;
   final double height;
@@ -12,6 +12,7 @@ class CustomDropdown extends StatefulWidget {
   final Color textColor;
   final Color iconColor;
   final EdgeInsetsGeometry padding;
+  final String? hint;
 
   const CustomDropdown({
     super.key,
@@ -24,6 +25,7 @@ class CustomDropdown extends StatefulWidget {
     this.textColor = Colors.black,
     this.iconColor = Colors.black,
     this.padding = const EdgeInsets.symmetric(horizontal: Sizes.s14),
+    this.hint,
   });
 
   @override
@@ -40,7 +42,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
   @override
   void initState() {
     super.initState();
-    _currentValue = widget.value;
+    _currentValue = widget.value ?? '';
     _focusNode.addListener(() {
       if (!_focusNode.hasFocus && _isOpen) {
         _toggleDropdown();
@@ -149,7 +151,11 @@ class _CustomDropdownState extends State<CustomDropdown> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              PoppinsText(text: _currentValue, fontSize: Sizes.s16),
+              PoppinsText(
+                text: _currentValue.isEmpty ? widget.hint ?? '' : _currentValue,
+                fontSize: Sizes.s16,
+                color: _currentValue.isEmpty ? Colors.grey : widget.textColor,
+              ),
 
               Icon(Icons.keyboard_arrow_down, color: widget.iconColor),
             ],

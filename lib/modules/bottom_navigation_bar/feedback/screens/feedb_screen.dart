@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:musculo_app/components/shared_appbar.dart';
+import 'package:musculo_app/core/constants/const_colors.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/feedback/components/feedbackfield.dart';
 
 import '../../../../components/custom_button.dart';
-import '../../../../components/shared_appbar.dart';
-import '../../../../core/constants/const_colors.dart';
 import '../../../../core/constants/sizes.dart';
 import '../../../auth/register/component/show_dialog_box.dart';
-import '../components/feedbackfield.dart';
 
-class TrainingFeedbackScreen extends StatefulWidget {
-  const TrainingFeedbackScreen({super.key});
+class FeedBScreen extends StatefulWidget {
+  const FeedBScreen({super.key, required this.feedbackType});
+  final String feedbackType;
 
   @override
-  State<TrainingFeedbackScreen> createState() => _TrainingFeedbackScreenState();
+  State<FeedBScreen> createState() => _FeedBScreenState();
 }
 
-class _TrainingFeedbackScreenState extends State<TrainingFeedbackScreen> {
+class _FeedBScreenState extends State<FeedBScreen> {
   final feedbackController = TextEditingController();
   final suggestionController = TextEditingController();
   final emailController = TextEditingController();
@@ -32,7 +33,7 @@ class _TrainingFeedbackScreenState extends State<TrainingFeedbackScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: ConstColors.white,
-      appBar: SharedAppBar(title: 'Training'),
+      appBar: SharedAppBar(title: widget.feedbackType),
       body: Padding(
         padding: EdgeInsets.all(Sizes.s16),
         child: Column(

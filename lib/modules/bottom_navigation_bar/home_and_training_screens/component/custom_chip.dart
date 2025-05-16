@@ -13,11 +13,11 @@ class CustomChip extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(5),
       alignment: Alignment.center,
-      height: 33,
+      height: 25,
 
       decoration: BoxDecoration(
-        color: color.withOpacity(0.8),
-        borderRadius: BorderRadius.circular(5),
+        color: color.withValues(alpha: .8),
+        borderRadius: BorderRadius.circular(8),
       ),
       child: PoppinsText(
         text: text,
