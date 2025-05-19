@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/components/shared_appbar.dart';
 import 'package:musculo_app/core/config/routes.dart';
+import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/modules/auth/register/component/question_text.dart';
@@ -37,13 +38,14 @@ class _ResetpasswordScreenState extends State<ResetpasswordScreen> {
                   "No worries! We'll help you reset your password. Enter your registered email, and we'll send you an OTP code to verify your identity.",
               fontSize: Sizes.s14,
               fontWeight: TextWeight.regular,
+              color: ConstColors.grey7575,
             ),
             PoppinsText(
               text: "Email",
               fontSize: Sizes.s16,
               fontWeight: TextWeight.semiBold,
             ),
-            CustomTextField(prefexicon: Icons.email, title: "Email"),
+            CustomTextField(preIcon: Assets.message, title: "Email"),
           ],
         ),
       ),

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/poppins_text.dart';
+import 'package:musculo_app/components/share_picture.dart';
+import 'package:musculo_app/core/constants/assets.dart';
+import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 
 class CustomDropdown extends StatefulWidget {
@@ -152,12 +155,15 @@ class _CustomDropdownState extends State<CustomDropdown> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               PoppinsText(
-                text: _currentValue.isEmpty ? widget.hint ?? '' : _currentValue,
-                fontSize: Sizes.s16,
-                color: _currentValue.isEmpty ? Colors.grey : widget.textColor,
+                text: _currentValue.isEmpty ? widget.hint! : _currentValue,
+                fontSize: Sizes.s14,
+                color:
+                    _currentValue.isEmpty
+                        ? ConstColors.gre9E9E
+                        : widget.textColor,
               ),
 
-              Icon(Icons.keyboard_arrow_down, color: widget.iconColor),
+              SharePicture(imagePath: Assets.downArrow),
             ],
           ),
         ),

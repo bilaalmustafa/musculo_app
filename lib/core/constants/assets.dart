@@ -7,6 +7,26 @@ class Assets {
   static const String runnerIcon = "$_icons/runner.svg";
   static const String walletIcon = "$_icons/Wallet.svg";
   static const String timeCircle = "$_icons/Time Circle.svg";
+  static const String hide = "$_icons/Hide.svg";
+  static const String lock = "$_icons/Lock.svg";
+  static const String message = "$_icons/Message.svg";
+  static const String show = "$_icons/Show.svg";
+  static const String male = "$_icons/male.svg";
+  static const String female = "$_icons/female.svg";
+  static const String filterIcon = "$_icons/Filter.svg";
+  static const String searchIcon = "$_icons/Search.svg";
+  static const String settingIcon = "$_icons/Setting.svg";
+  static const String feedbackIcon = "$_icons/Danger Circle.svg";
+  static const String feedbackIcon1 = "$_icons/Info Circle.svg";
+  static const String homeIcon = "$_icons/Home.svg";
+  static const String discoveryIcon = "$_icons/Discovery.svg";
+  static const String discoveryIcon1 = "$_icons/Discovery1.svg";
+  static const String profilIcon = "$_icons/Profile.svg";
+  static const String profilIcon1 = "$_icons/Profile1.svg";
+  static const String home1 = "$_icons/Home1.svg";
+  static const String downArrow = "$_icons/ArrowDown 2.svg";
+  static const String message1 = "$_icons/Message1.svg";
+  static const String calendar1 = "$_icons/Calendar1.svg";
 
   static const String logo = '$_assets/applogo.png';
   static const String maskgroup = "$_assets/maskgroup.png";
@@ -20,6 +40,7 @@ class Assets {
   static const String workout = "$_assets/workuot.png";
   static const String gpayment = "$_assets/gpayment.png";
   static const String ellipse = "$_assets/Ellipse.png";
+  static const String monog = "$_assets/monog.png";
 
   static const String facebook = "$_svgs/facebook.svg";
   static const String google = "$_svgs/google.svg";
@@ -49,4 +70,5 @@ class Assets {
   static const String downSquare = "$_svgs/Down Square.svg";
   static const String rdownSquare = "$_svgs/RDown Square.svg";
   static const String mailDraw = "$_svgs/mailDraw.svg";
+  static const String arrowleft = "$_svgs/ArrowLeft.svg";
 }

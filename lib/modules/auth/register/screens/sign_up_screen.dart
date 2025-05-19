@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/customTextField.dart';
 import 'package:musculo_app/components/poppins_text.dart';
+import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/modules/auth/register/component/question_text.dart';
@@ -17,7 +18,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(25.0),
+      padding: const EdgeInsets.all(Sizes.s16),
       child: Column(
         spacing: Sizes.s20,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -31,16 +32,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
             fontSize: Sizes.s16,
             fontWeight: TextWeight.semiBold,
           ),
-          CustomTextField(prefexicon: Icons.email, title: "Email"),
+          CustomTextField(preIcon: Assets.message, title: "Email"),
           PoppinsText(
             text: "Password",
             fontSize: Sizes.s16,
             fontWeight: TextWeight.semiBold,
           ),
           CustomTextField(
-            prefexicon: Icons.lock,
+            preIcon: Assets.lock,
             title: "Password",
-            suffexicon: isObscure ? Icons.visibility_off : Icons.visibility,
+            sufIcon: isObscure ? Assets.hide : Assets.show,
             obscureText: isObscure,
             onTap:
                 () => setState(() {

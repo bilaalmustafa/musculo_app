@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musculo_app/components/share_picture.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 
@@ -11,6 +12,8 @@ class CustomTextField extends StatelessWidget {
     this.prefexicon,
     this.obscureText = false,
     this.onTap,
+    this.preIcon,
+    this.sufIcon,
   });
   final String title;
   final IconData? suffexicon;
@@ -18,14 +21,16 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
   final bool obscureText;
   final VoidCallback? onTap;
+  final String? preIcon;
+  final String? sufIcon;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       obscureText: obscureText,
       decoration: InputDecoration(
-        labelText: title,
-        labelStyle: const TextStyle(
+        hintText: title,
+        hintStyle: const TextStyle(
           color: ConstColors.grey6A7,
           fontSize: Sizes.s13,
         ),
@@ -45,23 +50,35 @@ class CustomTextField extends StatelessWidget {
           borderRadius: BorderRadius.circular(Sizes.s10),
           borderSide: const BorderSide(color: ConstColors.black, width: 2),
         ),
-        prefixIcon:
-            prefexicon != null
-                ? Icon(prefexicon, size: 20, color: ConstColors.grey6A7)
-                : null,
-        suffixIcon:
-            suffexicon != null
-                ? IconButton(
-                  icon: Icon(
-                    suffexicon,
-                    size: 20,
-                    color: ConstColors.black1616,
-                  ),
-                  color: ConstColors.grey6A7,
-                  onPressed: onTap,
-                )
-                : null,
+        prefixIcon: getPrefixIcon(),
+
+        suffixIcon: getSuffixIcon(),
       ),
     );
+  }
+
+  Widget? getSuffixIcon() {
+    if (suffexicon != null) {
+      return IconButton(
+        icon: Icon(suffexicon, size: 20, color: ConstColors.black1616),
+        color: ConstColors.grey6A7,
+        onPressed: onTap,
+      );
+    } else if (sufIcon != null) {
+      return GestureDetector(
+        onTap: onTap,
+        child: SharePicture(imagePath: sufIcon!, fit: BoxFit.scaleDown),
+      );
+    }
+    return null;
+  }
+
+  Widget? getPrefixIcon() {
+    if (prefexicon != null) {
+      return Icon(prefexicon, size: 20, color: ConstColors.grey6A7);
+    } else if (preIcon != null) {
+      return SharePicture(imagePath: preIcon!, fit: BoxFit.scaleDown);
+    }
+    return null;
   }
 }

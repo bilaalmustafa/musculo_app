@@ -4,6 +4,7 @@ import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/feedback/components/feedbackfield.dart';
 
 import '../../../../components/custom_button.dart';
+import '../../../../core/constants/assets.dart';
 import '../../../../core/constants/sizes.dart';
 import '../../../auth/register/component/show_dialog_box.dart';
 
@@ -53,7 +54,7 @@ class _FeedBScreenState extends State<FeedBScreen> {
               controller: emailController,
               hint: 'Email ( optional )',
               height: Sizes.s60,
-              preIcon: Icons.email_rounded,
+              prefixIcon: Assets.message,
             ),
           ],
         ),

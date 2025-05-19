@@ -23,9 +23,9 @@ class ProgramScreen extends StatelessWidget {
           spacing: Sizes.s20,
           children: [
             CustomTextField(
-              prefexicon: Icons.search,
+              preIcon: Assets.searchIcon,
               title: 'Search Program',
-              suffexicon: Icons.filter_1_outlined,
+              sufIcon: Assets.filterIcon,
               onTap: () {
                 Navigator.pushNamed(context, Routes.filterscreen);
               },

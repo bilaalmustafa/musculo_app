@@ -20,6 +20,7 @@ class ChangepasswordScreen extends StatefulWidget {
 
 class _ChangepasswordScreenState extends State<ChangepasswordScreen> {
   bool isObscure = true;
+  bool cobscure = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,6 +38,7 @@ class _ChangepasswordScreenState extends State<ChangepasswordScreen> {
                   "Almost there! Create a new password for your Musculo account to keep it secure. Remember to choose a strong and unique password.",
               fontSize: Sizes.s14,
               fontWeight: TextWeight.regular,
+              color: ConstColors.grey7575,
             ),
             PoppinsText(
               text: "New Password",
@@ -44,9 +46,10 @@ class _ChangepasswordScreenState extends State<ChangepasswordScreen> {
               fontWeight: TextWeight.semiBold,
             ),
             CustomTextField(
-              prefexicon: Icons.lock,
+              preIcon: Assets.lock,
               title: "Password",
-              suffexicon: isObscure ? Icons.visibility_off : Icons.visibility,
+              sufIcon: isObscure ? Assets.hide : Assets.show,
+
               obscureText: isObscure,
               onTap:
                   () => setState(() {
@@ -59,13 +62,14 @@ class _ChangepasswordScreenState extends State<ChangepasswordScreen> {
               fontWeight: TextWeight.semiBold,
             ),
             CustomTextField(
-              prefexicon: Icons.lock,
+              preIcon: Assets.lock,
               title: "Password",
-              suffexicon: isObscure ? Icons.visibility_off : Icons.visibility,
-              obscureText: isObscure,
+              sufIcon: cobscure ? Assets.hide : Assets.show,
+
+              obscureText: cobscure,
               onTap:
                   () => setState(() {
-                    isObscure = !isObscure;
+                    cobscure = !cobscure;
                   }),
             ),
           ],

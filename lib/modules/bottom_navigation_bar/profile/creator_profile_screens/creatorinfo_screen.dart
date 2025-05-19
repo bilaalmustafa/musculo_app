@@ -63,7 +63,7 @@ class _CreatorinfoScreenState extends State<CreatorinfoScreen> {
                           child: Icon(
                             Icons.edit,
                             color: Colors.white,
-                            size: 20,
+                            size: Sizes.s20,
                           ),
                         ),
                       ),
@@ -84,6 +84,7 @@ class _CreatorinfoScreenState extends State<CreatorinfoScreen> {
                 'Push-Ups',
                 'Upper Body',
               ],
+              hint: 'Select Excercise',
               onChanged: (value) {
                 setState(() {
                   _selectExcercise = value;

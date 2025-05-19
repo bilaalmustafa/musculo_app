@@ -52,7 +52,7 @@ class VerifypasswordScreen extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                 ),
                 decoration: BoxDecoration(
-                  color: ConstColors.secondary,
+                  color: ConstColors.greyEEE,
                   border: Border.all(color: ConstColors.greyA9A8),
                   borderRadius: BorderRadius.circular(10),
                 ),

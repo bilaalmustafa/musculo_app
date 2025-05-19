@@ -9,31 +9,34 @@ class SelectLevelOfFitness extends StatelessWidget {
     super.key,
     required this.fitnessLevel,
     required this.value,
+    required this.groupValue,
     this.onChanged,
     required this.color,
   });
-  final String fitnessLevel, value;
-  final ValueChanged? onChanged;
+
+  final String fitnessLevel, value, groupValue;
+  final ValueChanged<String?>? onChanged;
   final Color color;
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 10),
       shape: RoundedRectangleBorder(
         side: BorderSide(color: color, width: 2),
         borderRadius: BorderRadius.circular(Sizes.s16),
       ),
       tileColor: ConstColors.white,
-
       title: PoppinsText(
         text: fitnessLevel,
         fontWeight: TextWeight.medium,
         fontSize: Sizes.s16,
       ),
-      trailing: Radio(
-        value: fitnessLevel,
-        groupValue: "fitnessLevel",
+      trailing: Radio<String>(
+        value: value,
+        groupValue: groupValue,
         onChanged: onChanged,
+        activeColor: ConstColors.black,
       ),
     );
   }

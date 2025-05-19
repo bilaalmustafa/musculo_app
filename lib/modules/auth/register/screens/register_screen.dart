@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/shared_appbar.dart';
-import 'package:musculo_app/core/constants/const_colors.dart';
 
 import 'package:musculo_app/modules/auth/register/screens/age_screen.dart';
 import 'package:musculo_app/modules/auth/register/screens/agreement_screen.dart';
@@ -37,6 +36,7 @@ class _RegisterScrenState extends State<RegisterScren> {
     }
   }
 
+  @override
   void dispose() {
     _pageController.dispose();
     super.dispose();
