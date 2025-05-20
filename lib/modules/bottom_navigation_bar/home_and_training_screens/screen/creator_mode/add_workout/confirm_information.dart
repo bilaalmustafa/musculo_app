@@ -76,7 +76,7 @@ class _WarmUpState extends State<ConfirmInformation> {
                 children: [
                   PoppinsText(
                     text: "Confirm the information below",
-                    fontSize: Sizes.s20,
+                    fontSize: Sizes.s24,
                     fontWeight: TextWeight.semiBold,
                   ),
                   PoppinsText(
@@ -90,7 +90,7 @@ class _WarmUpState extends State<ConfirmInformation> {
                     decoration: BoxDecoration(
                       color: ConstColors.secondary,
 
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,

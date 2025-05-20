@@ -27,10 +27,11 @@ class _DaysAWeeksState extends State<DaysAWeeks> {
             ).copyWith(top: 20),
             child: PoppinsText(
               text: "How many day’s a week ?",
-              fontSize: Sizes.s20,
+              fontSize: Sizes.s24,
               fontWeight: TextWeight.semiBold,
             ),
           ),
+
           Expanded(
             child: Container(
               color: ConstColors.secondary,
@@ -48,7 +49,10 @@ class _DaysAWeeksState extends State<DaysAWeeks> {
                               : null,
                     ),
                     child: CheckboxListTile(
-                      contentPadding: EdgeInsets.all(10),
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 5,
+                      ),
                       checkboxShape: CircleBorder(
                         side: BorderSide(color: ConstColors.black),
                       ),

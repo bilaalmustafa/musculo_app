@@ -12,6 +12,8 @@ import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_scre
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_program/level_of_program.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_program/type_of_program.dart';
 
+import '../../../../../../core/config/routes.dart';
+
 class AddProgramPageview extends StatefulWidget {
   const AddProgramPageview({super.key});
 
@@ -98,6 +100,7 @@ class _AddProgramPageviewState extends State<AddProgramPageview> {
                   } else {
                     showDialog(
                       context: context,
+
                       builder: (context) {
                         return ShowDialogBox(
                           message: "Your program is live!",
@@ -111,6 +114,11 @@ class _AddProgramPageviewState extends State<AddProgramPageview> {
                                 buttonText: "Back to home page",
                                 buttonColor: ConstColors.secondary,
                                 textColor: ConstColors.black,
+                                onTap:
+                                    () => Navigator.pushNamed(
+                                      context,
+                                      Routes.bottomnavigationbarscreen,
+                                    ),
                               ),
                             ],
                           ),

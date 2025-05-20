@@ -8,7 +8,6 @@ import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/custom_chip.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/calender.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/history_list_tile.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 class HistoryTab extends StatefulWidget {
   const HistoryTab({super.key});

@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:musculo_app/components/custom_button.dart';
-import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/components/share_picture.dart';
 import 'package:musculo_app/components/tab_buttons.dart';
 import 'package:musculo_app/core/config/extensions.dart';
 import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
-import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/rating_star.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/show_rating_bottomsheet.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/tab/description_tab.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/tab/history_tab.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/traning_preview_screen.dart';
 
 class ProgramDetailPageView extends StatefulWidget {
   const ProgramDetailPageView({super.key});

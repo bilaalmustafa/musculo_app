@@ -19,7 +19,7 @@ class _TypeOfWorkoutState extends State<TypeOfWorkout> {
     return Scaffold(
       backgroundColor: ConstColors.white,
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(Sizes.s16),
         child: Column(
           spacing: Sizes.s20,
           crossAxisAlignment: CrossAxisAlignment.start,

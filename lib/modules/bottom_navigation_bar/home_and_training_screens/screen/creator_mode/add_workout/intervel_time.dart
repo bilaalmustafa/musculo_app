@@ -1,11 +1,10 @@
+import 'dart:nativewrappers/_internal/vm/lib/developer.dart';
+
 import 'package:flutter/material.dart';
-import 'package:musculo_app/components/customTextField.dart';
 import 'package:musculo_app/components/poppins_text.dart';
-import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/custom_chip.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/component/counter_container.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/component/reels_item.dart';
 import 'package:video_player/video_player.dart';
@@ -32,11 +31,11 @@ class _WarmUpState extends State<IntervelTime> {
       controller
           .initialize()
           .then((_) {
-            print("Initialized video: $url");
+            log("Initialized video: $url");
             setState(() {});
           })
           .catchError((error) {
-            print("Error initializing video: $error");
+            log("Error initializing video: $error");
           });
       _controllers.add(controller);
     }

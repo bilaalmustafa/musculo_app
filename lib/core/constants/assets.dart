@@ -38,6 +38,7 @@ class Assets {
   static const String star1 = "$_icons/Star1.svg";
   static const String upload1 = "$_icons/Upload1.svg";
   static const String sqaure1 = "$_icons/Close Square1.png";
+  static const String arrowUp = "$_icons/ArrowUp2.svg";
 
   static const String logo = '$_assets/applogo.png';
   static const String maskgroup = "$_assets/maskgroup.png";

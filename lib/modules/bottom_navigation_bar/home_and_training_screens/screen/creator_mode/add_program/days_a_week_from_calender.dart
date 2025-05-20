@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:musculo_app/components/customTextField.dart';
+
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
@@ -14,7 +14,7 @@ class DaysAWeeksFromCalender extends StatefulWidget {
 }
 
 class _DurationOfProgramState extends State<DaysAWeeksFromCalender> {
-    DateTime _focusedDay = DateTime.now();
+  DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class _DurationOfProgramState extends State<DaysAWeeksFromCalender> {
           children: [
             PoppinsText(
               text: "How many day’s a week ?",
-              fontSize: Sizes.s20,
+              fontSize: Sizes.s24,
               fontWeight: TextWeight.semiBold,
             ),
 

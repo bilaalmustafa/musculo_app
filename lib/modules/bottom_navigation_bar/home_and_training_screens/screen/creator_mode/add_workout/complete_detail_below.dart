@@ -17,7 +17,7 @@ class CompleteDetailBelow extends StatefulWidget {
 
 class _WarmUpState extends State<CompleteDetailBelow> {
   double slidervalue = 5;
-  String _selectedhere = "Select it here";
+  String _selectedhere = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,6 +54,7 @@ class _WarmUpState extends State<CompleteDetailBelow> {
                   CustomDropdown(
                     value: _selectedhere,
                     items: const ['Warm up', 'Workout', 'Finisher'],
+                    hint: 'DD/MM/YYYY',
                     onChanged: (value) {
                       setState(() {
                         _selectedhere = value;

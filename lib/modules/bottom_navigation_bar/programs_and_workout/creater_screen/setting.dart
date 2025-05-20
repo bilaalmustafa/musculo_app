@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/share_picture.dart';
 import 'package:musculo_app/components/shared_appbar.dart';

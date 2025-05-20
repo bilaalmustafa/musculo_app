@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/modules/auth/register/component/question_text.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
-import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/modules/auth/register/component/select_level_of_fitness.dart';
 
