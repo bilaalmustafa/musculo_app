@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/poppins_text.dart';
+import 'package:musculo_app/components/share_picture.dart';
 import 'package:musculo_app/core/config/routes.dart';
+import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
@@ -37,6 +39,20 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
             fontSize: Sizes.s20,
             color: isSwitch ? ConstColors.white : ConstColors.black,
             fontWeight: TextWeight.semiBold,
+          ),
+          Transform.scale(
+            scale: 0.7,
+            child: Switch(
+              activeColor: ConstColors.green10,
+              value: true,
+              onChanged: (vlue) {},
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, Routes.settingScreen);
+            },
+            icon: SharePicture(imagePath: Assets.settingIcon),
           ),
         ],
       ),
@@ -120,8 +136,6 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ],
     );
-
-    ;
   }
 
   @override

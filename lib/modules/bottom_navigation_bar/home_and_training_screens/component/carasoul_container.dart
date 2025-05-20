@@ -38,7 +38,7 @@ class _CarasoulContainerState extends State<CarasoulContainer> {
           borderRadius: BorderRadius.circular(10),
           child: CarouselSlider(
             options: CarouselOptions(
-              height: 180.0,
+              height: Sizes.s180,
               viewportFraction: 1.0,
               autoPlay: true,
               onPageChanged: (index, reason) {

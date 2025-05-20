@@ -64,7 +64,7 @@ class _TrainingScreenState extends State<TrainingScreen> {
                 ),
                 Container(
                   width: double.infinity,
-                  height: 350,
+                  height: Sizes.s350,
 
                   decoration: BoxDecoration(
                     color: ConstColors.secondary,
@@ -99,7 +99,7 @@ class _TrainingScreenState extends State<TrainingScreen> {
                         buttonText: "PAUSE",
                         textColor: ConstColors.white,
                         buttonColor: ConstColors.black,
-                        postIconData: CupertinoIcons.pause_solid,
+                        preIconData: CupertinoIcons.pause_solid,
                       ),
                     ),
                     SizedBox(
@@ -108,7 +108,7 @@ class _TrainingScreenState extends State<TrainingScreen> {
                         buttonText: "END",
                         textColor: ConstColors.white,
                         buttonColor: ConstColors.redF52,
-                        preIconData: Icons.cancel_rounded,
+                        preSvgPath: Assets.closeSquare,
                       ),
                     ),
                   ],

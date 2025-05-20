@@ -20,6 +20,7 @@ class SignInScreen extends StatefulWidget {
 
 class _SignInScreenState extends State<SignInScreen> {
   final _formKey = GlobalKey<FormState>();
+  bool visibility = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,9 +31,13 @@ class _SignInScreenState extends State<SignInScreen> {
           child: Column(
             spacing: Sizes.s20,
             children: [
-              SharePicture(imagePath: Assets.monogram),
+              SharePicture(
+                imagePath: Assets.monog,
+                width: Sizes.s120,
+                height: Sizes.s132,
+              ),
               PoppinsText(
-                text: "Log Into You Account",
+                text: "Log Into Your Account",
                 fontSize: Sizes.s24,
                 fontWeight: TextWeight.semiBold,
               ),
@@ -40,15 +45,22 @@ class _SignInScreenState extends State<SignInScreen> {
               Form(
                 key: _formKey,
                 child: Padding(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.all(Sizes.s20),
                   child: Column(
                     spacing: Sizes.s20,
                     children: [
-                      CustomTextField(title: "Email", prefexicon: Icons.email),
+                      CustomTextField(title: "Email", preIcon: Assets.message),
                       CustomTextField(
                         title: "Password",
-                        prefexicon: Icons.lock,
-                        suffexicon: Icons.visibility,
+                        preIcon: Assets.lock,
+                        obscureText: visibility,
+                        sufIcon: visibility ? Assets.hide : Assets.show,
+
+                        onTap: () {
+                          setState(() {
+                            visibility = !visibility;
+                          });
+                        },
                       ),
                       CustomButton(
                         buttonText: "Log In",
@@ -62,21 +74,50 @@ class _SignInScreenState extends State<SignInScreen> {
                           }
                         },
                       ),
-                      PoppinsText(
-                        text: "Forgot the Password?",
-                        fontSize: Sizes.s13,
-                        fontWeight: TextWeight.semiBold,
+                      TextButton(
+                        onPressed: () {
+                          // navigate to forgot password screen
+                          Navigator.pushNamed(
+                            context,
+                            Routes.resetPasswordScreen,
+                          );
+                        },
+                        child: PoppinsText(
+                          text: "Forgot the Password?",
+                          color: ConstColors.black,
+
+                          fontSize: Sizes.s13,
+                          fontWeight: TextWeight.semiBold,
+                        ),
                       ),
                     ],
                   ),
                 ),
               ),
 
-              PoppinsText(
-                text: "Or continue with",
-                fontSize: Sizes.s13,
-                color: ConstColors.greyB3B3,
-                fontWeight: TextWeight.semiBold,
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 20, right: 10),
+                      height: 1,
+                      color: ConstColors.greyEDE,
+                    ),
+                  ),
+                  PoppinsText(
+                    text: "Or continue with",
+                    fontSize: Sizes.s13,
+                    color: ConstColors.greyB3B3,
+                    fontWeight: TextWeight.semiBold,
+                  ),
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 10, right: 20),
+                      height: 1,
+                      color: ConstColors.greyEDE,
+                    ),
+                  ),
+                ],
               ),
 
               SocialButtonRow(),
@@ -98,6 +139,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       text: "Register",
                       fontSize: Sizes.s13,
                       fontWeight: TextWeight.semiBold,
+                      color: ConstColors.black,
                     ),
                   ),
                 ],

@@ -26,19 +26,20 @@ class AgreementCheck extends StatelessWidget {
           contentPadding: EdgeInsets.zero,
           title: PoppinsText(
             text: title,
-            fontSize: fontSize ?? Sizes.s16,
+            fontSize: fontSize ?? Sizes.s14,
             fontWeight: TextWeight.medium,
           ),
           leading: Checkbox(
             activeColor: Colors.black,
 
             value: isChecked,
-            onChanged: (value) {
-              // Handle checkbox state change
-            },
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(7),
+            ),
+            onChanged: onChanged,
           ),
         ),
-        Divider(color: ConstColors.secondary, thickness: 2),
+        Divider(color: ConstColors.secondary, thickness: 1),
       ],
     );
   }

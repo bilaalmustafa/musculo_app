@@ -37,7 +37,7 @@ class ShowDialogBox extends StatelessWidget {
             fontSize: Sizes.s13,
             fontWeight: TextWeight.regular,
           ),
-          // Image(image: AssetImage(Assets.vector)),
+
           if (bottomWidget != null) bottomWidget!,
         ],
       ),

@@ -27,8 +27,8 @@ class LogoAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(minHeight: 100),
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      constraints: BoxConstraints(minHeight: Sizes.s100),
+      padding: EdgeInsets.symmetric(vertical: Sizes.s10, horizontal: Sizes.s20),
       color: ConstColors.white,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -45,14 +45,15 @@ class LogoAppBar extends StatelessWidget implements PreferredSizeWidget {
                 fontSize: Sizes.s20,
                 fontWeight: TextWeight.semiBold,
               ),
-              trailing: Icon(Icons.more_horiz_outlined),
+              trailing: SharePicture(imagePath: Assets.moreHrizontal),
             ),
           ),
           huintText != null
               ? CustomTextField(
-                prefexicon: Icons.search,
+                preIcon: Assets.searchIcon,
                 title: huintText!,
-                suffexicon: Icons.filter_1_outlined,
+
+                sufIcon: Assets.filterIcon,
                 onTap: () {
                   Navigator.pushNamed(context, Routes.filterscreen);
                 },

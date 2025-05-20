@@ -49,7 +49,12 @@ class _GetStartedState extends State<GetStarted> {
                   fontWeight: TextWeight.semiBold,
                 ),
                 SizedBox(height: context.screenheight * 0.02),
-                CustomButton(buttonText: "Register"),
+                CustomButton(
+                  buttonText: "Register",
+                  onTap: () {
+                    Navigator.pushNamed(context, Routes.registerscreen);
+                  },
+                ),
                 CustomButton(
                   buttonText: "Sign in",
                   buttonColor: ConstColors.secondary,
@@ -57,6 +62,7 @@ class _GetStartedState extends State<GetStarted> {
                   onTap:
                       () => Navigator.pushNamed(context, Routes.signInscreen),
                 ),
+                SizedBox(height: Sizes.s10),
               ],
             ),
           ),

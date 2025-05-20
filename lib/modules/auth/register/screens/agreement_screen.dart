@@ -12,10 +12,11 @@ class AgreementScreen extends StatefulWidget {
 }
 
 class _AgreementScreenState extends State<AgreementScreen> {
+  List<bool> agreementsChecked = [false, false, false, false];
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(25.0),
+      padding: const EdgeInsets.all(Sizes.s16),
       child: Column(
         // spacing: Sizes.s1_5,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -27,23 +28,39 @@ class _AgreementScreenState extends State<AgreementScreen> {
           SizedBox(height: Sizes.s20),
           AgreementCheck(
             title: "Consequat id porta nibh venenatis cras sed. I",
-            onChanged: (value) {},
-            isChecked: true,
+            isChecked: agreementsChecked[0],
+            onChanged: (value) {
+              setState(() {
+                agreementsChecked[0] = value!;
+              });
+            },
           ),
           AgreementCheck(
             title: "Consequat id porta nibh venenatis cras sed. I",
-            onChanged: (value) {},
-            isChecked: true,
+            isChecked: agreementsChecked[1],
+            onChanged: (value) {
+              setState(() {
+                agreementsChecked[1] = value!;
+              });
+            },
           ),
           AgreementCheck(
             title: "Consequat id porta nibh venenatis cras sed. I",
-            onChanged: (value) {},
-            isChecked: true,
+            isChecked: agreementsChecked[2],
+            onChanged: (value) {
+              setState(() {
+                agreementsChecked[2] = value;
+              });
+            },
           ),
           AgreementCheck(
             title: "Consequat id porta nibh venenatis cras sed. I",
-            onChanged: (value) {},
-            isChecked: true,
+            isChecked: agreementsChecked[3],
+            onChanged: (value) {
+              setState(() {
+                agreementsChecked[3] = value!;
+              });
+            },
           ),
         ],
       ),

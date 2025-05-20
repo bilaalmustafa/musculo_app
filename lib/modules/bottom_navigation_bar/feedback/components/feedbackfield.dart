@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musculo_app/components/share_picture.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
@@ -22,6 +23,8 @@ class Feedbackfield extends StatelessWidget {
   final String? obsecureCharacter;
   final FontWeight? fontWeight;
   final int? maxline;
+  final String? sufixIcon;
+  final String? prefixIcon;
 
   const Feedbackfield({
     super.key,
@@ -43,6 +46,8 @@ class Feedbackfield extends StatelessWidget {
     this.obsecureCharacter,
     this.fontWeight,
     this.maxline,
+    this.sufixIcon,
+    this.prefixIcon,
   });
 
   @override
@@ -79,13 +84,17 @@ class Feedbackfield extends StatelessWidget {
           prefixIcon:
               preIcon != null
                   ? Icon(preIcon, size: 18, color: ConstColors.gre9E9E)
+                  : prefixIcon != null
+                  ? SharePicture(imagePath: prefixIcon!, fit: BoxFit.scaleDown)
                   : null,
           suffixIcon:
               sufIcon != null
                   ? GestureDetector(
                     onTap: onSufixTap,
-                    child: Icon(sufIcon, size: 18, color: ConstColors.black),
+                    child: Icon(sufIcon, size: 18, color: ConstColors.gre9E9E),
                   )
+                  : sufixIcon != null
+                  ? SharePicture(imagePath: sufixIcon!, fit: BoxFit.scaleDown)
                   : null,
           contentPadding: EdgeInsets.zero,
         ),
