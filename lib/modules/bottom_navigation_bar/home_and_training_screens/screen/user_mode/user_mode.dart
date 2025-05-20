@@ -28,8 +28,11 @@ class _UserModeTabState extends State<UserModeTab> {
           children: [
             CustomTextField(
               title: "Search program",
-              prefexicon: Icons.search,
-              suffexicon: Icons.filter_list_outlined,
+              // prefexicon: Icons.search,
+              preIcon: Assets.searchIcon,
+              sufIcon: Assets.filterIcon,
+
+              // suffexicon: Icons.filter_list_outlined,
             ),
             CarasoulContainer(),
             Row(
@@ -102,7 +105,7 @@ class _UserModeTabState extends State<UserModeTab> {
               child: ListView.separated(
                 itemCount: 3,
                 itemBuilder:
-                    (context, index) => VideoItem(image: Assets.playbutton),
+                    (context, index) => VideoItem(image: Assets.playbutt),
                 separatorBuilder: (context, index) => SizedBox(height: 20),
               ),
             ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/poppins_text.dart';
+import 'package:musculo_app/components/share_picture.dart';
+import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
@@ -84,10 +86,11 @@ class ReelsItem extends StatelessWidget {
             Spacer(),
             Align(
               alignment: Alignment.topRight,
-              child: Icon(
-                screenintervel == 0
-                    ? Icons.favorite_border_outlined
-                    : Icons.more_horiz,
+              child: SharePicture(
+                imagePath:
+                    screenintervel == 0
+                        ? Assets.heartIcon
+                        : Assets.moreHrizontal,
               ),
             ),
           ],

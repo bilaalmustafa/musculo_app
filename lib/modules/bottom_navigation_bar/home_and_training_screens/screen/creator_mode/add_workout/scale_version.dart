@@ -67,7 +67,7 @@ class _WarmUpState extends State<ScaleVersion> {
               children: [
                 PoppinsText(
                   text: "Choose scale version for the chosen exercises",
-                  fontSize: Sizes.s20,
+                  fontSize: Sizes.s24,
                   fontWeight: TextWeight.semiBold,
                 ),
               ],

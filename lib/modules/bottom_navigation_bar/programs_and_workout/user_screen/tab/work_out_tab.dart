@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import 'package:musculo_app/core/constants/const_colors.dart';
@@ -11,7 +10,7 @@ class WorkOutTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ConstColors.secondary,
+      backgroundColor: ConstColors.white,
       body: ListView.builder(
         itemCount: 3,
         itemBuilder: (context, index) {
@@ -21,5 +20,3 @@ class WorkOutTab extends StatelessWidget {
     );
   }
 }
-
-

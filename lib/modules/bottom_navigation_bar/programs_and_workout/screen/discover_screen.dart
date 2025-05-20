@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/logo_app_bar.dart';
+import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/program_tab.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/tab/work_out_tab.dart';
-
 
 class DiscoverScreen extends StatefulWidget {
   const DiscoverScreen({super.key});
@@ -24,6 +24,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ConstColors.white,
       appBar: LogoAppBar(
         title: "Discover",
         huintText: "Search workouts",

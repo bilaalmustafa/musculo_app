@@ -28,7 +28,7 @@ class _TypeOfWorkoutState extends State<SectionOfWork> {
             children: [
               PoppinsText(
                 text: "Select the sections of your workout",
-                fontSize: Sizes.s20,
+                fontSize: Sizes.s24,
                 fontWeight: TextWeight.semiBold,
               ),
               Divider(color: ConstColors.dividerColor),

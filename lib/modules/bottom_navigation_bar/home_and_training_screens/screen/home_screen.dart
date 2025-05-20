@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/customTextField.dart';
-import 'package:musculo_app/components/custom_button.dart';
+
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/core/config/extensions.dart';
 import 'package:musculo_app/core/constants/assets.dart';
@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             spacing: Sizes.s20,
             children: [
-              HomeAppBar(isSwitch: true, valueChange: (value) {}),
+              HomeAppBar(isSwitch: false, valueChange: (value) {}),
               CustomTextField(
                 title: "Search program",
                 preIcon: Assets.searchIcon,

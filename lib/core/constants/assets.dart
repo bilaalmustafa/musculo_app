@@ -29,6 +29,15 @@ class Assets {
   static const String calendar1 = "$_icons/Calendar1.svg";
   static const String discovery2 = "$_icons/Discovery2.svg";
   static const String moreHrizontal = "$_icons/moreHorizontal.svg";
+  static const String chart = "$_icons/Chart.svg";
+  static const String daimond = "$_icons/diamond.svg";
+  static const String editIcon1 = "$_icons/Edit1.svg";
+  static const String plusIcon = "$_icons/Plusicon.png";
+  static const String editBlack = "$_icons/EditBlack.svg";
+  static const String chartBlack = "$_icons/ChartBlack.svg";
+  static const String star1 = "$_icons/Star1.svg";
+  static const String upload1 = "$_icons/Upload1.svg";
+  static const String sqaure1 = "$_icons/Close Square1.png";
 
   static const String logo = '$_assets/applogo.png';
   static const String maskgroup = "$_assets/maskgroup.png";
@@ -47,6 +56,9 @@ class Assets {
   static const String whatsappimage = "$_assets/Mask Group.png";
   static const String twitterImage = "$_assets/twitterImage.png";
   static const String instagramImage = "$_assets/instagramImage.png";
+  static const String bellyFat = "$_assets/belly Fat.png";
+  static const String coachProfile = "$_assets/coachProfile.png";
+  static const String rectanglework = "$_assets/Rectanglework.png";
 
   static const String facebook = "$_svgs/facebook.svg";
   static const String google = "$_svgs/google.svg";

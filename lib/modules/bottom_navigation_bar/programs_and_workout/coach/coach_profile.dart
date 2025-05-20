@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/poppins_text.dart';
+import 'package:musculo_app/components/share_picture.dart';
 import 'package:musculo_app/components/shared_appbar.dart';
 import 'package:musculo_app/components/tab_buttons.dart';
 import 'package:musculo_app/core/config/extensions.dart';
@@ -9,6 +10,8 @@ import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/coach/coach_profile_text_tab.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/coach/program/workouts_tab.dart';
+
+import '../../home_and_training_screens/component/show_rating_bottom_sheet.dart';
 
 class CoachProfile extends StatefulWidget {
   const CoachProfile({super.key});
@@ -31,12 +34,64 @@ class _CoachProfileState extends State<CoachProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ConstColors.white,
-      appBar: SharedAppBar(actionIcon: Icons.more_horiz_outlined),
+      appBar: SharedAppBar(
+        trailing: PopupMenuButton<String>(
+          color: ConstColors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          onSelected: (value) {
+            if (value == "rate") {
+              showModalBottomSheet(
+                isScrollControlled: true,
+                barrierColor: ConstColors.black.withValues(alpha: .8),
+                constraints: BoxConstraints(
+                  maxHeight: context.screenheight * 0.7,
+                ),
+                backgroundColor: ConstColors.white,
+                context: context,
+                builder: (context) => ShowRatingBottomSheet(),
+              );
+            }
+          },
+          itemBuilder:
+              (context) => [
+                PopupMenuItem(
+                  value: 'rate',
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.star_border_outlined,
+                        color: ConstColors.black,
+                      ),
+                      const SizedBox(width: 8),
+                      const Text('Rate Creator'),
+                    ],
+                  ),
+                ),
+                PopupMenuItem(
+                  value: 'edit',
+                  child: Row(
+                    children: [
+                      SharePicture(imagePath: Assets.editIcon),
+                      const SizedBox(width: 8),
+                      Text('Edit Rating'),
+                    ],
+                  ),
+                ),
+              ],
+          icon: SharePicture(
+            imagePath: Assets.moreHrizontal,
+            colorFilter: ColorFilter.mode(ConstColors.black, BlendMode.srcIn),
+          ),
+        ),
+      ),
+
       body: Column(
         children: [
           Container(
             width: double.infinity,
-            height: 200,
+            height: Sizes.s200,
             decoration: BoxDecoration(
               //color: ConstColors.amber,
               image: DecorationImage(
@@ -49,7 +104,7 @@ class _CoachProfileState extends State<CoachProfile> {
               children: [
                 CircleAvatar(
                   radius: 55,
-                  backgroundImage: AssetImage(Assets.workout),
+                  backgroundImage: AssetImage(Assets.coachProfile),
                 ),
                 SizedBox(height: Sizes.s10),
                 PoppinsText(
@@ -57,12 +112,15 @@ class _CoachProfileState extends State<CoachProfile> {
                   fontSize: Sizes.s20,
                   fontWeight: TextWeight.semiBold,
                 ),
+                SizedBox(height: Sizes.s3),
+
                 Row(
                   spacing: Sizes.s10,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.star, color: ConstColors.orange, size: 20),
-                    PoppinsText(text: "4.6 |", fontSize: Sizes.s10),
+                    PoppinsText(text: "4.6", fontSize: Sizes.s10),
+                    Container(height: 15, width: 1.5, color: Colors.black),
                     Container(
                       padding: EdgeInsets.all(4),
                       decoration: BoxDecoration(
@@ -70,8 +128,9 @@ class _CoachProfileState extends State<CoachProfile> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Row(
+                        spacing: Sizes.s2,
                         children: [
-                          Icon(Icons.star, size: 18),
+                          SharePicture(imagePath: Assets.daimond),
                           PoppinsText(
                             text: "Premium Creator",
                             fontSize: Sizes.s10,

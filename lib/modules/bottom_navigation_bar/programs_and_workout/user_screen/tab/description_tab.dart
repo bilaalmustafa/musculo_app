@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/core/config/extensions.dart';
+import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
@@ -113,26 +114,32 @@ class _ProgramDetailScreenState extends State<DescriptionTab> {
                     fontWeight: TextWeight.semiBold,
                   ),
                   CreatorListTile(),
+                  PoppinsText(
+                    text: "Workouts ",
+                    fontSize: Sizes.s16,
+                    fontWeight: TextWeight.semiBold,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       AnalsisContainer(
-                        icon: Icons.timelapse_outlined,
+                        iconImage: Assets.timeCircle,
                         digit: "10",
                         text: "Weeks",
                       ),
                       AnalsisContainer(
-                        icon: Icons.run_circle_outlined,
+                        iconImage: Assets.runnerIcon,
                         digit: "15",
                         text: "Workout",
                       ),
                       AnalsisContainer(
-                        icon: Icons.analytics_outlined,
+                        iconImage: Assets.chart,
                         digit: "3X",
                         text: "week",
                       ),
                     ],
                   ),
+                  SizedBox(height: Sizes.s20),
                 ],
               ),
             ),
@@ -141,7 +148,7 @@ class _ProgramDetailScreenState extends State<DescriptionTab> {
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(
-          horizontal: 20.0,
+          horizontal: 16.0,
         ).copyWith(bottom: 20),
         child: Row(
           children: [
@@ -149,8 +156,9 @@ class _ProgramDetailScreenState extends State<DescriptionTab> {
               flex: 3,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  PoppinsText(text: "Price", fontSize: 14),
+                  PoppinsText(text: "Price", fontSize: 13),
                   PoppinsText(
                     text: "£20.00",
                     fontSize: 16,

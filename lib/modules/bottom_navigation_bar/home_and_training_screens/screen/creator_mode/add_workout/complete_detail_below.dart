@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/customTextField.dart';
 import 'package:musculo_app/components/poppins_text.dart';
-import 'package:musculo_app/core/constants/assets.dart';
+
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/custom_chip.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/component/counter_container.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/component/reels_item.dart';
+
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/component/customdropdown.dart';
-import 'package:video_player/video_player.dart';
 
 class CompleteDetailBelow extends StatefulWidget {
   const CompleteDetailBelow({super.key});
@@ -38,7 +35,7 @@ class _WarmUpState extends State<CompleteDetailBelow> {
                 children: [
                   PoppinsText(
                     text: "Complete the details below",
-                    fontSize: Sizes.s20,
+                    fontSize: Sizes.s24,
                     fontWeight: TextWeight.semiBold,
                   ),
                   PoppinsText(

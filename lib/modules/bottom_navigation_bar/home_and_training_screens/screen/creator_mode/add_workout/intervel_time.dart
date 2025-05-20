@@ -60,14 +60,14 @@ class _WarmUpState extends State<IntervelTime> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 20,
               children: [
                 PoppinsText(
                   text: "Choose the interval time for the chosen exercises",
-                  fontSize: Sizes.s20,
+                  fontSize: Sizes.s24,
                   fontWeight: TextWeight.semiBold,
                 ),
               ],

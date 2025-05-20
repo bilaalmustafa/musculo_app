@@ -12,7 +12,6 @@ import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_scre
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_workout/section_of_workout.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_workout/type_of_workout.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_workout/warm_up.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_workout/work_out.dart';
 
 class AddWorkoutPageView extends StatefulWidget {
   const AddWorkoutPageView({super.key});
@@ -37,6 +36,7 @@ class _AddWorkoutPageViewState extends State<AddWorkoutPageView> {
     }
   }
 
+  @override
   void dispose() {
     _pageController.dispose();
     super.dispose();
