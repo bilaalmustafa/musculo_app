@@ -9,14 +9,14 @@ import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_scre
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/component/reels_item.dart';
 import 'package:video_player/video_player.dart';
 
-class WarmUp extends StatefulWidget {
-  const WarmUp({super.key});
+class Work_Out extends StatefulWidget {
+  const Work_Out({super.key});
 
   @override
-  State<WarmUp> createState() => _WarmUpState();
+  State<Work_Out> createState() => _WarmUpState();
 }
 
-class _WarmUpState extends State<WarmUp> {
+class _WarmUpState extends State<Work_Out> {
   final List<String> videoUrls = [
     'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
     'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4',
@@ -65,7 +65,7 @@ class _WarmUpState extends State<WarmUp> {
               spacing: 20,
               children: [
                 PoppinsText(
-                  text: "Warm Up",
+                  text: "Workouts",
                   fontSize: Sizes.s20,
                   fontWeight: TextWeight.semiBold,
                 ),
@@ -109,7 +109,6 @@ class _WarmUpState extends State<WarmUp> {
                         } else {
                           seletedList.add(index);
                         }
-                        
                       });
                     },
 
