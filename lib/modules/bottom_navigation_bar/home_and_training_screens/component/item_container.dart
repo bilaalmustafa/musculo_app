@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/poppins_text.dart';
+import 'package:musculo_app/components/share_picture.dart';
 import 'package:musculo_app/core/config/extensions.dart';
 import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
@@ -13,18 +14,18 @@ class ItemContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 180,
+      height: Sizes.s180,
 
       decoration: BoxDecoration(
         color: ConstColors.secondary,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(Sizes.s10),
         image: DecorationImage(
           image: AssetImage(Assets.bgimage),
           fit: BoxFit.cover,
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: Sizes.s20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -58,7 +59,7 @@ class ItemContainer extends StatelessWidget {
             Expanded(
               child: Align(
                 alignment: Alignment.centerRight,
-                child: Image.asset(Assets.discovery),
+                child: SharePicture(imagePath: Assets.discovery2),
               ),
             ),
           ],

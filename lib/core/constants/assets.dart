@@ -27,6 +27,8 @@ class Assets {
   static const String downArrow = "$_icons/ArrowDown 2.svg";
   static const String message1 = "$_icons/Message1.svg";
   static const String calendar1 = "$_icons/Calendar1.svg";
+  static const String discovery2 = "$_icons/Discovery2.svg";
+  static const String moreHrizontal = "$_icons/moreHorizontal.svg";
 
   static const String logo = '$_assets/applogo.png';
   static const String maskgroup = "$_assets/maskgroup.png";
@@ -41,6 +43,9 @@ class Assets {
   static const String gpayment = "$_assets/gpayment.png";
   static const String ellipse = "$_assets/Ellipse.png";
   static const String monog = "$_assets/monog.png";
+  static const String whatsappimage = "$_assets/Mask Group.png";
+  static const String twitterImage = "$_assets/twitterImage.png";
+  static const String instagramImage = "$_assets/instagramImage.png";
 
   static const String facebook = "$_svgs/facebook.svg";
   static const String google = "$_svgs/google.svg";
@@ -71,4 +76,8 @@ class Assets {
   static const String rdownSquare = "$_svgs/RDown Square.svg";
   static const String mailDraw = "$_svgs/mailDraw.svg";
   static const String arrowleft = "$_svgs/ArrowLeft.svg";
+  static const String playbutt = "$_svgs/Play Button.svg";
+  static const String dumbellImage = "$_svgs/dumbell.svg";
+  static const String closeSquare = "$_svgs/Close Square.svg";
+  static const String whatsappIcon = "$_svgs/whatsapp icon.svg";
 }

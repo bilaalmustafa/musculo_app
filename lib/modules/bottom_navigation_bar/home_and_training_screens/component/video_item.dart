@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/poppins_text.dart';
+import 'package:musculo_app/components/share_picture.dart';
 import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
@@ -78,7 +79,7 @@ class VideoItem extends StatelessWidget {
             onChanged: (value) {},
           )
         else
-          Image.asset(image!, height: 50, width: 50),
+          SharePicture(imagePath: image!, height: Sizes.s50, width: Sizes.s50),
       ],
     );
   }

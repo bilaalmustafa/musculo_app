@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:musculo_app/components/customTextField.dart';
+
 import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/components/share_picture.dart';
+import 'package:musculo_app/core/config/routes.dart';
 import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/congrate_container.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/share_to_social.dart';
+
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/show_rating_bottom_sheet.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/show_share_bottom_sheet.dart';
 
@@ -25,7 +26,7 @@ class _CongratulationScreenState extends State<CongratulationScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(Sizes.s20),
         child: SafeArea(
           child: SingleChildScrollView(
             child: Column(
@@ -33,14 +34,19 @@ class _CongratulationScreenState extends State<CongratulationScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SharePicture(imagePath: Assets.congrate),
+                SizedBox(height: Sizes.s20),
+                SharePicture(
+                  imagePath: Assets.congrate,
+                  width: Sizes.s250,
+                  height: Sizes.s250,
+                ),
                 PoppinsText(
                   text: "Congratulation!",
                   fontSize: Sizes.s26,
                   fontWeight: TextWeight.semiBold,
                 ),
                 PoppinsText(
-                  text: "You have completed your workout!",
+                  text: "You’ve completed the workout!",
                   fontSize: Sizes.s13,
                   fontWeight: TextWeight.regular,
                   color: ConstColors.greyA1A1,
@@ -49,12 +55,12 @@ class _CongratulationScreenState extends State<CongratulationScreen> {
                 Row(
                   children: [
                     CongrateContainer(
-                      iconData: Icons.run_circle_outlined,
+                      imagePath: Assets.runnerIcon,
                       digit: "15",
                       text: "Finished Workout",
                     ),
                     CongrateContainer(
-                      iconData: Icons.timelapse,
+                      imagePath: Assets.timeCircle,
                       digit: "20",
                       text: "Minutes Spent",
                     ),
@@ -102,7 +108,17 @@ class _CongratulationScreenState extends State<CongratulationScreen> {
                         },
                       ),
                     ),
-                    Expanded(child: CustomButton(buttonText: "Back home")),
+                    Expanded(
+                      child: CustomButton(
+                        buttonText: "Back home",
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            Routes.bottomnavigationbarscreen,
+                          );
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ],

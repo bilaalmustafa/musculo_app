@@ -8,12 +8,11 @@ import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/carasoul_container.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/custom_chip.dart';
+
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/item_container.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/show_bottom_sheet.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/video_item.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/component/home_app_bar.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -29,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: ConstColors.white,
       body: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: 15,
+          horizontal: Sizes.s15,
         ).copyWith(top: context.screenheight * 0.05),
         child: SingleChildScrollView(
           child: Column(
@@ -38,8 +37,8 @@ class _HomeScreenState extends State<HomeScreen> {
               HomeAppBar(),
               CustomTextField(
                 title: "Search program",
-                prefexicon: Icons.search,
-                suffexicon: Icons.filter_list_outlined,
+                preIcon: Assets.searchIcon,
+                sufIcon: Assets.filterIcon,
               ),
               CarasoulContainer(),
               Row(
@@ -54,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   PoppinsText(
                     text: "See All",
                     fontSize: Sizes.s14,
-                    fontWeight: TextWeight.medium,
+                    fontWeight: FontWeight.w600,
                     color: ConstColors.black,
                   ),
                 ],
@@ -100,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: PoppinsText(
                       text: "See All",
                       fontSize: Sizes.s14,
-                      fontWeight: TextWeight.medium,
+                      fontWeight: FontWeight.w600,
                       color: ConstColors.black,
                     ),
                   ),
@@ -108,12 +107,13 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               SizedBox(
                 width: double.infinity,
-                height: 150,
+                height: Sizes.s150,
                 child: ListView.separated(
                   itemCount: 3,
                   itemBuilder:
-                      (context, index) => VideoItem(image: Assets.playbutton),
-                  separatorBuilder: (context, index) => SizedBox(height: 20),
+                      (context, index) => VideoItem(image: Assets.playbutt),
+                  separatorBuilder:
+                      (context, index) => SizedBox(height: Sizes.s20),
                 ),
               ),
             ],

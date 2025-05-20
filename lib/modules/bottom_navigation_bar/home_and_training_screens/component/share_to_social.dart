@@ -11,10 +11,10 @@ class ShareToSocial extends StatelessWidget {
   Widget build(BuildContext context) {
     List<String> text = ["WhatsApp", "Twitter", "Facebook", "Instagram"];
     List<String> svg = [
-      "assets/svgs/whatsapp.svg",
-      Assets.twitter,
+      Assets.whatsappimage,
+      Assets.twitterImage,
       Assets.facebook,
-      Assets.insta,
+      Assets.instagramImage,
     ];
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

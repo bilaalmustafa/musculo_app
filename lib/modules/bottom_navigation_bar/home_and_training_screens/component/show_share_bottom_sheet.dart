@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/poppins_text.dart';
+import 'package:musculo_app/core/config/routes.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
@@ -12,27 +13,28 @@ class ShowShareBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: Column(
-                            spacing: Sizes.s20,
-                            children: [
-                              Container(
-                                height: 3,
-                                width: 30,
-                                color: ConstColors.secondary,
-                              ),
+      padding: const EdgeInsets.all(Sizes.s20),
+      child: Column(
+        spacing: Sizes.s20,
+        children: [
+          Container(height: 3, width: 30, color: ConstColors.secondary),
 
-                              PoppinsText(
-                                text: "Share to",
-                                fontSize: Sizes.s20,
-                                fontWeight: TextWeight.semiBold,
-                              ),
-                              Divider(color: ConstColors.secondary, height: 2),
-                              ShareToSocial(),
-                              Divider(color: ConstColors.secondary, height: 2),
-                              CustomButton(buttonText: "Back home"),
-                            ],
-                          ),
-                        );
+          PoppinsText(
+            text: "Share to",
+            fontSize: Sizes.s20,
+            fontWeight: TextWeight.semiBold,
+          ),
+          Divider(color: ConstColors.secondary, height: 2),
+          ShareToSocial(),
+          Divider(color: ConstColors.secondary, height: 2),
+          CustomButton(
+            buttonText: "Back home",
+            onTap: () {
+              Navigator.pushNamed(context, Routes.bottomnavigationbarscreen);
+            },
+          ),
+        ],
+      ),
+    );
   }
 }
