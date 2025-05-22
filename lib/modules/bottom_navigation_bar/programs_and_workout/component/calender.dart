@@ -52,6 +52,7 @@ class CalenderWidget extends StatelessWidget {
             border: Border.all(color: ConstColors.dividerColor),
           ),
         ),
+
         daysOfWeekStyle: DaysOfWeekStyle(
           weekendStyle: TextStyle(
             color: ConstColors.black,

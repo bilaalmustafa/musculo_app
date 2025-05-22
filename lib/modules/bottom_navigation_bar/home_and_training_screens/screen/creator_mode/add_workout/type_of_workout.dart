@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/poppins_text.dart';
-import 'package:musculo_app/components/shared_appbar.dart';
+
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
@@ -19,16 +19,16 @@ class _TypeOfWorkoutState extends State<TypeOfWorkout> {
     return Scaffold(
       backgroundColor: ConstColors.white,
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(Sizes.s16),
         child: Column(
-          spacing: Sizes.s20,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             PoppinsText(
               text: "Select type of your workout",
-              fontSize: Sizes.s20,
+              fontSize: Sizes.s24,
               fontWeight: TextWeight.semiBold,
             ),
+            SizedBox(height: Sizes.s20),
             Divider(color: ConstColors.dividerColor),
 
             RadioListTile(

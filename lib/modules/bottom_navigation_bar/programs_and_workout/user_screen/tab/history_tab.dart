@@ -8,7 +8,6 @@ import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/custom_chip.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/calender.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/history_list_tile.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 class HistoryTab extends StatefulWidget {
   const HistoryTab({super.key});
@@ -84,7 +83,7 @@ class _HistoryTabState extends State<HistoryTab> {
                 ),
               ),
             ),
-            Container(
+            SizedBox(
               width: double.infinity,
               // color: ConstColors.secondary,
               child: ListView.separated(
@@ -100,22 +99,21 @@ class _HistoryTabState extends State<HistoryTab> {
                     ),
                     tileColor: ConstColors.white,
 
-                    leading: Container(
-                      child: SharePicture(imagePath: Assets.workout),
-                    ),
+                    leading: SharePicture(imagePath: Assets.workout),
                     title: PoppinsText(
                       text: "Leg day work",
                       fontSize: Sizes.s14,
                       fontWeight: TextWeight.semiBold,
                     ),
                     subtitle: Column(
-                      spacing: Sizes.s10,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        SizedBox(height: 3),
                         PoppinsText(
                           text: "08:20 - 08:40 AM",
                           fontSize: Sizes.s10,
                         ),
+                        SizedBox(height: 3),
                         Row(
                           spacing: Sizes.s10,
                           children: [

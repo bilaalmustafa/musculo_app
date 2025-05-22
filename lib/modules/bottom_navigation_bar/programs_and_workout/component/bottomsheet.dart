@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/poppins_text.dart';
-import 'package:musculo_app/core/config/extensions.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 

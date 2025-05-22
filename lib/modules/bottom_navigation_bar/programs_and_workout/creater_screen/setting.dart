@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/share_picture.dart';
 import 'package:musculo_app/components/shared_appbar.dart';
@@ -9,6 +7,7 @@ import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/customlisttile.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/switchbottomsheet.dart';
 
 import '../component/bottomsheet.dart';
 
@@ -38,6 +37,7 @@ class SettingScreen extends StatelessWidget {
               trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
               onTap: () {
                 // Add Account Related code here
+                Navigator.pushNamed(context, Routes.signInscreen);
               },
             ),
             CustomListTile(
@@ -51,6 +51,7 @@ class SettingScreen extends StatelessWidget {
               trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
               onTap: () {
                 // switch Account related code here
+                Switchbottomsheet.show(context);
               },
             ),
             CustomListTile(

@@ -4,10 +4,8 @@ import 'package:musculo_app/components/tab_buttons.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/creator_profile_screens/informationtab.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/creator_profile_screens/paymenttab.dart';
 
-import '../../../../components/customTextField.dart';
 import '../../../../core/constants/const_colors.dart';
 import '../../../../core/constants/sizes.dart';
-import '../component/customdropdown.dart';
 
 class CreatorProfileScreen extends StatefulWidget {
   const CreatorProfileScreen({super.key});

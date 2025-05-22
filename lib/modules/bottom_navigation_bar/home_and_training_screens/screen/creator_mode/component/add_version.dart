@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:musculo_app/components/customTextField.dart';
-import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
-import 'package:musculo_app/core/constants/fonts.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/component/reels_item.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/component/show_sheet_bottom.dart';
 import 'package:video_player/video_player.dart';
 
@@ -58,9 +54,11 @@ class _AddVersionState extends State<AddVersion> {
           onTap: () {
             showModalBottomSheet(
               backgroundColor: ConstColors.white,
+
               context: context,
+
               builder: (context) {
-                return ShowSheetBottom(ListController: _controllers);
+                return ShowSheetBottom(listController: _controllers);
               },
             );
           },

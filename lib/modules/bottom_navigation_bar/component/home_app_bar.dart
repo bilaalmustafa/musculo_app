@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/components/share_picture.dart';
+
 import 'package:musculo_app/core/config/routes.dart';
-import 'package:musculo_app/core/constants/assets.dart';
+
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
+
+import '../../../core/constants/assets.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   const HomeAppBar({
@@ -40,26 +43,12 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
             color: isSwitch ? ConstColors.white : ConstColors.black,
             fontWeight: TextWeight.semiBold,
           ),
-          Transform.scale(
-            scale: 0.7,
-            child: Switch(
-              activeColor: ConstColors.green10,
-              value: true,
-              onChanged: (vlue) {},
-            ),
-          ),
-          IconButton(
-            onPressed: () {
-              Navigator.pushNamed(context, Routes.settingScreen);
-            },
-            icon: SharePicture(imagePath: Assets.settingIcon),
-          ),
         ],
       ),
 
       actions: [
         PoppinsText(
-          text: !isSwitch ? "user" : "Creator",
+          text: !isSwitch ? "User" : "Creator",
           fontSize: Sizes.s11,
           color: isSwitch ? ConstColors.white : ConstColors.black,
           fontWeight: TextWeight.medium,
@@ -78,10 +67,14 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
             ),
-            icon: Icon(
-              Icons.add_box_rounded,
-
-              color: isSwitch ? ConstColors.white : ConstColors.black,
+            icon: SharePicture(
+              imagePath: Assets.plusIcon,
+              width: Sizes.s24,
+              height: Sizes.s24,
+              colorFilter: ColorFilter.mode(
+                isSwitch ? ConstColors.white : ConstColors.black,
+                BlendMode.srcIn,
+              ),
             ),
             onSelected: (value) {
               if (value == "workout") {
@@ -98,7 +91,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                       spacing: 10,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.run_circle, color: ConstColors.black),
+                        SharePicture(imagePath: Assets.runnerIcon),
                         PoppinsText(
                           text: "Add Workouts",
                           fontSize: Sizes.s12,
@@ -113,7 +106,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                       spacing: 10,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.calendar_month, color: ConstColors.black),
+                        SharePicture(imagePath: Assets.calendarIcon),
                         PoppinsText(
                           text: "Add Program",
                           fontSize: Sizes.s12,
@@ -129,11 +122,17 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           onPressed: () {
             Navigator.pushNamed(context, Routes.settingScreen);
           },
-          icon: Icon(
-            Icons.settings,
-            color: isSwitch ? ConstColors.white : ConstColors.black,
+          icon: SharePicture(
+            imagePath: Assets.settingIcon,
+            width: Sizes.s24,
+            height: Sizes.s24,
+            colorFilter: ColorFilter.mode(
+              isSwitch ? ConstColors.white : ConstColors.black,
+              BlendMode.srcIn,
+            ),
           ),
         ),
+        SizedBox(width: 10),
       ],
     );
   }

@@ -10,7 +10,7 @@ class ProgramTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ConstColors.secondary,
+      backgroundColor: ConstColors.white,
       body: ListView.builder(
         itemCount: 3,
         itemBuilder: (context, index) {

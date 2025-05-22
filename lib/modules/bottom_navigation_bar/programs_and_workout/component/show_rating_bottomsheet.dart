@@ -26,7 +26,7 @@ class _ShowrateBottomSheetState extends State<ShowrateBottomSheet> {
           horizontal: 20.0,
         ).copyWith(bottom: 20),
         child: Column(
-          spacing: Sizes.s10,
+          spacing: Sizes.s8,
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 5.0),
@@ -82,7 +82,7 @@ class _ShowrateBottomSheetState extends State<ShowrateBottomSheet> {
                 });
               },
             ),
-            CustomTextField(title: "review"),
+            CustomTextField(title: "Amazing"),
             SizedBox(height: Sizes.s20),
             Row(
               spacing: Sizes.s10,
@@ -92,6 +92,7 @@ class _ShowrateBottomSheetState extends State<ShowrateBottomSheet> {
                     buttonText: "Cancel",
                     buttonColor: ConstColors.secondary,
                     textColor: ConstColors.black,
+                    onTap: () => Navigator.pop(context),
                   ),
                 ),
 

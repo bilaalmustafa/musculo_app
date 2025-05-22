@@ -4,6 +4,7 @@ import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 
+// ignore: must_be_immutable
 class CustomChip extends StatelessWidget {
   CustomChip({super.key, required this.text, this.color = ConstColors.white});
   final String text;

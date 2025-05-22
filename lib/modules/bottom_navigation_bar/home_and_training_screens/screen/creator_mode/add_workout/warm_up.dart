@@ -5,7 +5,7 @@ import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/custom_chip.dart';
+
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/component/reels_item.dart';
 import 'package:video_player/video_player.dart';
 
@@ -66,13 +66,14 @@ class _WarmUpState extends State<WarmUp> {
               children: [
                 PoppinsText(
                   text: "Warm Up",
-                  fontSize: Sizes.s20,
+                  fontSize: Sizes.s24,
                   fontWeight: TextWeight.semiBold,
                 ),
 
                 CustomTextField(
                   title: "search exercise",
-                  suffexicon: Icons.filter,
+                  sufIcon: Assets.filterIcon,
+                  preIcon: Assets.searchIcon,
                 ),
 
                 Row(
@@ -86,7 +87,7 @@ class _WarmUpState extends State<WarmUp> {
                     PoppinsText(
                       text: "650 found",
                       fontSize: Sizes.s12,
-                      fontWeight: TextWeight.semiBold,
+                      fontWeight: TextWeight.bold,
                     ),
                   ],
                 ),
@@ -96,8 +97,8 @@ class _WarmUpState extends State<WarmUp> {
 
           Expanded(
             child: Container(
-              color: ConstColors.secondary,
-              padding: EdgeInsets.all(20),
+              color: ConstColors.white,
+              padding: EdgeInsets.all(Sizes.s16),
               child: ListView.separated(
                 itemBuilder: (context, index) {
                   final controller = _controllers[index];
@@ -109,7 +110,6 @@ class _WarmUpState extends State<WarmUp> {
                         } else {
                           seletedList.add(index);
                         }
-                        
                       });
                     },
 

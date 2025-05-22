@@ -9,7 +9,6 @@ import 'package:musculo_app/modules/bottom_navigation_bar/feedback/screens/feedb
 import 'package:musculo_app/modules/bottom_navigation_bar/feedback/screens/feedback.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_program/add_program_pageView.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_workout/add_workout_pageview.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_workout/type_of_workout.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/user_mode/congratulation_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/user_mode/training_screen.dart';
 

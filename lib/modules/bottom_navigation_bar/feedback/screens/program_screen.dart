@@ -9,9 +9,15 @@ import '../../../../components/custom_button.dart';
 import '../../../../core/config/routes.dart';
 import '../../../../core/constants/sizes.dart';
 
-class ProgramScreen extends StatelessWidget {
+class ProgramScreen extends StatefulWidget {
   const ProgramScreen({super.key});
 
+  @override
+  State<ProgramScreen> createState() => _ProgramScreenState();
+}
+
+class _ProgramScreenState extends State<ProgramScreen> {
+  int? selectedIndex;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,16 +36,26 @@ class ProgramScreen extends StatelessWidget {
                 Navigator.pushNamed(context, Routes.filterscreen);
               },
             ),
-            VideoItem(
-              creatorName: 'Asim khan',
-              programTitle: 'Quick Core Blaster',
-              radiostatus: true,
+            Expanded(
+              child: ListView.separated(
+                itemCount: 4,
+                itemBuilder:
+                    (context, index) => VideoItem(
+                      index: index,
+                      selectedIndex: selectedIndex,
+                      onChanged: (val) {
+                        setState(() {
+                          selectedIndex = val;
+                        });
+                      },
+                      programTitle: "Quick Core Blaster",
+                      // programTime: "15 Mins",
+                      // programStatus: "Beginner",
+                      creatorName: "Ceator name",
+                    ),
+                separatorBuilder: (_, __) => SizedBox(height: Sizes.s20),
+              ),
             ),
-            VideoItem(
-              creatorName: 'Creator Name',
-              programTitle: 'Weight Lifting',
-            ),
-            VideoItem(creatorName: 'Creator Name', radiostatus: true),
           ],
         ),
       ),

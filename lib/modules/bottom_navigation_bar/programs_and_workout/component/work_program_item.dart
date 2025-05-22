@@ -20,7 +20,7 @@ class WorkProgramItem extends StatelessWidget {
       height: Sizes.s150,
       padding: EdgeInsets.all(Sizes.s12),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(Sizes.s8),
         color: ConstColors.white,
       ),
       child: Row(
@@ -29,8 +29,8 @@ class WorkProgramItem extends StatelessWidget {
           Container(
             width: context.screenheight * 0.12,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              color: ConstColors.amber,
+              borderRadius: BorderRadius.circular(Sizes.s8),
+              // color: ConstColors.amber,
               image: DecorationImage(
                 image: AssetImage(Assets.workout),
                 fit: BoxFit.cover,
@@ -43,7 +43,6 @@ class WorkProgramItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Row(
-                spacing: context.screenwidth * 0.15,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   PoppinsText(
@@ -51,6 +50,7 @@ class WorkProgramItem extends StatelessWidget {
                     fontSize: Sizes.s14,
                     fontWeight: TextWeight.semiBold,
                   ),
+                  SizedBox(width: context.screenwidth * 0.08),
 
                   Icon(Icons.favorite),
                 ],
@@ -70,18 +70,19 @@ class WorkProgramItem extends StatelessWidget {
                 ],
               ),
               Row(
-                spacing: context.screenwidth * 0.15,
+                // spacing: context.screenwidth * 0.10,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   PoppinsText(
-                    text: "5.00 \$",
+                    text: "5.00 £",
                     fontSize: Sizes.s14,
                     fontWeight: TextWeight.semiBold,
                   ),
+                  SizedBox(width: context.screenwidth * 0.08),
                   CustomButton(
                     buttonText: "See details",
                     buttonHeight: Sizes.s30,
-                    buttonWidth: Sizes.s120,
+                    buttonWidth: Sizes.s110,
                     onTap: () {
                       if (tabselect == 1) {
                         Navigator.pushNamed(

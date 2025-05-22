@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:musculo_app/core/constants/const_colors.dart';
 
 class ParagraphText extends StatelessWidget {
   const ParagraphText({
     super.key,
     required this.isExpanded,
-    required this.onTap, required this.text,
+    required this.onTap,
+    required this.text,
   });
   final bool isExpanded;
   final String text;
@@ -19,11 +21,11 @@ class ParagraphText extends StatelessWidget {
           text,
           maxLines: isExpanded ? null : 5,
           overflow: TextOverflow.fade,
-          style: TextStyle(fontSize: 13),
+          style: TextStyle(fontSize: 13, color: ConstColors.grey7575),
         ),
         InkWell(
           onTap: onTap,
-         
+
           child: Padding(
             padding: const EdgeInsets.only(top: 4.0),
             child: Text(

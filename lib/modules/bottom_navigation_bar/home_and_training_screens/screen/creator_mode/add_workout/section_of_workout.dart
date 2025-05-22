@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/poppins_text.dart';
-import 'package:musculo_app/components/shared_appbar.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
+
+import '../../../../../auth/register/component/agreement_check.dart';
 
 class SectionOfWork extends StatefulWidget {
   const SectionOfWork({super.key});
@@ -20,101 +21,63 @@ class _TypeOfWorkoutState extends State<SectionOfWork> {
     return Scaffold(
       backgroundColor: ConstColors.white,
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(Sizes.s20),
         child: SingleChildScrollView(
           child: Column(
-            spacing: Sizes.s10,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               PoppinsText(
                 text: "Select the sections of your workout",
-                fontSize: Sizes.s20,
+                fontSize: Sizes.s24,
                 fontWeight: TextWeight.semiBold,
               ),
-              Divider(color: ConstColors.dividerColor),
+              SizedBox(height: Sizes.s20),
 
-              CheckboxListTile(
-                activeColor: Colors.black,
-                title: PoppinsText(
-                  text: "Warm up",
-                  fontSize: Sizes.s14,
-                  fontWeight: TextWeight.medium,
-                ),
-                value: valueoption[0],
-
+              AgreementCheck(
+                title: "Warm up",
+                isChecked: valueoption[0],
                 onChanged: (value) {
                   setState(() {
                     valueoption[0] = value!;
                   });
                 },
               ),
-              Divider(color: ConstColors.dividerColor),
-
-              CheckboxListTile(
-                activeColor: Colors.black,
-                title: PoppinsText(
-                  text: "Extended warm up",
-                  fontSize: Sizes.s14,
-                  fontWeight: TextWeight.medium,
-                ),
-                value: valueoption[1],
-
+              AgreementCheck(
+                title: "Extended warm up",
+                isChecked: valueoption[1],
                 onChanged: (value) {
                   setState(() {
                     valueoption[1] = value!;
                   });
                 },
               ),
-              Divider(color: ConstColors.dividerColor),
-
-              CheckboxListTile(
-                activeColor: Colors.black,
-                title: PoppinsText(
-                  text: "Workout",
-                  fontSize: Sizes.s14,
-                  fontWeight: TextWeight.medium,
-                ),
-                value: valueoption[2],
-
+              AgreementCheck(
+                title: "Workout",
+                isChecked: valueoption[2],
                 onChanged: (value) {
                   setState(() {
                     valueoption[2] = value!;
                   });
                 },
               ),
-              Divider(color: ConstColors.dividerColor),
-              CheckboxListTile(
-                activeColor: Colors.black,
-                title: PoppinsText(
-                  text: "Finisher",
-                  fontSize: Sizes.s14,
-                  fontWeight: TextWeight.medium,
-                ),
-                value: valueoption[3],
-
+              AgreementCheck(
+                title: "Finisher",
+                isChecked: valueoption[3],
                 onChanged: (value) {
                   setState(() {
                     valueoption[3] = value!;
                   });
                 },
               ),
-              Divider(color: ConstColors.dividerColor),
-              CheckboxListTile(
-                activeColor: Colors.black,
-                title: PoppinsText(
-                  text: "Cool down",
-                  fontSize: Sizes.s14,
-                  fontWeight: TextWeight.medium,
-                ),
-                value: valueoption[4],
-
+              AgreementCheck(
+                title: "Cool down",
+                isChecked: valueoption[4],
                 onChanged: (value) {
                   setState(() {
                     valueoption[4] = value!;
                   });
                 },
               ),
-              Divider(color: ConstColors.dividerColor),
             ],
           ),
         ),
@@ -122,3 +85,58 @@ class _TypeOfWorkoutState extends State<SectionOfWork> {
     );
   }
 }
+
+  
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Padding(
+  //     padding: const EdgeInsets.all(Sizes.s16),
+  //     child: Column(
+  //       // spacing: Sizes.s1_5,
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         QuestionText(
+  //           questionText:
+  //               "By checking the box, you agree to our terms and conditions.",
+  //         ),
+  //         SizedBox(height: Sizes.s20),
+  //         AgreementCheck(
+  //           title: "Consequat id porta nibh venenatis cras sed. I",
+  //           isChecked: agreementsChecked[0],
+  //           onChanged: (value) {
+  //             setState(() {
+  //               agreementsChecked[0] = value!;
+  //             });
+  //           },
+  //         ),
+  //         AgreementCheck(
+  //           title: "Consequat id porta nibh venenatis cras sed. I",
+  //           isChecked: agreementsChecked[1],
+  //           onChanged: (value) {
+  //             setState(() {
+  //               agreementsChecked[1] = value!;
+  //             });
+  //           },
+  //         ),
+  //         AgreementCheck(
+  //           title: "Consequat id porta nibh venenatis cras sed. I",
+  //           isChecked: agreementsChecked[2],
+  //           onChanged: (value) {
+  //             setState(() {
+  //               agreementsChecked[2] = value;
+  //             });
+  //           },
+  //         ),
+  //         AgreementCheck(
+  //           title: "Consequat id porta nibh venenatis cras sed. I",
+  //           isChecked: agreementsChecked[3],
+  //           onChanged: (value) {
+  //             setState(() {
+  //               agreementsChecked[3] = value!;
+  //             });
+  //           },
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }

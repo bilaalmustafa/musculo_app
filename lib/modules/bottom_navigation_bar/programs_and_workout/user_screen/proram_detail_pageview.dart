@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:musculo_app/components/custom_button.dart';
-import 'package:musculo_app/components/poppins_text.dart';
+import 'package:musculo_app/components/share_picture.dart';
 import 'package:musculo_app/components/tab_buttons.dart';
 import 'package:musculo_app/core/config/extensions.dart';
 import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
-import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/rating_star.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/show_rating_bottomsheet.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/tab/description_tab.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/tab/history_tab.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/traning_preview_screen.dart';
 
 class ProgramDetailPageView extends StatefulWidget {
   const ProgramDetailPageView({super.key});
@@ -50,7 +46,7 @@ class _ProgramDetailPageViewState extends State<ProgramDetailPageView> {
                 height: context.screenheight * 0.3,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage(Assets.workout),
+                    image: AssetImage(Assets.rectanglework),
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -59,7 +55,16 @@ class _ProgramDetailPageViewState extends State<ProgramDetailPageView> {
               Positioned(
                 top: context.screenheight * .07,
                 left: 20,
-                child: Icon(Icons.arrow_back_ios, color: ConstColors.white),
+                child: GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: SharePicture(
+                    imagePath: Assets.arrowleft,
+                    colorFilter: ColorFilter.mode(
+                      ConstColors.white,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                ),
               ),
               Positioned(
                 top: context.screenheight * 0.05,
@@ -73,7 +78,7 @@ class _ProgramDetailPageViewState extends State<ProgramDetailPageView> {
                     if (value == "rate") {
                       showModalBottomSheet(
                         isScrollControlled: true,
-                        barrierColor: ConstColors.black.withOpacity(0.8),
+                        barrierColor: ConstColors.black.withValues(alpha: .8),
                         constraints: BoxConstraints(
                           maxHeight: context.screenheight * 0.7,
                         ),
@@ -104,7 +109,13 @@ class _ProgramDetailPageViewState extends State<ProgramDetailPageView> {
                           value: 'cancel',
                           child: Row(
                             children: [
-                              Icon(Icons.cancel, color: ConstColors.red),
+                              SharePicture(
+                                imagePath: Assets.closeSquare,
+                                colorFilter: ColorFilter.mode(
+                                  ConstColors.red,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
                               Text(
                                 ' Cancel program',
                                 style: TextStyle(color: ConstColors.red),
@@ -113,23 +124,32 @@ class _ProgramDetailPageViewState extends State<ProgramDetailPageView> {
                           ),
                         ),
                       ],
-                  icon: Icon(Icons.more_vert, color: Colors.white),
+                  icon: SharePicture(
+                    imagePath: Assets.moreHrizontal,
+                    colorFilter: ColorFilter.mode(
+                      ConstColors.white,
+                      BlendMode.srcIn,
+                    ),
+                  ),
                 ),
               ),
             ],
           ),
-          TabButtons(
-            tabNames: ["Description", "History"],
-            selecttab: selecttab,
-            onChange:
-                (index) => setState(() {
-                  selecttab = index;
-                  _pageController.animateToPage(
-                    index,
-                    duration: Duration(milliseconds: 100),
-                    curve: Curves.easeInOut,
-                  );
-                }),
+          Padding(
+            padding: const EdgeInsets.all(Sizes.s16),
+            child: TabButtons(
+              tabNames: ["Description", "History"],
+              selecttab: selecttab,
+              onChange:
+                  (index) => setState(() {
+                    selecttab = index;
+                    _pageController.animateToPage(
+                      index,
+                      duration: Duration(milliseconds: 100),
+                      curve: Curves.easeInOut,
+                    );
+                  }),
+            ),
           ),
           Expanded(
             child: Padding(

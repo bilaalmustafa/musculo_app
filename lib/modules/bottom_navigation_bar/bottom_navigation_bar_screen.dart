@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:musculo_app/components/logo_app_bar.dart';
+
 import 'package:musculo_app/components/share_picture.dart';
 import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';

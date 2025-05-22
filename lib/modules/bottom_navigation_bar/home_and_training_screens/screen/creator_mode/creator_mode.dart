@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/poppins_text.dart';
-import 'package:musculo_app/core/constants/assets.dart';
+
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/custom_chip.dart';
+
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/component/analysis_listtile.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/component/creator_List_item.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/component/day_chip.dart';
+
+import '../../../../../core/constants/assets.dart';
 
 class CreatorModeTab extends StatefulWidget {
   const CreatorModeTab({super.key});
@@ -27,7 +29,7 @@ class _CreatorModeTabState extends State<CreatorModeTab> {
         children: [
           Container(
             width: double.infinity,
-            height: 200,
+            height: Sizes.s150,
             color: ConstColors.black,
 
             child: Column(
@@ -62,19 +64,22 @@ class _CreatorModeTabState extends State<CreatorModeTab> {
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(
-              spacing: 20,
               children: [
                 Row(
                   children: [
                     AnalysisLisTile(
                       heading1: "Total sales",
                       heading2: "50",
-                      icon: Icons.analytics,
+                      iconImage: Assets.chartBlack,
                     ),
                     AnalysisLisTile(
                       heading1: "Cancelled",
                       heading2: "12",
-                      icon: Icons.cancel_outlined,
+                      iconImage: Assets.closeSquare,
+                      iconColor: ColorFilter.mode(
+                        ConstColors.black,
+                        BlendMode.srcIn,
+                      ),
                     ),
                   ],
                 ),
@@ -84,16 +89,18 @@ class _CreatorModeTabState extends State<CreatorModeTab> {
                     AnalysisLisTile(
                       heading1: "Ratings",
                       heading2: "4.0",
-                      icon: Icons.star,
+                      iconImage: Assets.star1,
                     ),
 
                     AnalysisLisTile(
                       heading1: "Withdrawed",
                       heading2: "\$600",
-                      icon: Icons.credit_card,
+                      iconImage: Assets.upload1,
                     ),
                   ],
                 ),
+
+                SizedBox(height: Sizes.s20),
 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
