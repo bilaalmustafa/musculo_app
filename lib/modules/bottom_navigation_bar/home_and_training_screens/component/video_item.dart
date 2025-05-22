@@ -16,19 +16,24 @@ class VideoItem extends StatelessWidget {
     this.programTime,
     this.programTitle,
     this.creatorName,
-    this.radiostatus,
+    this.index,
+    this.selectedIndex,
+    this.onChanged,
   });
+
   final String? image;
   final String? programTitle;
   final String? programTime;
   final String? programStatus;
   final String? programImage;
   final String? creatorName;
-  final bool? radiostatus;
+  final int? index;
+  final int? selectedIndex;
+  final ValueChanged<int>? onChanged;
+
   @override
   Widget build(BuildContext context) {
     return Row(
-      spacing: Sizes.s10,
       children: [
         Container(
           width: 90,
@@ -42,26 +47,25 @@ class VideoItem extends StatelessWidget {
             ),
           ),
         ),
+        const SizedBox(width: 10),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: Sizes.s3,
           children: [
             PoppinsText(
               text: programTitle ?? "Quick Core ",
               fontSize: Sizes.s16,
               fontWeight: TextWeight.semiBold,
             ),
-
             if (creatorName != null)
               CustomChip(text: creatorName ?? '', color: ConstColors.secondary),
-
+            SizedBox(height: 5),
             Row(
-              spacing: Sizes.s10,
               children: [
                 CustomChip(
                   text: programTime ?? "15 Mins",
                   color: ConstColors.secondary,
                 ),
+                const SizedBox(width: 10),
                 CustomChip(
                   text: programStatus ?? "Beginner",
                   color: ConstColors.secondary,
@@ -74,11 +78,13 @@ class VideoItem extends StatelessWidget {
         if (image == null)
           Radio(
             activeColor: ConstColors.black,
-            value: radiostatus ?? false,
-            groupValue: true,
-            onChanged: (value) {},
+            value: index,
+            groupValue: selectedIndex,
+            onChanged: (value) {
+              if (onChanged != null) onChanged!(value!);
+            },
           )
-        else
+        else if (image != null)
           SharePicture(imagePath: image!, height: Sizes.s50, width: Sizes.s50),
       ],
     );

@@ -21,7 +21,6 @@ class _TypeOfWorkoutState extends State<TypeOfWorkout> {
       body: Padding(
         padding: const EdgeInsets.all(Sizes.s16),
         child: Column(
-          spacing: Sizes.s20,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             PoppinsText(
@@ -29,6 +28,7 @@ class _TypeOfWorkoutState extends State<TypeOfWorkout> {
               fontSize: Sizes.s24,
               fontWeight: TextWeight.semiBold,
             ),
+            SizedBox(height: Sizes.s20),
             Divider(color: ConstColors.dividerColor),
 
             RadioListTile(

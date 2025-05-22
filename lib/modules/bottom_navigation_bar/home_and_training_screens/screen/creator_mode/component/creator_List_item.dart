@@ -45,7 +45,11 @@ class CreatorListItems extends StatelessWidget {
             ],
           ),
           Spacer(),
-          SharePicture(imagePath: Assets.editBlack),
+          SharePicture(
+            imagePath: Assets.editBlack,
+            width: Sizes.s20,
+            height: Sizes.s20,
+          ),
         ],
       ),
     );
