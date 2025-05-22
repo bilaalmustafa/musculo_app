@@ -19,17 +19,17 @@ class WorkoutPrograms extends StatelessWidget {
       height: Sizes.s160,
       padding: EdgeInsets.all(Sizes.s20),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(Sizes.s8),
         color: ConstColors.white,
       ),
       child: Row(
         spacing: Sizes.s10,
         children: [
           Container(
-            width: 100,
-            height: 100,
+            width: Sizes.s100,
+            height: Sizes.s100,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(Sizes.s8),
               color: ConstColors.amber,
               image: DecorationImage(
                 image: AssetImage(Assets.workout),

@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:musculo_app/components/poppins_text.dart';
+import 'package:musculo_app/core/constants/const_colors.dart';
+import 'package:musculo_app/core/constants/fonts.dart';
+
+import '../../../../core/constants/sizes.dart';
 
 class CustomChips extends StatelessWidget {
   const CustomChips({
@@ -17,16 +22,19 @@ class CustomChips extends StatelessWidget {
       children: List.generate(optionslist.length, (index) {
         final isSelected = selectedIndex == index;
         return ChoiceChip(
-          label: Text(
-            optionslist[index],
-            style: TextStyle(color: isSelected ? Colors.white : Colors.black),
+          label: PoppinsText(
+            text: optionslist[index],
+            fontSize: Sizes.s14,
+            fontWeight: TextWeight.medium,
+            color: isSelected ? ConstColors.white : ConstColors.black,
           ),
+
           selected: isSelected,
-          selectedColor: Colors.black,
-          backgroundColor: Colors.white,
+          selectedColor: ConstColors.black,
+          backgroundColor: ConstColors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-            side: BorderSide(color: Colors.black),
+            borderRadius: BorderRadius.circular(Sizes.s20),
+            side: BorderSide(color: ConstColors.black),
           ),
           onSelected: (selected) {
             onSelect(index);

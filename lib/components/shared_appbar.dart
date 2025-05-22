@@ -1,20 +1,33 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/poppins_text.dart';
+import 'package:musculo_app/components/share_picture.dart';
+import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 
 class SharedAppBar extends StatelessWidget implements PreferredSizeWidget {
-  SharedAppBar({super.key, this.progress, this.title, this.actionIcon});
+  SharedAppBar({
+    super.key,
+    this.progress,
+    this.title,
+    this.actionIcon,
+    this.iconImage,
+    this.trailing,
+  });
   double? progress;
   String? title;
   IconData? actionIcon;
+  String? iconImage;
+  final Widget? trailing;
   @override
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: ConstColors.white,
       leading: IconButton(
-        icon: const Icon(Icons.arrow_back_ios_new),
+        icon: const SharePicture(imagePath: Assets.arrowleft),
         onPressed: () {
           Navigator.pop(context);
         },
@@ -38,7 +51,13 @@ class SharedAppBar extends StatelessWidget implements PreferredSizeWidget {
               )
               : null,
       actions: [
-        actionIcon != null ? Icon(actionIcon) : Container(),
+        actionIcon != null
+            ? Icon(actionIcon)
+            : iconImage != null
+            ? SharePicture(imagePath: iconImage!)
+            : trailing != null
+            ? trailing!
+            : Container(),
         SizedBox(width: 20),
       ],
     );

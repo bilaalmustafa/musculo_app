@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:musculo_app/core/config/extensions.dart';
 import 'package:musculo_app/core/config/routes.dart';
@@ -8,7 +7,6 @@ import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
-import 'package:musculo_app/core/constants/strings.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -26,6 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   _goTo() {
     Future.delayed(const Duration(milliseconds: 5000), () {
+      // ignore: use_build_context_synchronously
       Navigator.pushReplacementNamed(context, Routes.getStarted);
     });
   }

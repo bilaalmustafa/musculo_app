@@ -28,8 +28,11 @@ class _UserModeTabState extends State<UserModeTab> {
           children: [
             CustomTextField(
               title: "Search program",
-              prefexicon: Icons.search,
-              suffexicon: Icons.filter_list_outlined,
+              // prefexicon: Icons.search,
+              preIcon: Assets.searchIcon,
+              sufIcon: Assets.filterIcon,
+
+              // suffexicon: Icons.filter_list_outlined,
             ),
             CarasoulContainer(),
             Row(
@@ -83,7 +86,7 @@ class _UserModeTabState extends State<UserModeTab> {
                         ),
                       ),
                       builder: (_) {
-                        return ShowBottomSheet();
+                        return ShowBottomSheet(title: 'Choose Program');
                       },
                     );
                   },
@@ -98,14 +101,62 @@ class _UserModeTabState extends State<UserModeTab> {
             ),
             SizedBox(
               width: double.infinity,
-              height: 150,
+              height: 180,
               child: ListView.separated(
                 itemCount: 3,
                 itemBuilder:
-                    (context, index) => VideoItem(image: Assets.playbutton),
+                    (context, index) => VideoItem(image: Assets.playbutt),
                 separatorBuilder: (context, index) => SizedBox(height: 20),
               ),
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                PoppinsText(
+                  text: "Your Worouts",
+                  fontSize: Sizes.s18,
+                  fontWeight: TextWeight.semiBold,
+                  color: ConstColors.black,
+                ),
+                InkWell(
+                  onTap: () {
+                    showModalBottomSheet(
+                      backgroundColor: ConstColors.white,
+                      context: context,
+                      isScrollControlled: true,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(32),
+                        ),
+                      ),
+                      builder: (_) {
+                        return ShowBottomSheet(title: 'Choose Workout');
+                      },
+                    );
+                  },
+                  child: PoppinsText(
+                    text: "See All",
+                    fontSize: Sizes.s14,
+                    fontWeight: TextWeight.medium,
+                    color: ConstColors.black,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              width: double.infinity,
+              height: 180,
+              child: ListView.separated(
+                itemCount: 3,
+                itemBuilder:
+                    (context, index) => VideoItem(
+                      image: Assets.playbutt,
+                      onChanged: (value) {},
+                    ),
+                separatorBuilder: (context, index) => SizedBox(height: 20),
+              ),
+            ),
+            SizedBox(height: 5),
           ],
         ),
       ),

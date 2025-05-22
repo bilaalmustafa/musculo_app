@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/components/shared_appbar.dart';
+// ignore: unused_import
 import 'package:musculo_app/core/config/extensions.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
@@ -36,7 +37,7 @@ class _FilterScreenState extends State<FilterScreen> {
       appBar: SharedAppBar(title: "Filter"),
 
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(Sizes.s20),
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -112,6 +113,11 @@ class _FilterScreenState extends State<FilterScreen> {
                       _timeRange = value;
                     }),
               ),
+              PoppinsText(
+                text: "Difficulty",
+                fontSize: Sizes.s16,
+                fontWeight: TextWeight.semiBold,
+              ),
               Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -150,9 +156,19 @@ class _FilterScreenState extends State<FilterScreen> {
                 buttonText: "Cancel",
                 buttonColor: ConstColors.secondary,
                 textColor: ConstColors.black,
+                onTap: () {
+                  Navigator.pop(context);
+                },
               ),
             ),
-            Expanded(child: CustomButton(buttonText: "Apply")),
+            Expanded(
+              child: CustomButton(
+                buttonText: "Apply",
+                onTap: () {
+                  // apply button code here
+                },
+              ),
+            ),
           ],
         ),
       ),

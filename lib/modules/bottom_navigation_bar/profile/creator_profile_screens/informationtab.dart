@@ -13,8 +13,8 @@ class Informationtab extends StatefulWidget {
 }
 
 class _InformationtabState extends State<Informationtab> {
-  String _selectExcercise = 'Favorites Excercise';
-  String _selectPlan = 'Premium';
+  String _selectExcercise = '';
+  String _selectPlan = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,6 +73,7 @@ class _InformationtabState extends State<Informationtab> {
               'Push-Ups',
               'Upper Body',
             ],
+            hint: 'Select Favorites Excercise',
             onChanged: (value) {
               setState(() {
                 _selectExcercise = value;
@@ -82,6 +83,7 @@ class _InformationtabState extends State<Informationtab> {
           CustomDropdown(
             value: _selectPlan,
             items: const ['Free', 'Premium'],
+            hint: 'Select Plan',
             onChanged: (value) {
               setState(() {
                 _selectPlan = value;

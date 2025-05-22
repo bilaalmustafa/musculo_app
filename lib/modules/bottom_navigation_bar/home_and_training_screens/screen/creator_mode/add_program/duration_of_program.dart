@@ -22,14 +22,14 @@ class _DurationOfProgramState extends State<DurationOfProgram> {
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
-          spacing: Sizes.s20,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             PoppinsText(
               text: "What’s the duration of your program ",
-              fontSize: Sizes.s20,
+              fontSize: Sizes.s24,
               fontWeight: TextWeight.semiBold,
             ),
+            SizedBox(height: Sizes.s20),
             PoppinsText(
               text: "Program duration",
               fontSize: Sizes.s14,
@@ -62,6 +62,7 @@ class _DurationOfProgramState extends State<DurationOfProgram> {
               fontSize: Sizes.s14,
               fontWeight: TextWeight.semiBold,
             ),
+            SizedBox(height: Sizes.s10),
             CustomTextField(title: "write it here"),
             RadioListTile(
               contentPadding: EdgeInsets.zero,

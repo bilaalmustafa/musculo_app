@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:musculo_app/components/customTextField.dart';
 import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/poppins_text.dart';
-import 'package:musculo_app/components/share_picture.dart';
-import 'package:musculo_app/core/constants/assets.dart';
+
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
@@ -46,14 +45,18 @@ class _ShowRatingBottomSheetState extends State<ShowRatingBottomSheet> {
             fontSize: Sizes.s14,
             fontWeight: TextWeight.regular,
             color: ConstColors.greyA1A1,
+            textAlign: TextAlign.center,
           ),
 
-        RatingStars( selectedRating:selectedRating ,  onRatingSelected: (newvalue){
-           setState(() {
-                                    selectedRating = newvalue;
-                                  });
-        },),
-          CustomTextField(title: "review"),
+          RatingStars(
+            selectedRating: selectedRating,
+            onRatingSelected: (newvalue) {
+              setState(() {
+                selectedRating = newvalue;
+              });
+            },
+          ),
+          CustomTextField(title: "Amazing"),
           Divider(color: ConstColors.secondary, height: 2),
           Row(
             spacing: Sizes.s10,
@@ -63,9 +66,19 @@ class _ShowRatingBottomSheetState extends State<ShowRatingBottomSheet> {
                   buttonText: "Cancel",
                   buttonColor: ConstColors.secondary,
                   textColor: ConstColors.black,
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
                 ),
               ),
-              Expanded(child: CustomButton(buttonText: "Submit")),
+              Expanded(
+                child: CustomButton(
+                  buttonText: "Submit",
+                  onTap: () {
+                    // submit code here
+                  },
+                ),
+              ),
             ],
           ),
         ],
@@ -73,5 +86,3 @@ class _ShowRatingBottomSheetState extends State<ShowRatingBottomSheet> {
     );
   }
 }
-
-

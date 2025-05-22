@@ -9,16 +9,19 @@ class SelectLevelOfFitness extends StatelessWidget {
     super.key,
     required this.fitnessLevel,
     required this.value,
+   
     this.onChanged,
   });
+
   final String fitnessLevel, value;
-  final ValueChanged? onChanged;
+  final ValueChanged<String?>? onChanged;
+ 
 
   @override
   Widget build(BuildContext context) {
     final bool isSelected = fitnessLevel == value;
     return ListTile(
-      contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 10),
       shape: RoundedRectangleBorder(
         side: BorderSide(
           color: isSelected ? ConstColors.black : ConstColors.white,
@@ -27,7 +30,6 @@ class SelectLevelOfFitness extends StatelessWidget {
         borderRadius: BorderRadius.circular(Sizes.s16),
       ),
       tileColor: ConstColors.white,
-
       title: PoppinsText(
         text: value,
         fontWeight: TextWeight.medium,

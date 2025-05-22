@@ -30,42 +30,42 @@ class _UserProfileState extends State<UserProfile> {
         appBar: LogoTitleAppBar(title: 'Profile'),
 
         body: Padding(
-          padding: EdgeInsets.all(16),
+          padding: EdgeInsets.all(Sizes.s16),
           child: Column(
             children: [
               Center(
                 child: SizedBox(
-                  height: 120,
-                  width: 300,
+                  height: Sizes.s120,
+                  width: Sizes.s300,
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
                       SharePicture(imagePath: Assets.groupCircle),
                       CircleAvatar(
-                        maxRadius: 55,
-                        backgroundColor: Colors.grey[400],
+                        maxRadius: Sizes.s55,
+                        backgroundColor: ConstColors.greyE0E0,
                         child: Icon(
                           Icons.person,
-                          size: 50,
-                          color: Colors.black,
+                          size: Sizes.s50,
+                          color: ConstColors.black,
                         ),
                       ),
                       Transform.translate(
-                        offset: Offset(40, 40),
+                        offset: Offset(Sizes.s40, Sizes.s40),
                         child: InkWell(
                           onTap: () {},
                           child: Container(
-                            width: 20,
-                            height: 20,
+                            width: Sizes.s20,
+                            height: Sizes.s20,
                             decoration: BoxDecoration(
                               shape: BoxShape.rectangle,
-                              borderRadius: BorderRadius.circular(4),
-                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(Sizes.s4),
+                              color: ConstColors.black,
                             ),
                             child: Icon(
                               Icons.edit,
                               color: Colors.white,
-                              size: 20,
+                              size: Sizes.s20,
                             ),
                           ),
                         ),
@@ -74,7 +74,7 @@ class _UserProfileState extends State<UserProfile> {
                   ),
                 ),
               ),
-              SizedBox(height: 10),
+              SizedBox(height: Sizes.s10),
 
               PoppinsText(
                 text: 'Full Name',

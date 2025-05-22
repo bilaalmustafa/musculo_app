@@ -4,6 +4,7 @@ import 'package:musculo_app/core/constants/const_colors.dart';
 
 import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/feedback/screens/feedbacktab.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/feedback/screens/reportstab.dart';
 
 import '../../../../components/tab_buttons.dart';
 
@@ -60,7 +61,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
               child: PageView(
                 controller: _pageController,
                 physics: NeverScrollableScrollPhysics(),
-                children: [Feedbacktab()],
+                children: [Feedbacktab(), Reportstab()],
               ),
             ),
           ],

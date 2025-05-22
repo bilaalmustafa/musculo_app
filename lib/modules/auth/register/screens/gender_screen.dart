@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:musculo_app/components/customTextField.dart';
-import 'package:musculo_app/components/custom_button.dart';
+import 'package:musculo_app/core/constants/assets.dart';
+
 import 'package:musculo_app/modules/auth/register/component/gender_selection_button.dart';
-import 'package:musculo_app/components/poppins_text.dart';
+
 import 'package:musculo_app/modules/auth/register/component/question_text.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
-import 'package:musculo_app/core/constants/fonts.dart';
+
 import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/modules/auth/view_model/auth_view_model.dart';
 import 'package:provider/provider.dart';

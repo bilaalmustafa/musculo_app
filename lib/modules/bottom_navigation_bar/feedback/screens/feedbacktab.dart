@@ -19,7 +19,11 @@ class Feedbacktab extends StatelessWidget {
             trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
             onTap: () {
               // compnay feedback screen
-              Navigator.pushNamed(context, Routes.companyFeedbackScreen);
+              Navigator.pushNamed(
+                context,
+                Routes.feedbScreen,
+                arguments: {'feedbackType': 'Company'},
+              );
             },
           ),
           CustomListTile(
@@ -27,7 +31,11 @@ class Feedbacktab extends StatelessWidget {
             trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
             onTap: () {
               // Training feedback screen
-              Navigator.pushNamed(context, Routes.trainingFeedbackScreen);
+              Navigator.pushNamed(
+                context,
+                Routes.feedbScreen,
+                arguments: {'feedbackType': 'Training'},
+              );
             },
           ),
           CustomListTile(
@@ -35,6 +43,7 @@ class Feedbacktab extends StatelessWidget {
             trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
             onTap: () {
               // program feedback screen
+              Navigator.pushNamed(context, Routes.programScreen);
             },
           ),
           CustomListTile(
@@ -42,6 +51,11 @@ class Feedbacktab extends StatelessWidget {
             trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
             onTap: () {
               // creator feedback screen
+              Navigator.pushNamed(
+                context,
+                Routes.feedbScreen,
+                arguments: {'feedbackType': 'Creator'},
+              );
             },
           ),
         ],

@@ -4,6 +4,7 @@ import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 
+// ignore: must_be_immutable
 class CustomChip extends StatelessWidget {
   CustomChip({super.key, required this.text, this.color = ConstColors.white});
   final String text;
@@ -13,11 +14,11 @@ class CustomChip extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(5),
       alignment: Alignment.center,
-      height: 33,
+      height: 25,
 
       decoration: BoxDecoration(
-        color: color.withOpacity(0.8),
-        borderRadius: BorderRadius.circular(5),
+        color: color.withValues(alpha: .8),
+        borderRadius: BorderRadius.circular(8),
       ),
       child: PoppinsText(
         text: text,

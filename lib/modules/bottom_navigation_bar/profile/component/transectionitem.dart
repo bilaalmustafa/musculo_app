@@ -31,7 +31,7 @@ class Transectionitem extends StatelessWidget {
           maxRadius: 25,
           child: SharePicture(imagePath: Assets.tWallet),
         ),
-        const SizedBox(width: 16),
+        const SizedBox(width: Sizes.s16),
         // Transaction Details
         Expanded(
           child: Column(
@@ -50,10 +50,10 @@ class Transectionitem extends StatelessWidget {
                     fontWeight: TextWeight.regular,
                   ),
                   SizedBox(
-                    height: 15,
+                    height: Sizes.s15,
                     child: VerticalDivider(
                       thickness: 1.5,
-                      width: 10,
+                      width: Sizes.s10,
                       color: Colors.grey,
                     ),
                   ),

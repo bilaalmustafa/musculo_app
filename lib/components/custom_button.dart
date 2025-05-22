@@ -4,7 +4,7 @@ import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
-import 'package:musculo_app/components/share_picture.dart'; // Import the reusable widget
+// Import the reusable widget
 
 class CustomButton extends StatelessWidget {
   const CustomButton({
@@ -95,7 +95,12 @@ class BtnSharePicture extends StatelessWidget {
     if (iconData != null) {
       return Icon(iconData, size: 18, color: color);
     } else if (svgPath != null) {
-      return SvgPicture.asset(svgPath!, height: 20, width: 20, color: color);
+      return SvgPicture.asset(
+        svgPath!,
+        height: 20,
+        width: 20,
+        colorFilter: ColorFilter.mode(color!, BlendMode.srcIn),
+      );
     } else {
       return const SizedBox.shrink(); // Empty container
     }

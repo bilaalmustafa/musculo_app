@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/poppins_text.dart';
+import 'package:musculo_app/components/share_picture.dart';
 import 'package:musculo_app/components/shared_appbar.dart';
+import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/modules/auth/register/component/show_dialog_box.dart';
@@ -12,7 +14,8 @@ import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_scre
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_workout/section_of_workout.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_workout/type_of_workout.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_workout/warm_up.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_workout/work_out.dart';
+
+import '../../../../../../core/config/routes.dart';
 
 class AddWorkoutPageView extends StatefulWidget {
   const AddWorkoutPageView({super.key});
@@ -37,6 +40,7 @@ class _AddWorkoutPageViewState extends State<AddWorkoutPageView> {
     }
   }
 
+  @override
   void dispose() {
     _pageController.dispose();
     super.dispose();
@@ -95,11 +99,11 @@ class _AddWorkoutPageViewState extends State<AddWorkoutPageView> {
                             fontSize: 11,
                             color: ConstColors.greyA1A1,
                           ),
-                          Icon(Icons.arrow_upward_outlined, size: 15),
+                          SharePicture(imagePath: Assets.arrowUp),
                         ],
                       ),
                       PoppinsText(
-                        text: " 11",
+                        text: " 01",
                         fontSize: 14,
                         color: ConstColors.black,
                         fontWeight: TextWeight.semiBold,
@@ -131,6 +135,11 @@ class _AddWorkoutPageViewState extends State<AddWorkoutPageView> {
                                 buttonText: "Back to home page",
                                 buttonColor: ConstColors.secondary,
                                 textColor: ConstColors.black,
+                                onTap:
+                                    () => Navigator.pushNamed(
+                                      context,
+                                      Routes.bottomnavigationbarscreen,
+                                    ),
                               ),
                             ],
                           ),

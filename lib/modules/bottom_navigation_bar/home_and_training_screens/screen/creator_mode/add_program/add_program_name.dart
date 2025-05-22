@@ -25,7 +25,7 @@ class _AddProgramNameState extends State<AddProgramName> {
           children: [
             PoppinsText(
               text: "Name your program",
-              fontSize: Sizes.s20,
+              fontSize: Sizes.s24,
               fontWeight: TextWeight.semiBold,
             ),
             SizedBox(height: Sizes.s10),

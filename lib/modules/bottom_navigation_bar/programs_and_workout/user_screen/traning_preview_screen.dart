@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/poppins_text.dart';
+import 'package:musculo_app/components/share_picture.dart';
 import 'package:musculo_app/core/config/extensions.dart';
+import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
@@ -31,12 +33,25 @@ class _TraningPreviewScreenState extends State<TraningPreviewScreen> {
                 color: ConstColors.black,
                 width: double.infinity,
                 height: context.screenheight * 0.3,
+                child: SharePicture(
+                  imagePath: Assets.bellyFat,
+                  fit: BoxFit.cover,
+                ),
               ),
 
               Positioned(
                 top: context.screenheight * .07,
                 left: 20,
-                child: Icon(Icons.arrow_back_ios, color: ConstColors.white),
+                child: GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: SharePicture(
+                    imagePath: Assets.arrowleft,
+                    colorFilter: ColorFilter.mode(
+                      ConstColors.white,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                ),
               ),
               Positioned(
                 top: context.screenheight * 0.05,
@@ -53,16 +68,23 @@ class _TraningPreviewScreenState extends State<TraningPreviewScreen> {
                           value: 'Like',
                           child: Row(
                             children: [
-                              Icon(
-                                Icons.favorite_border,
-                                color: ConstColors.black,
+                              SharePicture(imagePath: Assets.heartIcon),
+                              SizedBox(width: Sizes.s8),
+                              PoppinsText(
+                                text: 'Like Workout',
+                                fontSize: Sizes.s14,
                               ),
-                              Text('  Like workout'),
                             ],
                           ),
                         ),
                       ],
-                  icon: Icon(Icons.more_vert, color: Colors.white),
+                  icon: SharePicture(
+                    imagePath: Assets.moreHrizontal,
+                    colorFilter: ColorFilter.mode(
+                      ConstColors.white,
+                      BlendMode.srcIn,
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -116,17 +138,17 @@ class _TraningPreviewScreenState extends State<TraningPreviewScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         AnalsisContainer(
-                          icon: Icons.run_circle_outlined,
+                          iconImage: Assets.runnerIcon,
                           digit: "15",
                           text: "Exercise",
                         ),
                         AnalsisContainer(
-                          icon: Icons.analytics_outlined,
+                          iconImage: Assets.chart,
                           digit: "7",
                           text: "Difficulty",
                         ),
                         AnalsisContainer(
-                          icon: Icons.timelapse_outlined,
+                          iconImage: Assets.timeCircle,
                           digit: "10",
                           text: "Munites",
                         ),
@@ -146,6 +168,7 @@ class _TraningPreviewScreenState extends State<TraningPreviewScreen> {
                           "We only want to show a few lines and then let the user tap View More. "
                           "This helps keep the UI clean and readable for longer content.",
                       isExpanded: isExpanded,
+
                       onTap:
                           () => setState(() {
                             isExpanded = !isExpanded;

@@ -21,46 +21,53 @@ class _GetStartedState extends State<GetStarted> {
     return Scaffold(
       backgroundColor: ConstColors.white,
 
-      body: Column(
-        spacing: Sizes.s10,
-        children: [
-          Image.asset(Assets.maskgroup),
-          Spacer(),
+      body: SingleChildScrollView(
+        child: Column(
+          spacing: Sizes.s10,
+          children: [
+            Image.asset(Assets.maskgroup),
 
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: Sizes.s30,
-              vertical: Sizes.s10,
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: Sizes.s30,
+                vertical: Sizes.s10,
+              ),
+              child: Column(
+                spacing: Sizes.s10,
+                children: [
+                  PoppinsText(
+                    text: "Welcome to Musculo 👋 ",
+                    fontSize: Sizes.s24,
+                    fontWeight: TextWeight.semiBold,
+                  ),
+                  PoppinsText(
+                    textAlign: TextAlign.center,
+                    text:
+                        "Get ready to embark on a transformative fitness journey with Musculo.",
+                    color: ConstColors.greyB3B3,
+                    fontSize: Sizes.s13,
+                    fontWeight: TextWeight.semiBold,
+                  ),
+                  SizedBox(height: context.screenheight * 0.02),
+                  CustomButton(
+                    buttonText: "Register",
+                    onTap: () {
+                      Navigator.pushNamed(context, Routes.registerscreen);
+                    },
+                  ),
+                  CustomButton(
+                    buttonText: "Sign in",
+                    buttonColor: ConstColors.secondary,
+                    textColor: ConstColors.black,
+                    onTap:
+                        () => Navigator.pushNamed(context, Routes.signInscreen),
+                  ),
+                  SizedBox(height: Sizes.s10),
+                ],
+              ),
             ),
-            child: Column(
-              spacing: Sizes.s10,
-              children: [
-                PoppinsText(
-                  text: "Welcome to Musculo 👋 ",
-                  fontSize: Sizes.s24,
-                  fontWeight: TextWeight.semiBold,
-                ),
-                PoppinsText(
-                  textAlign: TextAlign.center,
-                  text:
-                      "Get ready to embark on a transformative fitness journey with Musculo.",
-                  color: ConstColors.greyB3B3,
-                  fontSize: Sizes.s13,
-                  fontWeight: TextWeight.semiBold,
-                ),
-                SizedBox(height: context.screenheight * 0.02),
-                CustomButton(buttonText: "Register"),
-                CustomButton(
-                  buttonText: "Sign in",
-                  buttonColor: ConstColors.secondary,
-                  textColor: ConstColors.black,
-                  onTap:
-                      () => Navigator.pushNamed(context, Routes.signInscreen),
-                ),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

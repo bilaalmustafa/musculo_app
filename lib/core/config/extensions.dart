@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 extension ContextExtension on BuildContext {
   double get screenwidth => MediaQuery.sizeOf(this).width;
-   double get screenheight => MediaQuery.sizeOf(this).height;
+  double get screenheight => MediaQuery.sizeOf(this).height;
 }
 //  String? format() {
 //     if (this == null) {

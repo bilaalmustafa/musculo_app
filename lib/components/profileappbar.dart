@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:musculo_app/components/poppins_text.dart';
+import 'package:musculo_app/components/share_picture.dart';
+import 'package:musculo_app/core/constants/assets.dart';
 
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
@@ -18,11 +20,11 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? appbarTitle;
   @override
   Widget build(BuildContext context) {
-    List<String> tab = ["Workouts", "programs"];
+    List<String> tab = ["Workouts", "Programs"];
 
     return Container(
-      constraints: BoxConstraints(minHeight: 100),
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      constraints: BoxConstraints(minHeight: Sizes.s100),
+      padding: EdgeInsets.symmetric(vertical: Sizes.s10, horizontal: Sizes.s20),
       color: ConstColors.white,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -34,7 +36,7 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
             child: ListTile(
               contentPadding: EdgeInsets.zero,
               leading: IconButton(
-                icon: const Icon(Icons.arrow_back_ios_new),
+                icon: SharePicture(imagePath: Assets.arrowleft),
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -49,9 +51,9 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
 
           Container(
             width: double.infinity,
-            height: 40,
+            height: Sizes.s40,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(Sizes.s8),
               color: ConstColors.secondary,
             ),
             child: Row(
@@ -61,7 +63,7 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
                   child: GestureDetector(
                     child: Container(
                       alignment: Alignment.center,
-                      height: 40,
+                      height: Sizes.s40,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                         color:
@@ -73,7 +75,7 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
                       child: PoppinsText(
                         text: tab[index],
                         fontSize: Sizes.s13,
-                        fontWeight: TextWeight.regular,
+                        fontWeight: FontWeight.w600,
                         color:
                             isSelected ? ConstColors.white : ConstColors.black,
                       ),

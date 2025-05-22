@@ -41,6 +41,7 @@ class _RegisterScrenState extends State<RegisterScren> {
     }
   }
 
+  @override
   void dispose() {
     _pageController.dispose();
     super.dispose();
