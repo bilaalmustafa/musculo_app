@@ -9,8 +9,8 @@ class CustomTextField extends StatelessWidget {
     this.suffexicon,
     this.controller,
     this.prefexicon,
-    this.obscureText = false,
-    this.onTap,
+    this.obscureText = false, this.onTap, this.validator,
+   
   });
   final String title;
   final IconData? suffexicon;
@@ -18,10 +18,14 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
   final bool obscureText;
   final VoidCallback? onTap;
+  final String? Function(String?)? validator;
+ 
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      validator: validator,
+      controller:controller ,
       obscureText: obscureText,
       decoration: InputDecoration(
         labelText: title,

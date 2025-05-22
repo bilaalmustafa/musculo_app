@@ -1,0 +1,126 @@
+{
+  "project_info": {
+    "project_number": "332527150538",
+    "project_id": "musculo-2ba15",
+    "storage_bucket": "musculo-2ba15.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:332527150538:android:1f3a7f80736ac5b4c69b33",
+        "android_client_info": {
+          "package_name": "com.dartsync.musculo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "332527150538-kh4am4skcvd8ejg17heb5r8npkl76b0j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dartsync.musculo",
+            "certificate_hash": "e0400708de5fc6d6b96b98d181b831c213ce8fba"
+          }
+        },
+        {
+          "client_id": "332527150538-sitk13h96rue4ooldqa3hogl70igt5dk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA249FEmCf6hi2iTap26BZjyc3GmiDHjz0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "332527150538-0o1ocvprjuuf2c9ajdjsnocth80f8h2e.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "332527150538-9uu29sg10ur0pt600nbmc98kl1i5n3e2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.musculo"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:332527150538:android:eeb9517d647d6bdec69b33",
+        "android_client_info": {
+          "package_name": "com.example.musculo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "332527150538-sitk13h96rue4ooldqa3hogl70igt5dk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA249FEmCf6hi2iTap26BZjyc3GmiDHjz0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "332527150538-0o1ocvprjuuf2c9ajdjsnocth80f8h2e.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "332527150538-9uu29sg10ur0pt600nbmc98kl1i5n3e2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.musculo"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:332527150538:android:eaf73791fa10b1f4c69b33",
+        "android_client_info": {
+          "package_name": "com.example.musculo_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "332527150538-sitk13h96rue4ooldqa3hogl70igt5dk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA249FEmCf6hi2iTap26BZjyc3GmiDHjz0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "332527150538-0o1ocvprjuuf2c9ajdjsnocth80f8h2e.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "332527150538-9uu29sg10ur0pt600nbmc98kl1i5n3e2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.musculo"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

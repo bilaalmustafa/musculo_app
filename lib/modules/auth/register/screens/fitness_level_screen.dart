@@ -5,6 +5,8 @@ import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/modules/auth/register/component/select_level_of_fitness.dart';
+import 'package:musculo_app/modules/auth/view_model/auth_view_model.dart';
+import 'package:provider/provider.dart';
 
 class FitnessLevelScren extends StatelessWidget {
   const FitnessLevelScren({super.key});
@@ -28,34 +30,38 @@ class FitnessLevelScren extends StatelessWidget {
 
           Padding(
             padding: const EdgeInsets.all(25.0),
-            child: Column(
-              spacing: Sizes.s40,
-              children: [
-                SelectLevelOfFitness(
-                  color: ConstColors.black,
-                  fitnessLevel: "Beginner",
-                  value: "Beginner",
-                  onChanged: (value) {
-                    // Handle selection
-                  },
-                ),
-                SelectLevelOfFitness(
-                  color: ConstColors.white,
-                  fitnessLevel: "Experienced",
-                  value: "Experienced",
-                  onChanged: (value) {
-                    // Handle selection
-                  },
-                ),
-                SelectLevelOfFitness(
-                  color: ConstColors.white,
-                  fitnessLevel: "Advanced",
-                  value: "Advanced",
-                  onChanged: (value) {
-                    // Handle selection
-                  },
-                ),
-              ],
+            child: Consumer<AuthViewModel>(
+              builder: (context, vm, _) {
+                return Column(
+                  spacing: Sizes.s40,
+                  children: [
+                    SelectLevelOfFitness(
+                     
+                      fitnessLevel: vm.fitnessLevel,
+                      value: "Beginner",
+                      onChanged: (value) {
+                        vm.setfitnesslevel(value);
+                      },
+                    ),
+                    SelectLevelOfFitness(
+                     
+                      fitnessLevel: vm.fitnessLevel,
+                      value: "Experienced",
+                      onChanged: (value) {
+                        vm.setfitnesslevel(value);
+                      },
+                    ),
+                    SelectLevelOfFitness(
+                      
+                      fitnessLevel: vm.fitnessLevel,
+                      value: "Advanced",
+                      onChanged: (value) {
+                        vm.setfitnesslevel(value);
+                      },
+                    ),
+                  ],
+                );
+              },
             ),
           ),
         ],

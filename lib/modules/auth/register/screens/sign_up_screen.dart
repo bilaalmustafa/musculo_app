@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/customTextField.dart';
 import 'package:musculo_app/components/poppins_text.dart';
+import 'package:musculo_app/core/config/validator.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/modules/auth/register/component/question_text.dart';
+import 'package:musculo_app/modules/auth/view_model/auth_view_model.dart';
+import 'package:provider/provider.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -18,36 +21,54 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(25.0),
-      child: Column(
-        spacing: Sizes.s20,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          QuestionText(
-            questionText: "Enter the email and password of your account.",
-          ),
-          PoppinsText(
-            text: "Email",
-            fontSize: Sizes.s16,
-            fontWeight: TextWeight.semiBold,
-          ),
-          CustomTextField(prefexicon: Icons.email, title: "Email"),
-          PoppinsText(
-            text: "Password",
-            fontSize: Sizes.s16,
-            fontWeight: TextWeight.semiBold,
-          ),
-          CustomTextField(
-            prefexicon: Icons.lock,
-            title: "Password",
-            suffexicon: isObscure ? Icons.visibility_off : Icons.visibility,
-            obscureText: isObscure,
-            onTap:
-                () => setState(() {
-                  isObscure = !isObscure;
-                }),
-          ),
-        ],
+      child: Consumer<AuthViewModel>(
+        builder: (context, vm, _) {
+          return Form(
+            key: vm.formKey,
+            child: SingleChildScrollView(
+              child: Column(
+                spacing: Sizes.s20,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  QuestionText(
+                    questionText:
+                        "Enter the email and password of your account.",
+                  ),
+                  PoppinsText(
+                    text: "Email",
+                    fontSize: Sizes.s16,
+                    fontWeight: TextWeight.semiBold,
+                  ),
+                  CustomTextField(
+                    controller: vm.emailController,
+                    prefexicon: Icons.email,
+                    title: "Email",
+                    validator: (value) => Validator.validateEmail(value),
+                  ),
+                  PoppinsText(
+                    text: "Password",
+                    fontSize: Sizes.s16,
+                    fontWeight: TextWeight.semiBold,
+                  ),
+                  CustomTextField(
+                    controller: vm.passController,
+                    prefexicon: Icons.lock,
+                    title: "Password",
+                    validator: (value) => Validator.passwordCorrect(value),
+                    suffexicon:
+                        isObscure ? Icons.visibility_off : Icons.visibility,
+                    obscureText: isObscure,
+                    onTap:
+                        () => setState(() {
+                          isObscure = !isObscure;
+                        }),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }

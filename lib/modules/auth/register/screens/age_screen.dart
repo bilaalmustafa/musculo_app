@@ -3,6 +3,8 @@ import 'package:musculo_app/modules/auth/register/component/age_selection.dart';
 import 'package:musculo_app/modules/auth/register/component/question_text.dart';
 import 'package:musculo_app/core/config/extensions.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
+import 'package:musculo_app/modules/auth/view_model/auth_view_model.dart';
+import 'package:provider/provider.dart';
 
 class AgeScreen extends StatefulWidget {
   const AgeScreen({super.key});
@@ -12,7 +14,7 @@ class AgeScreen extends StatefulWidget {
 }
 
 class _AgeScreenState extends State<AgeScreen> {
-  int _selectedItemIndex = 18; //
+  //
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -27,25 +29,27 @@ class _AgeScreenState extends State<AgeScreen> {
           SizedBox(
             height: context.screenheight * 0.6,
             width: double.infinity,
-            child: ListWheelScrollView(
-              // controller: loginController.scrollController,
-              onSelectedItemChanged: (val) {
-                setState(() {
-                  _selectedItemIndex = val;
-                  // loginController.getAge(val);
-                });
-              },
-              physics: const FixedExtentScrollPhysics(),
-              itemExtent: 90,
-              children: List.generate(
-                100,
-                (index) => Center(
-                  child: SelectAge(
-                    index: index,
-                    isSelected: index == _selectedItemIndex,
+            child: Consumer<AuthViewModel>(
+              builder: (context, vm, _) {
+                return ListWheelScrollView(
+                  // controller: loginController.scrollController,
+                  onSelectedItemChanged: (val) {
+                    vm.setage(val);
+                    // loginController.getAge(val);
+                  },
+                  physics: const FixedExtentScrollPhysics(),
+                  itemExtent: 90,
+                  children: List.generate(
+                    100,
+                    (index) => Center(
+                      child: SelectAge(
+                        index: index,
+                        isSelected: index == vm.selectedage,
+                      ),
+                    ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
           ),
         ],

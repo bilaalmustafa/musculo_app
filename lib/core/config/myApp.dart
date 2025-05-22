@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/core/config/routes.dart';
+import 'package:musculo_app/modules/auth/view_model/auth_view_model.dart';
+import 'package:provider/provider.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -7,15 +9,18 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.black12),
-      ),
+    return MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => AuthViewModel())],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.black12),
+        ),
 
-      onGenerateRoute: RouteGenerator.getRoute,
-      initialRoute: Routes.splash,
+        onGenerateRoute: RouteGenerator.getRoute,
+        initialRoute: Routes.splash,
+      ),
     );
   }
 }

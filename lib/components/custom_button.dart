@@ -19,6 +19,7 @@ class CustomButton extends StatelessWidget {
     this.preSvgPath,
     this.postIconData,
     this.postSvgPath,
+    this.loading = false,
   });
 
   final String buttonText;
@@ -27,6 +28,7 @@ class CustomButton extends StatelessWidget {
   final VoidCallback? onTap;
   final IconData? preIconData, postIconData;
   final String? preSvgPath, postSvgPath;
+  final bool loading;
 
   @override
   Widget build(BuildContext context) {
@@ -40,31 +42,34 @@ class CustomButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(Sizes.s10),
         ),
         child: Center(
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              BtnSharePicture(
-                iconData: preIconData,
-                svgPath: preSvgPath,
-                color: textColor,
-                size: Sizes.s24,
-              ),
-              const SizedBox(width: Sizes.s8),
-              PoppinsText(
-                text: buttonText,
-                fontSize: Sizes.s13,
-                color: textColor,
-                fontWeight: TextWeight.semiBold,
-              ),
-              const SizedBox(width: Sizes.s8),
-              BtnSharePicture(
-                iconData: postIconData,
-                svgPath: postSvgPath,
-                color: textColor,
-                size: Sizes.s24,
-              ),
-            ],
-          ),
+          child:
+              loading
+                  ? CircularProgressIndicator(color: ConstColors.white)
+                  : Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      BtnSharePicture(
+                        iconData: preIconData,
+                        svgPath: preSvgPath,
+                        color: textColor,
+                        size: Sizes.s24,
+                      ),
+                      const SizedBox(width: Sizes.s8),
+                      PoppinsText(
+                        text: buttonText,
+                        fontSize: Sizes.s13,
+                        color: textColor,
+                        fontWeight: TextWeight.semiBold,
+                      ),
+                      const SizedBox(width: Sizes.s8),
+                      BtnSharePicture(
+                        iconData: postIconData,
+                        svgPath: postSvgPath,
+                        color: textColor,
+                        size: Sizes.s24,
+                      ),
+                    ],
+                  ),
         ),
       ),
     );

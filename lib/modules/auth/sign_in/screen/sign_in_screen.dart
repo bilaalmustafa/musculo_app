@@ -1,15 +1,20 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:musculo_app/components/customTextField.dart';
 import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/components/share_picture.dart';
 import 'package:musculo_app/components/shared_appbar.dart';
+import 'package:musculo_app/core/config/validator.dart';
 import 'package:musculo_app/modules/auth/sign_in/component/social_button_row.dart';
 import 'package:musculo_app/core/config/routes.dart';
 import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
+import 'package:musculo_app/modules/auth/view_model/auth_view_model.dart';
+import 'package:provider/provider.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -20,6 +25,10 @@ class SignInScreen extends StatefulWidget {
 
 class _SignInScreenState extends State<SignInScreen> {
   final _formKey = GlobalKey<FormState>();
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,82 +36,107 @@ class _SignInScreenState extends State<SignInScreen> {
       appBar: SharedAppBar(),
       body: Center(
         child: SingleChildScrollView(
-          child: Column(
-            spacing: Sizes.s20,
-            children: [
-              SharePicture(imagePath: Assets.monogram),
-              PoppinsText(
-                text: "Log Into You Account",
-                fontSize: Sizes.s24,
-                fontWeight: TextWeight.semiBold,
-              ),
-
-              Form(
-                key: _formKey,
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    spacing: Sizes.s20,
-                    children: [
-                      CustomTextField(title: "Email", prefexicon: Icons.email),
-                      CustomTextField(
-                        title: "Password",
-                        prefexicon: Icons.lock,
-                        suffexicon: Icons.visibility,
-                      ),
-                      CustomButton(
-                        buttonText: "Log In",
-                        onTap: () {
-                          if (_formKey.currentState!.validate()) {
-                            Navigator.pushNamedAndRemoveUntil(
-                              context,
-                              Routes.bottomnavigationbarscreen,
-                              (route) => false,
-                            );
-                          }
-                        },
-                      ),
-                      PoppinsText(
-                        text: "Forgot the Password?",
-                        fontSize: Sizes.s13,
-                        fontWeight: TextWeight.semiBold,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-
-              PoppinsText(
-                text: "Or continue with",
-                fontSize: Sizes.s13,
-                color: ConstColors.greyB3B3,
-                fontWeight: TextWeight.semiBold,
-              ),
-
-              SocialButtonRow(),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
+          child: Consumer<AuthViewModel>(
+            builder: (context, vm, _) {
+              return Column(
+                spacing: Sizes.s20,
                 children: [
+                  SharePicture(imagePath: Assets.monogram),
                   PoppinsText(
-                    text: "Dont't have an account?",
+                    text: "Log Into You Account",
+                    fontSize: Sizes.s24,
+                    fontWeight: TextWeight.semiBold,
+                  ),
+
+                  Form(
+                    key: _formKey,
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        spacing: Sizes.s20,
+                        children: [
+                          CustomTextField(
+                            controller: _emailController,
+                            title: "Email",
+                            prefexicon: Icons.email,
+                            validator:
+                                (value) => Validator.validateEmail(value),
+                          ),
+                          CustomTextField(
+                            controller: _passController,
+                            title: "Password",
+                            prefexicon: Icons.lock,
+                            suffexicon: Icons.visibility,
+                            validator:
+                                (value) => Validator.passwordCorrect(value),
+                          ),
+                          CustomButton(
+                            loading: vm.isLoading,
+                            buttonText: "Log In",
+                            onTap: () async {
+                              if (_formKey.currentState!.validate()) {
+                                User? user = await vm.signIn(
+                                  _emailController.text.trim(),
+                                  _passController.text.trim(),
+                                );
+                                if (user != null && context.mounted) {
+                                  Fluttertoast.showToast(
+                                    msg: "Signin Successfully",
+                                  );
+                                  Navigator.pushNamedAndRemoveUntil(
+                                    context,
+                                    Routes.bottomnavigationbarscreen,
+                                    (route) => false,
+                                  );
+                                }
+                              }
+                            },
+                          ),
+                          PoppinsText(
+                            text: "Forgot the Password?",
+                            fontSize: Sizes.s13,
+                            fontWeight: TextWeight.semiBold,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  PoppinsText(
+                    text: "Or continue with",
                     fontSize: Sizes.s13,
                     color: ConstColors.greyB3B3,
                     fontWeight: TextWeight.semiBold,
                   ),
-                  TextButton(
-                    onPressed:
-                        () =>
-                            Navigator.pushNamed(context, Routes.registerscreen),
-                    child: PoppinsText(
-                      text: "Register",
-                      fontSize: Sizes.s13,
-                      fontWeight: TextWeight.semiBold,
-                    ),
+
+                  SocialButtonRow(),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      PoppinsText(
+                        text: "Dont't have an account?",
+                        fontSize: Sizes.s13,
+                        color: ConstColors.greyB3B3,
+                        fontWeight: TextWeight.semiBold,
+                      ),
+                      TextButton(
+                        onPressed:
+                            () => Navigator.pushNamed(
+                              context,
+                              Routes.registerscreen,
+                            ),
+                        child: PoppinsText(
+                          text: "Register",
+                          fontSize: Sizes.s13,
+                          fontWeight: TextWeight.semiBold,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
-              ),
-            ],
+              );
+            },
           ),
         ),
       ),
