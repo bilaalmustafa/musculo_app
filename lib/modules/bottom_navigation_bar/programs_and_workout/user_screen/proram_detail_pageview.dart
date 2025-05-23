@@ -9,6 +9,8 @@ import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/c
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/tab/description_tab.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/tab/history_tab.dart';
 
+import '../../../../core/config/routes.dart';
+
 class ProgramDetailPageView extends StatefulWidget {
   const ProgramDetailPageView({super.key});
 
@@ -89,6 +91,20 @@ class _ProgramDetailPageViewState extends State<ProgramDetailPageView> {
                         },
                       );
                     }
+                    if (value == "feedback") {
+                      Navigator.pushNamed(
+                        context,
+                        Routes.feedbScreen,
+                        arguments: {'feedbackType': 'Program'},
+                      );
+                    }
+                    if (value == "report") {
+                      Navigator.pushNamed(
+                        context,
+                        Routes.reportScreen,
+                        arguments: {'reportType': 'Report Program'},
+                      );
+                    }
                   },
                   itemBuilder:
                       (context) => [
@@ -101,6 +117,41 @@ class _ProgramDetailPageViewState extends State<ProgramDetailPageView> {
                                 color: ConstColors.black,
                               ),
                               Text(' Rate program'),
+                            ],
+                          ),
+                        ),
+                        PopupMenuItem(
+                          value: 'feedback',
+                          child: Row(
+                            children: [
+                              SharePicture(
+                                imagePath: Assets.feedbackIcon,
+                                colorFilter: ColorFilter.mode(
+                                  ConstColors.black,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Text('Feedback'),
+                            ],
+                          ),
+                        ),
+                        PopupMenuItem(
+                          value: 'report',
+                          child: Row(
+                            children: [
+                              SharePicture(
+                                imagePath: Assets.reportIcon,
+                                colorFilter: ColorFilter.mode(
+                                  ConstColors.red,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Report',
+                                style: TextStyle(color: ConstColors.red),
+                              ),
                             ],
                           ),
                         ),

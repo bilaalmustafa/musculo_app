@@ -58,15 +58,15 @@ class _SignInScreenState extends State<SignInScreen> {
                           CustomTextField(
                             controller: _emailController,
                             title: "Email",
-                            prefexicon: Icons.email,
+                            preIcon: Assets.message,
                             validator:
                                 (value) => Validator.validateEmail(value),
                           ),
                           CustomTextField(
                             controller: _passController,
                             title: "Password",
-                            prefexicon: Icons.lock,
-                            suffexicon: Icons.visibility,
+                            preIcon: Assets.lock,
+                            sufIcon: Assets.hide,
                             validator:
                                 (value) => Validator.passwordCorrect(value),
                           ),
@@ -92,21 +92,50 @@ class _SignInScreenState extends State<SignInScreen> {
                               }
                             },
                           ),
-                          PoppinsText(
-                            text: "Forgot the Password?",
-                            fontSize: Sizes.s13,
-                            fontWeight: TextWeight.semiBold,
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                context,
+                                Routes.resetPasswordScreen,
+                              );
+                            },
+                            child: PoppinsText(
+                              text: "Forgot the Password?",
+                              fontSize: Sizes.s13,
+                              fontWeight: TextWeight.semiBold,
+                              color: ConstColors.black,
+                            ),
                           ),
                         ],
                       ),
                     ),
                   ),
 
-                  PoppinsText(
-                    text: "Or continue with",
-                    fontSize: Sizes.s13,
-                    color: ConstColors.greyB3B3,
-                    fontWeight: TextWeight.semiBold,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Divider(
+                          color: ConstColors.greyB3B3,
+                          thickness: 0.5,
+                          indent: 16,
+                          endIndent: 10,
+                        ),
+                      ),
+                      PoppinsText(
+                        text: "Or continue with",
+                        fontSize: Sizes.s13,
+                        color: ConstColors.greyB3B3,
+                        fontWeight: TextWeight.semiBold,
+                      ),
+                      Expanded(
+                        child: Divider(
+                          color: ConstColors.greyB3B3,
+                          thickness: 0.5,
+                          indent: 10,
+                          endIndent: 16,
+                        ),
+                      ),
+                    ],
                   ),
 
                   SocialButtonRow(),
@@ -130,6 +159,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           text: "Register",
                           fontSize: Sizes.s13,
                           fontWeight: TextWeight.semiBold,
+                          color: ConstColors.black,
                         ),
                       ),
                     ],

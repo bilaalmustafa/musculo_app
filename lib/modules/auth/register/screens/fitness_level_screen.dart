@@ -14,7 +14,7 @@ class FitnessLevelScren extends StatefulWidget {
 }
 
 class _FitnessLevelScrenState extends State<FitnessLevelScren> {
-  String selectedFitnessLevel = "Beginner";
+  // String selectedFitnessLevel = "Beginner";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,41 +34,39 @@ class _FitnessLevelScrenState extends State<FitnessLevelScren> {
               ),
             ),
 
-          Padding(
-            padding: const EdgeInsets.all(25.0),
-            child: Consumer<AuthViewModel>(
-              builder: (context, vm, _) {
-                return Column(
-                  spacing: Sizes.s40,
-                  children: [
-                    SelectLevelOfFitness(
-                     
-                      fitnessLevel: vm.fitnessLevel,
-                      value: "Beginner",
-                      onChanged: (value) {
-                        vm.setfitnesslevel(value!);
-                      },
-                    ),
-                    SelectLevelOfFitness(
-                     
-                      fitnessLevel: vm.fitnessLevel,
-                      value: "Experienced",
-                      onChanged: (value) {
-                        vm.setfitnesslevel(value!);
-                      },
-                    ),
-                    SelectLevelOfFitness(
-                      
-                      fitnessLevel: vm.fitnessLevel,
-                      value: "Advanced",
-                      onChanged: (value) {
-                        vm.setfitnesslevel(value!);
-                      },
-                    ),
-                  ],
-                );
-              },
-            ),)
+            Padding(
+              padding: const EdgeInsets.all(25.0),
+              child: Consumer<AuthViewModel>(
+                builder: (context, vm, _) {
+                  return Column(
+                    spacing: Sizes.s40,
+                    children: [
+                      SelectLevelOfFitness(
+                        fitnessLevel: vm.fitnessLevel,
+                        value: "Beginner",
+                        onChanged: (value) {
+                          vm.setfitnesslevel(value!);
+                        },
+                      ),
+                      SelectLevelOfFitness(
+                        fitnessLevel: vm.fitnessLevel,
+                        value: "Experienced",
+                        onChanged: (value) {
+                          vm.setfitnesslevel(value!);
+                        },
+                      ),
+                      SelectLevelOfFitness(
+                        fitnessLevel: vm.fitnessLevel,
+                        value: "Advanced",
+                        onChanged: (value) {
+                          vm.setfitnesslevel(value!);
+                        },
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),

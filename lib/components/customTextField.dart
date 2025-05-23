@@ -10,9 +10,10 @@ class CustomTextField extends StatelessWidget {
     this.suffexicon,
     this.controller,
     this.prefexicon,
-    this.obscureText = false, this.onTap, this.validator,
-   
-  
+    this.obscureText = false,
+    this.onTap,
+    this.validator,
+
     this.preIcon,
     this.sufIcon,
   });
@@ -23,7 +24,7 @@ class CustomTextField extends StatelessWidget {
   final bool obscureText;
   final VoidCallback? onTap;
   final String? Function(String?)? validator;
- 
+
   final String? preIcon;
   final String? sufIcon;
 
@@ -31,7 +32,7 @@ class CustomTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       validator: validator,
-      controller:controller ,
+      controller: controller,
       obscureText: obscureText,
       decoration: InputDecoration(
         hintText: title,

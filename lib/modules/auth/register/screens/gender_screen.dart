@@ -47,7 +47,8 @@ class _AgeScreenState extends State<GenderScreen> {
                 gendercolor:
                     vm.isMale ? ConstColors.secondary : ConstColors.black,
                 gendertitle: "Female",
-                gendericon: Icons.female,
+                // gendericon: Icons.female,
+                gendericonimage: Assets.female,
               ),
             ],
           );

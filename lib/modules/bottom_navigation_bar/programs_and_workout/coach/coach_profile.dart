@@ -4,10 +4,12 @@ import 'package:musculo_app/components/share_picture.dart';
 import 'package:musculo_app/components/shared_appbar.dart';
 import 'package:musculo_app/components/tab_buttons.dart';
 import 'package:musculo_app/core/config/extensions.dart';
+import 'package:musculo_app/core/config/routes.dart';
 import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/feedback/screens/reportstab.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/coach/coach_profile_text_tab.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/coach/program/workouts_tab.dart';
 
@@ -41,41 +43,99 @@ class _CoachProfileState extends State<CoachProfile> {
             borderRadius: BorderRadius.circular(20),
           ),
           onSelected: (value) {
-            if (value == "rate") {
-              showModalBottomSheet(
-                isScrollControlled: true,
-                barrierColor: ConstColors.black.withValues(alpha: .8),
-                constraints: BoxConstraints(
-                  maxHeight: context.screenheight * 0.7,
-                ),
-                backgroundColor: ConstColors.white,
-                context: context,
-                builder: (context) => ShowRatingBottomSheet(),
+            // if (value == "rate") {
+            //   showModalBottomSheet(
+            //     isScrollControlled: true,
+            //     barrierColor: ConstColors.black.withValues(alpha: .8),
+            //     constraints: BoxConstraints(
+            //       maxHeight: context.screenheight * 0.7,
+            //     ),
+            //     backgroundColor: ConstColors.white,
+            //     context: context,
+            //     builder: (context) => ShowRatingBottomSheet(),
+            //   );
+            // }
+            // if (value == "edit") {
+            //   showModalBottomSheet(
+            //     isScrollControlled: true,
+            //     barrierColor: ConstColors.black.withValues(alpha: .8),
+            //     constraints: BoxConstraints(
+            //       maxHeight: context.screenheight * 0.7,
+            //     ),
+            //     backgroundColor: ConstColors.white,
+            //     context: context,
+            //     builder: (context) => ShowRatingBottomSheet(),
+            //   );
+            // }
+            if (value == "feedback") {
+              Navigator.pushNamed(
+                context,
+                Routes.feedbScreen,
+                arguments: {'feedbackType': 'Creator'},
+              );
+            }
+            if (value == "report") {
+              Navigator.pushNamed(
+                context,
+                Routes.reportScreen,
+                arguments: {'reportType': 'Report Creator'},
               );
             }
           },
           itemBuilder:
               (context) => [
+                // PopupMenuItem(
+                //   value: 'rate',
+                //   child: Row(
+                //     children: [
+                //       Icon(
+                //         Icons.star_border_outlined,
+                //         color: ConstColors.black,
+                //       ),
+                //       const SizedBox(width: 8),
+                //       const Text('Rate Creator'),
+                //     ],
+                //   ),
+                // ),
+                // PopupMenuItem(
+                //   value: 'edit',
+                //   child: Row(
+                //     children: [
+                //       SharePicture(imagePath: Assets.editIcon),
+                //       const SizedBox(width: 8),
+                //       Text('Edit Rating'),
+                //     ],
+                //   ),
+                // ),
                 PopupMenuItem(
-                  value: 'rate',
+                  value: 'feedback',
                   child: Row(
                     children: [
-                      Icon(
-                        Icons.star_border_outlined,
-                        color: ConstColors.black,
+                      SharePicture(
+                        imagePath: Assets.feedbackIcon,
+                        colorFilter: ColorFilter.mode(
+                          ConstColors.black,
+                          BlendMode.srcIn,
+                        ),
                       ),
                       const SizedBox(width: 8),
-                      const Text('Rate Creator'),
+                      Text('Feedback'),
                     ],
                   ),
                 ),
                 PopupMenuItem(
-                  value: 'edit',
+                  value: 'report',
                   child: Row(
                     children: [
-                      SharePicture(imagePath: Assets.editIcon),
+                      SharePicture(
+                        imagePath: Assets.reportIcon,
+                        colorFilter: ColorFilter.mode(
+                          ConstColors.red,
+                          BlendMode.srcIn,
+                        ),
+                      ),
                       const SizedBox(width: 8),
-                      Text('Edit Rating'),
+                      Text('Report', style: TextStyle(color: ConstColors.red)),
                     ],
                   ),
                 ),

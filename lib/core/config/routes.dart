@@ -7,6 +7,7 @@ import 'package:musculo_app/modules/auth/sign_in/screen/verifypassword_screen.da
 import 'package:musculo_app/modules/bottom_navigation_bar/bottom_navigation_bar_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/feedback/screens/feedb_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/feedback/screens/feedback.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/feedback/screens/reportstab.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_program/add_program_pageView.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_workout/add_workout_pageview.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/user_mode/congratulation_screen.dart';
@@ -61,10 +62,11 @@ class Routes {
   static const String paymentScreen = "/payment_screen";
   static const String creatorProfileScreen = "/creator_profile_screen";
   static const String feedbScreen = "/feedb_screen";
-  static const String programScreen = "/program_screen";
+  // static const String programScreen = "/program_screen";
   static const String resetPasswordScreen = "/resetpassword_screen";
   static const String verifyPasswordScreen = "/verifypassword_screen";
   static const String changePasswordScreen = "/changepassword_screen";
+  static const String reportScreen = "/reporttab_screen";
 }
 
 class RouteGenerator {
@@ -129,9 +131,15 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (_) => FeedBScreen(feedbackType: feedbackType),
         );
+      case Routes.reportScreen:
+        final args = routeSitting.arguments as Map<String, dynamic>;
+        final reportType = args['reportType'] as String;
+        return MaterialPageRoute(
+          builder: (_) => Reportstab(reportType: reportType),
+        );
 
-      case Routes.programScreen:
-        return MaterialPageRoute(builder: (_) => const ProgramScreen());
+      // case Routes.programScreen:
+      //   return MaterialPageRoute(builder: (_) => const ProgramScreen());
       case Routes.resetPasswordScreen:
         return MaterialPageRoute(builder: (_) => const ResetpasswordScreen());
       case Routes.verifyPasswordScreen:
