@@ -5,7 +5,10 @@ import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
+import 'package:musculo_app/core/services/auth_services.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/feedback/components/feedbackfield.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/feedback/view_model/report_view_model.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../components/custom_button.dart';
 import '../../../../components/logo_title_appbar.dart';
@@ -20,8 +23,6 @@ class Reportstab extends StatefulWidget {
 }
 
 class _ReportstabState extends State<Reportstab> {
-  String? selectedReason;
-  String? otherReasonText;
   final noteController = TextEditingController();
   final emailController = TextEditingController();
   final otherReasonController = TextEditingController();
@@ -35,7 +36,16 @@ class _ReportstabState extends State<Reportstab> {
     'Other',
   ];
   @override
+  void dispose() {
+    noteController.dispose();
+    emailController.dispose();
+    otherReasonController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<ReportProvider>(context);
     return Scaffold(
       appBar: LogoTitleAppBar(title: widget.reportType),
       backgroundColor: ConstColors.white,
@@ -59,13 +69,13 @@ class _ReportstabState extends State<Reportstab> {
                         Radio<String>(
                           activeColor: ConstColors.black,
                           value: reason,
-                          groupValue: selectedReason,
-
+                          groupValue: provider.selectReason,
                           onChanged: (value) {
-                            setState(() {
-                              selectedReason = value;
-                              if (value != 'other') otherReasonText = '';
-                            });
+                            provider.setSelectReason(value!);
+                            if (value != 'Other') {
+                              otherReasonController.clear();
+                              // provider.setOtherReason('');
+                            }
                           },
                         ),
 
@@ -79,17 +89,15 @@ class _ReportstabState extends State<Reportstab> {
                       ],
                     ),
                     // if the user select other then this field will be show
-                    if (reason == "Other" && selectedReason == "Other")
+                    if (reason == "Other" && provider.selectReason == "Other")
                       Feedbackfield(
                         controller: otherReasonController,
                         hint: 'Give Other Reason',
                         height: Sizes.s90,
                         maxline: 3,
-                        onchange: (value) {
-                          setState(() {
-                            otherReasonText = value;
-                          });
-                        },
+                        // onchange: (value) {
+                        //   provider.setOtherReason(value);
+                        // },
                       ),
                   ],
                 );
@@ -131,7 +139,14 @@ class _ReportstabState extends State<Reportstab> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16.0),
         child: CustomButton(
-          onTap: () {
+          onTap: () async {
+            await provider.submitReport(
+              userId: AuthService().currentUser?.uid ?? 'anonoymous',
+              contentType: widget.reportType,
+              note: noteController.text.toString().trim(),
+              email: emailController.text.toString().trim(),
+              otherReason: otherReasonController.text.toString().trim(),
+            );
             // navigation handle here
             showDialog(
               context: context,

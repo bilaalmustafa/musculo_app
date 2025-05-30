@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/core/config/routes.dart';
 import 'package:musculo_app/modules/auth/view_model/auth_view_model.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/feedback/view_model/report_view_model.dart';
 import 'package:provider/provider.dart';
 
 import '../../modules/auth/view_model/forgot_view_model.dart';
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthViewModel()),
         ChangeNotifierProvider(create: (_) => PasswordResetProvider()),
         ChangeNotifierProvider(create: (_) => FeedbackProvider()),
+        ChangeNotifierProvider(create: (_) => ReportProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

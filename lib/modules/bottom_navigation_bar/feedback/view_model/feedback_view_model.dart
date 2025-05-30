@@ -14,6 +14,7 @@ class FeedbackProvider with ChangeNotifier {
 
   void setLoading(bool value) {
     _isLoading = value;
+    notifyListeners();
   }
 
   /// Submit feedback (create document in Firebase)
