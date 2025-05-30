@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/shared_appbar.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
+import 'package:musculo_app/core/services/auth_services.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/feedback/components/feedbackfield.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/feedback/view_model/feedback_view_model.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../components/custom_button.dart';
 import '../../../../core/constants/assets.dart';
@@ -31,11 +34,12 @@ class _FeedBScreenState extends State<FeedBScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<FeedbackProvider>(context, listen: false);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: ConstColors.white,
       appBar: SharedAppBar(title: widget.feedbackType),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: EdgeInsets.all(Sizes.s16),
         child: Column(
           spacing: Sizes.s20,
@@ -63,7 +67,16 @@ class _FeedBScreenState extends State<FeedBScreen> {
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(16),
         child: CustomButton(
-          onTap: () {
+          loading: provider.isLoading,
+          onTap: () async {
+            await provider.submitFeedback(
+              userId: AuthService().currentUser?.uid ?? 'anonymous',
+              contentId: null,
+              contentType: widget.feedbackType,
+              email: emailController.text.toString().trim(),
+              suggestion: suggestionController.text.toString().trim(),
+              feedbackMessage: feedbackController.text.toString().trim(),
+            );
             // navigation handle here
             showDialog(
               context: context,

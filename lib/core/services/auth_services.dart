@@ -3,20 +3,24 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-
 class AuthService {
+  // firebase auth instance
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
+  // auth stream
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
+  // current user
   User? get currentUser => _firebaseAuth.currentUser;
 
-  Future<User?> signUpWithEmailAndPassword(String email, String password) async {
+  // sign up
+  Future<User?> signUpWithEmailAndPassword(
+    String email,
+    String password,
+  ) async {
     try {
-      UserCredential userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      UserCredential userCredential = await _firebaseAuth
+          .createUserWithEmailAndPassword(email: email, password: password);
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -24,7 +28,6 @@ class AuthService {
       } else if (e.code == 'email-already-in-use') {
         Fluttertoast.showToast(msg: "Account already exists for that email.");
       } else {
-       
         Fluttertoast.showToast(msg: "Sign up failed : ${e.message}");
       }
     } catch (e) {
@@ -34,12 +37,14 @@ class AuthService {
     return null;
   }
 
-  Future<User?> signInWithEmailAndPassword(String email, String password) async {
+  // sign in
+  Future<User?> signInWithEmailAndPassword(
+    String email,
+    String password,
+  ) async {
     try {
-      UserCredential userCredential = await _firebaseAuth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      UserCredential userCredential = await _firebaseAuth
+          .signInWithEmailAndPassword(email: email, password: password);
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -56,6 +61,7 @@ class AuthService {
     return null;
   }
 
+  // sign out
   Future<bool> signOut() async {
     try {
       await _firebaseAuth.signOut();
@@ -66,15 +72,17 @@ class AuthService {
     }
   }
 
-  Future<String?> sendPasswordResetEmail(String email) async {
+  // send password reset email
+  Future<void> sendPasswordResetEmail(String email) async {
     try {
       await _firebaseAuth.sendPasswordResetEmail(email: email);
-      return "Password reset email sent!";
+      Fluttertoast.showToast(msg: "Password reset email sent!");
     } catch (e) {
       throw Exception('Error sending password reset email: $e');
     }
   }
 
+  // delete account
   Future<int> deleteUserAccount() async {
     try {
       await _firebaseAuth.currentUser?.delete();
@@ -91,6 +99,7 @@ class AuthService {
     }
   }
 
+  // re-authenticate
   Future<void> reauthenticateUser(String email, String password) async {
     try {
       AuthCredential credential = EmailAuthProvider.credential(

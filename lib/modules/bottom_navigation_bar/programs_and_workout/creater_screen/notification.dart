@@ -7,9 +7,17 @@ import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/customlisttile.dart';
 
-class NotificationScreen extends StatelessWidget {
+import '../component/notification_switch.dart';
+
+class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
 
+  @override
+  State<NotificationScreen> createState() => _NotificationScreenState();
+}
+
+class _NotificationScreenState extends State<NotificationScreen> {
+  List<bool> isNotify = [true, false, true, true, false, false, false, true];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,6 +30,7 @@ class NotificationScreen extends StatelessWidget {
         ),
 
         child: Column(
+          spacing: Sizes.s10,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             PoppinsText(
@@ -29,7 +38,7 @@ class NotificationScreen extends StatelessWidget {
               fontSize: Sizes.s18,
               fontWeight: FontWeight.w600,
             ),
-            SizedBox(height: Sizes.s20),
+            SizedBox(height: Sizes.s10),
             CustomListTile(
               padding: EdgeInsets.zero,
               title:
@@ -37,22 +46,17 @@ class NotificationScreen extends StatelessWidget {
               titleFontweight: FontWeight.w500,
               titleFont: Sizes.s15,
 
-              trailing: Transform.scale(
-                scale: 0.8,
-                child: Switch(
-                  activeColor: ConstColors.white,
-                  activeTrackColor: ConstColors.green4AD,
-
-                  inactiveTrackColor: ConstColors.greyEEE,
-                  inactiveThumbColor: ConstColors.white,
-
-                  value: true,
-
-                  onChanged: (value) {},
-                ),
+              trailing: NotificationSwitch(
+                useCupertino: true,
+                value: isNotify[0],
+                onChanged: (value) {
+                  setState(() {
+                    isNotify[0] = value;
+                  });
+                },
               ),
             ),
-            SizedBox(height: Sizes.s10),
+
             CustomListTile(
               padding: EdgeInsets.zero,
               title:
@@ -60,18 +64,14 @@ class NotificationScreen extends StatelessWidget {
               titleFontweight: FontWeight.w500,
               titleFont: Sizes.s15,
 
-              trailing: Transform.scale(
-                scale: 0.7,
-                child: Switch(
-                  activeColor: ConstColors.white,
-                  activeTrackColor: ConstColors.green4AD,
-
-                  inactiveTrackColor: ConstColors.greyEEE,
-                  inactiveThumbColor: ConstColors.white,
-
-                  value: true,
-                  onChanged: (value) {},
-                ),
+              trailing: NotificationSwitch(
+                useCupertino: true,
+                value: isNotify[1],
+                onChanged: (value) {
+                  setState(() {
+                    isNotify[1] = value;
+                  });
+                },
               ),
             ),
             CustomListTile(
@@ -79,17 +79,17 @@ class NotificationScreen extends StatelessWidget {
               title: "Upcoming training ( For user )",
               titleFontweight: FontWeight.w500,
               titleFont: Sizes.s15,
-              trailing: Transform.scale(
-                scale: 0.7,
-                child: Switch(
-                  activeColor: ConstColors.green10,
-
-                  value: false,
-                  onChanged: (value) {},
-                ),
+              trailing: NotificationSwitch(
+                useCupertino: true,
+                value: isNotify[2],
+                onChanged: (value) {
+                  setState(() {
+                    isNotify[2] = value;
+                  });
+                },
               ),
             ),
-            SizedBox(height: Sizes.s20),
+            SizedBox(height: Sizes.s10),
             PoppinsText(
               text: 'General Notifications',
               fontSize: Sizes.s18,
@@ -102,13 +102,14 @@ class NotificationScreen extends StatelessWidget {
 
               titleFontweight: FontWeight.w500,
               titleFont: Sizes.s15,
-              trailing: Transform.scale(
-                scale: 0.7,
-                child: Switch(
-                  activeColor: ConstColors.green10,
-                  value: false,
-                  onChanged: (value) {},
-                ),
+              trailing: NotificationSwitch(
+                useCupertino: true,
+                value: isNotify[3],
+                onChanged: (value) {
+                  setState(() {
+                    isNotify[3] = value;
+                  });
+                },
               ),
             ),
             CustomListTile(
@@ -116,13 +117,15 @@ class NotificationScreen extends StatelessWidget {
               title: "Refund warning",
               titleFontweight: FontWeight.w500,
               titleFont: Sizes.s15,
-              trailing: Transform.scale(
-                scale: 0.7,
-                child: Switch(
-                  activeColor: ConstColors.green10,
-                  value: false,
-                  onChanged: (value) {},
-                ),
+
+              trailing: NotificationSwitch(
+                useCupertino: true,
+                value: isNotify[4],
+                onChanged: (value) {
+                  setState(() {
+                    isNotify[4] = value;
+                  });
+                },
               ),
             ),
             CustomListTile(
@@ -130,13 +133,15 @@ class NotificationScreen extends StatelessWidget {
               title: "Receive feedback to Email",
               titleFontweight: FontWeight.w500,
               titleFont: Sizes.s15,
-              trailing: Transform.scale(
-                scale: 0.7,
-                child: Switch(
-                  activeColor: ConstColors.green10,
-                  value: false,
-                  onChanged: (value) {},
-                ),
+
+              trailing: NotificationSwitch(
+                useCupertino: true,
+                value: isNotify[5],
+                onChanged: (value) {
+                  setState(() {
+                    isNotify[5] = value;
+                  });
+                },
               ),
             ),
             CustomListTile(
@@ -145,13 +150,14 @@ class NotificationScreen extends StatelessWidget {
               titleFontweight: FontWeight.w500,
               titleFont: Sizes.s15,
 
-              trailing: Transform.scale(
-                scale: 0.7,
-                child: Switch(
-                  activeColor: ConstColors.green10,
-                  value: false,
-                  onChanged: (value) {},
-                ),
+              trailing: NotificationSwitch(
+                useCupertino: true,
+                value: isNotify[6],
+                onChanged: (value) {
+                  setState(() {
+                    isNotify[6] = value;
+                  });
+                },
               ),
             ),
             CustomListTile(
@@ -160,13 +166,14 @@ class NotificationScreen extends StatelessWidget {
               titleFontweight: FontWeight.w500,
               titleFont: Sizes.s15,
 
-              trailing: Transform.scale(
-                scale: 0.7,
-                child: Switch(
-                  activeColor: ConstColors.green10,
-                  value: false,
-                  onChanged: (value) {},
-                ),
+              trailing: NotificationSwitch(
+                useCupertino: true,
+                value: isNotify[7],
+                onChanged: (value) {
+                  setState(() {
+                    isNotify[7] = value;
+                  });
+                },
               ),
             ),
           ],
