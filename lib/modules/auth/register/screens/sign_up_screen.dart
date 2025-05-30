@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/customTextField.dart';
 import 'package:musculo_app/components/poppins_text.dart';
+import 'package:musculo_app/components/share_picture.dart';
 import 'package:musculo_app/core/config/validator.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/modules/auth/register/component/question_text.dart';
 import 'package:musculo_app/modules/auth/view_model/auth_view_model.dart';
 import 'package:provider/provider.dart';
+
+import '../../../../core/constants/assets.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -42,7 +45,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   CustomTextField(
                     controller: vm.emailController,
-                    prefexicon: Icons.email,
+                    // prefexicon: Icons.email,
+                    preIcon: Assets.message,
                     title: "Email",
                     validator: (value) => Validator.validateEmail(value),
                   ),
@@ -53,11 +57,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   CustomTextField(
                     controller: vm.passController,
-                    prefexicon: Icons.lock,
+                    // prefexicon: Icons.lock,
+                    preIcon: Assets.lock,
                     title: "Password",
                     validator: (value) => Validator.passwordCorrect(value),
-                    suffexicon:
-                        isObscure ? Icons.visibility_off : Icons.visibility,
+                    sufIcon: isObscure ? Assets.hide : Assets.show,
+                    // suffexicon:
+                    //     isObscure ? Icons.visibility_off : Icons.visibility,
                     obscureText: isObscure,
                     onTap:
                         () => setState(() {

@@ -25,6 +25,7 @@ class Feedbackfield extends StatelessWidget {
   final int? maxline;
   final String? sufixIcon;
   final String? prefixIcon;
+  final Function(String)? onchange;
 
   const Feedbackfield({
     super.key,
@@ -48,6 +49,7 @@ class Feedbackfield extends StatelessWidget {
     this.maxline,
     this.sufixIcon,
     this.prefixIcon,
+    this.onchange,
   });
 
   @override
@@ -69,6 +71,8 @@ class Feedbackfield extends StatelessWidget {
         maxLines: maxline ?? 1,
         validator: validator,
         cursorColor: cursorColor ?? ConstColors.gre9E9E,
+        onChanged: onchange,
+
         style: TextStyle(
           color: textColor ?? ConstColors.black,
           fontWeight: fontWeight ?? TextWeight.regular,

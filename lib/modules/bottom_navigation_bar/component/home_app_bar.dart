@@ -7,6 +7,7 @@ import 'package:musculo_app/core/config/routes.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/notification_switch.dart';
 
 import '../../../core/constants/assets.dart';
 
@@ -53,14 +54,19 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           color: isSwitch ? ConstColors.white : ConstColors.black,
           fontWeight: TextWeight.medium,
         ),
-        Transform.scale(
-          scale: 0.7,
-          child: Switch(
-            activeColor: ConstColors.green10,
-            value: isSwitch,
-            onChanged: (value) => valueChange(value),
-          ),
+        NotificationSwitch(
+          useCupertino: true,
+          value: isSwitch,
+          onChanged: (value) => valueChange(value),
         ),
+        // Transform.scale(
+        //   scale: 0.7,
+        //   child: Switch(
+        //     activeColor: ConstColors.green10,
+        //     value: isSwitch,
+        //     onChanged: (value) => valueChange(value),
+        //   ),
+        // ),
         if (isSwitch)
           PopupMenuButton<String>(
             color: ConstColors.white,

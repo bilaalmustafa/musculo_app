@@ -1,1 +1,36 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"musculo-2ba15","appId":"1:332527150538:android:eaf73791fa10b1f4c69b33","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"musculo-2ba15","configurations":{"android":"1:332527150538:android:eaf73791fa10b1f4c69b33","ios":"1:332527150538:ios:aa406e6c57e6719ac69b33","web":"1:332527150538:web:d17569840984aa31c69b33"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "musculo-2ba15",
+          "appId": "1:332527150538:android:eaf73791fa10b1f4c69b33",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "musculo-2ba15",
+          "configurations": {
+            "android": "1:332527150538:android:eaf73791fa10b1f4c69b33",
+            "ios": "1:332527150538:ios:aa406e6c57e6719ac69b33",
+            "web": "1:332527150538:web:d17569840984aa31c69b33"
+          }
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ]
+    }
+  ]
+}
