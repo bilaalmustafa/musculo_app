@@ -5,11 +5,13 @@ import 'package:musculo_app/core/config/routes.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/video_item.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/program_video_item.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/workout_video_items.dart';
 
 class ShowBottomSheet extends StatefulWidget {
   final String? title;
-  const ShowBottomSheet({super.key, this.title});
+  final dynamic modelData;
+  const ShowBottomSheet({super.key, this.title, this.modelData});
 
   @override
   State<ShowBottomSheet> createState() => _ShowBottomSheetState();
@@ -46,21 +48,38 @@ class _ShowBottomSheetState extends State<ShowBottomSheet> {
           SizedBox(height: 10),
           Expanded(
             child: ListView.separated(
-              itemCount: 10,
+              itemCount: widget.modelData.length,
               itemBuilder:
-                  (context, index) => VideoItem(
-                    index: index,
-                    selectedIndex: selectedIndex,
-                    onChanged: (val) {
-                      setState(() {
-                        selectedIndex = val;
-                      });
-                    },
-                    // programTitle: "Program $index",
-                    // programTime: "15 Mins",
-                    // programStatus: "Beginner",
-                    // creatorName: "Trainer $index",
-                  ),
+                  (context, index) =>
+                      widget.title == "Choose Workout"
+                          ? WorkoutVideoItem(
+                            index: index,
+                            selectedIndex: selectedIndex,
+                            workoutModel: widget.modelData[index],
+                            onChanged: (val) {
+                              setState(() {
+                                selectedIndex = val;
+                              });
+                            },
+                            // programTitle: "Program $index",
+                            // programTime: "15 Mins",
+                            // programStatus: "Beginner",
+                            // creatorName: "Trainer $index",
+                          )
+                          : ProgramVideoItem(
+                            index: index,
+                            selectedIndex: selectedIndex,
+                            program: widget.modelData[index],
+                            onChanged: (val) {
+                              setState(() {
+                                selectedIndex = val;
+                              });
+                            },
+                            // programTitle: "Program $index",
+                            // programTime: "15 Mins",
+                            // programStatus: "Beginner",
+                            // creatorName: "Trainer $index",
+                          ),
               separatorBuilder: (_, __) => SizedBox(height: Sizes.s20),
             ),
           ),

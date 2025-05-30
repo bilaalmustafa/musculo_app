@@ -12,6 +12,7 @@ class CustomTextField extends StatelessWidget {
     this.prefexicon,
     this.obscureText = false,
     this.onTap,
+    this.enabled = true,
     this.validator,
 
     this.preIcon,
@@ -23,6 +24,7 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
   final bool obscureText;
   final VoidCallback? onTap;
+  final bool enabled;
   final String? Function(String?)? validator;
 
   final String? preIcon;
@@ -31,6 +33,7 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      enabled: enabled,
       validator: validator,
       controller: controller,
       obscureText: obscureText,

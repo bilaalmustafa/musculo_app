@@ -7,11 +7,14 @@ import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
+import 'package:musculo_app/model/workouts.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/custom_chip.dart';
 
-class WorkProgramItem extends StatelessWidget {
-  const WorkProgramItem({super.key, this.tabselect});
+class WorkOutItem extends StatelessWidget {
+  const WorkOutItem({super.key, this.tabselect,   this.workout});
   final int? tabselect;
+   final WorkoutModel?workout;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -46,7 +49,7 @@ class WorkProgramItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   PoppinsText(
-                    text: "Quick Core Blaster",
+                    text: "modeldata.",
                     fontSize: Sizes.s14,
                     fontWeight: TextWeight.semiBold,
                   ),

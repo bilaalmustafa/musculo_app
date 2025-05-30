@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/logo_title_appbar.dart';
@@ -7,6 +9,8 @@ import 'package:musculo_app/components/share_picture.dart';
 import 'package:musculo_app/core/config/routes.dart';
 import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/view_model/user_view_model.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../core/constants/const_colors.dart';
 import '../../../../core/constants/fonts.dart';
@@ -24,6 +28,11 @@ class _UserProfileState extends State<UserProfile> {
   bool isCreator = false;
   @override
   Widget build(BuildContext context) {
+    final userVm = context.watch<UserViewModel>();
+    final userName = userVm.userModel?.name ?? "User name";
+    final finishedWorkouts = userVm.userModel?.finishedWorkouts ?? 0;
+    final minutesSpent = userVm.userModel?.spentMinutes ?? 0;
+   
     return SafeArea(
       child: Scaffold(
         backgroundColor: ConstColors.white,
@@ -77,7 +86,7 @@ class _UserProfileState extends State<UserProfile> {
               SizedBox(height: Sizes.s10),
 
               PoppinsText(
-                text: 'Full Name',
+                text: userName,
                 fontSize: Sizes.s24,
                 fontWeight: FontWeight.w600,
               ),
@@ -129,13 +138,13 @@ class _UserProfileState extends State<UserProfile> {
                   CongrateContainer(
                     imagePath:
                         isCreator ? Assets.runnerIcon : Assets.runnerIcon,
-                    digit: "15",
+                    digit: isCreator ? "15" : finishedWorkouts.toString(),
                     text: isCreator ? "Programs Sold" : "Finished Workout",
                   ),
                   CongrateContainer(
                     imagePath:
                         isCreator ? Assets.walletIcon : Assets.timeCircle,
-                    digit: isCreator ? '250£' : "20",
+                    digit: isCreator ? '250£' : minutesSpent.toString(),
                     text: isCreator ? "Earnings" : "Minutes Spent",
                   ),
                 ],
@@ -168,7 +177,11 @@ class _UserProfileState extends State<UserProfile> {
 
                   trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
                   onTap: () {
-                    Navigator.pushNamed(context, Routes.myProgramWorkout);
+                    Navigator.pushNamed(
+                      context,
+                      Routes.myProgramWorkout,
+                     
+                    );
                     // program workout code here
                   },
                 ),
