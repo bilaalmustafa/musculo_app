@@ -14,6 +14,7 @@ import 'package:musculo_app/core/services/user_service.dart';
 import 'package:musculo_app/model/user_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/view_model/user_view_model.dart';
 import 'package:provider/provider.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/notification_switch.dart';
 
 import '../../../core/constants/assets.dart';
 
@@ -105,15 +106,20 @@ class _HomeAppBarState extends State<HomeAppBar> {
           color: widget.isSwitch ? ConstColors.white : ConstColors.black,
           fontWeight: TextWeight.medium,
         ),
-        Transform.scale(
-          scale: 0.7,
-          child: Switch(
-            activeColor: ConstColors.green10,
-            value: widget.isSwitch,
-            onChanged: (value) => widget.valueChange(value),
-          ),
+        NotificationSwitch(
+          useCupertino: true,
+          value:widget. isSwitch,
+          onChanged: (value) => widget. valueChange(value),
         ),
-        if (widget.isSwitch)
+        // Transform.scale(
+        //   scale: 0.7,
+        //   child: Switch(
+        //     activeColor: ConstColors.green10,
+        //     value: isSwitch,
+        //     onChanged: (value) => valueChange(value),
+        //   ),
+        // ),
+        if ( widget. isSwitch)
           PopupMenuButton<String>(
             color: ConstColors.white,
             shape: RoundedRectangleBorder(

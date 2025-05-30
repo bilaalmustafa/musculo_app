@@ -1,18 +1,31 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:musculo_app/core/config/injections.dart';
+import 'package:musculo_app/core/services/account_storage.dart';
 import 'package:musculo_app/core/services/auth_services.dart';
 import 'package:musculo_app/core/services/user_service.dart';
 import 'package:musculo_app/model/user_model.dart' as u;
 
 class AuthViewModel with ChangeNotifier {
+  final _authServices = AuthService();
+
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passController = TextEditingController();
   final TextEditingController firstnameController = TextEditingController();
   final TextEditingController surenameController = TextEditingController();
+
   final formKey = GlobalKey<FormState>();
+
   bool isMale = true;
   int selectedage = 18;
+  String fitnessLevel = "Beginner";
+  bool isLoading = false;
+
+  User? currentUser;
+
+  AuthViewModel() {
+    currentUser = _authServices.currentUser;
+  }
 
   bool validateAndSaveForm() {
     var form = formKey.currentState!;
@@ -22,9 +35,6 @@ class AuthViewModel with ChangeNotifier {
     }
     return false;
   }
-
-  String fitnessLevel = "Beginner";
-  bool isLoading = false;
 
   void gender(bool value) {
     isMale = value;
@@ -44,12 +54,17 @@ class AuthViewModel with ChangeNotifier {
   Future<User?> signUp() async {
     isLoading = true;
     notifyListeners();
-    User? user = await instance<AuthService>().signUpWithEmailAndPassword(
-      emailController.text,
+    User? user = await _authServices.signUpWithEmailAndPassword(
+      emailController.text.trim(),
       passController.text,
     );
     if (user != null) {
-      await instance<UserService>().createUser(
+      currentUser = user;
+      await AccountStorage.saveCredentials(
+        emailController.text.trim(),
+        passController.text,
+      );
+      await UserService().createUser(
         user.uid,
         u.UserModel(
           email: emailController.text.trim(),
@@ -75,8 +90,46 @@ class AuthViewModel with ChangeNotifier {
       email,
       pass,
     );
+
+    if (user != null) {
+      currentUser = user;
+      await AccountStorage.saveCredentials(email, pass);
+    }
+
     isLoading = false;
     notifyListeners();
     return user;
+  }
+
+  Future<void> logout() async {
+    isLoading = true;
+    notifyListeners();
+
+    await _authServices.signOut();
+    currentUser = null;
+
+    isLoading = false;
+    notifyListeners();
+  }
+
+  Future<String?> getCurrentUserEmail() async {
+    return FirebaseAuth.instance.currentUser?.email;
+  }
+
+  Future<void> switchAccount(String email) async {
+    final creds = await AccountStorage.getCredentials(email);
+    if (creds != null) {
+      await signIn(creds['email']!, creds['password']!);
+      await AccountStorage.saveCredentials(creds['email']!, creds['password']!);
+    }
+  }
+
+  Future<List<String>> getSavedAccounts() async {
+    return await AccountStorage.getSavedEmails();
+  }
+
+  Future<void> removeAccount(String email) async {
+    await AccountStorage.deleteAccount(email);
+    notifyListeners();
   }
 }

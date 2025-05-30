@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/poppins_text.dart';
+import 'package:musculo_app/core/config/routes.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
+import 'package:musculo_app/modules/auth/view_model/auth_view_model.dart';
+import 'package:provider/provider.dart';
 
 class LogoutBottomSheet extends StatelessWidget {
   const LogoutBottomSheet({super.key});
@@ -65,15 +68,30 @@ class LogoutBottomSheet extends StatelessWidget {
                   ),
                 ),
 
-                Expanded(
-                  child: CustomButton(
-                    buttonText: 'Logout',
+                Consumer<AuthViewModel>(
+                  builder: (context, vm, child) {
+                    return Expanded(
+                      child: CustomButton(
+                        buttonText: 'Logout',
+                        loading: vm.isLoading,
 
-                    //   buttonWidth: 184,
-                    onTap: () {
-                      // logout Logic here
-                    },
-                  ),
+                        onTap: () async {
+                          // logout Logic here
+                          Navigator.pop(context);
+                          await vm.logout();
+
+                          // Navigate to SignIn screen and remove all previous routes
+                          if (context.mounted) {
+                            Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              Routes.signInscreen,
+                              (route) => false,
+                            );
+                          }
+                        },
+                      ),
+                    );
+                  },
                 ),
               ],
             ),

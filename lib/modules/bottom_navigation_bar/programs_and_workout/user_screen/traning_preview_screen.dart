@@ -12,6 +12,8 @@ import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_scre
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/analysis_containers.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/paragraph_text.dart';
 
+import '../../../../core/config/routes.dart';
+
 class TraningPreviewScreen extends StatefulWidget {
   const TraningPreviewScreen({super.key});
 
@@ -61,7 +63,26 @@ class _TraningPreviewScreenState extends State<TraningPreviewScreen> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  onSelected: (value) {},
+                  onSelected: (value) {
+                    if (value == 'like') {
+                      // navigate to favirate screen
+                    }
+
+                    if (value == "feedback") {
+                      Navigator.pushNamed(
+                        context,
+                        Routes.feedbScreen,
+                        arguments: {'feedbackType': 'WorkOut'},
+                      );
+                    }
+                    if (value == "report") {
+                      Navigator.pushNamed(
+                        context,
+                        Routes.reportScreen,
+                        arguments: {'reportType': 'Report workOut'},
+                      );
+                    }
+                  },
                   itemBuilder:
                       (context) => [
                         PopupMenuItem(
@@ -73,6 +94,42 @@ class _TraningPreviewScreenState extends State<TraningPreviewScreen> {
                               PoppinsText(
                                 text: 'Like Workout',
                                 fontSize: Sizes.s14,
+                                fontWeight: TextWeight.medium,
+                              ),
+                            ],
+                          ),
+                        ),
+                        PopupMenuItem(
+                          value: 'feedback',
+                          child: Row(
+                            children: [
+                              SharePicture(
+                                imagePath: Assets.feedbackIcon,
+                                colorFilter: ColorFilter.mode(
+                                  ConstColors.black,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Text('Feedback'),
+                            ],
+                          ),
+                        ),
+                        PopupMenuItem(
+                          value: 'report',
+                          child: Row(
+                            children: [
+                              SharePicture(
+                                imagePath: Assets.reportIcon,
+                                colorFilter: ColorFilter.mode(
+                                  ConstColors.red,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Report',
+                                style: TextStyle(color: ConstColors.red),
                               ),
                             ],
                           ),

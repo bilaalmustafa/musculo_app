@@ -6,6 +6,9 @@ import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_scre
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/view_model/user_view_model.dart';
 import 'package:provider/provider.dart';
 
+import '../../modules/auth/view_model/forgot_view_model.dart';
+import '../../modules/bottom_navigation_bar/feedback/view_model/feedback_view_model.dart';
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -17,7 +20,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthViewModel()),
         ChangeNotifierProvider(create: (_) => UserViewModel()),
         ChangeNotifierProvider(create: (_)=> AddProgramViewModel()),
-         ChangeNotifierProvider(create: (_)=> AddWorkoutVeiwModel())
+         ChangeNotifierProvider(create: (_)=> AddWorkoutVeiwModel()),
+        ChangeNotifierProvider(create: (_) => PasswordResetProvider()),
+        ChangeNotifierProvider(create: (_) => FeedbackProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
