@@ -5,10 +5,11 @@ import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
+import 'package:musculo_app/model/programs.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/custom_chip.dart';
 
-class VideoItem extends StatelessWidget {
-  const VideoItem({
+class ProgramVideoItem extends StatelessWidget {
+  const ProgramVideoItem({
     super.key,
     this.image,
     this.programImage,
@@ -19,6 +20,7 @@ class VideoItem extends StatelessWidget {
     this.index,
     this.selectedIndex,
     this.onChanged,
+    this.program,
   });
 
   final String? image;
@@ -30,6 +32,7 @@ class VideoItem extends StatelessWidget {
   final int? index;
   final int? selectedIndex;
   final ValueChanged<int>? onChanged;
+  final ProgramModel? program;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +55,7 @@ class VideoItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             PoppinsText(
-              text: programTitle ?? "Quick Core ",
+              text: program?.programName ?? 'Unknown Program',
               fontSize: Sizes.s16,
               fontWeight: TextWeight.semiBold,
             ),
@@ -62,12 +65,12 @@ class VideoItem extends StatelessWidget {
             Row(
               children: [
                 CustomChip(
-                  text: programTime ?? "15 Mins",
+                  text: "${program?.duration ?? "0"} Mins",
                   color: ConstColors.secondary,
                 ),
                 const SizedBox(width: 10),
                 CustomChip(
-                  text: programStatus ?? "Beginner",
+                  text: program?.levelOf ?? 'Unknown Level',
                   color: ConstColors.secondary,
                 ),
               ],

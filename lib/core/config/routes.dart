@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musculo_app/model/user_model.dart';
 import 'package:musculo_app/modules/auth/register/screens/register_screen.dart';
 import 'package:musculo_app/modules/auth/sign_in/screen/changepassword_screen.dart';
 import 'package:musculo_app/modules/auth/sign_in/screen/resetpassword_screen.dart';
@@ -13,6 +14,7 @@ import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_scre
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/user_mode/training_screen.dart';
 
 import 'package:musculo_app/modules/bottom_navigation_bar/feedback/screens/program_screen.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/view_model/user_view_model.dart';
 // import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/congratulation_screen.dart';
 // import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/training_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/creator_profile_screens/becomecreator.dart';
@@ -28,6 +30,7 @@ import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/u
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/filter_screen.dart';
 import 'package:musculo_app/modules/onboarding/get_started.dart';
 import 'package:musculo_app/modules/onboarding/splash_screen.dart';
+import 'package:provider/provider.dart';
 
 import '../../modules/bottom_navigation_bar/profile/user_profile_screens/favorites_screen.dart';
 import '../../modules/bottom_navigation_bar/programs_and_workout/coach/coach_profile.dart';
@@ -101,7 +104,7 @@ class RouteGenerator {
       case Routes.feedBackScreen:
         return MaterialPageRoute(builder: (_) => const FeedbackScreen());
       case Routes.accountInfoScreen:
-        return MaterialPageRoute(builder: (_) => const AccountinfoScreen());
+        return MaterialPageRoute(builder: (_) => AccountinfoScreen());
       case Routes.myProgramWorkout:
         return MaterialPageRoute(builder: (_) => const Myprogramworkout());
       case Routes.favoriteScreen:

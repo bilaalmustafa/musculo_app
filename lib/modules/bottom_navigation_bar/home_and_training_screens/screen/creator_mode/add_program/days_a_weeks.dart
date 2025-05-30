@@ -3,6 +3,8 @@ import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_program/view_model/add_program_view_model.dart';
+import 'package:provider/provider.dart';
 
 class DaysAWeeks extends StatefulWidget {
   const DaysAWeeks({super.key});
@@ -12,7 +14,7 @@ class DaysAWeeks extends StatefulWidget {
 }
 
 class _DaysAWeeksState extends State<DaysAWeeks> {
-  int? _selectedIndex;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,48 +35,52 @@ class _DaysAWeeksState extends State<DaysAWeeks> {
           ),
 
           Expanded(
-            child: Container(
-              color: ConstColors.secondary,
-              child: ListView.separated(
-                itemCount: 10,
-                itemBuilder: (conex, index) {
-                  return Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20),
-                    decoration: BoxDecoration(
-                      color: ConstColors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      border:
-                          _selectedIndex == index
-                              ? Border.all(color: ConstColors.black)
-                              : null,
-                    ),
-                    child: CheckboxListTile(
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 5,
-                      ),
-                      checkboxShape: CircleBorder(
-                        side: BorderSide(color: ConstColors.black),
-                      ),
-                      activeColor: ConstColors.black,
-                      title: PoppinsText(
-                        text: " ${index + 1} Time",
-                        fontSize: Sizes.s14,
-                      ),
-
-                      value: _selectedIndex == index,
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedIndex = value! ? index : null;
-                        });
-                      },
-                    ),
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return SizedBox(height: 20);
-                },
-              ),
+            child: Consumer<AddProgramViewModel>(
+              builder: (context, vm,_) {
+                return Container(
+                  color: ConstColors.secondary,
+                  child: ListView.separated(
+                    itemCount: 10,
+                    itemBuilder: (conex, index) {
+                      return Container(
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        decoration: BoxDecoration(
+                          color: ConstColors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          border:
+                              vm.selectedTime == index
+                                  ? Border.all(color: ConstColors.black)
+                                  : null,
+                        ),
+                        child: CheckboxListTile(
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 5,
+                          ),
+                          checkboxShape: CircleBorder(
+                            side: BorderSide(color: ConstColors.black),
+                          ),
+                          activeColor: ConstColors.black,
+                          title: PoppinsText(
+                            text: " ${index + 1} Time",
+                            fontSize: Sizes.s14,
+                          ),
+                
+                          value:  vm.selectedTime == index,
+                          onChanged: (value) {
+                            setState(() {
+                               vm.selectedTime = value! ? index : null;
+                            });
+                          },
+                        ),
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return SizedBox(height: 20);
+                    },
+                  ),
+                );
+              }
             ),
           ),
         ],

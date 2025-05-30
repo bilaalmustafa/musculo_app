@@ -1,16 +1,23 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/components/share_picture.dart';
+import 'package:musculo_app/core/config/injections.dart';
 
 import 'package:musculo_app/core/config/routes.dart';
 
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
+import 'package:musculo_app/core/services/auth_services.dart';
+import 'package:musculo_app/core/services/user_service.dart';
+import 'package:musculo_app/model/user_model.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/view_model/user_view_model.dart';
+import 'package:provider/provider.dart';
 
 import '../../../core/constants/assets.dart';
 
-class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
+class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
   const HomeAppBar({
     super.key,
     required this.isSwitch,
@@ -19,6 +26,27 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isSwitch;
 
   final ValueChanged valueChange;
+
+  @override
+  State<HomeAppBar> createState() => _HomeAppBarState();
+
+  @override
+  Size get preferredSize => Size(double.infinity, Sizes.s100);
+}
+
+class _HomeAppBarState extends State<HomeAppBar> {
+  final AuthService _authservces = instance<AuthService>();
+
+  Future<UserModel?>? _Future;
+  @override
+  void initState() {
+    _Future = context.read<UserViewModel>().getUserById(
+      _authservces.currentUser!.uid,
+    );
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -27,7 +55,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
       bottomOpacity: 0,
       shadowColor: Colors.black,
 
-      backgroundColor: !isSwitch ? ConstColors.white : ConstColors.black,
+      backgroundColor: !widget.isSwitch ? ConstColors.white : ConstColors.black,
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -37,31 +65,55 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
             color: ConstColors.greyB1B1,
             fontWeight: TextWeight.semiBold,
           ),
-          PoppinsText(
-            text: "Full user name",
-            fontSize: Sizes.s20,
-            color: isSwitch ? ConstColors.white : ConstColors.black,
-            fontWeight: TextWeight.semiBold,
+          FutureBuilder<UserModel?>(
+            future: _Future,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return PoppinsText(
+                  text: "Loading...",
+                  fontSize: Sizes.s20,
+                  color:
+                      widget.isSwitch ? ConstColors.white : ConstColors.black,
+                  fontWeight: TextWeight.semiBold,
+                );
+              } else if (snapshot.data == null) {
+                return PoppinsText(
+                  text: "User name",
+                  fontSize: Sizes.s20,
+                  color:
+                      widget.isSwitch ? ConstColors.white : ConstColors.black,
+                  fontWeight: TextWeight.semiBold,
+                );
+              } else {
+                return PoppinsText(
+                  text: snapshot.data!.name ?? " User name",
+                  fontSize: Sizes.s20,
+                  color:
+                      widget.isSwitch ? ConstColors.white : ConstColors.black,
+                  fontWeight: TextWeight.semiBold,
+                );
+              }
+            },
           ),
         ],
       ),
 
       actions: [
         PoppinsText(
-          text: !isSwitch ? "User" : "Creator",
+          text: !widget.isSwitch ? "User" : "Creator",
           fontSize: Sizes.s11,
-          color: isSwitch ? ConstColors.white : ConstColors.black,
+          color: widget.isSwitch ? ConstColors.white : ConstColors.black,
           fontWeight: TextWeight.medium,
         ),
         Transform.scale(
           scale: 0.7,
           child: Switch(
             activeColor: ConstColors.green10,
-            value: isSwitch,
-            onChanged: (value) => valueChange(value),
+            value: widget.isSwitch,
+            onChanged: (value) => widget.valueChange(value),
           ),
         ),
-        if (isSwitch)
+        if (widget.isSwitch)
           PopupMenuButton<String>(
             color: ConstColors.white,
             shape: RoundedRectangleBorder(
@@ -72,7 +124,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
               width: Sizes.s24,
               height: Sizes.s24,
               colorFilter: ColorFilter.mode(
-                isSwitch ? ConstColors.white : ConstColors.black,
+                widget.isSwitch ? ConstColors.white : ConstColors.black,
                 BlendMode.srcIn,
               ),
             ),
@@ -127,7 +179,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
             width: Sizes.s24,
             height: Sizes.s24,
             colorFilter: ColorFilter.mode(
-              isSwitch ? ConstColors.white : ConstColors.black,
+              widget.isSwitch ? ConstColors.white : ConstColors.black,
               BlendMode.srcIn,
             ),
           ),

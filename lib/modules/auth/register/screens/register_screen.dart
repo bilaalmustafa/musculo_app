@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/custom_button.dart';
@@ -98,6 +100,7 @@ class _RegisterScrenState extends State<RegisterScren> {
                   User? user = await context.read<AuthViewModel>().signUp();
                   if (user != null && context.mounted) {
                     showDialog(
+                      barrierDismissible: true,
                       context: context,
                       barrierColor: Colors.black.withValues(alpha: 0.9),
                       builder: (BuildContext context) {
@@ -113,6 +116,7 @@ class _RegisterScrenState extends State<RegisterScren> {
                         Navigator.pushNamedAndRemoveUntil(
                           context,
                           Routes.bottomnavigationbarscreen,
+                         
                           (route) => false,
                         );
                       }

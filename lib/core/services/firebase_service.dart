@@ -1,7 +1,7 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:musculo_app/model/programs.dart';
 
 class FirebaseService<T> {
   final String collectionName;
@@ -26,4 +26,49 @@ class FirebaseService<T> {
       throw Exception('Error creating document: $e');
     }
   }
+
+  Future<T?> updateUser(String id, T item) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection(collectionName)
+          .doc(id)
+          .update(toJson(item));
+      Fluttertoast.showToast(msg: "Updated successful");
+      return item;
+    } catch (e) {
+      Fluttertoast.showToast(msg: "Unable to Store ${T.runtimeType}: $e");
+      throw Exception('Error creating document: $e');
+    }
+  }
+
+  Future<T?> getById(String id) async {
+    try {
+      DocumentSnapshot doc =
+          await FirebaseFirestore.instance
+              .collection(collectionName)
+              .doc(id)
+              .get();
+
+      if (doc.exists) {
+        return fromJson(doc.data() as Map<String, dynamic>);
+      }
+      return null;
+    } catch (e) {
+      print(e);
+      throw Exception('Error fetching document: $e');
+    }
+  }
+
+
+Stream<List<T>> getAllDiscovery(String type) {
+  return FirebaseFirestore.instance
+      .collection(collectionName)
+      .where('type', isEqualTo: type)  
+      .snapshots()
+      .map((snapshot) {
+        return snapshot.docs
+            .map((doc) => fromJson(doc.data()))
+            .toList();  
+      });
+}
 }

@@ -5,7 +5,7 @@ import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 
-import 'package:musculo_app/modules/bottom_navigation_bar/profile/component/workoutprograms.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/profile/component/programItems.dart';
 
 import '../../../../../../core/constants/assets.dart';
 
@@ -50,7 +50,7 @@ class _AddProgramNameState extends State<AddYourProgram> {
               child: ListView.separated(
                 itemBuilder: (context, index) {
                   // their you will not print the price
-                  return WorkoutPrograms();
+                  return ProgramItems();
                 },
                 separatorBuilder: (context, index) {
                   return SizedBox(height: 10);

@@ -58,8 +58,8 @@ class AuthViewModel with ChangeNotifier {
           gender: isMale ? "Male" : "Female",
           age: selectedage,
           levelOfFitness: fitnessLevel,
-          userid: user.uid,
-          status: "Pending",
+          userId: user.uid,
+          // status: "Pending",
         ),
       );
     }
@@ -68,10 +68,13 @@ class AuthViewModel with ChangeNotifier {
     return user;
   }
 
-   Future<User?> signIn(String email, String pass) async {
+  Future<User?> signIn(String email, String pass) async {
     isLoading = true;
     notifyListeners();
-    User? user = await instance<AuthService>().signInWithEmailAndPassword(email, pass);
+    User? user = await instance<AuthService>().signInWithEmailAndPassword(
+      email,
+      pass,
+    );
     isLoading = false;
     notifyListeners();
     return user;
