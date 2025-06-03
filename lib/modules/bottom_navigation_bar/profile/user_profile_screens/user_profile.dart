@@ -10,6 +10,7 @@ import 'package:musculo_app/core/config/routes.dart';
 import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/view_model/user_view_model.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/notification_switch.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/const_colors.dart';
@@ -32,7 +33,7 @@ class _UserProfileState extends State<UserProfile> {
     final userName = userVm.userModel?.name ?? "User name";
     final finishedWorkouts = userVm.userModel?.finishedWorkouts ?? 0;
     final minutesSpent = userVm.userModel?.spentMinutes ?? 0;
-   
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: ConstColors.white,
@@ -98,24 +99,35 @@ class _UserProfileState extends State<UserProfile> {
                     fontSize: Sizes.s14,
                     fontWeight: TextWeight.semiBold,
                   ),
-                  Transform.scale(
-                    scale: 0.8,
-                    child: Switch(
-                      activeColor: ConstColors.white,
-                      activeTrackColor: ConstColors.green4AD,
 
-                      inactiveTrackColor: ConstColors.greyEEE,
-                      inactiveThumbColor: ConstColors.white,
-                      value: isCreator,
-                      onChanged: (value) {
-                        setState(() {
-                          isCreator = value;
-                        });
-                      },
-                    ),
+                  NotificationSwitch(
+                    value: isCreator,
+                    useCupertino: true,
+                    onChanged: (value) {
+                      setState(() {
+                        isCreator = value;
+                      });
+                    },
                   ),
+                  // Transform.scale(
+                  //   scale: 0.8,
+                  //   child: Switch(
+                  //     activeColor: ConstColors.white,
+                  //     activeTrackColor: ConstColors.green4AD,
+
+                  //     inactiveTrackColor: ConstColors.greyEEE,
+                  //     inactiveThumbColor: ConstColors.white,
+                  //     value: isCreator,
+                  //     onChanged: (value) {
+                  //       setState(() {
+                  //         isCreator = value;
+                  //       });
+                  //     },
+                  //   ),
+                  // ),
                 ],
               ),
+              SizedBox(height: 15),
               CustomButton(
                 buttonText:
                     isCreator
@@ -177,11 +189,7 @@ class _UserProfileState extends State<UserProfile> {
 
                   trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
                   onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      Routes.myProgramWorkout,
-                     
-                    );
+                    Navigator.pushNamed(context, Routes.myProgramWorkout);
                     // program workout code here
                   },
                 ),
@@ -209,6 +217,7 @@ class _UserProfileState extends State<UserProfile> {
                   trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
                   onTap: () {
                     // motivvational text code here
+                    Navigator.pushNamed(context, Routes.motivationalScreen);
                   },
                 ),
               ] else ...[

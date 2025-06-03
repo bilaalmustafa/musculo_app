@@ -24,6 +24,11 @@ class ReportProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void clearSelectReason() {
+    _selectReason = null; // or however you store the selected reason
+    notifyListeners();
+  }
+
   /// Submit report (create document in Firebase)
   Future<void> submitReport({
     required String userId,
@@ -53,7 +58,7 @@ class ReportProvider with ChangeNotifier {
         timeStamp: DateTime.now(),
       );
       final reportId = DateTime.now().millisecondsSinceEpoch.toString();
-      await _reportService.create(reportId, report);
+      await _reportService.createReport(reportId, report);
     } catch (e) {
       debugPrint("Error submitting report: $e");
     } finally {
