@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:musculo_app/components/shared_appbar.dart';
+import 'package:musculo_app/core/services/auth_services.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/profile/profile_view_model/motivational_view_model.dart';
+
+import 'package:provider/provider.dart';
 
 import '../../../../components/custom_button.dart';
 import '../../../../components/poppins_text.dart';
@@ -19,6 +24,7 @@ class MotivationalTextScreen extends StatefulWidget {
 class _MotivationalTextScreenState extends State<MotivationalTextScreen> {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -31,67 +37,97 @@ class _MotivationalTextScreenState extends State<MotivationalTextScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ConstColors.white,
-      appBar: SharedAppBar(title: 'Motivational Text'),
+      appBar: SharedAppBar(title: 'Add Quote'),
 
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Form(
+          key: formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
 
-          children: [
-            PoppinsText(
-              text: "Title",
-              fontSize: Sizes.s16,
-              fontWeight: TextWeight.semiBold,
-            ),
-            Feedbackfield(
-              controller: titleController,
-              hint: 'Enter Title',
-              height: 60,
-              validator: (value) => Validator.valueExists(value),
-            ),
-            SizedBox(height: 30),
-            PoppinsText(
-              text: "Description",
-              fontSize: Sizes.s16,
-              fontWeight: TextWeight.semiBold,
-            ),
-            Feedbackfield(
-              controller: descriptionController,
-              hint: 'Enter description',
-              maxline: 5,
-              validator: (value) => Validator.valueExists(value),
-            ),
-          ],
+            children: [
+              PoppinsText(
+                text: "Title",
+                fontSize: Sizes.s16,
+                fontWeight: TextWeight.semiBold,
+              ),
+              Feedbackfield(
+                controller: titleController,
+                hint: 'Enter Title',
+                height: 80,
+
+                validator: (value) => Validator.valueExists(value),
+              ),
+              SizedBox(height: 30),
+              PoppinsText(
+                text: "Description",
+
+                fontSize: Sizes.s16,
+                fontWeight: TextWeight.semiBold,
+              ),
+              Feedbackfield(
+                controller: descriptionController,
+                hint: 'Enter description',
+                maxline: 5,
+                validator: (value) => Validator.valueExists(value),
+              ),
+            ],
+          ),
         ),
       ),
 
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Row(
-          spacing: Sizes.s10,
-          children: [
-            Expanded(
-              child: CustomButton(
-                buttonText: 'Clear',
-                textColor: Colors.black,
-                buttonColor: ConstColors.secondary,
+        child: Consumer<MotivationalTextProvider>(
+          builder: (context, provider, child) {
+            return Row(
+              spacing: Sizes.s10,
+              children: [
+                // Expanded(
+                //   child: CustomButton(
+                //     loading: provider.isLoading,
+                //     buttonText: 'Clear',
+                //     textColor: Colors.black,
+                //     buttonColor: ConstColors.secondary,
 
-                onTap: () {
-                  // logout logic here
-                  Navigator.pop(context);
-                },
-              ),
-            ),
-            Expanded(
-              child: CustomButton(
-                buttonText: 'Add',
-                onTap: () {
-                  // add logic here
-                },
-              ),
-            ),
-          ],
+                //     onTap: () {
+                //       // formKey.currentState?.reset();
+                //       // titleController.clear();
+                //       // descriptionController.clear();
+                //       Navigator.push(
+                //         context,
+                //         MaterialPageRoute(
+                //           builder: (context) => MotivationalListScreen(),
+                //         ),
+                //       );
+                //     },
+                //   ),
+                // ),
+                Expanded(
+                  child: CustomButton(
+                    loading: provider.isLoading,
+                    buttonText: 'Add',
+                    onTap: () async {
+                      // add logic here
+                      if (formKey.currentState!.validate()) {
+                        await provider.submitMotivationalText(
+                          title: titleController.text.trim(),
+                          description: descriptionController.text.trim(),
+                          userId: AuthService().currentUser!.uid,
+                        );
+                        formKey.currentState?.reset();
+                        titleController.clear();
+                        descriptionController.clear();
+
+                        Fluttertoast.showToast(msg: 'successfully added');
+                      }
+                    },
+                  ),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );

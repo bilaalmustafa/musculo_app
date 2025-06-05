@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/logo_title_appbar.dart';
@@ -109,22 +107,6 @@ class _UserProfileState extends State<UserProfile> {
                       });
                     },
                   ),
-                  // Transform.scale(
-                  //   scale: 0.8,
-                  //   child: Switch(
-                  //     activeColor: ConstColors.white,
-                  //     activeTrackColor: ConstColors.green4AD,
-
-                  //     inactiveTrackColor: ConstColors.greyEEE,
-                  //     inactiveThumbColor: ConstColors.white,
-                  //     value: isCreator,
-                  //     onChanged: (value) {
-                  //       setState(() {
-                  //         isCreator = value;
-                  //       });
-                  //     },
-                  //   ),
-                  // ),
                 ],
               ),
               SizedBox(height: 15),
@@ -217,7 +199,7 @@ class _UserProfileState extends State<UserProfile> {
                   trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
                   onTap: () {
                     // motivvational text code here
-                    Navigator.pushNamed(context, Routes.motivationalScreen);
+                    Navigator.pushNamed(context, Routes.motivationalListScreen);
                   },
                 ),
               ] else ...[
@@ -244,6 +226,7 @@ class _UserProfileState extends State<UserProfile> {
                   trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
                   onTap: () {
                     // motivvational text code here
+                    Navigator.pushNamed(context, Routes.motivationalListScreen);
                   },
                 ),
                 CustomListTile(

@@ -100,8 +100,6 @@ class _FeedBScreenState extends State<FeedBScreen> {
                     suggestionController.clear();
                     feedbackController.clear();
 
-                    Fluttertoast.showToast(msg: 'Feedback Submitted');
-
                     // navigation handle here
                     showDialog(
                       context: context,

@@ -24,6 +24,7 @@ import 'package:musculo_app/modules/bottom_navigation_bar/profile/creator_profil
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/creator_profile_screens/payment_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/user_profile_screens/accountinfo.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/user_profile_screens/motivational_text.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/profile/user_profile_screens/motivationallist.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/user_profile_screens/myprogramworkout.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/user_profile_screens/user_profile.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/creater_screen/notification.dart';
@@ -72,6 +73,7 @@ class Routes {
   static const String changePasswordScreen = "/changepassword_screen";
   static const String reportScreen = "/reporttab_screen";
   static const String motivationalScreen = "/motivational_text_screen";
+  static const String motivationalListScreen = "/motivational_list_screen";
 }
 
 class RouteGenerator {
@@ -154,6 +156,10 @@ class RouteGenerator {
       case Routes.motivationalScreen:
         return MaterialPageRoute(
           builder: (_) => const MotivationalTextScreen(),
+        );
+      case Routes.motivationalListScreen:
+        return MaterialPageRoute(
+          builder: (_) => const MotivationalListScreen(),
         );
 
       default:
