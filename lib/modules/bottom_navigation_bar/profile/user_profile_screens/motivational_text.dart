@@ -12,19 +12,32 @@ import '../../../../core/config/validator.dart';
 import '../../../../core/constants/const_colors.dart';
 import '../../../../core/constants/fonts.dart';
 import '../../../../core/constants/sizes.dart';
+import '../../../../model/motivational_text_model.dart';
 import '../../feedback/components/feedbackfield.dart';
 
 class MotivationalTextScreen extends StatefulWidget {
-  const MotivationalTextScreen({super.key});
+  final MotivationalTextModel? editableText;
+  const MotivationalTextScreen({super.key, this.editableText});
 
   @override
   State<MotivationalTextScreen> createState() => _MotivationalTextScreenState();
 }
 
 class _MotivationalTextScreenState extends State<MotivationalTextScreen> {
-  final titleController = TextEditingController();
-  final descriptionController = TextEditingController();
+  late TextEditingController titleController;
+  late TextEditingController descriptionController;
   final formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    titleController = TextEditingController(
+      text: widget.editableText?.title ?? '',
+    );
+    descriptionController = TextEditingController(
+      text: widget.editableText?.description ?? '',
+    );
+  }
 
   @override
   void dispose() {
@@ -35,9 +48,10 @@ class _MotivationalTextScreenState extends State<MotivationalTextScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isEdit = widget.editableText != null;
     return Scaffold(
       backgroundColor: ConstColors.white,
-      appBar: SharedAppBar(title: 'Add Quote'),
+      appBar: SharedAppBar(title: isEdit ? 'Edit Quote' : 'Add Quote'),
 
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -107,20 +121,30 @@ class _MotivationalTextScreenState extends State<MotivationalTextScreen> {
                 Expanded(
                   child: CustomButton(
                     loading: provider.isLoading,
-                    buttonText: 'Add',
+                    buttonText: isEdit ? 'Update' : 'Add',
                     onTap: () async {
                       // add logic here
                       if (formKey.currentState!.validate()) {
-                        await provider.submitMotivationalText(
-                          title: titleController.text.trim(),
-                          description: descriptionController.text.trim(),
-                          userId: AuthService().currentUser!.uid,
-                        );
-                        formKey.currentState?.reset();
-                        titleController.clear();
-                        descriptionController.clear();
+                        final title = titleController.text.trim();
+                        final desc = descriptionController.text.trim();
+                        final userId = AuthService().currentUser?.uid;
 
-                        Fluttertoast.showToast(msg: 'successfully added');
+                        if (isEdit) {
+                          final updated = widget.editableText!.copyWith(
+                            title: title,
+                            description: desc,
+                          );
+                          await provider.updateMotivationalText(updated);
+                          Fluttertoast.showToast(msg: "Updated successfully");
+                        } else {
+                          await provider.submitMotivationalText(
+                            title: title,
+                            description: desc,
+                            userId: userId ?? '',
+                          );
+                          Fluttertoast.showToast(msg: "Added successfully");
+                        }
+                        if (context.mounted) Navigator.pop(context);
                       }
                     },
                   ),

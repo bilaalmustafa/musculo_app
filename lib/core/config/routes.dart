@@ -35,6 +35,7 @@ import 'package:musculo_app/modules/onboarding/get_started.dart';
 import 'package:musculo_app/modules/onboarding/splash_screen.dart';
 import 'package:provider/provider.dart';
 
+import '../../model/motivational_text_model.dart';
 import '../../modules/bottom_navigation_bar/profile/user_profile_screens/favorites_screen.dart';
 import '../../modules/bottom_navigation_bar/programs_and_workout/coach/coach_profile.dart';
 import '../../modules/bottom_navigation_bar/programs_and_workout/user_screen/proram_detail_pageview.dart';
@@ -154,8 +155,9 @@ class RouteGenerator {
       case Routes.changePasswordScreen:
         return MaterialPageRoute(builder: (_) => const ChangepasswordScreen());
       case Routes.motivationalScreen:
+        final args = routeSitting.arguments as MotivationalTextModel?;
         return MaterialPageRoute(
-          builder: (_) => const MotivationalTextScreen(),
+          builder: (_) => MotivationalTextScreen(editableText: args),
         );
       case Routes.motivationalListScreen:
         return MaterialPageRoute(

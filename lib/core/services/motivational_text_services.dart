@@ -20,9 +20,25 @@ class MotivationalTextService extends FirebaseService<MotivationalTextModel> {
     return await getAll();
   }
 
+  Future<List<MotivationalTextModel>> getMotivationalTextsbyUID(
+    String uID,
+  ) async {
+    return await getMotivationalTextsByUserId(uID);
+  }
+
   Future<List<MotivationalTextModel>> getRandomMotivationalTexts({
     int limit = 3,
   }) async {
     return await getRandomItems(limit: limit);
+  }
+
+  // New method to delete a motivational text
+  Future<MotivationalTextModel?> deleteMotivationalText(String id) async {
+    return await delete(id);
+  }
+
+  // update data method
+  Future<void> updateMText(String id, MotivationalTextModel text) {
+    return updateUser(id, text);
   }
 }
