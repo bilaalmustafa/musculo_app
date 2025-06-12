@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:musculo_app/model/programs.dart';
+
+import '../../model/motivational_text_model.dart';
 
 class FirebaseService<T> {
   final String collectionName;
-  final T Function(Map<String, dynamic> data) fromJson;
+  final T Function(Map<String, dynamic> data, {String? id}) fromJson;
   final Map<String, dynamic> Function(T item) toJson;
 
   FirebaseService({
@@ -50,7 +51,8 @@ class FirebaseService<T> {
               .get();
 
       if (doc.exists) {
-        return fromJson(doc.data() as Map<String, dynamic>);
+        final data = doc.data() as Map<String, dynamic>;
+        return fromJson(data, id: doc.id);
       }
       return null;
     } catch (e) {
@@ -59,16 +61,90 @@ class FirebaseService<T> {
     }
   }
 
+  Stream<List<T>> getAllDiscovery(String type) {
+    return FirebaseFirestore.instance
+        .collection(collectionName)
+        .where('type', isEqualTo: type)
+        .snapshots()
+        .map((snapshot) {
+          return snapshot.docs.map((doc) => fromJson(doc.data())).toList();
+        });
+  }
 
-Stream<List<T>> getAllDiscovery(String type) {
-  return FirebaseFirestore.instance
-      .collection(collectionName)
-      .where('type', isEqualTo: type)  
-      .snapshots()
-      .map((snapshot) {
-        return snapshot.docs
-            .map((doc) => fromJson(doc.data()))
-            .toList();  
-      });
-}
+  // Add method to fetch all documents
+  Future<List<T>> getAll() async {
+    try {
+      QuerySnapshot snapshot =
+          await FirebaseFirestore.instance
+              .collection(collectionName)
+              .orderBy('createdAt', descending: true)
+              .get();
+
+      return snapshot.docs.map((doc) {
+        final data = doc.data() as Map<String, dynamic>;
+
+        return fromJson(data, id: doc.id);
+      }).toList();
+    } catch (e) {
+      print('Error fetching all documents: $e');
+      return [];
+    }
+  }
+
+  // Add method to get random items
+  Future<List<T>> getRandomItems({int limit = 3}) async {
+    try {
+      QuerySnapshot snapshot =
+          await FirebaseFirestore.instance.collection(collectionName).get();
+
+      List<T> allItems =
+          snapshot.docs.map((doc) {
+            final data = doc.data() as Map<String, dynamic>;
+
+            return fromJson(data, id: doc.id);
+          }).toList();
+      // Shuffle and take limited number
+      allItems.shuffle();
+      return allItems.take(limit).toList();
+    } catch (e) {
+      print('Error fetching random items: $e');
+      return [];
+    }
+  }
+
+  // New method to delete a document by ID
+  Future<T?> delete(String id) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection(collectionName)
+          .doc(id)
+          .delete();
+      Fluttertoast.showToast(msg: "Deleted successfully!");
+      return null;
+    } catch (e) {
+      Fluttertoast.showToast(msg: "Unable to delete ${T.runtimeType}: $e");
+      throw Exception('Error deleting document: $e');
+    }
+  }
+
+  Future<List<MotivationalTextModel>> getMotivationalTextsByUserId(
+    String userId,
+  ) async {
+    try {
+      final querySnapshot =
+          await FirebaseFirestore.instance
+              .collection('motivational_texts')
+              .where('userId', isEqualTo: userId)
+              .orderBy('createdAt', descending: true)
+              .get();
+
+      return querySnapshot.docs.map((doc) {
+        final data = doc.data();
+        return MotivationalTextModel.fromJson(data, id: doc.id);
+      }).toList();
+    } catch (e) {
+      print('Error fetching motivational texts: $e');
+      throw Exception('Failed to fetch motivational texts');
+    }
+  }
 }

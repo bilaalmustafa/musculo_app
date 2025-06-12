@@ -8,6 +8,7 @@ enum FitnessLevel { beginner, intermediate, advanced }
 enum UserStatus { active, inactive, suspended }
 
 class UserModel {
+  final String? id;
   final String? name;
   final String? gender;
   final int? age;
@@ -26,6 +27,7 @@ class UserModel {
   dateOfBirth; // Changed from String to DateTime for better type safety
 
   const UserModel({
+    this.id,
     this.name,
     this.gender,
     this.age,
@@ -70,8 +72,9 @@ class UserModel {
     );
   }
 
-  factory UserModel.fromJson(Map<String, dynamic> json) {
+  factory UserModel.fromJson(Map<String, dynamic> json, {String? id}) {
     return UserModel(
+      id: json['id'],
       name: json['name'] as String?,
       gender: json['gender'] as String?,
       age: json['age'] as int?,

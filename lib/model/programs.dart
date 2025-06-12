@@ -21,15 +21,16 @@ class ProgramModel {
     // this.listOfWorkouts,
   });
 
-  factory ProgramModel.fromJson(Map<String, dynamic> json) {
+  factory ProgramModel.fromJson(Map<String, dynamic> json, {String? id}) {
     return ProgramModel(
       id: json['id'],
       programName: json['programName'],
       typeOf: json['typeOf'],
       levelOf: json['levelOf'],
-      duration: json['duration'] is int
-          ? json['duration']
-          : int.tryParse(json['duration'].toString()) ?? 0,
+      duration:
+          json['duration'] is int
+              ? json['duration']
+              : int.tryParse(json['duration'].toString()) ?? 0,
       timeAWeek: json['timeAWeek'],
       dayAWeek: json['dayAWeek'],
       // listOfWorkouts: (json['listOfWorkouts'] as List<dynamic>?)
