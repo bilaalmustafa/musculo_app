@@ -32,10 +32,6 @@ class _MotivationalListScreenState extends State<MotivationalListScreen> {
         listen: false,
       ).fetchMotivationalTextsByUserId(userId);
     });
-
-    //    final userId = FirebaseAuth.instance.currentUser!.uid;
-    // Provider.of<MotivationalTextProvider>(context, listen: false)
-    //     .fetchMotivationalTextsByUserId(userId);
   }
 
   @override
