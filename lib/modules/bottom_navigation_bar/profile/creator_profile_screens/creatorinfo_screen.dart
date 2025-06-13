@@ -4,8 +4,10 @@ import 'package:musculo_app/core/constants/sizes.dart';
 
 import '../../../../components/customTextField.dart';
 import '../../../../components/custom_button.dart';
+import '../../../../components/share_picture.dart';
 import '../../../../components/shared_appbar.dart';
 import '../../../../core/config/routes.dart';
+import '../../../../core/constants/assets.dart';
 import '../../../../core/constants/const_colors.dart';
 import '../component/customdropdown.dart';
 
@@ -52,20 +54,21 @@ class _CreatorinfoScreenState extends State<CreatorinfoScreen> {
                         onTap: () {
                           // edit code here
                         },
-                        child: Container(
-                          width: Sizes.s20,
-                          height: Sizes.s20,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            borderRadius: BorderRadius.circular(4),
-                            color: Colors.black,
-                          ),
-                          child: Icon(
-                            Icons.edit,
-                            color: Colors.white,
-                            size: Sizes.s20,
-                          ),
-                        ),
+                        child: SharePicture(imagePath: Assets.eidtSquare),
+                        // Container(
+                        //   width: Sizes.s20,
+                        //   height: Sizes.s20,
+                        //   decoration: BoxDecoration(
+                        //     shape: BoxShape.rectangle,
+                        //     borderRadius: BorderRadius.circular(4),
+                        //     color: Colors.black,
+                        //   ),
+                        //   child: Icon(
+                        //     Icons.edit,
+                        //     color: Colors.white,
+                        //     size: Sizes.s20,
+                        //   ),
+                        // ),
                       ),
                     ),
                   ],

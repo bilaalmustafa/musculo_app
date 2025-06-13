@@ -62,6 +62,7 @@ class Assets {
   static const String bellyFat = "$_assets/belly Fat.png";
   static const String coachProfile = "$_assets/coachProfile.png";
   static const String rectanglework = "$_assets/Rectanglework.png";
+  static const String profileDImage = "$_assets/profile_DImage.png";
 
   static const String facebook = "$_svgs/facebook.svg";
   static const String google = "$_svgs/google.svg";
@@ -97,4 +98,5 @@ class Assets {
   static const String dumbellImage = "$_svgs/dumbell.svg";
   static const String closeSquare = "$_svgs/Close Square.svg";
   static const String whatsappIcon = "$_svgs/whatsapp icon.svg";
+  static const String eidtSquare = "$_svgs/Edit Square.svg";
 }
