@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import '../../modules/auth/view_model/forgot_view_model.dart';
 import '../../modules/bottom_navigation_bar/feedback/view_model/feedback_view_model.dart';
 import '../../modules/bottom_navigation_bar/profile/profile_view_model/motivational_view_model.dart';
+import '../../modules/bottom_navigation_bar/profile/profile_view_model/profile_view_model.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => FeedbackProvider()),
         ChangeNotifierProvider(create: (_) => ReportProvider()),
         ChangeNotifierProvider(create: (_) => MotivationalTextProvider()),
+        ChangeNotifierProvider(create: (_) => ProfileProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
