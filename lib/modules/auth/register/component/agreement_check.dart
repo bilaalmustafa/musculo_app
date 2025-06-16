@@ -11,9 +11,10 @@ class AgreementCheck extends StatelessWidget {
     required this.onChanged,
     required this.title,
     this.fontSize,
+    required this.isSelected,
   });
 
-  final bool isChecked;
+  final bool isChecked, isSelected;
   final ValueChanged onChanged;
   final String title;
   final double? fontSize;
@@ -35,6 +36,10 @@ class AgreementCheck extends StatelessWidget {
             value: isChecked,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(7),
+            ),
+            side: BorderSide(
+              color: isSelected ? ConstColors.red : ConstColors.black,
+              width: 1.5,
             ),
             onChanged: onChanged,
           ),

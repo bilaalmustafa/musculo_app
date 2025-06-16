@@ -27,6 +27,7 @@ class _AgreementScreenState extends State<AgreementScreen> {
           ),
           SizedBox(height: Sizes.s20),
           AgreementCheck(
+            isSelected: false,
             title: "Consequat id porta nibh venenatis cras sed. I",
             isChecked: agreementsChecked[0],
             onChanged: (value) {
@@ -36,6 +37,7 @@ class _AgreementScreenState extends State<AgreementScreen> {
             },
           ),
           AgreementCheck(
+            isSelected: false,
             title: "Consequat id porta nibh venenatis cras sed. I",
             isChecked: agreementsChecked[1],
             onChanged: (value) {
@@ -45,6 +47,7 @@ class _AgreementScreenState extends State<AgreementScreen> {
             },
           ),
           AgreementCheck(
+            isSelected: false,
             title: "Consequat id porta nibh venenatis cras sed. I",
             isChecked: agreementsChecked[2],
             onChanged: (value) {
@@ -54,6 +57,7 @@ class _AgreementScreenState extends State<AgreementScreen> {
             },
           ),
           AgreementCheck(
+            isSelected: false,
             title: "Consequat id porta nibh venenatis cras sed. I",
             isChecked: agreementsChecked[3],
             onChanged: (value) {

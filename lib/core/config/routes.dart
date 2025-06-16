@@ -23,6 +23,8 @@ import 'package:musculo_app/modules/bottom_navigation_bar/profile/creator_profil
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/creator_profile_screens/creatorinfo_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/creator_profile_screens/payment_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/user_profile_screens/accountinfo.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/profile/user_profile_screens/motivational_text.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/profile/user_profile_screens/motivationallist.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/user_profile_screens/myprogramworkout.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/user_profile_screens/user_profile.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/creater_screen/notification.dart';
@@ -33,6 +35,7 @@ import 'package:musculo_app/modules/onboarding/get_started.dart';
 import 'package:musculo_app/modules/onboarding/splash_screen.dart';
 import 'package:provider/provider.dart';
 
+import '../../model/motivational_text_model.dart';
 import '../../modules/bottom_navigation_bar/profile/user_profile_screens/favorites_screen.dart';
 import '../../modules/bottom_navigation_bar/programs_and_workout/coach/coach_profile.dart';
 import '../../modules/bottom_navigation_bar/programs_and_workout/user_screen/proram_detail_pageview.dart';
@@ -70,6 +73,8 @@ class Routes {
   static const String verifyPasswordScreen = "/verifypassword_screen";
   static const String changePasswordScreen = "/changepassword_screen";
   static const String reportScreen = "/reporttab_screen";
+  static const String motivationalScreen = "/motivational_text_screen";
+  static const String motivationalListScreen = "/motivational_list_screen";
 }
 
 class RouteGenerator {
@@ -149,6 +154,15 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const VerifypasswordScreen());
       case Routes.changePasswordScreen:
         return MaterialPageRoute(builder: (_) => const ChangepasswordScreen());
+      case Routes.motivationalScreen:
+        final args = routeSitting.arguments as MotivationalTextModel?;
+        return MaterialPageRoute(
+          builder: (_) => MotivationalTextScreen(editableText: args),
+        );
+      case Routes.motivationalListScreen:
+        return MaterialPageRoute(
+          builder: (_) => const MotivationalListScreen(),
+        );
 
       default:
         return MaterialPageRoute(

@@ -8,5 +8,6 @@ GetIt instance = GetIt.instance;
 initlocator() {
   instance.registerSingleton<AuthService>(AuthService());
  instance.registerSingleton<UserService>(UserService());
- instance.registerSingleton<CreatorServices>(CreatorServices());
+ instance.registerSingleton<ProgramServices>(ProgramServices());
+  instance.registerSingleton<WorkoutServices>(WorkoutServices());
 }

@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:musculo_app/components/custom_shimmer.dart';
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/components/share_picture.dart';
+import 'package:musculo_app/core/config/extensions.dart';
 import 'package:musculo_app/core/config/injections.dart';
 
 import 'package:musculo_app/core/config/routes.dart';
@@ -70,12 +72,9 @@ class _HomeAppBarState extends State<HomeAppBar> {
             future: _Future,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return PoppinsText(
-                  text: "Loading...",
-                  fontSize: Sizes.s20,
-                  color:
-                      widget.isSwitch ? ConstColors.white : ConstColors.black,
-                  fontWeight: TextWeight.semiBold,
+                return CustomShimmer(
+                  height: 30,
+                  width: context.screenwidth * 0.3,
                 );
               } else if (snapshot.data == null) {
                 return PoppinsText(
@@ -108,8 +107,8 @@ class _HomeAppBarState extends State<HomeAppBar> {
         ),
         NotificationSwitch(
           useCupertino: true,
-          value:widget. isSwitch,
-          onChanged: (value) => widget. valueChange(value),
+          value: widget.isSwitch,
+          onChanged: (value) => widget.valueChange(value),
         ),
         // Transform.scale(
         //   scale: 0.7,
@@ -119,7 +118,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
         //     onChanged: (value) => valueChange(value),
         //   ),
         // ),
-        if ( widget. isSwitch)
+        if (widget.isSwitch)
           PopupMenuButton<String>(
             color: ConstColors.white,
             shape: RoundedRectangleBorder(

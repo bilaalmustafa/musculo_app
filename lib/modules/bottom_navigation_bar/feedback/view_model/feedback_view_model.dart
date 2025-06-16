@@ -14,6 +14,7 @@ class FeedbackProvider with ChangeNotifier {
 
   void setLoading(bool value) {
     _isLoading = value;
+    notifyListeners();
   }
 
   /// Submit feedback (create document in Firebase)
@@ -45,7 +46,7 @@ class FeedbackProvider with ChangeNotifier {
         timestamp: DateTime.now(),
       );
       final feedbackId = DateTime.now().millisecondsSinceEpoch.toString();
-      await _feedbackService.create(feedbackId, model);
+      await _feedbackService.createFeedback(feedbackId, model);
     } catch (e) {
       debugPrint("Error submitting feedback: $e");
     } finally {

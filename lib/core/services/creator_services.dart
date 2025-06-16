@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musculo_app/core/services/firebase_service.dart';
-import 'package:musculo_app/model/programs.dart';
+import 'package:musculo_app/model/programs_%20model.dart';
+import 'package:musculo_app/model/workouts_model.dart';
 
-class CreatorServices extends FirebaseService<ProgramModel> {
-  CreatorServices()
+class ProgramServices extends FirebaseService<ProgramModel> {
+  ProgramServices()
     : super(
         collectionName: "discovery",
         fromJson: ProgramModel.fromJson,
@@ -14,5 +16,22 @@ class CreatorServices extends FirebaseService<ProgramModel> {
   }
 
   Stream<List<ProgramModel>> getPrograms() => getAllDiscovery("Program");
-  Stream<List<ProgramModel>> getWorkout() => getAllDiscovery("Workout");
+
+   
+}
+
+class WorkoutServices extends FirebaseService<WorkoutModel> {
+  WorkoutServices()
+    : super(
+        collectionName: "discovery",
+        fromJson: WorkoutModel.fromJson,
+        toJson: (workout) => {...workout.toJson(), "type": "Workout"},
+      );
+
+  Future<bool> createDiscovery(String id, WorkoutModel item) async {
+    return create(id, item);
+  }
+
+  Stream<List<WorkoutModel>> getWorkout() => getAllDiscovery("Workout");
+  Stream<List<WorkoutModel>> getCreatorWorkout( String uid) => getAllcreatorworkout("Workout",  uid);
 }

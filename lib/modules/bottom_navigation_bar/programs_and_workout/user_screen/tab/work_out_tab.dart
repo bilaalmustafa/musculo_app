@@ -15,7 +15,8 @@ class WorkOutTab extends StatelessWidget {
       body: ListView.builder(
         itemCount: 3,
         itemBuilder: (context, index) {
-          return WorkOutItem();
+          return Text("progress");
+          // WorkOutItem();
         },
       ),
     );

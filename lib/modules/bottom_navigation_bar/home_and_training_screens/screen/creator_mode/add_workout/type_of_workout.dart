@@ -35,6 +35,7 @@ class _TypeOfWorkoutState extends State<TypeOfWorkout> {
                 Divider(color: ConstColors.dividerColor),
 
                 RadioListTile(
+                  fillColor: WidgetStatePropertyAll(vm.isTypeofworkoutSelect ? ConstColors.red : ConstColors.black),
                   activeColor: Colors.black,
                   title: PoppinsText(
                     text: "Without equipment",
@@ -50,6 +51,7 @@ class _TypeOfWorkoutState extends State<TypeOfWorkout> {
                 Divider(color: ConstColors.dividerColor),
 
                 RadioListTile(
+                   fillColor: WidgetStatePropertyAll(vm.isTypeofworkoutSelect ? ConstColors.red : ConstColors.black),
                   activeColor: Colors.black,
                   title: PoppinsText(
                     text: "Stretching",

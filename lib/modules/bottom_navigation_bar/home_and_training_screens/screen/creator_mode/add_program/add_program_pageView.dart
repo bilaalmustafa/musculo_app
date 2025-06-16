@@ -128,79 +128,83 @@ class _AddProgramPageviewState extends State<AddProgramPageview> {
                             if (vm.levelofProgramsvalidate()) {
                               _goToNextPage();
                             }
+                          
                             break;
                           default:
                             _goToNextPage();
                         }
                       } else {
-                        String? userId =
-                            context.read<UserViewModel>().userModel?.userId;
+                        if (vm.sectectedworksvalidation()) {
+                          final userVm =
+                              context.read<UserViewModel>().userModel!;
 
-                        String id =
-                            DateTime.now().millisecondsSinceEpoch.toString();
+                          String id =
+                              DateTime.now().millisecondsSinceEpoch.toString();
 
-                        bool success = await vm.creatediscoveryPost(
-                          id,
-                          userId!,
-                        );
-
-                        log("Success: ${success.toString()}");
-
-                        if (success && context.mounted) {
-                          Fluttertoast.showToast(
-                            msg: "Program Posted Successfully!",
+                          bool success = await vm.creatediscoveryPost(
+                            id,
+                            userVm.userId!,
+                            userVm.name!,
                           );
 
-                          showDialog(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (context) {
-                              return ShowDialogBox(
-                                message: "Your program is live!",
-                                bottomWidget: Column(
-                                  spacing: 10,
-                                  children: [
-                                    CustomButton(
-                                      buttonText: "Create another program",
-                                      onTap: () {
-                                        Navigator.of(context).pop();
-                                        Navigator.pushNamed(
-                                          context,
-                                          Routes.addprogrampageview,
-                                        );
-                                        // Navigator.pushNamedAndRemoveUntil(
-                                        //   context,
-                                        //   Routes.addprogrampageview,
-                                        //   (route) => false,
-                                        // );
-                                        setState(() {
-                                          _currentPage = 0;
-                                        });
-                                      },
-                                    ),
-                                    CustomButton(
-                                      buttonText: "Back to home page",
-                                      buttonColor: ConstColors.secondary,
-                                      textColor: ConstColors.black,
-                                      onTap: () {
-                                        Navigator.of(context).pop();
-                                        Navigator.pushNamedAndRemoveUntil(
-                                          context,
-                                          Routes.bottomnavigationbarscreen,
-                                          (route) => false,
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          );
-                        } else if (context.mounted) {
-                          Fluttertoast.showToast(
-                            msg: "Failed to post program. Please try again.",
-                            backgroundColor: Colors.red,
-                          );
+                          log("Success: ${success.toString()}");
+
+                          if (success && context.mounted) {
+                            Fluttertoast.showToast(
+                              msg: "Program Posted Successfully!",
+                            );
+
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (context) {
+                                return ShowDialogBox(
+                                  message: "Your program is live!",
+                                  bottomWidget: Column(
+                                    spacing: 10,
+                                    children: [
+                                      CustomButton(
+                                        buttonText: "Create another program",
+                                        onTap: () {
+                                          Navigator.of(context).pop();
+                                          Navigator.pushNamed(
+                                            context,
+                                            Routes.addprogrampageview,
+                                          );
+                                          // Navigator.pushNamedAndRemoveUntil(
+                                          //   context,
+                                          //   Routes.addprogrampageview,
+                                          //   (route) => false,
+                                          // );
+                                          setState(() {
+                                            _currentPage = 0;
+                                          });
+                                        },
+                                      ),
+                                      CustomButton(
+                                        buttonText: "Back to home page",
+                                        buttonColor: ConstColors.secondary,
+                                        textColor: ConstColors.black,
+                                        onTap: () {
+                                          Navigator.of(context).pop();
+                                          Navigator.pushNamedAndRemoveUntil(
+                                            context,
+                                            Routes.bottomnavigationbarscreen,
+                                            (route) => false,
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          } else if (context.mounted) {
+                            Fluttertoast.showToast(
+                              msg: "Failed to post program. Please try again.",
+                              backgroundColor: Colors.red,
+                            );
+                          }
                         }
                       }
                     },

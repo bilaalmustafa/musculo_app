@@ -5,79 +5,120 @@ import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
+import 'package:musculo_app/model/video_model.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_workout/video_frame_screen.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_workout/view_model/add_workout_veiw_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/component/reels_item.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../../../core/constants/sizes.dart';
 
 class ShowSheetBottom extends StatelessWidget {
-  const ShowSheetBottom({super.key, required this.listController});
-  final List listController;
+  const ShowSheetBottom({super.key, required this.selectedVideo});
+  final VideoModel selectedVideo;
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(Sizes.s16),
-      child: Column(
-        spacing: 10,
-        children: [
-          Container(
-            height: 3,
-            width: 40,
-            decoration: BoxDecoration(
-              color: ConstColors.greyC8C8,
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-          PoppinsText(
-            text: "Add Versions",
-            fontSize: Sizes.s18,
-            fontWeight: TextWeight.semiBold,
-          ),
-
-          Divider(color: ConstColors.dividerColor),
-          CustomTextField(
-            title: "search exercise",
-            preIcon: Assets.searchIcon,
-            sufIcon: Assets.filterIcon,
-          ),
-
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-              color: ConstColors.secondary,
-              child: ListView.separated(
-                itemBuilder: (context, index) {
-                  final controller = listController[index];
-                  return ReelsItem(controller: controller);
-                },
-                separatorBuilder: (context, index) {
-                  return SizedBox(height: 10);
-                },
-                itemCount: 3,
-              ),
-            ),
-          ),
-
-          Divider(color: ConstColors.dividerColor),
-          Container(
-            color: ConstColors.white,
-
-            margin: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-            child: Row(
-              spacing: 10,
-              children: [
-                Expanded(
-                  child: CustomButton(
-                    buttonText: "Back",
-                    buttonColor: ConstColors.secondary,
-                    textColor: ConstColors.black,
-                    onTap: () => Navigator.pop(context),
-                  ),
+      padding: const EdgeInsets.symmetric(vertical: Sizes.s16),
+      child: Consumer<AddWorkoutVeiwModel>(
+        builder: (context, vm, _) {
+          return Column(
+            spacing: 10,
+            children: [
+              Container(
+                height: 3,
+                width: 40,
+                decoration: BoxDecoration(
+                  color: ConstColors.greyC8C8,
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                Expanded(child: CustomButton(buttonText: "Add")),
-              ],
-            ),
-          ),
-        ],
+              ),
+              PoppinsText(
+                text: "Add Versions",
+                fontSize: Sizes.s18,
+                fontWeight: TextWeight.semiBold,
+              ),
+
+              Divider(color: ConstColors.dividerColor),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: Sizes.s16),
+                child: CustomTextField(
+                  title: "search exercise",
+                  preIcon: Assets.searchIcon,
+                  sufIcon: Assets.filterIcon,
+                ),
+              ),
+
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: Sizes.s16),
+                  color: ConstColors.secondary,
+                  child:
+                      vm.storagevideos.isEmpty
+                          ? const Center(child: Text("No videos found"))
+                          : ListView.separated(
+                            itemBuilder: (context, index) {
+                              final video = vm.storagevideos[index];
+
+                              return InkWell(
+                                onTap: () {
+                                  vm.addversionvideo(video);
+                                },
+                                child: ReelsItem(
+                                  videodata: video,
+                                  onTap:
+                                      () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder:
+                                              (context) => VideoFrameScreen(
+                                                videourl: video.url,
+                                              ),
+                                        ),
+                                      ),
+
+                                  selected: vm.addVersionList.contains(video),
+                                ),
+                              );
+                            },
+                            separatorBuilder: (context, index) {
+                              return SizedBox(height: 10);
+                            },
+                            itemCount: vm.storagevideos.length,
+                          ),
+                ),
+              ),
+
+              Container(
+                color: ConstColors.white,
+
+                margin: EdgeInsets.symmetric(horizontal: Sizes.s16),
+                child: Row(
+                  spacing: 10,
+                  children: [
+                    Expanded(
+                      child: CustomButton(
+                        buttonText: "Back",
+                        buttonColor: ConstColors.secondary,
+                        textColor: ConstColors.black,
+                        onTap: () => Navigator.pop(context),
+                      ),
+                    ),
+                    Expanded(
+                      child: CustomButton(
+                        onTap: () {
+                          vm.addVersionToVideo(selectedVideo);
+                          Navigator.pop(context);
+                        },
+                        buttonText: "Add",
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

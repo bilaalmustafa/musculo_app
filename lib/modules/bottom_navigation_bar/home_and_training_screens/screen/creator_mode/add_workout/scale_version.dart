@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import 'package:musculo_app/components/poppins_text.dart';
@@ -5,8 +7,11 @@ import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_program/view_model/add_program_view_model.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_workout/view_model/add_workout_veiw_model.dart';
 
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/component/reels_item.dart';
+import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
 class ScaleVersion extends StatefulWidget {
@@ -17,39 +22,6 @@ class ScaleVersion extends StatefulWidget {
 }
 
 class _WarmUpState extends State<ScaleVersion> {
-  final List<String> videoUrls = [
-    'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
-    'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4',
-    'https://samplelib.com/lib/preview/mp4/sample-5s.mp4',
-  ];
-  final List<VideoPlayerController> _controllers = [];
-  @override
-  void initState() {
-    super.initState();
-    for (var url in videoUrls) {
-      final controller = VideoPlayerController.networkUrl(Uri.parse(url));
-      controller
-          .initialize()
-          .then((_) {
-            print("Initialized video: $url");
-            setState(() {});
-          })
-          .catchError((error) {
-            print("Error initializing video: $error");
-          });
-      _controllers.add(controller);
-    }
-  }
-
-  @override
-  void dispose() {
-    for (var controller in _controllers) {
-      controller.dispose();
-    }
-    super.dispose();
-  }
-
-  Set<int> seletedList = {};
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,36 +46,75 @@ class _WarmUpState extends State<ScaleVersion> {
           ),
 
           Expanded(
-            child: Container(
-              color: ConstColors.secondary,
-              padding: EdgeInsets.all(20),
-              child: ListView.separated(
-                itemBuilder: (context, index) {
-                  final controller = _controllers[index];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: ReelsItem(
-                      screenintervel: 2,
-                      selected: seletedList.contains(index),
-                      controller: controller,
-                    ),
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      PoppinsText(
-                        text: "Reset time",
-                        fontSize: Sizes.s14,
-                        fontWeight: TextWeight.semiBold,
-                      ),
-                      Container(decoration: BoxDecoration()),
-                    ],
-                  );
-                },
-                itemCount: videoUrls.length,
-              ),
+            child: Consumer<AddWorkoutVeiwModel>(
+              builder: (context, vm, _) {
+                return Container(
+                  color: ConstColors.secondary,
+                  padding: EdgeInsets.all(20),
+                  child: ListView.builder(
+                    itemCount: vm.selectedVideos.length,
+                    itemBuilder: (context, ind) {
+                      final sectionTitle = vm.selectedVideos.keys.elementAt(
+                        ind,
+                      );
+                      final videos = vm.selectedVideos[sectionTitle]!;
+                      return ListView.separated(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          final video = videos.elementAt(index);
+                          final int minutes = video.restTime ~/ 60;
+                          final int seconds = video.restTime % 60;
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Column(
+                              spacing: 5,
+                              children: [
+                                ReelsItem(videodata: video, screenintervel: 2),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    PoppinsText(
+                                      text: "Rest time",
+                                      fontSize: Sizes.s14,
+                                      fontWeight: TextWeight.semiBold,
+                                    ),
+                                    Container(
+                                      alignment: Alignment.center,
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 5,
+                                        horizontal: 8,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: ConstColors.white,
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: PoppinsText(
+                                        text:
+                                            "${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}",
+                                        fontSize: 10,
+                                        color: ConstColors.black,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                         
+                          
+
+                          return SizedBox(height: 10);
+                        },
+                        itemCount: videos.length,
+                      );
+                    },
+                  ),
+                );
+              },
             ),
           ),
         ],

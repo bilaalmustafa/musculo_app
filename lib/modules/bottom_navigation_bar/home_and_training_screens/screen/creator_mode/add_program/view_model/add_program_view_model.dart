@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:musculo_app/core/config/injections.dart';
 import 'package:musculo_app/core/services/creator_services.dart';
-import 'package:musculo_app/model/programs.dart';
-import 'package:musculo_app/model/workouts.dart';
+import 'package:musculo_app/model/programs_%20model.dart';
+import 'package:musculo_app/model/workouts_model.dart';
 
 class AddProgramViewModel extends ChangeNotifier {
   bool isLoading = false;
@@ -11,13 +12,14 @@ class AddProgramViewModel extends ChangeNotifier {
   bool isintendedselect = false;
   bool isTypeofProgramSelect = false;
   bool isLevelofProgramslect = false;
+  List<WorkoutModel> workoutList = [];
 
   final formKey = GlobalKey<FormState>();
   String intendedoption = "";
   String typeofProgram = "";
   String levelofProgram = "";
   int? selectedTime;
-  
+
   bool validateAndSaveForm() {
     var form = formKey.currentState!;
     if (form.validate()) {
@@ -33,6 +35,15 @@ class AddProgramViewModel extends ChangeNotifier {
     } else {
       isintendedselect = true;
       notifyListeners();
+      return false;
+    }
+  }
+
+  bool sectectedworksvalidation() {
+    if (workoutList.isNotEmpty) {
+      return true;
+    } else {
+      Fluttertoast.showToast(msg: " You haven't Select the workout");
       return false;
     }
   }
@@ -75,20 +86,36 @@ class AddProgramViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> creatediscoveryPost(String docId, String userId) async {
+  void workoutSelected(WorkoutModel index) {
+    if (workoutList.contains(index)) {
+      workoutList.remove(index);
+    } else {
+      workoutList.add(index);
+    }
+    notifyListeners();
+  }
+
+  Future<bool> creatediscoveryPost(
+    String docId,
+    String userId,
+    String creatorName,
+  ) async {
     isLoading = true;
     notifyListeners();
     ProgramModel item = ProgramModel(
       id: userId,
+      creatorName: creatorName,
       programName: programNameController.text.trim(),
       typeOf: typeofProgram,
       levelOf: levelofProgram,
+      intended: intendedoption,
+      listOfWorkouts: workoutList,
       dayAWeek:
           selectedTime != null
               ? selectedTime.toString()
               : addOwnDuraionController.text.trim(),
     );
-    bool success = await instance<CreatorServices>().createDiscovery(
+    bool success = await instance<ProgramServices>().createDiscovery(
       docId,
       item,
     );
@@ -99,6 +126,7 @@ class AddProgramViewModel extends ChangeNotifier {
     typeofProgram = "";
     levelofProgram = "";
     selectedTime = null;
+    workoutList.clear();
     notifyListeners();
     return success;
   }

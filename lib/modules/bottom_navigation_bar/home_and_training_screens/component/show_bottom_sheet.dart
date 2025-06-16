@@ -55,7 +55,7 @@ class _ShowBottomSheetState extends State<ShowBottomSheet> {
                           ? WorkoutVideoItem(
                             index: index,
                             selectedIndex: selectedIndex,
-                            workoutModel: widget.modelData[index],
+                            workouts: widget.modelData[index],
                             onChanged: (val) {
                               setState(() {
                                 selectedIndex = val;

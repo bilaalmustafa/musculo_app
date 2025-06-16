@@ -5,8 +5,8 @@ import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
-import 'package:musculo_app/model/programs.dart';
-import 'package:musculo_app/model/workouts.dart';
+import 'package:musculo_app/model/programs_%20model.dart';
+import 'package:musculo_app/model/workouts_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/custom_chip.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/user_profile_screens/programes.dart';
 
@@ -22,7 +22,7 @@ class WorkoutVideoItem extends StatelessWidget {
     this.index,
     this.selectedIndex,
     this.onChanged,
-    this.workoutModel,
+    this.workouts,
   });
 
   final String? image;
@@ -34,7 +34,7 @@ class WorkoutVideoItem extends StatelessWidget {
   final int? index;
   final int? selectedIndex;
   final ValueChanged<int>? onChanged;
-  final dynamic workoutModel;
+  final WorkoutModel? workouts;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +57,7 @@ class WorkoutVideoItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             PoppinsText(
-              text: workoutModel?.workoutName ?? 'Unknown Program',
+              text: workouts?.workoutName ?? 'Unknown Program',
               fontSize: Sizes.s16,
               fontWeight: TextWeight.semiBold,
             ),
@@ -67,12 +67,12 @@ class WorkoutVideoItem extends StatelessWidget {
             Row(
               children: [
                 CustomChip(
-                  text: "${workoutModel?.totalTime ?? "0"} Mins",
+                  text: "${workouts?.totalTime ?? "0"} Mins",
                   color: ConstColors.secondary,
                 ),
                 const SizedBox(width: 10),
                 CustomChip(
-                  text: workoutModel?.level ?? 'Unknown Level',
+                  text: workouts?.levelOf ?? 'Unknown Level',
                   color: ConstColors.secondary,
                 ),
               ],

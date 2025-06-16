@@ -1,6 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
+
 import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/logo_title_appbar.dart';
 
@@ -9,13 +8,16 @@ import 'package:musculo_app/components/share_picture.dart';
 import 'package:musculo_app/core/config/routes.dart';
 import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
+import 'package:musculo_app/core/utils/profilehelper.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/view_model/user_view_model.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/notification_switch.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/const_colors.dart';
 import '../../../../core/constants/fonts.dart';
 import '../../home_and_training_screens/component/congrate_container.dart';
 import '../../programs_and_workout/component/customlisttile.dart';
+import '../profile_view_model/profile_view_model.dart';
 
 class UserProfile extends StatefulWidget {
   const UserProfile({super.key});
@@ -26,13 +28,22 @@ class UserProfile extends StatefulWidget {
 
 class _UserProfileState extends State<UserProfile> {
   bool isCreator = false;
+
+  @override
+  void initState() {
+    Future.microtask(() {
+      context.read<ProfileProvider>().loadProfileImage();
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final userVm = context.watch<UserViewModel>();
     final userName = userVm.userModel?.name ?? "User name";
     final finishedWorkouts = userVm.userModel?.finishedWorkouts ?? 0;
     final minutesSpent = userVm.userModel?.spentMinutes ?? 0;
-   
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: ConstColors.white,
@@ -46,40 +57,69 @@ class _UserProfileState extends State<UserProfile> {
                 child: SizedBox(
                   height: Sizes.s120,
                   width: Sizes.s300,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      SharePicture(imagePath: Assets.groupCircle),
-                      CircleAvatar(
-                        maxRadius: Sizes.s55,
-                        backgroundColor: ConstColors.greyE0E0,
-                        child: Icon(
-                          Icons.person,
-                          size: Sizes.s50,
-                          color: ConstColors.black,
-                        ),
-                      ),
-                      Transform.translate(
-                        offset: Offset(Sizes.s40, Sizes.s40),
-                        child: InkWell(
-                          onTap: () {},
-                          child: Container(
-                            width: Sizes.s20,
-                            height: Sizes.s20,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              borderRadius: BorderRadius.circular(Sizes.s4),
-                              color: ConstColors.black,
+                  child: Consumer<ProfileProvider>(
+                    builder: (context, profileProvider, child) {
+                      final img = profileProvider.user?.profileImageUrl;
+                      return Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          SharePicture(imagePath: Assets.groupCircle),
+                          CircleAvatar(
+                            maxRadius: Sizes.s55,
+                            backgroundColor: ConstColors.greyE0E0,
+                            backgroundImage:
+                                img != null
+                                    ? NetworkImage(img)
+                                    : AssetImage(Assets.profileDImage)
+                                        as ImageProvider,
+                          ),
+
+                          // loading indicator
+                          if (profileProvider.isUploading)
+                            Container(
+                              width: 150,
+                              height: 150,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.black54,
+                              ),
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.white,
+                                  ),
+                                ),
+                              ),
                             ),
-                            child: Icon(
-                              Icons.edit,
-                              color: Colors.white,
-                              size: Sizes.s20,
+                          Transform.translate(
+                            offset: Offset(Sizes.s40, Sizes.s40),
+                            child: InkWell(
+                              onTap: () {
+                                ProfileHelper.showImagePickerBottomSheet(
+                                  context,
+                                );
+                              },
+
+                              child: SharePicture(imagePath: Assets.eidtSquare),
+                              // Container(
+                              //   width: Sizes.s20,
+                              //   height: Sizes.s20,
+                              //   decoration: BoxDecoration(
+                              //     shape: BoxShape.rectangle,
+                              //     borderRadius: BorderRadius.circular(Sizes.s4),
+                              //     color: ConstColors.black,
+                              //   ),
+                              //   child: Icon(
+                              //     Icons.edit,
+                              //     color: Colors.white,
+                              //     size: Sizes.s20,
+                              //   ),
+                              // ),
                             ),
                           ),
-                        ),
-                      ),
-                    ],
+                        ],
+                      );
+                    },
                   ),
                 ),
               ),
@@ -98,24 +138,19 @@ class _UserProfileState extends State<UserProfile> {
                     fontSize: Sizes.s14,
                     fontWeight: TextWeight.semiBold,
                   ),
-                  Transform.scale(
-                    scale: 0.8,
-                    child: Switch(
-                      activeColor: ConstColors.white,
-                      activeTrackColor: ConstColors.green4AD,
 
-                      inactiveTrackColor: ConstColors.greyEEE,
-                      inactiveThumbColor: ConstColors.white,
-                      value: isCreator,
-                      onChanged: (value) {
-                        setState(() {
-                          isCreator = value;
-                        });
-                      },
-                    ),
+                  NotificationSwitch(
+                    value: isCreator,
+                    useCupertino: true,
+                    onChanged: (value) {
+                      setState(() {
+                        isCreator = value;
+                      });
+                    },
                   ),
                 ],
               ),
+              SizedBox(height: 15),
               CustomButton(
                 buttonText:
                     isCreator
@@ -177,11 +212,7 @@ class _UserProfileState extends State<UserProfile> {
 
                   trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
                   onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      Routes.myProgramWorkout,
-                     
-                    );
+                    Navigator.pushNamed(context, Routes.myProgramWorkout);
                     // program workout code here
                   },
                 ),
@@ -209,6 +240,7 @@ class _UserProfileState extends State<UserProfile> {
                   trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
                   onTap: () {
                     // motivvational text code here
+                    Navigator.pushNamed(context, Routes.motivationalListScreen);
                   },
                 ),
               ] else ...[
@@ -235,6 +267,7 @@ class _UserProfileState extends State<UserProfile> {
                   trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
                   onTap: () {
                     // motivvational text code here
+                    Navigator.pushNamed(context, Routes.motivationalListScreen);
                   },
                 ),
                 CustomListTile(

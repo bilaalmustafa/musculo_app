@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 
 import '../../../../components/customTextField.dart';
+import '../../../../components/share_picture.dart';
+import '../../../../core/constants/assets.dart';
 import '../../../../core/constants/sizes.dart';
 import '../component/customdropdown.dart';
 
@@ -45,16 +47,17 @@ class _InformationtabState extends State<Informationtab> {
                       onTap: () {
                         // edit code here
                       },
-                      child: Container(
-                        width: Sizes.s20,
-                        height: Sizes.s20,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.circular(4),
-                          color: Colors.black,
-                        ),
-                        child: Icon(Icons.edit, color: Colors.white, size: 20),
-                      ),
+                      child: SharePicture(imagePath: Assets.eidtSquare),
+                      //  Container(
+                      //   width: Sizes.s20,
+                      //   height: Sizes.s20,
+                      //   decoration: BoxDecoration(
+                      //     shape: BoxShape.rectangle,
+                      //     borderRadius: BorderRadius.circular(4),
+                      //     color: Colors.black,
+                      //   ),
+                      //   child: Icon(Icons.edit, color: Colors.white, size: 20),
+                      // ),
                     ),
                   ),
                 ],

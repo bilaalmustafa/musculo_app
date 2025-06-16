@@ -1,5 +1,5 @@
-import 'package:musculo_app/model/programs.dart';
-import 'package:musculo_app/model/workouts.dart';
+import 'package:musculo_app/model/programs_%20model.dart';
+import 'package:musculo_app/model/workouts_model.dart';
 
 enum Gender { male, female, other }
 
@@ -8,8 +8,10 @@ enum FitnessLevel { beginner, intermediate, advanced }
 enum UserStatus { active, inactive, suspended }
 
 class UserModel {
+  final String? id;
   final String? name;
   final String? gender;
+  final String? profileImageUrl;
   final int? age;
   final String? userId; // Changed from userid for better naming
   final String? levelOfFitness;
@@ -26,9 +28,11 @@ class UserModel {
   dateOfBirth; // Changed from String to DateTime for better type safety
 
   const UserModel({
+    this.id,
     this.name,
     this.gender,
     this.age,
+    this.profileImageUrl,
     this.userId,
     this.levelOfFitness,
     this.email,
@@ -43,6 +47,7 @@ class UserModel {
   UserModel copyWith({
     String? name,
     String? gender,
+    String? profileImageUrl,
     int? age,
     String? userId,
     String? levelOfFitness,
@@ -67,13 +72,16 @@ class UserModel {
       finishedWorkouts: finishedWorkouts ?? this.finishedWorkouts,
       spentMinutes: spentMinutes ?? this.spentMinutes,
       dateOfBirth: dateOfBirth ?? this.dateOfBirth,
+      profileImageUrl: profileImageUrl ?? this.profileImageUrl,
     );
   }
 
-  factory UserModel.fromJson(Map<String, dynamic> json) {
+  factory UserModel.fromJson(Map<String, dynamic> json, {String? id}) {
     return UserModel(
+      id: json['id'],
       name: json['name'] as String?,
       gender: json['gender'] as String?,
+      profileImageUrl: json['profileImageUrl'] as String?,
       age: json['age'] as int?,
       userId: json['userid'] as String?, // Updated key name
       levelOfFitness: json['level_of_fitness'] as String?,
@@ -91,6 +99,7 @@ class UserModel {
     return {
       'name': name,
       'gender': gender,
+      'profileImageUrl': profileImageUrl,
       'age': age,
       'userid': userId, // Updated key name
       'level_of_fitness': levelOfFitness,
@@ -226,6 +235,7 @@ class UserModel {
     return 'UserModel('
         'name: $name, '
         'gender: $gender, '
+        'profileImageUrl: $profileImageUrl,'
         'age: $age, '
         'userId: $userId, '
         'levelOfFitness: $levelOfFitness, '

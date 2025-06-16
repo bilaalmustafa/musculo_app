@@ -43,10 +43,7 @@ class _TypeOfProgramState extends State<TypeOfProgram> {
                     text: "With equipment",
                     fontSize: Sizes.s14,
                     fontWeight: TextWeight.medium,
-                    color:
-                        vm.isTypeofProgramSelect
-                            ? ConstColors.red
-                            : ConstColors.black,
+                    color: ConstColors.black,
                   ),
                   value: "With equipment",
                   groupValue: vm.typeofProgram,
@@ -67,10 +64,7 @@ class _TypeOfProgramState extends State<TypeOfProgram> {
                     text: "Without equipment",
                     fontSize: Sizes.s14,
                     fontWeight: TextWeight.medium,
-                    color:
-                        vm.isTypeofProgramSelect
-                            ? ConstColors.red
-                            : ConstColors.black,
+                    color: ConstColors.black,
                   ),
                   value: "Without equipment",
                   groupValue: vm.typeofProgram,
@@ -92,10 +86,7 @@ class _TypeOfProgramState extends State<TypeOfProgram> {
                     text: "Stretching",
                     fontSize: Sizes.s14,
                     fontWeight: TextWeight.medium,
-                    color:
-                        vm.isTypeofProgramSelect
-                            ? ConstColors.red
-                            : ConstColors.black,
+                    color: ConstColors.black,
                   ),
                   value: "Stretching",
                   groupValue: vm.typeofProgram,

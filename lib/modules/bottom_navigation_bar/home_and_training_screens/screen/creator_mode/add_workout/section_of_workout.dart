@@ -38,20 +38,22 @@ class _TypeOfWorkoutState extends State<SectionOfWork> {
                   AgreementCheck(
                     title: "Warm up",
                     isChecked: vm.sectionofWorkout[0],
+                    isSelected: vm.isSectionofWorkout,
                     onChanged: (value) {
                       vm.sectionofWorkoutselct(value!, 0);
-                     
                     },
                   ),
                   AgreementCheck(
+                    isSelected: vm.isSectionofWorkout,
                     title: "Extended warm up",
                     isChecked: vm.sectionofWorkout[1],
                     onChanged: (value) {
-                    vm.sectionofWorkoutselct(value!, 1);
+                      vm.sectionofWorkoutselct(value!, 1);
                     },
                   ),
                   AgreementCheck(
                     title: "Workout",
+                    isSelected: vm.isSectionofWorkout,
                     isChecked: vm.sectionofWorkout[2],
                     onChanged: (value) {
                       vm.sectionofWorkoutselct(value!, 2);
@@ -59,13 +61,15 @@ class _TypeOfWorkoutState extends State<SectionOfWork> {
                   ),
                   AgreementCheck(
                     title: "Finisher",
+                    isSelected: vm.isSectionofWorkout,
                     isChecked: vm.sectionofWorkout[3],
                     onChanged: (value) {
-                       vm.sectionofWorkoutselct(value!, 3);
+                      vm.sectionofWorkoutselct(value!, 3);
                     },
                   ),
                   AgreementCheck(
                     title: "Cool down",
+                    isSelected: vm.isSectionofWorkout,
                     isChecked: vm.sectionofWorkout[4],
                     onChanged: (value) {
                       vm.sectionofWorkoutselct(value!, 4);

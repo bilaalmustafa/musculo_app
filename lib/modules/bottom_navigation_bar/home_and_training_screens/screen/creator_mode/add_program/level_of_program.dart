@@ -44,9 +44,7 @@ class _LevelOfProgramState extends State<LevelOfProgram> {
                     fontSize: Sizes.s14,
                     fontWeight: TextWeight.medium,
                     color:
-                        vm.isLevelofProgramslect
-                            ? ConstColors.red
-                            : ConstColors.black,
+                         ConstColors.black,
                   ),
                   value: "Beginner",
                   groupValue: vm.levelofProgram,
@@ -67,9 +65,7 @@ class _LevelOfProgramState extends State<LevelOfProgram> {
                     fontSize: Sizes.s14,
                     fontWeight: TextWeight.medium,
                     color:
-                        vm.isLevelofProgramslect
-                            ? ConstColors.red
-                            : ConstColors.black,
+                        ConstColors.black,
                   ),
                   value: "Experienced",
                   groupValue: vm.levelofProgram,
@@ -91,9 +87,7 @@ class _LevelOfProgramState extends State<LevelOfProgram> {
                     fontSize: Sizes.s14,
                     fontWeight: TextWeight.medium,
                     color:
-                        vm.isLevelofProgramslect
-                            ? ConstColors.red
-                            : ConstColors.black,
+                         ConstColors.black,
                   ),
                   value: "Advanced",
                   groupValue: vm.levelofProgram,

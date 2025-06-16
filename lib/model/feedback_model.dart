@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FeedbackModel {
+  final String? id;
   final String? userId;
   final String? contentId;
   final String? contentType; // e.g. 'program', 'workout', 'creator', 'company'
@@ -13,6 +14,7 @@ class FeedbackModel {
   final DateTime? timestamp;
 
   FeedbackModel({
+    this.id,
     this.userId,
     this.contentId,
     this.contentType,
@@ -51,8 +53,9 @@ class FeedbackModel {
     );
   }
 
-  factory FeedbackModel.fromJson(Map<String, dynamic> json) {
+  factory FeedbackModel.fromJson(Map<String, dynamic> json, {String? id}) {
     return FeedbackModel(
+      id: json['id'],
       userId: json['userId'],
       contentId: json['contentId'],
       contentType: json['contentType'],

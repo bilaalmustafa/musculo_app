@@ -110,10 +110,11 @@ class _WarmUpState extends State<Work_Out> {
                       });
                     },
 
-                    child: ReelsItem(
-                      selected: seletedList.contains(index),
-                      controller: controller,
-                    ),
+                    child: Container(),
+                    //  ReelsItem(
+                    //   selected: seletedList.contains(index),
+                   
+                    // ),
                   );
                 },
                 separatorBuilder: (context, index) {

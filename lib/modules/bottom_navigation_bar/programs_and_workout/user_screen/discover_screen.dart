@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/logo_app_bar.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/program_tab.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/tab/program_tab.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/work_out_tab.dart';
 
 class DiscoverScreen extends StatefulWidget {
@@ -42,7 +43,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
       body: PageView(
         controller: _pageController,
         physics: const NeverScrollableScrollPhysics(),
-        children: [WorkOutTab(), ProgramTab(tabselect: _currentPage)],
+        children: [WorkOutTabDisScreen(), ProgramTabDisScreen()],
 
         onPageChanged: (index) {
           setState(() {
