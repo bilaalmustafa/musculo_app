@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 
 class Myprogramworkout extends StatefulWidget {
   const Myprogramworkout({super.key});
- 
+
   @override
   State<Myprogramworkout> createState() => _MyprogramworkoutState();
 }
@@ -29,12 +29,14 @@ class _MyprogramworkoutState extends State<Myprogramworkout> {
 
   @override
   Widget build(BuildContext context) {
-    // final userVm = context.watch<UserViewModel>();
+    final userVm = context.read<UserViewModel>();
+
     // log("User Model: ${userVm.userModel?.listOfPrograms}");
+
     return Scaffold(
       backgroundColor: ConstColors.white,
       appBar: ProfileAppBar(
-        appbarTitle: 'My Programs/Workouts', 
+        appbarTitle: 'My Programs/Workouts',
         selectedindex: _currentPage,
         onSelected: (value) {
           setState(() {
@@ -51,11 +53,8 @@ class _MyprogramworkoutState extends State<Myprogramworkout> {
         controller: _pageController,
         physics: const NeverScrollableScrollPhysics(),
         children: [
-          WorkOuts(),
-          Programs(
-            tabselect: _currentPage,
-           
-          ),
+          WorkOuts(workoutModelList: userVm.userModel!.listOfWorkouts),
+          Programs(tabselect: _currentPage),
         ],
 
         onPageChanged: (index) {

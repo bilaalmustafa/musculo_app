@@ -1,21 +1,41 @@
-class VideoModel {
-  final String name;
-  final String url;
-  final Duration duration;
-  final String? thumbnailPath;
+import 'package:hive/hive.dart';
+
+part 'video_model.g.dart';
+
+@HiveType(typeId: 1) // Ensure this ID is unique across all your models
+class VideoModel extends HiveObject {
+  @HiveField(0)
+  String name;
+
+  @HiveField(1)
+  String url;
+
+  @HiveField(2)
+  int durationInSeconds; // Hive doesn't support Duration directly
+
+  @HiveField(3)
+  String? thumbnailPath;
+
+  @HiveField(4)
   int intervalSeconds;
+
+  @HiveField(5)
   int restTime;
-  List<VideoModel> versionList;
+
+  @HiveField(6)
+  List<VideoModel> versionList; // Recursive Hive support OK if registered
 
   VideoModel({
     required this.name,
     required this.url,
-    required this.duration,
+    Duration? duration,
     this.thumbnailPath,
     this.intervalSeconds = 30,
     this.restTime = 10,
     required this.versionList,
-  });
+  }) : durationInSeconds = duration?.inSeconds ?? 0;
+
+  Duration get duration => Duration(seconds: durationInSeconds);
 
   factory VideoModel.fromJson(Map<String, dynamic> json) {
     return VideoModel(
@@ -44,7 +64,6 @@ class VideoModel {
     };
   }
 
-  /// ✅ Copy with method added here
   VideoModel copyWith({
     String? name,
     String? url,
@@ -61,10 +80,7 @@ class VideoModel {
       thumbnailPath: thumbnailPath ?? this.thumbnailPath,
       intervalSeconds: intervalSeconds ?? this.intervalSeconds,
       restTime: restTime ?? this.restTime,
-      versionList:
-          versionList != null
-              ? versionList.map((v) => v.copyWith()).toList()
-              : this.versionList.map((v) => v.copyWith()).toList(),
+      versionList: versionList ?? this.versionList,
     );
   }
 
@@ -80,35 +96,3 @@ class VideoModel {
   @override
   int get hashCode => name.hashCode ^ url.hashCode;
 }
-
-// class VideoModel {
-//   final String name;
-//   final String url;
-//   final Duration duration;
-//   final String? thumbnailPath;
-//   int intervalSeconds;
-//   int restTime;
-//   List<VideoModel> versionList;
-
-//   VideoModel({
-//     required this.name,
-//     required this.url,
-//     required this.duration,
-//     this.thumbnailPath,
-//     this.intervalSeconds = 30,
-//     this.restTime = 10,
-//     required this.versionList ,
-//   });
-
-//   @override
-//   bool operator ==(Object other) =>
-//       identical(this, other) ||
-//       other is VideoModel &&
-//           runtimeType == other.runtimeType &&
-//           name == other.name &&
-//           url == other.url &&
-//           intervalSeconds == other.intervalSeconds;
-
-//   @override
-//   int get hashCode => name.hashCode ^ url.hashCode;
-// }

@@ -4,15 +4,54 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hive/hive.dart';
 import 'package:musculo_app/model/user_model.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:musculo_app/model/workouts_model.dart';
+
 class ProfileProvider extends ChangeNotifier {
   UserModel? _user;
   UserModel? get user => _user;
   bool _isUploading = false;
+
   final ImagePicker _picker = ImagePicker();
 
   bool get isUploading => _isUploading;
+  late Box<WorkoutModel> _box;
+
+  // final Box<WorkoutModel> _box = Hive.box<WorkoutModel>('favorite_workouts');
+
+  // Access the current list
+  List<WorkoutModel> get favorateWorkout => _box.values.toList();
+
+  /// 🔹 Load the current user's favorites box
+  Future<void> initFavoritesForUser(String uid) async {
+    final boxName = 'favorite_workouts_$uid';
+    if (!Hive.isBoxOpen(boxName)) {
+      _box = await Hive.openBox<WorkoutModel>(boxName);
+    } else {
+      _box = Hive.box<WorkoutModel>(boxName);
+    }
+    notifyListeners();
+  }
+
+  void addFaverateWorkout(WorkoutModel model) {
+    // Check if model already exists by workoutName
+    final key = _box.keys.firstWhere(
+      (k) => _box.get(k)?.workoutName == model.workoutName,
+      orElse: () => null,
+    );
+
+    if (key != null) {
+      _box.delete(key);
+      // Remove from Hive
+    } else {
+      _box.add(model);
+      // Add to Hive
+    }
+
+    notifyListeners();
+  }
 
   // Load existing profile image from Firestore
   Future<void> loadProfileImage() async {
