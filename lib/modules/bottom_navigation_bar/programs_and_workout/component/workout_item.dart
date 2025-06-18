@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/poppins_text.dart';
+import 'package:musculo_app/components/share_picture.dart';
 import 'package:musculo_app/core/config/extensions.dart';
 import 'package:musculo_app/core/config/routes.dart';
 import 'package:musculo_app/core/constants/assets.dart';
@@ -9,6 +10,9 @@ import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/model/workouts_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/custom_chip.dart';
+import 'package:provider/provider.dart';
+
+import '../../profile/profile_view_model/profile_view_model.dart';
 
 // this is the discover screen workout item
 class WorkOutItemDis extends StatelessWidget {
@@ -59,7 +63,31 @@ class WorkOutItemDis extends StatelessWidget {
                       fontWeight: TextWeight.semiBold,
                     ),
 
-                    Icon(Icons.favorite),
+                    Consumer<ProfileProvider>(
+                      builder: (context, vm, _) {
+                        final isFavorite = vm.favorateWorkout.any(
+                          (w) => w.workoutName == workout.workoutName,
+                        );
+                        return InkWell(
+                          onTap: () {
+                            vm.addFaverateWorkout(workout);
+                            print(
+                              'print existing work out in hive ${vm.favorateWorkout}',
+                            );
+                          },
+                          child: SharePicture(
+                            imagePath:
+                                isFavorite
+                                    ? Assets.heartFill
+                                    : Assets.heartIcon,
+                            colorFilter: ColorFilter.mode(
+                              isFavorite ? ConstColors.red : ConstColors.black,
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ],
                 ),
                 PoppinsText(

@@ -41,6 +41,7 @@ class Assets {
   static const String arrowUp = "$_icons/ArrowUp2.svg";
   static const String reportIcon = "$_icons/Shield Fail.svg";
   static const String deleteIcon = "$_icons/Delete.svg";
+  static const String heartFill = "$_icons/Heart Fill.svg";
 
   static const String logo = '$_assets/applogo.png';
   static const String maskgroup = "$_assets/maskgroup.png";

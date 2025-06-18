@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../core/constants/const_colors.dart';
 import '../../../../components/profileappbar.dart';
+import '../profile_view_model/profile_view_model.dart';
 import 'programes.dart';
 import 'workouts.dart';
 
@@ -24,6 +27,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final favirate = context.watch<ProfileProvider>();
     return Scaffold(
       backgroundColor: ConstColors.white,
       appBar: ProfileAppBar(
@@ -43,7 +47,10 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       body: PageView(
         controller: _pageController,
         physics: const NeverScrollableScrollPhysics(),
-        children: [WorkOuts(), Programs(tabselect: _currentPage)],
+        children: [
+          WorkOuts(workoutModelList: favirate.favorateWorkout),
+          Programs(tabselect: _currentPage),
+        ],
 
         onPageChanged: (index) {
           setState(() {
