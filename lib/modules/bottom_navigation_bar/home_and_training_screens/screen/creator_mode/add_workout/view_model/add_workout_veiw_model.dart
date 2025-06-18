@@ -230,7 +230,6 @@ class AddWorkoutVeiwModel extends ChangeNotifier {
       addedTo: selectedSections,
       totalTime: getTotalIntervalTimeInSeconds(),
       categorizedVideos: selectedVideos,
-      
     );
     bool success = await instance<WorkoutServices>().createDiscovery(
       docId,
@@ -247,6 +246,7 @@ class AddWorkoutVeiwModel extends ChangeNotifier {
     selectedSections.clear();
     selectedVideos.clear();
     selectedDate = null;
+    levelofworkout = "";
     notifyListeners();
     return success;
   }

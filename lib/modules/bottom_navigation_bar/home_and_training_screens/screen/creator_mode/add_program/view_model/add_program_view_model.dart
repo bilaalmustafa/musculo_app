@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:musculo_app/core/config/injections.dart';
 import 'package:musculo_app/core/services/creator_services.dart';
 import 'package:musculo_app/model/programs_%20model.dart';
@@ -9,16 +12,109 @@ class AddProgramViewModel extends ChangeNotifier {
   bool isLoading = false;
   final TextEditingController programNameController = TextEditingController();
   final TextEditingController addOwnDuraionController = TextEditingController();
+  final TextEditingController priceController = TextEditingController();
   bool isintendedselect = false;
   bool isTypeofProgramSelect = false;
   bool isLevelofProgramslect = false;
   List<WorkoutModel> workoutList = [];
-
+  double sliderValue = 0;
+  String? radioOption;
   final formKey = GlobalKey<FormState>();
   String intendedoption = "";
   String typeofProgram = "";
   String levelofProgram = "";
   int? selectedTime;
+
+  final List<DateTime> _selectedDates = [];
+
+  // Public getter for UI
+  List<DateTime> get selectedDates => _selectedDates;
+
+  // Weekdays extracted from selected dates
+  List<String> get selectedWeekdays =>
+      _selectedDates.map((date) => DateFormat('EEEE').format(date)).toList();
+
+  // Function to handle calendar date tap
+  void toggleSelectedDate(DateTime date) {
+    final maxSelections = (selectedTime ?? 0) + 1;
+
+    if (_selectedDates.contains(date)) {
+      _selectedDates.remove(date);
+    } else {
+      if (_selectedDates.length >= maxSelections) return;
+      _selectedDates.add(date);
+    }
+
+    notifyListeners(); // Notify UI to rebuild
+  }
+
+  void clearSelectedDates() {
+    _selectedDates.clear();
+    notifyListeners();
+  }
+
+  // Called when slider is changed
+  void updateSlider(double value) {
+    sliderValue = value;
+    radioOption = null;
+    addOwnDuraionController.clear();
+    notifyListeners();
+  }
+
+  // Called when text is typed
+  void updateTextField(String value) {
+    if (value.isNotEmpty) {
+      sliderValue = 0;
+      radioOption = null;
+      notifyListeners();
+    }
+  }
+
+  // Called when radio option is selected
+  void selectRadio(String value) {
+    radioOption = value;
+    sliderValue = 0;
+    addOwnDuraionController.clear();
+    notifyListeners();
+  }
+
+  // Get the final duration value
+  int getFinalDuration() {
+    if (sliderValue > 0) {
+      return sliderValue.round();
+    } else if (addOwnDuraionController.text.isNotEmpty) {
+      return int.tryParse(addOwnDuraionController.text) ?? 0;
+    } else if (radioOption == "Monthly program") {
+      return 30;
+    }
+    return 0;
+  }
+
+  bool validateAddDuratuon() {
+    if (getFinalDuration() != 0) {
+      return true;
+    }
+    Fluttertoast.showToast(msg: "Enter duration of Program");
+    return false;
+  }
+
+  bool validateofSeletedTime() {
+    if (selectedTime != null) {
+      return true;
+    }
+    Fluttertoast.showToast(msg: "Select time a week");
+    return false;
+  }
+
+  bool validateofSeleteddays() {
+    final requiredDays = (selectedTime ?? -1) + 1;
+    if (_selectedDates.isNotEmpty && _selectedDates.length == requiredDays) {
+      return true;
+    }
+    log("selectedTimeeee ${_selectedDates.length}  $selectedTime");
+    Fluttertoast.showToast(msg: "Select day a week");
+    return false;
+  }
 
   bool validateAndSaveForm() {
     var form = formKey.currentState!;
@@ -101,6 +197,11 @@ class AddProgramViewModel extends ChangeNotifier {
     String creatorName,
   ) async {
     isLoading = true;
+
+    int programTotalTime = workoutList.fold(
+      0,
+      (sum, workout) => sum + (workout.totalTime ?? 0),
+    );
     notifyListeners();
     ProgramModel item = ProgramModel(
       id: userId,
@@ -109,11 +210,12 @@ class AddProgramViewModel extends ChangeNotifier {
       typeOf: typeofProgram,
       levelOf: levelofProgram,
       intended: intendedoption,
+      duration: getFinalDuration(),
       listOfWorkouts: workoutList,
-      dayAWeek:
-          selectedTime != null
-              ? selectedTime.toString()
-              : addOwnDuraionController.text.trim(),
+      timeAWeek: selectedTime.toString(),
+      dayAWeek: selectedWeekdays,
+      price: int.parse(priceController.text),
+      totalTime: programTotalTime,
     );
     bool success = await instance<ProgramServices>().createDiscovery(
       docId,
@@ -126,6 +228,13 @@ class AddProgramViewModel extends ChangeNotifier {
     typeofProgram = "";
     levelofProgram = "";
     selectedTime = null;
+    sliderValue = 0;
+    radioOption = null;
+    addOwnDuraionController.clear();
+    _selectedDates.clear();
+    selectedWeekdays.clear();
+    priceController.clear();
+
     workoutList.clear();
     notifyListeners();
     return success;

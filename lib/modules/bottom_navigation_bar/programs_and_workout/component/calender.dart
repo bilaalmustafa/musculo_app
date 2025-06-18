@@ -10,9 +10,11 @@ class CalenderWidget extends StatelessWidget {
     this.selectedDay,
     required this.focusedDay,
     required this.ondaySelected,
+    this.selectedDates,
   });
   DateTime? selectedDay;
   DateTime focusedDay;
+  final List<DateTime>? selectedDates;
   final void Function(DateTime selectedDay, DateTime focusedDay) ondaySelected;
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,19 @@ class CalenderWidget extends StatelessWidget {
         firstDay: DateTime.utc(2020, 1, 1),
         lastDay: DateTime.utc(2030, 12, 31),
         focusedDay: focusedDay,
-        selectedDayPredicate: (day) => isSameDay(selectedDay, day),
+
+        selectedDayPredicate: (day) {
+          // ✅ highlight all selected dates
+
+          return selectedDates?.any(
+                (d) =>
+                    d.year == day.year &&
+                    d.month == day.month &&
+                    d.day == day.day,
+              ) ??
+              false;
+        },
+
         calendarStyle: CalendarStyle(
           todayDecoration: BoxDecoration(
             color: ConstColors.black,

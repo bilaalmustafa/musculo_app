@@ -14,15 +14,15 @@ class Programs extends StatelessWidget {
   Widget build(BuildContext context) {
     final userVm = context.read<UserViewModel>();
     final programList = userVm.userModel?.listOfPrograms ?? [];
-  
+
     return Scaffold(
       backgroundColor: ConstColors.secondary,
       body:
-            programList.isEmpty
+          programList.isEmpty
               ? Center(
                 child: Text(
-                  "No Programs Found",
-                  style: TextStyle(fontSize: 16, color: Colors.white),
+                  "No Programs",
+                  style: TextStyle(fontSize: 16, color: Colors.black),
                 ),
               )
               : ListView.builder(
