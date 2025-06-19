@@ -18,10 +18,8 @@ class WorkOutTabDisScreen extends StatefulWidget {
 class _WorkOutTabDisScreenState extends State<WorkOutTabDisScreen> {
   Stream<List<WorkoutModel>>? stream;
 
- 
   @override
   void initState() {
-
     stream = instance<WorkoutServices>().getWorkout();
     super.initState();
   }
