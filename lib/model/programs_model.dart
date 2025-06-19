@@ -1,19 +1,45 @@
+import 'package:hive/hive.dart';
 import 'package:musculo_app/model/workouts_model.dart';
 
-class ProgramModel {
-  final String? id;
-  final String? creatorName;
-  final String? programName;
-  final String? typeOf;
-  final String? levelOf;
-  final int? duration;
-  final String? timeAWeek;
-  final List<String>? dayAWeek;
-  final String? intended;
-  final int? price;
-   final int? totalTime;
+part 'programs_model.g.dart';
 
-  final List<WorkoutModel>? listOfWorkouts;
+@HiveType(typeId: 2)
+class ProgramModel extends HiveObject {
+  @HiveField(0)
+  String? id;
+
+  @HiveField(1)
+  String? creatorName;
+
+  @HiveField(2)
+  String? programName;
+
+  @HiveField(3)
+  String? typeOf;
+
+  @HiveField(4)
+  String? levelOf;
+
+  @HiveField(5)
+  int? duration;
+
+  @HiveField(6)
+  String? timeAWeek;
+
+  @HiveField(7)
+  List<String>? dayAWeek;
+
+  @HiveField(8)
+  String? intended;
+
+  @HiveField(9)
+  int? price;
+
+  @HiveField(10)
+  int? totalTime;
+
+  @HiveField(11)
+  List<WorkoutModel>? listOfWorkouts;
 
   ProgramModel({
     this.id,
@@ -27,7 +53,6 @@ class ProgramModel {
     this.intended,
     this.price,
     this.totalTime,
-
     this.listOfWorkouts,
   });
 
@@ -43,15 +68,12 @@ class ProgramModel {
               ? json['duration']
               : int.tryParse(json['duration'].toString()) ?? 0,
       timeAWeek: json['timeAWeek'],
-      dayAWeek:
-          (json['dayAWeek'] as List<dynamic>?)
-              ?.map((e) => e.toString())
-              .toList(),
+      dayAWeek: (json['dayAWeek'] as List?)?.map((e) => e.toString()).toList(),
       intended: json['intended'],
       price: json["price"],
       totalTime: json["totalTime"],
       listOfWorkouts:
-          (json['listOfWorkouts'] as List<dynamic>?)
+          (json['listOfWorkouts'] as List?)
               ?.map((e) => WorkoutModel.fromJson(e))
               .toList(),
     );
@@ -60,16 +82,16 @@ class ProgramModel {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      "creatorName": creatorName,
+      'creatorName': creatorName,
       'programName': programName,
       'typeOf': typeOf,
       'levelOf': levelOf,
       'duration': duration,
       'timeAWeek': timeAWeek,
-      'dayAWeek': dayAWeek?.map((e) => e.toString()).toList(),
-      "intended": intended,
-      "price": price,
-      "totalTime":totalTime,
+      'dayAWeek': dayAWeek,
+      'intended': intended,
+      'price': price,
+      'totalTime': totalTime,
       'listOfWorkouts': listOfWorkouts?.map((e) => e.toJson()).toList(),
     };
   }
@@ -100,7 +122,6 @@ class ProgramModel {
       intended: intended ?? this.intended,
       price: price ?? this.price,
       totalTime: totalTime ?? this.totalTime,
-
       listOfWorkouts: listOfWorkouts ?? this.listOfWorkouts,
     );
   }
