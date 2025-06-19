@@ -13,13 +13,13 @@ class ProfileProvider extends ChangeNotifier {
   UserModel? _user;
   UserModel? get user => _user;
   bool _isUploading = false;
+  int _currentPage = 0;
 
   final ImagePicker _picker = ImagePicker();
 
   bool get isUploading => _isUploading;
+  int get currentPage => _currentPage;
   late Box<WorkoutModel> _box;
-
-  // final Box<WorkoutModel> _box = Hive.box<WorkoutModel>('favorite_workouts');
 
   // Access the current list
   List<WorkoutModel> get favorateWorkout => _box.values.toList();
@@ -51,6 +51,13 @@ class ProfileProvider extends ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  void setPage(int page) {
+    if (_currentPage != page) {
+      _currentPage = page;
+      notifyListeners();
+    }
   }
 
   // Load existing profile image from Firestore
