@@ -14,6 +14,8 @@ class CustomTextField extends StatelessWidget {
     this.onTap,
     this.enabled = true,
     this.validator,
+    this.onChanged, 
+    this.keyboardType,
 
     this.preIcon,
     this.sufIcon,
@@ -26,6 +28,8 @@ class CustomTextField extends StatelessWidget {
   final VoidCallback? onTap;
   final bool enabled;
   final String? Function(String?)? validator;
+    final Function(String)? onChanged; 
+  final TextInputType? keyboardType;
 
   final String? preIcon;
   final String? sufIcon;
@@ -37,11 +41,14 @@ class CustomTextField extends StatelessWidget {
       validator: validator,
       controller: controller,
       obscureText: obscureText,
+      onChanged: onChanged,
+      keyboardType: keyboardType,
       decoration: InputDecoration(
         hintText: title,
         hintStyle: const TextStyle(
           color: ConstColors.grey6A7,
           fontSize: Sizes.s13,
+        
         ),
 
         fillColor: ConstColors.secondary,

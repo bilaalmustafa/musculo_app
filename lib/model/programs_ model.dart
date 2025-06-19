@@ -8,8 +8,10 @@ class ProgramModel {
   final String? levelOf;
   final int? duration;
   final String? timeAWeek;
-  final String? dayAWeek;
+  final List<String>? dayAWeek;
   final String? intended;
+  final int? price;
+   final int? totalTime;
 
   final List<WorkoutModel>? listOfWorkouts;
 
@@ -23,6 +25,8 @@ class ProgramModel {
     this.timeAWeek,
     this.dayAWeek,
     this.intended,
+    this.price,
+    this.totalTime,
 
     this.listOfWorkouts,
   });
@@ -39,8 +43,13 @@ class ProgramModel {
               ? json['duration']
               : int.tryParse(json['duration'].toString()) ?? 0,
       timeAWeek: json['timeAWeek'],
-      dayAWeek: json['dayAWeek'],
+      dayAWeek:
+          (json['dayAWeek'] as List<dynamic>?)
+              ?.map((e) => e.toString())
+              .toList(),
       intended: json['intended'],
+      price: json["price"],
+      totalTime: json["totalTime"],
       listOfWorkouts:
           (json['listOfWorkouts'] as List<dynamic>?)
               ?.map((e) => WorkoutModel.fromJson(e))
@@ -57,8 +66,10 @@ class ProgramModel {
       'levelOf': levelOf,
       'duration': duration,
       'timeAWeek': timeAWeek,
-      'dayAWeek': dayAWeek,
+      'dayAWeek': dayAWeek?.map((e) => e.toString()).toList(),
       "intended": intended,
+      "price": price,
+      "totalTime":totalTime,
       'listOfWorkouts': listOfWorkouts?.map((e) => e.toJson()).toList(),
     };
   }
@@ -71,8 +82,10 @@ class ProgramModel {
     String? levelOf,
     int? duration,
     String? timeAWeek,
-    String? dayAWeek,
+    List<String>? dayAWeek,
     String? intended,
+    int? price,
+    int? totalTime,
     List<WorkoutModel>? listOfWorkouts,
   }) {
     return ProgramModel(
@@ -85,6 +98,8 @@ class ProgramModel {
       timeAWeek: timeAWeek ?? this.timeAWeek,
       dayAWeek: dayAWeek ?? this.dayAWeek,
       intended: intended ?? this.intended,
+      price: price ?? this.price,
+      totalTime: totalTime ?? this.totalTime,
 
       listOfWorkouts: listOfWorkouts ?? this.listOfWorkouts,
     );

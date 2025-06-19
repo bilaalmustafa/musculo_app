@@ -128,7 +128,18 @@ class _AddProgramPageviewState extends State<AddProgramPageview> {
                             if (vm.levelofProgramsvalidate()) {
                               _goToNextPage();
                             }
-                          
+                          case 4:
+                            if (vm.validateAddDuratuon()  && vm.validateAndSaveForm()) {
+                              _goToNextPage();
+                            }
+                          case 5:
+                            if (vm.validateofSeletedTime()) {
+                              _goToNextPage();
+                            }
+                          case 6:
+                            if (vm.validateofSeleteddays()) {
+                              _goToNextPage();
+                            }
                             break;
                           default:
                             _goToNextPage();

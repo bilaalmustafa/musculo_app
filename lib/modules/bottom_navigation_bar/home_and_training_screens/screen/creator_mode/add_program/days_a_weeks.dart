@@ -14,7 +14,6 @@ class DaysAWeeks extends StatefulWidget {
 }
 
 class _DaysAWeeksState extends State<DaysAWeeks> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,11 +35,11 @@ class _DaysAWeeksState extends State<DaysAWeeks> {
 
           Expanded(
             child: Consumer<AddProgramViewModel>(
-              builder: (context, vm,_) {
+              builder: (context, vm, _) {
                 return Container(
                   color: ConstColors.secondary,
                   child: ListView.separated(
-                    itemCount: 10,
+                    itemCount: 7,
                     itemBuilder: (conex, index) {
                       return Container(
                         margin: EdgeInsets.symmetric(horizontal: 20),
@@ -65,11 +64,11 @@ class _DaysAWeeksState extends State<DaysAWeeks> {
                             text: " ${index + 1} Time",
                             fontSize: Sizes.s14,
                           ),
-                
-                          value:  vm.selectedTime == index,
+
+                          value: vm.selectedTime == index,
                           onChanged: (value) {
                             setState(() {
-                               vm.selectedTime = value! ? index : null;
+                              vm.selectedTime = value! ? index : null;
                             });
                           },
                         ),
@@ -80,7 +79,7 @@ class _DaysAWeeksState extends State<DaysAWeeks> {
                     },
                   ),
                 );
-              }
+              },
             ),
           ),
         ],

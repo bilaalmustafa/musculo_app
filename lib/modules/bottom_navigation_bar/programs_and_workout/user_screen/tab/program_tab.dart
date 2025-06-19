@@ -34,6 +34,9 @@ class _ProgramTabDisScreenState extends State<ProgramTabDisScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           }
+          if (snapshot.hasError) {
+            return Center(child: Text("Error: ${snapshot.error}"));
+          }
           if (!snapshot.hasData || snapshot.data == null) {
             return Center(
               child: PoppinsText(
