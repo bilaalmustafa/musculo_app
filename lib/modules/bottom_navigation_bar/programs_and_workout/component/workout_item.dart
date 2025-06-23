@@ -16,8 +16,8 @@ import '../../profile/profile_view_model/profile_view_model.dart';
 
 // this is the discover screen workout item
 class WorkOutItemDis extends StatelessWidget {
-  const WorkOutItemDis({super.key, this.tabselect, required this.workout});
-  final int? tabselect;
+  const WorkOutItemDis({super.key, required this.workout});
+
   final WorkoutModel workout;
 
   @override
@@ -84,7 +84,7 @@ class WorkOutItemDis extends StatelessWidget {
                     Consumer<ProfileProvider>(
                       builder: (context, vm, _) {
                         final isFavorite = vm.favorateWorkout.any(
-                          (w) => w.workoutName == workout.workoutName,
+                          (w) => w.workoutId == workout.workoutId,
                         );
                         return InkWell(
                           onTap: () {
@@ -124,8 +124,8 @@ class WorkOutItemDis extends StatelessWidget {
                       text: workout.levelOf ?? "unknown",
                       color: ConstColors.secondary,
                     ),
-                    if (tabselect == 1)
-                      CustomChip(text: " week", color: ConstColors.secondary),
+                    // if (tabselect == 1)
+                    //   CustomChip(text: " week", color: ConstColors.secondary),
                   ],
                 ),
                 Row(
@@ -143,17 +143,19 @@ class WorkOutItemDis extends StatelessWidget {
                       buttonHeight: Sizes.s30,
                       buttonWidth: Sizes.s110,
                       onTap: () {
-                        if (tabselect == 1) {
-                          Navigator.pushNamed(
-                            context,
-                            Routes.programDetailPageView,
-                          );
-                        } else {
-                          Navigator.pushNamed(
-                            context,
-                            Routes.traningpreviewscreen,
-                          );
-                        }
+                        Navigator.pushNamed(
+                          context,
+                          Routes.traningpreviewscreen,
+                          arguments: workout,
+                        );
+                        // if (tabselect == 1) {
+                        //   Navigator.pushNamed(
+                        //     context,
+                        //     Routes.programDetailPageView,
+                        //   );
+                        // } else {
+
+                        // }
                       },
                     ),
                   ],

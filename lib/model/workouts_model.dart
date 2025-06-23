@@ -46,7 +46,10 @@ class WorkoutModel extends HiveObject {
 
   @HiveField(13)
   final Map<String, List<VideoModel>>? categorizedVideos;
-
+ @HiveField(14)
+  final double? rating;
+   @HiveField(15)
+  final List<String>? review;
   WorkoutModel({
     this.workoutId,
     this.userId,
@@ -62,6 +65,8 @@ class WorkoutModel extends HiveObject {
     this.dateTime,
     this.description,
     this.categorizedVideos,
+    this.rating,
+    this.review
   });
 
   factory WorkoutModel.fromJson(Map<String, dynamic> json) {
@@ -75,11 +80,16 @@ class WorkoutModel extends HiveObject {
           json['addedTo'] != null
               ? List<String>.from(json['addedTo'] as List)
               : null,
+               review:
+          json['review'] != null
+              ? List<String>.from(json['review'] as List)
+              : null,
       difficulty: json['difficulty'] as String?,
       levelOf: json['levelOf'] as String?,
       gender: json['gender'] as String?,
       totalTime: json['totalTime'] as int?,
       price: json['price'] as int?,
+      rating: json['rating'] as double?,
       dateTime:
           json['dateTime'] != null ? DateTime.tryParse(json['dateTime']) : null,
       description: json['description'] as String?,
@@ -110,6 +120,8 @@ class WorkoutModel extends HiveObject {
       'price': price,
       'dateTime': dateTime?.toIso8601String(),
       'description': description,
+      "rating":rating,
+      "review":review,
       'categorizedVideos': categorizedVideos?.map(
         (key, value) => MapEntry(key, value.map((v) => v.toJson()).toList()),
       ),
@@ -130,6 +142,8 @@ class WorkoutModel extends HiveObject {
     int? price,
     DateTime? dateTime,
     String? description,
+    double? rating,
+    List<String>? review,
     Map<String, List<VideoModel>>? categorizedVideos,
   }) {
     return WorkoutModel(
@@ -146,6 +160,8 @@ class WorkoutModel extends HiveObject {
       price: price ?? this.price,
       dateTime: dateTime ?? this.dateTime,
       description: description ?? this.description,
+      rating: rating ?? this.rating,
+      review: review ?? this.review,
       categorizedVideos: categorizedVideos ?? this.categorizedVideos,
     );
   }

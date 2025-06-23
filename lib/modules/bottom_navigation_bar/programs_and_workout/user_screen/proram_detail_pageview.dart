@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/share_picture.dart';
 import 'package:musculo_app/components/tab_buttons.dart';
@@ -5,6 +7,7 @@ import 'package:musculo_app/core/config/extensions.dart';
 import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
+import 'package:musculo_app/model/programs_%20model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/show_rating_bottomsheet.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/tab/description_tab.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/tab/history_tab.dart';
@@ -12,7 +15,8 @@ import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/u
 import '../../../../core/config/routes.dart';
 
 class ProgramDetailPageView extends StatefulWidget {
-  const ProgramDetailPageView({super.key});
+  const ProgramDetailPageView({super.key, required this.programModel});
+  final ProgramModel programModel;
 
   @override
   State<ProgramDetailPageView> createState() => _ProgramDetailPageViewState();
@@ -36,6 +40,7 @@ class _ProgramDetailPageViewState extends State<ProgramDetailPageView> {
 
   @override
   Widget build(BuildContext context) {
+    log(" useriddd ${widget.programModel.userId}");
     return Scaffold(
       backgroundColor: ConstColors.white,
       body: Column(
@@ -87,7 +92,9 @@ class _ProgramDetailPageViewState extends State<ProgramDetailPageView> {
                         backgroundColor: ConstColors.white,
                         context: context,
                         builder: (context) {
-                          return ShowrateBottomSheet();
+                          return ShowrateBottomSheet(
+                            programModel: widget.programModel,
+                          );
                         },
                       );
                     }
@@ -208,7 +215,10 @@ class _ProgramDetailPageViewState extends State<ProgramDetailPageView> {
               child: PageView(
                 physics: NeverScrollableScrollPhysics(),
                 controller: _pageController,
-                children: [DescriptionTab(), HistoryTab()],
+                children: [
+                  DescriptionTab(programModel: widget.programModel),
+                  HistoryTab(programModel: widget.programModel),
+                ],
               ),
             ),
           ),

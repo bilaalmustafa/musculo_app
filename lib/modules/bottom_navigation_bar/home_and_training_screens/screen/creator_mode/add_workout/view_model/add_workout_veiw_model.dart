@@ -217,6 +217,7 @@ class AddWorkoutVeiwModel extends ChangeNotifier {
     isLoading = true;
     notifyListeners();
     WorkoutModel item = WorkoutModel(
+      workoutId: docId,
       creatorName: creatorName,
       workoutName: workoutNameController.text,
       description: descriptionController.text,
@@ -225,7 +226,7 @@ class AddWorkoutVeiwModel extends ChangeNotifier {
       userId: userId,
       workoutType: typeofworkout,
       gender: gender,
-      levelOf: typeofworkout,
+      levelOf: levelofworkout,
       difficulty: difficulty.round().toString(),
       addedTo: selectedSections,
       totalTime: getTotalIntervalTimeInSeconds(),

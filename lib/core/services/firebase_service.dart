@@ -13,7 +13,7 @@ import '../../model/motivational_text_model.dart';
 
 class FirebaseService<T> {
   final String collectionName;
-  final T Function(Map<String, dynamic> data,) fromJson;
+  final T Function(Map<String, dynamic> data) fromJson;
   final Map<String, dynamic> Function(T item) toJson;
 
   FirebaseService({
@@ -35,17 +35,17 @@ class FirebaseService<T> {
     }
   }
 
-  Future<T?> updateUser(String id, T item) async {
+  Future<T?> update(String id, T item) async {
     try {
       await FirebaseFirestore.instance
           .collection(collectionName)
           .doc(id)
           .update(toJson(item));
-      Fluttertoast.showToast(msg: "Updated successful");
+
       return item;
     } catch (e) {
       Fluttertoast.showToast(msg: "Unable to Store ${T.runtimeType}: $e");
-      throw Exception('Error creating document: $e');
+      throw Exception('Error : $e');
     }
   }
 
@@ -126,7 +126,7 @@ class FirebaseService<T> {
   //   return videos;
   // }
   // Add method to fetch all documents
-  Future<List<T>> getAll( ) async {
+  Future<List<T>> getAll() async {
     try {
       QuerySnapshot snapshot =
           await FirebaseFirestore.instance
@@ -137,7 +137,7 @@ class FirebaseService<T> {
       return snapshot.docs.map((doc) {
         final data = doc.data() as Map<String, dynamic>;
 
-        return fromJson(data,);
+        return fromJson(data);
       }).toList();
     } catch (e) {
       print('Error fetching all documents: $e');
@@ -155,7 +155,7 @@ class FirebaseService<T> {
           snapshot.docs.map((doc) {
             final data = doc.data() as Map<String, dynamic>;
 
-            return fromJson(data,  );
+            return fromJson(data);
           }).toList();
       // Shuffle and take limited number
       allItems.shuffle();

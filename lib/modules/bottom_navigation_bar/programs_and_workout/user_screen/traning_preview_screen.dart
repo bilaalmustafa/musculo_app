@@ -7,16 +7,20 @@ import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
+import 'package:musculo_app/model/workouts_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/creator_list_tile.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/custom_chip.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/analysis_containers.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/paragraph_text.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../core/config/routes.dart';
+import '../../profile/profile_view_model/profile_view_model.dart';
 
 class TraningPreviewScreen extends StatefulWidget {
-  const TraningPreviewScreen({super.key});
+  const TraningPreviewScreen({super.key, required this.workoutModel});
 
+  final WorkoutModel workoutModel;
   @override
   State<TraningPreviewScreen> createState() => _TraningPreviewScreenState();
 }
@@ -25,6 +29,25 @@ class _TraningPreviewScreenState extends State<TraningPreviewScreen> {
   bool isExpanded = false;
   @override
   Widget build(BuildContext context) {
+    final data = widget.workoutModel;
+    Map<String, String> formatProgramTimeParts(int totalTimeInSeconds) {
+      int totalMinutes = totalTimeInSeconds ~/ 60;
+
+      if (totalMinutes < 60) {
+        return {'digit': '$totalMinutes', 'unit': 'Minutes'};
+      } else {
+        int hours = totalMinutes ~/ 60;
+        int minutes = totalMinutes % 60;
+
+        if (minutes >= 45) {
+          hours += 1;
+        }
+
+        return {'digit': '$hours', 'unit': 'Hours'};
+      }
+    }
+
+    final timeParts = formatProgramTimeParts(data.totalTime!);
     return Scaffold(
       backgroundColor: ConstColors.white,
       body: Column(
@@ -87,16 +110,31 @@ class _TraningPreviewScreenState extends State<TraningPreviewScreen> {
                       (context) => [
                         PopupMenuItem(
                           value: 'Like',
-                          child: Row(
-                            children: [
-                              SharePicture(imagePath: Assets.heartIcon),
-                              SizedBox(width: Sizes.s8),
-                              PoppinsText(
-                                text: 'Like Workout',
-                                fontSize: Sizes.s14,
-                                fontWeight: TextWeight.medium,
-                              ),
-                            ],
+                          child: Consumer<ProfileProvider>(
+                            builder: (context, vm, _) {
+                              final isFavorite = vm.favorateWorkout.any(
+                                (w) => w.workoutId == data.workoutId,
+                              );
+                              return InkWell(
+                                onTap: () => vm.addFaverateWorkout(data),
+                                child: Row(
+                                  children: [
+                                    SharePicture(
+                                      imagePath:
+                                          isFavorite
+                                              ? Assets.heartFill
+                                              : Assets.heartIcon,
+                                    ),
+                                    SizedBox(width: Sizes.s8),
+                                    PoppinsText(
+                                      text: 'Like Workout',
+                                      fontSize: Sizes.s14,
+                                      fontWeight: TextWeight.medium,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
                           ),
                         ),
                         PopupMenuItem(
@@ -155,7 +193,7 @@ class _TraningPreviewScreenState extends State<TraningPreviewScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     PoppinsText(
-                      text: "Belly Fat Burning",
+                      text: data.workoutName ?? "unknown",
                       fontSize: Sizes.s20,
                       fontWeight: TextWeight.semiBold,
                     ),
@@ -167,7 +205,8 @@ class _TraningPreviewScreenState extends State<TraningPreviewScreen> {
                           size: Sizes.s20,
                         ),
                         PoppinsText(
-                          text: "4.6 (54 review)",
+                          text:
+                              "${data.rating ?? 0} (${data.review?.length ?? 0} review)",
                           fontSize: Sizes.s10,
                           fontWeight: TextWeight.regular,
                           color: ConstColors.greyA1A1,
@@ -178,15 +217,15 @@ class _TraningPreviewScreenState extends State<TraningPreviewScreen> {
                       spacing: Sizes.s10,
                       children: [
                         CustomChip(
-                          text: "For Males",
+                          text: "For ${data.gender}",
                           color: ConstColors.secondary,
                         ),
                         CustomChip(
-                          text: "Beginner",
+                          text: data.levelOf ?? "unknown",
                           color: ConstColors.secondary,
                         ),
                         CustomChip(
-                          text: "With equipment",
+                          text: data.workoutType ?? "unknown",
                           color: ConstColors.secondary,
                         ),
                       ],
@@ -196,18 +235,19 @@ class _TraningPreviewScreenState extends State<TraningPreviewScreen> {
                       children: [
                         AnalsisContainer(
                           iconImage: Assets.runnerIcon,
-                          digit: "15",
+                          digit:
+                              '${data.categorizedVideos?.values.fold(0, (sum, list) => sum + (list.length)) ?? 0}',
                           text: "Exercise",
                         ),
                         AnalsisContainer(
                           iconImage: Assets.chart,
-                          digit: "7",
+                          digit: data.difficulty ?? "0",
                           text: "Difficulty",
                         ),
                         AnalsisContainer(
                           iconImage: Assets.timeCircle,
-                          digit: "10",
-                          text: "Munites",
+                          digit: timeParts["digit"].toString(),
+                          text: timeParts["unit"].toString(),
                         ),
                       ],
                     ),
@@ -218,12 +258,8 @@ class _TraningPreviewScreenState extends State<TraningPreviewScreen> {
                     ),
 
                     ParagraphText(
-                      text:
-                          "This is a long paragraph. It spans many lines. "
-                          "We only want to show a few lines and then let the user tap View More. "
-                          "This helps keep the UI clean and readable for longer content.This is a long paragraph. It spans many lines. "
-                          "We only want to show a few lines and then let the user tap View More. "
-                          "This helps keep the UI clean and readable for longer content.",
+                      text: data.description.toString(),
+
                       isExpanded: isExpanded,
 
                       onTap:
@@ -231,6 +267,7 @@ class _TraningPreviewScreenState extends State<TraningPreviewScreen> {
                             isExpanded = !isExpanded;
                           }),
                     ),
+
                     PoppinsText(
                       text: "Creator",
                       fontSize: Sizes.s16,
@@ -257,7 +294,7 @@ class _TraningPreviewScreenState extends State<TraningPreviewScreen> {
                 children: [
                   PoppinsText(text: "Price", fontSize: 14),
                   PoppinsText(
-                    text: "£5.00",
+                    text: "£ ${data.price!.toDouble().toStringAsFixed(2)}",
                     fontSize: 16,
                     fontWeight: TextWeight.semiBold,
                   ),

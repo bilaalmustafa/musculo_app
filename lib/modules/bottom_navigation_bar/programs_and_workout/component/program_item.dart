@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/poppins_text.dart';
@@ -11,12 +13,13 @@ import 'package:musculo_app/model/programs_%20model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/custom_chip.dart';
 
 class ProgramItemDis extends StatelessWidget {
-  const ProgramItemDis({super.key, this.tabselect, required this.program});
-  final int? tabselect;
+  const ProgramItemDis({super.key, required this.program});
+
   final ProgramModel program;
 
   @override
   Widget build(BuildContext context) {
+    log(" item userIdd ${program.userId}");
     String formatProgramTime(int totalTimeInSeconds) {
       int totalMinutes = totalTimeInSeconds ~/ 60;
 
@@ -26,13 +29,21 @@ class ProgramItemDis extends StatelessWidget {
         int hours = totalMinutes ~/ 60;
         int minutes = totalMinutes % 60;
 
-        // Round up to the next hour if minutes >= 45
         if (minutes >= 45) {
           hours += 1;
         }
 
         return "$hours Hr";
       }
+    }
+
+    String getWeeksFromDuration(int? durationInDays) {
+      if (durationInDays == null || durationInDays <= 0) return "0";
+
+      if (durationInDays < 7) return "1";
+
+      final weeks = (durationInDays / 7).ceil();
+      return weeks.toString();
     }
 
     return Container(
@@ -96,11 +107,11 @@ class ProgramItemDis extends StatelessWidget {
                       text: program.levelOf ?? " unknown level",
                       color: ConstColors.secondary,
                     ),
-                    if (tabselect == 1)
-                      CustomChip(
-                        text: "${program.dayAWeek} week",
-                        color: ConstColors.secondary,
-                      ),
+                    // if (tabselect == 1)
+                    CustomChip(
+                      text: "${getWeeksFromDuration(program.duration)} week",
+                      color: ConstColors.secondary,
+                    ),
                   ],
                 ),
                 Row(
@@ -118,17 +129,19 @@ class ProgramItemDis extends StatelessWidget {
                       buttonHeight: Sizes.s30,
                       buttonWidth: Sizes.s110,
                       onTap: () {
-                        if (tabselect == 1) {
-                          Navigator.pushNamed(
-                            context,
-                            Routes.programDetailPageView,
-                          );
-                        } else {
-                          Navigator.pushNamed(
-                            context,
-                            Routes.traningpreviewscreen,
-                          );
-                        }
+                        Navigator.pushNamed(
+                          context,
+                          Routes.programDetailPageView,
+                          arguments: program,
+                        );
+                        // if (tabselect == 1) {
+
+                        // } else {
+                        //   Navigator.pushNamed(
+                        //     context,
+                        //     Routes.traningpreviewscreen,
+                        //   );
+                        // }
                       },
                     ),
                   ],

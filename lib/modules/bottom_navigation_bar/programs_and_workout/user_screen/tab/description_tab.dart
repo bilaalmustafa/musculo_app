@@ -5,12 +5,14 @@ import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
+import 'package:musculo_app/model/programs_%20model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/creator_list_tile.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/custom_chip.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/analysis_containers.dart';
 
 class DescriptionTab extends StatefulWidget {
-  const DescriptionTab({super.key});
+  const DescriptionTab({super.key, required this.programModel});
+  final ProgramModel programModel;
 
   @override
   State<DescriptionTab> createState() => _ProgramDetailScreenState();
@@ -21,6 +23,18 @@ class _ProgramDetailScreenState extends State<DescriptionTab> {
 
   @override
   Widget build(BuildContext context) {
+    final data = widget.programModel;
+    String getWeeksFromDuration(int? durationInDays) {
+      if (durationInDays == null || durationInDays <= 0) return "0";
+
+      
+      if (durationInDays < 7) return "1";
+
+     
+      final weeks = (durationInDays / 7).ceil();
+      return weeks.toString();
+    }
+
     return Scaffold(
       backgroundColor: ConstColors.white,
       body: Column(
@@ -32,7 +46,7 @@ class _ProgramDetailScreenState extends State<DescriptionTab> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   PoppinsText(
-                    text: "Power Lift",
+                    text: data.programName ?? "unknown",
                     fontSize: Sizes.s20,
                     fontWeight: TextWeight.semiBold,
                   ),
@@ -44,7 +58,8 @@ class _ProgramDetailScreenState extends State<DescriptionTab> {
                         size: Sizes.s20,
                       ),
                       PoppinsText(
-                        text: "4.6 (54 review)",
+                        text:
+                            "${data.rating ?? 0} (${data.review?.length ?? 0} review)",
                         fontSize: Sizes.s10,
                         fontWeight: TextWeight.regular,
                         color: ConstColors.greyA1A1,
@@ -55,15 +70,15 @@ class _ProgramDetailScreenState extends State<DescriptionTab> {
                     spacing: Sizes.s10,
                     children: [
                       CustomChip(
-                        text: "For Males",
+                        text: "For ${data.intended ?? "unknown"}",
                         color: ConstColors.secondary,
                       ),
                       CustomChip(
-                        text: "Beginner",
+                        text: data.levelOf ?? "unknown",
                         color: ConstColors.secondary,
                       ),
                       CustomChip(
-                        text: "With equipment",
+                        text: data.typeOf ?? "unknown",
                         color: ConstColors.secondary,
                       ),
                     ],
@@ -123,17 +138,17 @@ class _ProgramDetailScreenState extends State<DescriptionTab> {
                     children: [
                       AnalsisContainer(
                         iconImage: Assets.timeCircle,
-                        digit: "10",
+                        digit: getWeeksFromDuration(data.duration),
                         text: "Weeks",
                       ),
                       AnalsisContainer(
                         iconImage: Assets.runnerIcon,
-                        digit: "15",
+                        digit: data.listOfWorkouts?.length.toString() ?? "0",
                         text: "Workout",
                       ),
                       AnalsisContainer(
                         iconImage: Assets.chart,
-                        digit: "3X",
+                        digit: " ${data.timeAWeek}X",
                         text: "week",
                       ),
                     ],
@@ -159,7 +174,8 @@ class _ProgramDetailScreenState extends State<DescriptionTab> {
                 children: [
                   PoppinsText(text: "Price", fontSize: 13),
                   PoppinsText(
-                    text: "£20.00",
+                    text:
+                        "£${data.price?.toStringAsFixed(2).toString() ?? 0.0}",
                     fontSize: 16,
                     fontWeight: TextWeight.semiBold,
                   ),

@@ -32,7 +32,7 @@ class AddProgramViewModel extends ChangeNotifier {
 
   // Weekdays extracted from selected dates
   List<String> get selectedWeekdays =>
-      _selectedDates.map((date) => DateFormat('EEEE').format(date)).toList();
+      _selectedDates.map((date) => DateFormat('EEE').format(date)).toList();
 
   // Function to handle calendar date tap
   void toggleSelectedDate(DateTime date) {
@@ -203,8 +203,10 @@ class AddProgramViewModel extends ChangeNotifier {
       (sum, workout) => sum + (workout.totalTime ?? 0),
     );
     notifyListeners();
+
     ProgramModel item = ProgramModel(
-      id: userId,
+      userId: userId,
+      programId: docId,
       creatorName: creatorName,
       programName: programNameController.text.trim(),
       typeOf: typeofProgram,
@@ -212,9 +214,9 @@ class AddProgramViewModel extends ChangeNotifier {
       intended: intendedoption,
       duration: getFinalDuration(),
       listOfWorkouts: workoutList,
-      timeAWeek: selectedTime.toString(),
+      timeAWeek: (selectedTime ?? 0) + 1,
       dayAWeek: selectedWeekdays,
-      price: int.parse(priceController.text),
+      price: double.parse(priceController.text),
       totalTime: programTotalTime,
     );
     bool success = await instance<ProgramServices>().createDiscovery(

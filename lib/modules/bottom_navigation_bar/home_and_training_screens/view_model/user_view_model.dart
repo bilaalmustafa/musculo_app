@@ -21,7 +21,7 @@ class UserViewModel with ChangeNotifier {
     isLoading = true;
     notifyListeners();
     userModel = userModel!.copyWith(name: uname , dateOfBirth:udob , gender:ugenger, levelOfFitness:ulevel );
-    await instance<UserService>().updateUser(id, userModel!);
+    await instance<UserService>().update(id, userModel!);
 
     isLoading = false;
     notifyListeners();

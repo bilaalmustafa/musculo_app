@@ -1,5 +1,10 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:musculo_app/core/config/injections.dart';
 import 'package:musculo_app/core/services/firebase_service.dart';
+import 'package:musculo_app/core/services/user_service.dart';
 import 'package:musculo_app/model/programs_%20model.dart';
 import 'package:musculo_app/model/workouts_model.dart';
 
@@ -15,9 +20,19 @@ class ProgramServices extends FirebaseService<ProgramModel> {
     return create(id, item);
   }
 
-  Stream<List<ProgramModel>> getPrograms() => getAllDiscovery("Program");
+  Future<ProgramModel?> ratingCreate(String id, ProgramModel item) async {
+    try {
+      ProgramModel? result = await update(id, item);
 
-   
+      return result;
+    } catch (e, Strc) {
+      Fluttertoast.showToast(msg: "error $e   strace $Strc");
+      log("errror $e");
+      rethrow; // Pass the error up the chain
+    }
+  }
+
+  Stream<List<ProgramModel>> getPrograms() => getAllDiscovery("Program");
 }
 
 class WorkoutServices extends FirebaseService<WorkoutModel> {
@@ -33,5 +48,6 @@ class WorkoutServices extends FirebaseService<WorkoutModel> {
   }
 
   Stream<List<WorkoutModel>> getWorkout() => getAllDiscovery("Workout");
-  Stream<List<WorkoutModel>> getCreatorWorkout( String uid) => getAllcreatorworkout("Workout",  uid);
+  Stream<List<WorkoutModel>> getCreatorWorkout(String uid) =>
+      getAllcreatorworkout("Workout", uid);
 }

@@ -27,10 +27,10 @@ class UserService extends FirebaseService<UserModel> {
 
 
   Future<UserModel?> serviceUpdate(String id, UserModel item) async {
-  log("Service: update() called for ID: $id");
+ 
   try {
-    UserModel? result = await updateUser(id, item);
-    log("Service: update() completed successfully");
+    UserModel? result = await update(id, item);
+   
     return result;
   } catch (e) {
     log("Service: update() failed with error: $e");

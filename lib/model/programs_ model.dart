@@ -1,22 +1,27 @@
 import 'package:musculo_app/model/workouts_model.dart';
 
 class ProgramModel {
-  final String? id;
+  final String? userId;
+  String? programId;
   final String? creatorName;
   final String? programName;
   final String? typeOf;
   final String? levelOf;
   final int? duration;
-  final String? timeAWeek;
+  final int? timeAWeek;
   final List<String>? dayAWeek;
   final String? intended;
-  final int? price;
-   final int? totalTime;
+  final double? price;
+  final int? totalTime;
+  final double? rating;
+  final int? ratingCount;
+  final List<String>? review;
 
   final List<WorkoutModel>? listOfWorkouts;
 
   ProgramModel({
-    this.id,
+    this.userId,
+    this.programId,
     this.creatorName,
     this.programName,
     this.typeOf,
@@ -27,17 +32,24 @@ class ProgramModel {
     this.intended,
     this.price,
     this.totalTime,
-
+    this.rating,
+    this.ratingCount,
+    this.review,
     this.listOfWorkouts,
   });
 
   factory ProgramModel.fromJson(Map<String, dynamic> json) {
     return ProgramModel(
-      id: json['id'],
+      userId: json['userId'],
+      programId: json["programId"],
       creatorName: json['creatorName'],
       programName: json['programName'],
       typeOf: json['typeOf'],
       levelOf: json['levelOf'],
+      rating: json["rating"],
+      ratingCount: json["ratingCount"],
+      review:
+          (json['review'] as List<dynamic>?)?.map((e) => e.toString()).toList(),
       duration:
           json['duration'] is int
               ? json['duration']
@@ -59,37 +71,46 @@ class ProgramModel {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
+      'userId': userId,
+      "programId": programId,
       "creatorName": creatorName,
       'programName': programName,
       'typeOf': typeOf,
       'levelOf': levelOf,
       'duration': duration,
       'timeAWeek': timeAWeek,
+      "rating": rating,
+       "ratingCount": ratingCount,
+      "review": review,
       'dayAWeek': dayAWeek?.map((e) => e.toString()).toList(),
       "intended": intended,
       "price": price,
-      "totalTime":totalTime,
+      "totalTime": totalTime,
       'listOfWorkouts': listOfWorkouts?.map((e) => e.toJson()).toList(),
     };
   }
 
   ProgramModel copyWith({
-    String? id,
+    String? userId,
+    String? programId,
     String? creatorName,
     String? programName,
     String? typeOf,
     String? levelOf,
     int? duration,
-    String? timeAWeek,
+    int? timeAWeek,
     List<String>? dayAWeek,
     String? intended,
-    int? price,
+    double? price,
     int? totalTime,
+    double? rating,
+    int? ratingCount,
+    List<String>? review,
     List<WorkoutModel>? listOfWorkouts,
   }) {
     return ProgramModel(
-      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      programId: programId ?? this.programId,
       creatorName: creatorName ?? this.creatorName,
       programName: programName ?? this.programName,
       typeOf: typeOf ?? this.typeOf,
@@ -99,8 +120,10 @@ class ProgramModel {
       dayAWeek: dayAWeek ?? this.dayAWeek,
       intended: intended ?? this.intended,
       price: price ?? this.price,
+      rating: rating ?? this.rating,
+      ratingCount: ratingCount ?? this.ratingCount,
+      review: review ?? this.review,
       totalTime: totalTime ?? this.totalTime,
-
       listOfWorkouts: listOfWorkouts ?? this.listOfWorkouts,
     );
   }

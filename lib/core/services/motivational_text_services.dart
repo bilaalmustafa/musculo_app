@@ -39,6 +39,6 @@ class MotivationalTextService extends FirebaseService<MotivationalTextModel> {
 
   // update data method
   Future<void> updateMText(String id, MotivationalTextModel text) {
-    return updateUser(id, text);
+    return update(id, text);
   }
 }

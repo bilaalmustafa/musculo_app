@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:musculo_app/model/programs_%20model.dart';
 import 'package:musculo_app/model/user_model.dart';
+import 'package:musculo_app/model/workouts_model.dart';
 import 'package:musculo_app/modules/auth/register/screens/register_screen.dart';
 import 'package:musculo_app/modules/auth/sign_in/screen/changepassword_screen.dart';
 import 'package:musculo_app/modules/auth/sign_in/screen/resetpassword_screen.dart';
@@ -99,9 +101,11 @@ class RouteGenerator {
       case Routes.filterscreen:
         return MaterialPageRoute(builder: (_) => const FilterScreen());
       case Routes.traningpreviewscreen:
-        return MaterialPageRoute(builder: (_) => const TraningPreviewScreen());
-      case Routes.programdetailscreen:
-        return MaterialPageRoute(builder: (_) => const TraningPreviewScreen());
+        final workoutModel = routeSitting.arguments as WorkoutModel;
+        return MaterialPageRoute(
+          builder: (_) => TraningPreviewScreen(workoutModel: workoutModel),
+        );
+
       case Routes.settingScreen:
         return MaterialPageRoute(builder: (_) => const SettingScreen());
       case Routes.notificationScreen:
@@ -120,7 +124,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const BecomecreatorScreen());
 
       case Routes.programDetailPageView:
-        return MaterialPageRoute(builder: (_) => const ProgramDetailPageView());
+        final programModel = routeSitting.arguments as ProgramModel;
+        return MaterialPageRoute(builder: (_) =>  ProgramDetailPageView( programModel:programModel ,));
       case Routes.coachProfile:
         return MaterialPageRoute(builder: (_) => const CoachProfile());
       case Routes.addworkoutpageview:

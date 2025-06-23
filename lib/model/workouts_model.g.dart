@@ -30,15 +30,19 @@ class WorkoutModelAdapter extends TypeAdapter<WorkoutModel> {
       price: fields[10] as int?,
       dateTime: fields[11] as DateTime?,
       description: fields[12] as String?,
-      categorizedVideos: (fields[13] as Map?)?.map((dynamic k, dynamic v) =>
-          MapEntry(k as String, (v as List).cast<VideoModel>())),
+      categorizedVideos: (fields[13] as Map?)?.map(
+        (dynamic k, dynamic v) =>
+            MapEntry(k as String, (v as List).cast<VideoModel>()),
+      ),
+      rating: fields[14] as double?,
+      review: (fields[15] as List?)?.cast<String>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, WorkoutModel obj) {
     writer
-      ..writeByte(14)
+      ..writeByte(16)
       ..writeByte(0)
       ..write(obj.workoutId)
       ..writeByte(1)
@@ -66,7 +70,11 @@ class WorkoutModelAdapter extends TypeAdapter<WorkoutModel> {
       ..writeByte(12)
       ..write(obj.description)
       ..writeByte(13)
-      ..write(obj.categorizedVideos);
+      ..write(obj.categorizedVideos)
+      ..writeByte(14)
+      ..write(obj.rating)
+      ..writeByte(15)
+      ..write(obj.review);
   }
 
   @override

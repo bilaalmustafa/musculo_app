@@ -5,12 +5,15 @@ import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
+import 'package:musculo_app/model/programs_%20model.dart';
+import 'package:musculo_app/model/workouts_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/custom_chip.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/calender.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/history_list_tile.dart';
 
 class HistoryTab extends StatefulWidget {
-  const HistoryTab({super.key});
+  const HistoryTab({super.key, required this.programModel});
+  final ProgramModel programModel;
 
   @override
   State<HistoryTab> createState() => _HistoryTabState();
@@ -21,6 +24,27 @@ class _HistoryTabState extends State<HistoryTab> {
   DateTime? _selectedDay;
   @override
   Widget build(BuildContext context) {
+    final data = widget.programModel;
+    final List<WorkoutModel> listofworkout =
+        data.listOfWorkouts as List<WorkoutModel>;
+    String formatProgramTime(int totalTimeInSeconds) {
+      int totalMinutes = totalTimeInSeconds ~/ 60;
+
+      if (totalMinutes < 60) {
+        return "$totalMinutes Mins";
+      } else {
+        int hours = totalMinutes ~/ 60;
+        int minutes = totalMinutes % 60;
+
+        // Round up to the next hour if minutes >= 45
+        if (minutes >= 45) {
+          hours += 1;
+        }
+
+        return "$hours Hr";
+      }
+    }
+
     return Scaffold(
       backgroundColor: ConstColors.white,
       body: SingleChildScrollView(
@@ -30,6 +54,7 @@ class _HistoryTabState extends State<HistoryTab> {
             CalenderWidget(
               focusedDay: _focusedDay,
               selectedDay: _selectedDay,
+              // selectedDates:data.dayAWeek ,
               ondaySelected: (selectedDay, focusedDay) {
                 setState(() {
                   _selectedDay = selectedDay;
@@ -49,12 +74,12 @@ class _HistoryTabState extends State<HistoryTab> {
                   children: [
                     HistoryListTile(
                       headingtext: "Overall",
-                      runtext: "07",
-                      timetext: "100",
+                      runtext: data.listOfWorkouts?.length.toString() ?? "0",
+                      timetext: data.totalTime.toString(),
                     ),
                     Divider(color: ConstColors.dividerColor),
                     HistoryListTile(
-                      headingtext: "Tue, Dec 05",
+                      headingtext: (data.dayAWeek ?? []).join(","),
                       runtext: "01",
                       timetext: "20",
                     ),
@@ -88,6 +113,7 @@ class _HistoryTabState extends State<HistoryTab> {
               // color: ConstColors.secondary,
               child: ListView.separated(
                 shrinkWrap: true,
+
                 itemBuilder: (_, index) {
                   return ListTile(
                     contentPadding: EdgeInsets.symmetric(
@@ -101,28 +127,29 @@ class _HistoryTabState extends State<HistoryTab> {
 
                     leading: SharePicture(imagePath: Assets.workout),
                     title: PoppinsText(
-                      text: "Leg day work",
+                      text: listofworkout[index].workoutName ?? "unknown",
                       fontSize: Sizes.s14,
                       fontWeight: TextWeight.semiBold,
                     ),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 3),
-                        PoppinsText(
-                          text: "08:20 - 08:40 AM",
-                          fontSize: Sizes.s10,
-                        ),
+                        // PoppinsText(
+                        //   text: "08:20 - 08:40 AM",
+                        //   fontSize: Sizes.s10,
+                        // ),
                         SizedBox(height: 3),
                         Row(
                           spacing: Sizes.s10,
                           children: [
                             CustomChip(
-                              text: "20 Mins",
+                              text: formatProgramTime(
+                                listofworkout[index].totalTime!,
+                              ),
                               color: ConstColors.secondary,
                             ),
                             CustomChip(
-                              text: "beginner",
+                              text: listofworkout[index].levelOf ?? "unknown",
                               color: ConstColors.secondary,
                             ),
                           ],
@@ -134,7 +161,7 @@ class _HistoryTabState extends State<HistoryTab> {
                 separatorBuilder: (_, idex) {
                   return SizedBox(height: Sizes.s8);
                 },
-                itemCount: 3,
+                itemCount: listofworkout.length ?? 0,
               ),
             ),
           ],

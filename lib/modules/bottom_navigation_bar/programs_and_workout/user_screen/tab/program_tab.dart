@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/core/config/injections.dart';
@@ -55,11 +57,13 @@ class _ProgramTabDisScreenState extends State<ProgramTabDisScreen> {
               ),
             );
           }
-
           final data = snapshot.data!;
+
           return ListView.builder(
             itemCount: data.length,
             itemBuilder: (context, index) {
+              log(" index Userid ${data[index].userId}");
+              log(" index name ${data[index].programName}");
               return ProgramItemDis(program: data[index]);
             },
           );

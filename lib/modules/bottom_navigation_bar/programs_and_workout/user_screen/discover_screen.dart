@@ -18,23 +18,17 @@ class DiscoverScreen extends StatefulWidget {
 class _DiscoverScreenState extends State<DiscoverScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
-
+  late ProfileProvider profileProvider;
   @override
   void initState() {
+    profileProvider = context.read<ProfileProvider>();
+    final String user = FirebaseAuth.instance.currentUser!.uid;
     super.initState();
-    _initializeFavorites(); // Call async method
+    _initializeFavorites(user); // Call async method
   }
 
-  Future<void> _initializeFavorites() async {
-    final profileProvider = Provider.of<ProfileProvider>(
-      context,
-      listen: false,
-    );
-
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      await profileProvider.initFavoritesForUser(user.uid);
-    }
+  Future<void> _initializeFavorites(String user) async {
+    await profileProvider.initFavoritesForUser(user);
   }
 
   @override
