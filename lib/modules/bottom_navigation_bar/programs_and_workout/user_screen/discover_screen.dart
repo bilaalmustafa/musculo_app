@@ -22,7 +22,9 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   @override
   void initState() {
     super.initState();
-    _initializeFavorites(); // Call async method
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initializeFavorites();
+    });
   }
 
   Future<void> _initializeFavorites() async {

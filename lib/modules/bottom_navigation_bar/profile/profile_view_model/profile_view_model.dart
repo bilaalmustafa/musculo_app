@@ -9,6 +9,8 @@ import 'package:musculo_app/model/user_model.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:musculo_app/model/workouts_model.dart';
 
+import '../../../../model/programs_model.dart';
+
 class ProfileProvider extends ChangeNotifier {
   UserModel? _user;
   UserModel? get user => _user;
@@ -17,20 +19,29 @@ class ProfileProvider extends ChangeNotifier {
   final ImagePicker _picker = ImagePicker();
 
   bool get isUploading => _isUploading;
-  late Box<WorkoutModel> _box;
 
-  // final Box<WorkoutModel> _box = Hive.box<WorkoutModel>('favorite_workouts');
+  late Box<WorkoutModel> _box;
+  late Box<ProgramModel> _programBox;
 
   // Access the current list
   List<WorkoutModel> get favorateWorkout => _box.values.toList();
+  List<ProgramModel> get favoritePrograms => _programBox.values.toList();
 
   /// 🔹 Load the current user's favorites box
   Future<void> initFavoritesForUser(String uid) async {
     final boxName = 'favorite_workouts_$uid';
+    final programBoxName = 'favorite_programs_$uid';
+
     if (!Hive.isBoxOpen(boxName)) {
       _box = await Hive.openBox<WorkoutModel>(boxName);
     } else {
       _box = Hive.box<WorkoutModel>(boxName);
+    }
+
+    if (!Hive.isBoxOpen(programBoxName)) {
+      _programBox = await Hive.openBox<ProgramModel>(programBoxName);
+    } else {
+      _programBox = Hive.box<ProgramModel>(programBoxName);
     }
     notifyListeners();
   }
@@ -53,6 +64,24 @@ class ProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void addFaverateProgram(ProgramModel program) {
+    // Check if model already exists by workoutName
+    final key = _programBox.keys.firstWhere(
+      (k) => _programBox.get(k)?.programName == program.programName,
+      orElse: () => null,
+    );
+
+    if (key != null) {
+      _programBox.delete(key);
+      // Remove from Hive
+    } else {
+      _programBox.add(program);
+      // Add to Hive
+    }
+
+    notifyListeners();
+  }
+
   // Load existing profile image from Firestore
   Future<void> loadProfileImage() async {
     try {
@@ -65,11 +94,11 @@ class ProfileProvider extends ChangeNotifier {
                 .get();
 
         _user = UserModel.fromJson(doc.data()!, id: firebaseUser.uid);
-        notifyListeners();
       }
     } catch (e) {
       print('Error loading profile image: $e');
     }
+    notifyListeners();
   }
 
   // Pick image from gallery or camera
@@ -87,9 +116,11 @@ class ProfileProvider extends ChangeNotifier {
         notifyListeners();
 
         final result = await _uploadImageToFirebase(File(image.path));
-        _isUploading = false;
+
         if (result != null) {
           _user = _user?.copyWith(profileImageUrl: result);
+          _isUploading = false;
+          notifyListeners();
         }
       }
     } catch (e) {

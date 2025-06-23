@@ -1,4 +1,4 @@
-import 'package:musculo_app/model/programs_%20model.dart';
+import 'package:musculo_app/model/programs_model.dart';
 import 'package:musculo_app/model/workouts_model.dart';
 
 enum Gender { male, female, other }

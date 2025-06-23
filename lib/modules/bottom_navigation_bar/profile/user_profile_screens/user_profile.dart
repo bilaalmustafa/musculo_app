@@ -293,7 +293,7 @@ class _UserProfileState extends State<UserProfile> {
                   title: "Earnings",
                   trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
                   onTap: () {
-                    // motivvational text code here
+                    // earning text code here
                   },
                 ),
                 CustomListTile(
@@ -307,7 +307,7 @@ class _UserProfileState extends State<UserProfile> {
                   trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
                   onTap: () {
                     // faverate code here
-                    // Navigator.pushNamed(context, Routes.favoriteScreen);
+                    Navigator.pushNamed(context, Routes.favoriteScreen);
                   },
                 ),
               ],

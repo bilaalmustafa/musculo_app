@@ -8,7 +8,7 @@ import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
-import 'package:musculo_app/model/programs_%20model.dart';
+import 'package:musculo_app/model/programs_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/custom_chip.dart';
 
 class ProgramItems extends StatelessWidget {
@@ -17,7 +17,6 @@ class ProgramItems extends StatelessWidget {
   final ProgramModel? programModel;
   @override
   Widget build(BuildContext context) {
-  
     return Container(
       margin: EdgeInsets.symmetric(horizontal: Sizes.s20, vertical: Sizes.s10),
 

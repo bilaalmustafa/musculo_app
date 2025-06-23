@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musculo_app/core/services/firebase_service.dart';
-import 'package:musculo_app/model/programs_%20model.dart';
+import 'package:musculo_app/model/programs_model.dart';
 import 'package:musculo_app/model/workouts_model.dart';
 
 class ProgramServices extends FirebaseService<ProgramModel> {
@@ -16,8 +16,6 @@ class ProgramServices extends FirebaseService<ProgramModel> {
   }
 
   Stream<List<ProgramModel>> getPrograms() => getAllDiscovery("Program");
-
-   
 }
 
 class WorkoutServices extends FirebaseService<WorkoutModel> {
@@ -33,5 +31,6 @@ class WorkoutServices extends FirebaseService<WorkoutModel> {
   }
 
   Stream<List<WorkoutModel>> getWorkout() => getAllDiscovery("Workout");
-  Stream<List<WorkoutModel>> getCreatorWorkout( String uid) => getAllcreatorworkout("Workout",  uid);
+  Stream<List<WorkoutModel>> getCreatorWorkout(String uid) =>
+      getAllcreatorworkout("Workout", uid);
 }
