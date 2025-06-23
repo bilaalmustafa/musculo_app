@@ -9,8 +9,12 @@ import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
-import 'package:musculo_app/model/programs_%20model.dart';
+import 'package:musculo_app/model/programs_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/custom_chip.dart';
+import 'package:provider/provider.dart';
+
+import '../../../../components/share_picture.dart';
+import '../../profile/profile_view_model/profile_view_model.dart';
 
 class ProgramItemDis extends StatelessWidget {
   const ProgramItemDis({super.key, required this.program});
@@ -88,7 +92,31 @@ class ProgramItemDis extends StatelessWidget {
                       fontWeight: TextWeight.semiBold,
                     ),
 
-                    Icon(Icons.favorite),
+                    Consumer<ProfileProvider>(
+                      builder: (context, vm, _) {
+                        final isFavorite = vm.favoritePrograms.any(
+                          (w) => w.programName == program.programName,
+                        );
+                        return InkWell(
+                          onTap: () {
+                            vm.addFaverateProgram(program);
+                            print(
+                              'print existing work out in hive ${vm.favoritePrograms}',
+                            );
+                          },
+                          child: SharePicture(
+                            imagePath:
+                                isFavorite
+                                    ? Assets.heartFill
+                                    : Assets.heartIcon,
+                            // colorFilter: ColorFilter.mode(
+                            //   isFavorite ? ConstColors.red : ConstColors.black,
+                            //   BlendMode.srcIn,
+                            // ),
+                          ),
+                        );
+                      },
+                    ),
                   ],
                 ),
                 PoppinsText(

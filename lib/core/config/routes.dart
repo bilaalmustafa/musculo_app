@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:musculo_app/model/programs_%20model.dart';
+import 'package:musculo_app/model/programs_model.dart';
 import 'package:musculo_app/model/user_model.dart';
 import 'package:musculo_app/model/workouts_model.dart';
 import 'package:musculo_app/modules/auth/register/screens/register_screen.dart';

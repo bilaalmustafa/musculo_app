@@ -18,6 +18,25 @@ class FavoritesScreen extends StatefulWidget {
 class _FavoritesScreenState extends State<FavoritesScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initializeFavorites();
+    });
+  }
+
+  Future<void> _initializeFavorites() async {
+    final profileProvider = Provider.of<ProfileProvider>(
+      context,
+      listen: false,
+    );
+
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await profileProvider.initFavoritesForUser(user.uid);
+    }
+  }
 
   @override
   void dispose() {
@@ -49,7 +68,10 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         physics: const NeverScrollableScrollPhysics(),
         children: [
           WorkOuts(workoutModelList: favirate.favorateWorkout),
-          Programs(tabselect: _currentPage),
+          Programs(
+            tabselect: _currentPage,
+            programModelList: favirate.favoritePrograms,
+          ),
         ],
 
         onPageChanged: (index) {

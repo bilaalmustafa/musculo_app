@@ -24,7 +24,9 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
     profileProvider = context.read<ProfileProvider>();
     final String user = FirebaseAuth.instance.currentUser!.uid;
     super.initState();
-    _initializeFavorites(user); // Call async method
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initializeFavorites( user);
+    });
   }
 
   Future<void> _initializeFavorites(String user) async {

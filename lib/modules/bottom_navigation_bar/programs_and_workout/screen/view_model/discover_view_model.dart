@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:musculo_app/core/config/injections.dart';
 import 'package:musculo_app/core/services/creator_services.dart';
-import 'package:musculo_app/model/programs_%20model.dart';
+import 'package:musculo_app/model/programs_model.dart';
 
 class DiscoverViewModel extends ChangeNotifier {
   bool isloading = false;

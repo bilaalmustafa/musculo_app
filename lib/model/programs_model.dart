@@ -1,23 +1,53 @@
+import 'package:hive/hive.dart';
 import 'package:musculo_app/model/workouts_model.dart';
 
-class ProgramModel {
-  final String? userId;
-  String? programId;
-  final String? creatorName;
-  final String? programName;
-  final String? typeOf;
-  final String? levelOf;
-  final int? duration;
-  final int? timeAWeek;
-  final List<String>? dayAWeek;
-  final String? intended;
-  final double? price;
-  final int? totalTime;
-  final double? rating;
-  final int? ratingCount;
-  final List<String>? review;
+part 'programs_model.g.dart';
 
-  final List<WorkoutModel>? listOfWorkouts;
+@HiveType(typeId: 2)
+class ProgramModel extends HiveObject {
+  @HiveField(0)
+  String? userId;
+
+  @HiveField(1)
+  String? creatorName;
+
+  @HiveField(2)
+  String? programName;
+
+  @HiveField(3)
+  String? typeOf;
+
+  @HiveField(4)
+  String? levelOf;
+
+  @HiveField(5)
+  int? duration;
+
+  @HiveField(6)
+  int? timeAWeek;
+
+  @HiveField(7)
+  List<String>? dayAWeek;
+
+  @HiveField(8)
+  String? intended;
+
+  @HiveField(9)
+  num? price;
+
+  @HiveField(10)
+  int? totalTime;
+
+  @HiveField(11)
+  List<WorkoutModel>? listOfWorkouts;
+  @HiveField(12)
+  final double? rating;
+  @HiveField(13)
+  final int? ratingCount;
+  @HiveField(14)
+  final List<String>? review;
+    @HiveField(15)
+  String? programId;
 
   ProgramModel({
     this.userId,
@@ -55,15 +85,12 @@ class ProgramModel {
               ? json['duration']
               : int.tryParse(json['duration'].toString()) ?? 0,
       timeAWeek: json['timeAWeek'],
-      dayAWeek:
-          (json['dayAWeek'] as List<dynamic>?)
-              ?.map((e) => e.toString())
-              .toList(),
+      dayAWeek: (json['dayAWeek'] as List?)?.map((e) => e.toString()).toList(),
       intended: json['intended'],
       price: json["price"],
       totalTime: json["totalTime"],
       listOfWorkouts:
-          (json['listOfWorkouts'] as List<dynamic>?)
+          (json['listOfWorkouts'] as List?)
               ?.map((e) => WorkoutModel.fromJson(e))
               .toList(),
     );
@@ -101,7 +128,7 @@ class ProgramModel {
     int? timeAWeek,
     List<String>? dayAWeek,
     String? intended,
-    double? price,
+    num? price,
     int? totalTime,
     double? rating,
     int? ratingCount,

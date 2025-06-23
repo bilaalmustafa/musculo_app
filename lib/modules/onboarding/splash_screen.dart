@@ -19,11 +19,11 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  final SplashServices _splashServices = SplashServices();
+  // final SplashServices _splashServices = SplashServices();
   @override
   initState() {
     // _splashServices.splashFunction(context);
-    _goTo();
+   _goTo();
     super.initState();
     // Now, call the service that handles all the logic.
   }

@@ -30,10 +30,8 @@ class WorkoutModelAdapter extends TypeAdapter<WorkoutModel> {
       price: fields[10] as int?,
       dateTime: fields[11] as DateTime?,
       description: fields[12] as String?,
-      categorizedVideos: (fields[13] as Map?)?.map(
-        (dynamic k, dynamic v) =>
-            MapEntry(k as String, (v as List).cast<VideoModel>()),
-      ),
+      categorizedVideos: (fields[13] as Map?)?.map((dynamic k, dynamic v) =>
+          MapEntry(k as String, (v as List).cast<VideoModel>())),
       rating: fields[14] as double?,
       review: (fields[15] as List?)?.cast<String>(),
     );

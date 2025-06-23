@@ -5,7 +5,7 @@ import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
-import 'package:musculo_app/model/programs_%20model.dart';
+import 'package:musculo_app/model/programs_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/creator_list_tile.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/custom_chip.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/analysis_containers.dart';
@@ -27,10 +27,8 @@ class _ProgramDetailScreenState extends State<DescriptionTab> {
     String getWeeksFromDuration(int? durationInDays) {
       if (durationInDays == null || durationInDays <= 0) return "0";
 
-      
       if (durationInDays < 7) return "1";
 
-     
       final weeks = (durationInDays / 7).ceil();
       return weeks.toString();
     }
@@ -59,7 +57,7 @@ class _ProgramDetailScreenState extends State<DescriptionTab> {
                       ),
                       PoppinsText(
                         text:
-                            "${data.rating ?? 0} (${data.review?.length ?? 0} review)",
+                            "${data.rating?.toStringAsFixed(1) ?? 0} (${data.review?.length ?? 0} review)",
                         fontSize: Sizes.s10,
                         fontWeight: TextWeight.regular,
                         color: ConstColors.greyA1A1,

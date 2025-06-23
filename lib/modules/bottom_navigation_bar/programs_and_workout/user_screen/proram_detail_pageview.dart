@@ -7,7 +7,7 @@ import 'package:musculo_app/core/config/extensions.dart';
 import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
-import 'package:musculo_app/model/programs_%20model.dart';
+import 'package:musculo_app/model/programs_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/show_rating_bottomsheet.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/tab/description_tab.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/tab/history_tab.dart';
