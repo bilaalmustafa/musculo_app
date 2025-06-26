@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:musculo_app/components/customTextField.dart';
 import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/poppins_text.dart';
+import 'package:musculo_app/core/config/routes.dart';
 import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
@@ -13,9 +14,25 @@ import 'package:provider/provider.dart';
 
 import '../../../../../../core/constants/sizes.dart';
 
-class ShowSheetBottom extends StatelessWidget {
+class ShowSheetBottom extends StatefulWidget {
   const ShowSheetBottom({super.key, required this.selectedVideo});
   final VideoModel selectedVideo;
+
+  @override
+  State<ShowSheetBottom> createState() => _ShowSheetBottomState();
+}
+
+class _ShowSheetBottomState extends State<ShowSheetBottom> {
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _searchController.dispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -43,9 +60,16 @@ class ShowSheetBottom extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: Sizes.s16),
                 child: CustomTextField(
+                  controller: _searchController,
                   title: "search exercise",
                   preIcon: Assets.searchIcon,
-                  sufIcon: Assets.filterIcon,
+                  // sufIcon: Assets.filterIcon,
+                  // onTap: () {
+                  //   Navigator.pushNamed(context, Routes.filterscreen);
+                  // },
+                  onChanged: (value) {
+                    vm.searchQuery = value;
+                  },
                 ),
               ),
 
@@ -54,11 +78,11 @@ class ShowSheetBottom extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: Sizes.s16),
                   color: ConstColors.secondary,
                   child:
-                      vm.storagevideos.isEmpty
+                      vm.filteredVideos.isEmpty
                           ? const Center(child: Text("No videos found"))
                           : ListView.separated(
                             itemBuilder: (context, index) {
-                              final video = vm.storagevideos[index];
+                              final video = vm.filteredVideos[index];
 
                               return InkWell(
                                 onTap: () {
@@ -84,7 +108,7 @@ class ShowSheetBottom extends StatelessWidget {
                             separatorBuilder: (context, index) {
                               return SizedBox(height: 10);
                             },
-                            itemCount: vm.storagevideos.length,
+                            itemCount: vm.filteredVideos.length,
                           ),
                 ),
               ),
@@ -107,7 +131,7 @@ class ShowSheetBottom extends StatelessWidget {
                     Expanded(
                       child: CustomButton(
                         onTap: () {
-                          vm.addVersionToVideo(selectedVideo);
+                          vm.addVersionToVideo(widget.selectedVideo);
                           Navigator.pop(context);
                         },
                         buttonText: "Add",

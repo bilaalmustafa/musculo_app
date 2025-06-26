@@ -23,7 +23,6 @@ class ProgramItemDis extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log(" item userIdd ${program.userId}");
     String formatProgramTime(int totalTimeInSeconds) {
       int totalMinutes = totalTimeInSeconds ~/ 60;
 
@@ -94,14 +93,14 @@ class ProgramItemDis extends StatelessWidget {
 
                     Consumer<ProfileProvider>(
                       builder: (context, vm, _) {
-                        final isFavorite = vm.favoritePrograms.any(
-                          (w) => w.programName == program.programName,
+                        final isFavorite = vm.favoriteProgram.any(
+                          (p) => p.programId == program.programId,
                         );
                         return InkWell(
                           onTap: () {
                             vm.addFaverateProgram(program);
                             print(
-                              'print existing work out in hive ${vm.favoritePrograms}',
+                              'print existing program in hive ${vm.favoriteProgram}',
                             );
                           },
                           child: SharePicture(

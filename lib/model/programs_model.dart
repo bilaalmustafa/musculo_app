@@ -46,7 +46,7 @@ class ProgramModel extends HiveObject {
   final int? ratingCount;
   @HiveField(14)
   final List<String>? review;
-    @HiveField(15)
+  @HiveField(15)
   String? programId;
 
   ProgramModel({
@@ -107,7 +107,7 @@ class ProgramModel extends HiveObject {
       'duration': duration,
       'timeAWeek': timeAWeek,
       "rating": rating,
-       "ratingCount": ratingCount,
+      "ratingCount": ratingCount,
       "review": review,
       'dayAWeek': dayAWeek?.map((e) => e.toString()).toList(),
       "intended": intended,
