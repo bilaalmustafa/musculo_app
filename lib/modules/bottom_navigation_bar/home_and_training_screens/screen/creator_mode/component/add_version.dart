@@ -30,7 +30,7 @@ class _AddVersionState extends State<AddVersion> {
           onTap: () {
             showModalBottomSheet(
               backgroundColor: ConstColors.white,
-
+              isScrollControlled: true,
               context: context,
 
               builder: (context) {

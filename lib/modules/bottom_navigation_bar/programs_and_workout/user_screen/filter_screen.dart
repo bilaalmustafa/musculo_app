@@ -160,7 +160,6 @@ class _FilterScreenState extends State<FilterScreen> {
                   filtered.applyFilters();
                   filtered.applyFilterFlag();
                   Navigator.pop(context);
-                  Fluttertoast.showToast(msg: 'Apply felter successfully');
                 },
               ),
             ),

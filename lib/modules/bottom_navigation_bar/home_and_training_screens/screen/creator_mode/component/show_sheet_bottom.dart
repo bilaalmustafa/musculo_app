@@ -35,114 +35,127 @@ class _ShowSheetBottomState extends State<ShowSheetBottom> {
 
   @override
   Widget build(BuildContext context) {
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: Sizes.s16),
-      child: Consumer<AddWorkoutVeiwModel>(
-        builder: (context, vm, _) {
-          return Column(
-            spacing: 10,
-            children: [
-              Container(
-                height: 3,
-                width: 40,
-                decoration: BoxDecoration(
-                  color: ConstColors.greyC8C8,
-                  borderRadius: BorderRadius.circular(8),
+      padding: EdgeInsets.only(bottom: bottomInset),
+      child: FractionallySizedBox(
+        heightFactor: 0.7,
+        child: Consumer<AddWorkoutVeiwModel>(
+          builder: (context, vm, _) {
+            return Column(
+              spacing: 10,
+              children: [
+                Container(
+                  height: 3,
+                  width: 40,
+                  margin: const EdgeInsets.only(top: Sizes.s16),
+                  decoration: BoxDecoration(
+                    color: ConstColors.greyC8C8,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
-              ),
-              PoppinsText(
-                text: "Add Versions",
-                fontSize: Sizes.s18,
-                fontWeight: TextWeight.semiBold,
-              ),
-
-              Divider(color: ConstColors.dividerColor),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: Sizes.s16),
-                child: CustomTextField(
-                  controller: _searchController,
-                  title: "search exercise",
-                  preIcon: Assets.searchIcon,
-                  // sufIcon: Assets.filterIcon,
-                  // onTap: () {
-                  //   Navigator.pushNamed(context, Routes.filterscreen);
-                  // },
-                  onChanged: (value) {
-                    vm.searchQuery = value;
-                  },
+                PoppinsText(
+                  text: "Add Versions",
+                  fontSize: Sizes.s18,
+                  fontWeight: TextWeight.semiBold,
                 ),
-              ),
 
-              Expanded(
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: Sizes.s16),
-                  color: ConstColors.secondary,
-                  child:
-                      vm.filteredVideos.isEmpty
-                          ? const Center(child: Text("No videos found"))
-                          : ListView.separated(
-                            itemBuilder: (context, index) {
-                              final video = vm.filteredVideos[index];
+                Divider(
+                  color: ConstColors.dividerColor,
+                  indent: 16,
+                  endIndent: 16,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: Sizes.s16),
+                  child: CustomTextField(
+                    controller: _searchController,
+                    title: "search exercise",
+                    preIcon: Assets.searchIcon,
+                    // sufIcon: Assets.filterIcon,
+                    // onTap: () {
+                    //   Navigator.pushNamed(context, Routes.filterscreen);
+                    // },
+                    onChanged: (value) {
+                      vm.searchQuery = value;
+                    },
+                  ),
+                ),
 
-                              return InkWell(
-                                onTap: () {
-                                  vm.addversionvideo(video);
-                                },
-                                child: ReelsItem(
-                                  videodata: video,
-                                  onTap:
-                                      () => Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder:
-                                              (context) => VideoFrameScreen(
-                                                videourl: video.url,
-                                              ),
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: Sizes.s16),
+                    color: ConstColors.secondary,
+                    child:
+                        vm.filteredVideos.isEmpty
+                            ? const Center(child: Text("No videos found"))
+                            : ListView.separated(
+                              itemBuilder: (context, index) {
+                                final video = vm.filteredVideos[index];
+
+                                return InkWell(
+                                  onTap: () {
+                                    vm.addversionvideo(video);
+                                  },
+                                  child: ReelsItem(
+                                    videodata: video,
+                                    onTap:
+                                        () => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder:
+                                                (context) => VideoFrameScreen(
+                                                  videourl: video.url,
+                                                ),
+                                          ),
                                         ),
-                                      ),
 
-                                  selected: vm.addVersionList.contains(video),
-                                ),
-                              );
-                            },
-                            separatorBuilder: (context, index) {
-                              return SizedBox(height: 10);
-                            },
-                            itemCount: vm.filteredVideos.length,
-                          ),
+                                    selected: vm.addVersionList.contains(video),
+                                  ),
+                                );
+                              },
+                              separatorBuilder: (context, index) {
+                                return SizedBox(height: 10);
+                              },
+                              itemCount: vm.filteredVideos.length,
+                            ),
+                  ),
                 ),
-              ),
 
-              Container(
-                color: ConstColors.white,
+                Container(
+                  color: ConstColors.white,
 
-                margin: EdgeInsets.symmetric(horizontal: Sizes.s16),
-                child: Row(
-                  spacing: 10,
-                  children: [
-                    Expanded(
-                      child: CustomButton(
-                        buttonText: "Back",
-                        buttonColor: ConstColors.secondary,
-                        textColor: ConstColors.black,
-                        onTap: () => Navigator.pop(context),
+                  margin: EdgeInsets.only(
+                    bottom: Sizes.s16,
+                    left: Sizes.s16,
+                    right: Sizes.s16,
+                  ),
+                  child: Row(
+                    spacing: 10,
+                    children: [
+                      Expanded(
+                        child: CustomButton(
+                          buttonText: "Back",
+                          buttonColor: ConstColors.secondary,
+                          textColor: ConstColors.black,
+                          onTap: () => Navigator.pop(context),
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      child: CustomButton(
-                        onTap: () {
-                          vm.addVersionToVideo(widget.selectedVideo);
-                          Navigator.pop(context);
-                        },
-                        buttonText: "Add",
+                      Expanded(
+                        child: CustomButton(
+                          onTap: () {
+                            vm.addVersionToVideo(widget.selectedVideo);
+                            Navigator.pop(context);
+                          },
+                          buttonText: "Add",
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          );
-        },
+              ],
+            );
+          },
+        ),
       ),
     );
   }

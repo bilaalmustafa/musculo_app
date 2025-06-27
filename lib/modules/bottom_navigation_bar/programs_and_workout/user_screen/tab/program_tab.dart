@@ -53,36 +53,7 @@ class _ProgramTabDisScreenState extends State<ProgramTabDisScreen> {
                   ),
                 );
               }
-              // if (!snapshot.hasData || snapshot.data == null) {
-              //   return Center(
-              //     child: PoppinsText(
-              //       text: "No Programs Found",
-              //       fontSize: Sizes.s16,
-              //       color: ConstColors.black,
-              //     ),
-              //   );
-              // }
-              // if (snapshot.data!.isEmpty) {
-              //   return Center(
-              //     child: PoppinsText(
-              //       text: "No Programs Found",
-              //       fontSize: Sizes.s16,
-              //       color: ConstColors.black,
-              //     ),
-              //   );
-              // }
 
-              // final data = snapshot.data ?? [];
-              // final filtered =
-              //     query.isEmpty
-              //         ? data
-              //         : data
-              //             .where(
-              //               (w) => w.programName!.toLowerCase().contains(
-              //                 query.toLowerCase(),
-              //               ),
-              //             )
-              //             .toList();
               print(
                 '🔍 Applying filters with query: "$query" and isFilterApplied: ${filter.isFilterApplied}',
               );
