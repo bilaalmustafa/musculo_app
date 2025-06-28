@@ -1,19 +1,13 @@
-import 'dart:developer';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/customTextField.dart';
 import 'package:musculo_app/components/loader/home_loader.dart';
 import 'package:musculo_app/components/poppins_text.dart';
-import 'package:musculo_app/core/config/injections.dart';
+
 import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
-import 'package:musculo_app/core/services/auth_services.dart';
-import 'package:musculo_app/model/user_model.dart';
-import 'package:musculo_app/modules/auth/view_model/auth_view_model.dart';
+
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/carasoul_container.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/item_container.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/show_bottom_sheet.dart';
@@ -21,6 +15,11 @@ import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_scre
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/workout_video_items.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/view_model/user_view_model.dart';
 import 'package:provider/provider.dart';
+
+import '../../../../../core/config/injections.dart';
+import '../../../../../core/services/creator_services.dart';
+import '../../../../../model/programs_model.dart';
+import 'program_search_screen.dart';
 
 class UserModeTab extends StatefulWidget {
   const UserModeTab({super.key});
@@ -30,6 +29,8 @@ class UserModeTab extends StatefulWidget {
 }
 
 class _UserModeTabState extends State<UserModeTab> {
+  Stream<List<ProgramModel>>? stream;
+  final TextEditingController _searchController = TextEditingController();
   // final AuthService _authservces = instance<AuthService>();
   // late UserViewModel authViewModel;
   // Future<UserModel?>? _future;
@@ -39,7 +40,10 @@ class _UserModeTabState extends State<UserModeTab> {
     //   _authservces.currentUser!.uid,
     // );
     // authViewModel = context.read<UserViewModel>();
-    // super.initState();
+
+    stream = instance<ProgramServices>().getPrograms();
+
+    super.initState();
   }
 
   @override
@@ -59,11 +63,24 @@ class _UserModeTabState extends State<UserModeTab> {
               spacing: Sizes.s20,
               children: [
                 CustomTextField(
+                  controller: _searchController,
                   title: "Search program",
                   // prefexicon: Icons.search,
                   preIcon: Assets.searchIcon,
                   sufIcon: Assets.filterIcon,
+                  readOnly: true,
 
+                  onclick: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder:
+                            (_) => ProgramSearchScreen(
+                              controller: _searchController,
+                            ),
+                      ),
+                    );
+                  },
                   // suffexicon: Icons.filter_list_outlined,
                 ),
                 CarasoulContainer(),
@@ -84,7 +101,67 @@ class _UserModeTabState extends State<UserModeTab> {
                     ),
                   ],
                 ),
-                ItemContainer(),
+                SizedBox(
+                  height: Sizes.s180,
+                  child: StreamBuilder<List<ProgramModel>>(
+                    stream: stream,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
+                      }
+
+                      if (snapshot.hasError) {
+                        return Center(
+                          child: PoppinsText(
+                            text: "An error occurred: ${snapshot.error}",
+                            fontSize: Sizes.s16,
+                            color: ConstColors.black,
+                          ),
+                        );
+                      }
+
+                      final programs = snapshot.data ?? [];
+                      print('here we print programs ${programs.length}');
+
+                      //  Sort programs by rating (highest first)
+                      programs.sort(
+                        (a, b) => (b.rating ?? 0).compareTo(a.rating ?? 0),
+                      );
+
+                      if (programs.isEmpty) {
+                        return Center(
+                          child: PoppinsText(
+                            text: "No Programs",
+                            fontSize: Sizes.s16,
+                            color: ConstColors.black,
+                          ),
+                        );
+                      }
+
+                      final topTenPrograms = programs.take(10).toList();
+
+                      return ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: topTenPrograms.length,
+                        itemBuilder: (context, index) {
+                          final program = topTenPrograms[index];
+
+                          return Padding(
+                            padding: EdgeInsets.only(
+                              left: index == 0 ? 0 : 8, // more space at start
+                              right:
+                                  index == topTenPrograms.length - 1
+                                      ? 0
+                                      : 8, // more space at end
+                            ),
+                            child: ItemContainer(program: program),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ),
+
                 // Container(
                 //   color: ConstColors.red,
                 //   width: double.infinity,
@@ -137,7 +214,7 @@ class _UserModeTabState extends State<UserModeTab> {
                     ),
                   ],
                 ),
-                if (userVm!.listOfPrograms.isEmpty)
+                if (userVm.listOfPrograms.isEmpty)
                   Center(
                     child: PoppinsText(
                       text: "No Programs ",

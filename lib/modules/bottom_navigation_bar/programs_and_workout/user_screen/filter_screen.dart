@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/components/shared_appbar.dart';
@@ -9,6 +10,8 @@ import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/chips.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/rang_slider.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/screen/view_model/discover_filter_provider.dart';
+import 'package:provider/provider.dart';
 
 class FilterScreen extends StatefulWidget {
   const FilterScreen({super.key});
@@ -26,12 +29,19 @@ class _FilterScreenState extends State<FilterScreen> {
   ];
   final List<String> gender = ["All", "Male", "Female"];
   final List<String> premium = ["Premium only "];
-  int selectedIndex = 0, genderSelect = 0, premiumSelect = 0;
-  double sliderValue = 0;
-  RangeValues _priceRange = RangeValues(0, 500);
-  RangeValues _timeRange = RangeValues(1.0, 60.0);
+
+  @override
+  void initState() {
+    super.initState();
+    // Sync temp values with current applied values
+    Future.microtask(() {
+      context.read<DiscoverFilter>().resetTemp();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final filtered = context.watch<DiscoverFilter>();
     return Scaffold(
       backgroundColor: ConstColors.white,
       appBar: SharedAppBar(title: "Filter"),
@@ -50,12 +60,9 @@ class _FilterScreenState extends State<FilterScreen> {
                 fontWeight: TextWeight.semiBold,
               ),
               CustomChips(
-                selectedIndex: selectedIndex,
+                selectedIndex: filtered.tempPlanType,
                 optionslist: options,
-                onSelect:
-                    (value) => setState(() {
-                      selectedIndex = value;
-                    }),
+                onSelect: (value) => filtered.setTempPlanType(value),
               ),
               PoppinsText(
                 text: "Gender",
@@ -63,12 +70,9 @@ class _FilterScreenState extends State<FilterScreen> {
                 fontWeight: TextWeight.semiBold,
               ),
               CustomChips(
-                selectedIndex: genderSelect,
+                selectedIndex: filtered.tempGender,
                 optionslist: gender,
-                onSelect:
-                    (value) => setState(() {
-                      genderSelect = value;
-                    }),
+                onSelect: (value) => filtered.setTempGender(value),
               ),
               PoppinsText(
                 text: "Creators",
@@ -76,12 +80,9 @@ class _FilterScreenState extends State<FilterScreen> {
                 fontWeight: TextWeight.semiBold,
               ),
               CustomChips(
-                selectedIndex: premiumSelect,
+                selectedIndex: filtered.tempPremium ? 0 : -1,
                 optionslist: premium,
-                onSelect:
-                    (value) => setState(() {
-                      genderSelect = value;
-                    }),
+                onSelect: (_) => filtered.setTempPremium(!filtered.premium),
               ),
               PoppinsText(
                 text: "Price",
@@ -92,11 +93,8 @@ class _FilterScreenState extends State<FilterScreen> {
                 min: 0,
                 max: 500,
                 type: "£",
-                currentRange: _priceRange,
-                valuechange:
-                    (value) => setState(() {
-                      _priceRange = value;
-                    }),
+                currentRange: filtered.tempPrice,
+                valuechange: (value) => filtered.setTempPrice(value),
               ),
               PoppinsText(
                 text: "Time Length",
@@ -107,11 +105,8 @@ class _FilterScreenState extends State<FilterScreen> {
                 min: 1.0,
                 max: 60,
                 type: "min",
-                currentRange: _timeRange,
-                valuechange:
-                    (value) => setState(() {
-                      _timeRange = value;
-                    }),
+                currentRange: filtered.tempLength,
+                valuechange: (value) => filtered.setTempLength(value),
               ),
               PoppinsText(
                 text: "Difficulty",
@@ -127,15 +122,11 @@ class _FilterScreenState extends State<FilterScreen> {
                     max: 10,
                     activeColor: ConstColors.black,
                     inactiveColor: ConstColors.secondary,
-                    value: sliderValue,
-                    onChanged: (value) {
-                      setState(() {
-                        sliderValue = value;
-                      });
-                    },
+                    value: filtered.tempDifficulty,
+                    onChanged: filtered.setTempDifficulty,
                   ),
                   PoppinsText(
-                    text: sliderValue.round().toString(),
+                    text: filtered.tempDifficulty.round().toString(),
                     fontSize: Sizes.s12,
                   ),
                 ],
@@ -166,6 +157,9 @@ class _FilterScreenState extends State<FilterScreen> {
                 buttonText: "Apply",
                 onTap: () {
                   // apply button code here
+                  filtered.applyFilters();
+                  filtered.applyFilterFlag();
+                  Navigator.pop(context);
                 },
               ),
             ),

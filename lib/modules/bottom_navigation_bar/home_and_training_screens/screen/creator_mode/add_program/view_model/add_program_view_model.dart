@@ -241,4 +241,12 @@ class AddProgramViewModel extends ChangeNotifier {
     notifyListeners();
     return success;
   }
+
+  String _searchWorkoutQuery = '';
+  String get searchWorkoutQuery => _searchWorkoutQuery;
+
+  set searchWorkOutQuery(String query) {
+    _searchWorkoutQuery = query.trim();
+    notifyListeners();
+  }
 }

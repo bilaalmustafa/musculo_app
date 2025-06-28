@@ -1,15 +1,13 @@
-// profile_provider.dart
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive/hive.dart';
+import 'package:musculo_app/model/programs_model.dart';
 import 'package:musculo_app/model/user_model.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:musculo_app/model/workouts_model.dart';
-
-import '../../../../model/programs_model.dart';
 
 class ProfileProvider extends ChangeNotifier {
   UserModel? _user;
@@ -20,14 +18,14 @@ class ProfileProvider extends ChangeNotifier {
 
   bool get isUploading => _isUploading;
 
-  late Box<WorkoutModel> _box;
-  late Box<ProgramModel> _programBox;
+  Box<WorkoutModel>? _box;
+  Box<ProgramModel>? _programBox;
 
-  // Access the current list
-  List<WorkoutModel> get favorateWorkout => _box.values.toList();
-  List<ProgramModel> get favoritePrograms => _programBox.values.toList();
+  bool get boxesReady => _box != null && _programBox != null;
 
-  /// 🔹 Load the current user's favorites box
+  List<WorkoutModel> get favorateWorkout => _box?.values.toList() ?? [];
+  List<ProgramModel> get favoriteProgram => _programBox?.values.toList() ?? [];
+
   Future<void> initFavoritesForUser(String uid) async {
     final boxName = 'favorite_workouts_$uid';
     final programBoxName = 'favorite_programs_$uid';
@@ -47,36 +45,32 @@ class ProfileProvider extends ChangeNotifier {
   }
 
   void addFaverateWorkout(WorkoutModel model) {
-    // Check if model already exists by workoutName
-    final key = _box.keys.firstWhere(
-      (k) => _box.get(k)?.workoutName == model.workoutName,
+    if (_box == null) return;
+    final key = _box!.keys.firstWhere(
+      (k) => _box!.get(k)?.workoutId == model.workoutId,
       orElse: () => null,
     );
 
     if (key != null) {
-      _box.delete(key);
-      // Remove from Hive
+      _box!.delete(key);
     } else {
-      _box.add(model);
-      // Add to Hive
+      _box!.add(model);
     }
 
     notifyListeners();
   }
 
   void addFaverateProgram(ProgramModel program) {
-    // Check if model already exists by workoutName
-    final key = _programBox.keys.firstWhere(
-      (k) => _programBox.get(k)?.programName == program.programName,
+    if (_programBox == null) return;
+    final key = _programBox!.keys.firstWhere(
+      (p) => _programBox!.get(p)?.programId == program.programId,
       orElse: () => null,
     );
 
     if (key != null) {
-      _programBox.delete(key);
-      // Remove from Hive
+      _programBox!.delete(key);
     } else {
-      _programBox.add(program);
-      // Add to Hive
+      _programBox!.add(program);
     }
 
     notifyListeners();

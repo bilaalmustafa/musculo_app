@@ -337,4 +337,22 @@ class AddWorkoutVeiwModel extends ChangeNotifier {
       }
     }
   }
+
+  String _searchQuery = '';
+  String get searchQuery => _searchQuery;
+
+  set searchQuery(String query) {
+    _searchQuery = query;
+    notifyListeners();
+  }
+
+  List<VideoModel> get filteredVideos {
+    if (_searchQuery.isEmpty) return storagevideos;
+    return storagevideos
+        .where(
+          (video) =>
+              video.name.toLowerCase().contains(_searchQuery.toLowerCase()),
+        )
+        .toList();
+  }
 }

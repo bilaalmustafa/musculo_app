@@ -8,6 +8,9 @@ import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
+import 'package:provider/provider.dart';
+
+import '../modules/bottom_navigation_bar/programs_and_workout/screen/view_model/discover_filter_provider.dart';
 
 class LogoAppBar extends StatelessWidget implements PreferredSizeWidget {
   const LogoAppBar({
@@ -17,6 +20,7 @@ class LogoAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.title,
     this.huintText,
     this.buttonTabList,
+    this.controller,
   });
   final int? selectedindex;
   final ValueChanged<int> onSelected;
@@ -24,8 +28,10 @@ class LogoAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final String? huintText;
   final List<String>? buttonTabList;
+  final TextEditingController? controller;
   @override
   Widget build(BuildContext context) {
+    final filter = context.watch<DiscoverFilter>();
     return Container(
       constraints: BoxConstraints(minHeight: Sizes.s100),
       padding: EdgeInsets.symmetric(vertical: Sizes.s10, horizontal: Sizes.s20),
@@ -52,10 +58,18 @@ class LogoAppBar extends StatelessWidget implements PreferredSizeWidget {
               ? CustomTextField(
                 preIcon: Assets.searchIcon,
                 title: huintText!,
+                controller: controller,
 
-                sufIcon: Assets.filterIcon,
+                sufIcon:
+                    filter.isFilterApplied
+                        ? Assets.crossIcon
+                        : Assets.filterIcon,
                 onTap: () {
-                  Navigator.pushNamed(context, Routes.filterscreen);
+                  if (filter.isFilterApplied) {
+                    filter.clear();
+                  } else {
+                    Navigator.pushNamed(context, Routes.filterscreen);
+                  }
                 },
               )
               : Container(),

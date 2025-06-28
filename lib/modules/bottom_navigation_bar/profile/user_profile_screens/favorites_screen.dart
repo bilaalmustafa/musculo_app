@@ -70,7 +70,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           WorkOuts(workoutModelList: favirate.favorateWorkout),
           Programs(
             tabselect: _currentPage,
-            programModelList: favirate.favoritePrograms,
+            programModelList: favirate.favoriteProgram,
           ),
         ],
 

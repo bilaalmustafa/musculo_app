@@ -43,129 +43,138 @@ class _ShowrateBottomSheetState extends State<ShowrateBottomSheet> {
 
     return ChangeNotifierProvider(
       create: (context) => DiscoverViewModel(),
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20.0,
-          ).copyWith(bottom: 20),
-          child: Column(
-            spacing: Sizes.s8,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 5.0),
-                child: Container(
-                  height: 5,
+      child: FractionallySizedBox(
+        heightFactor: 1,
+        child: Container(
+          padding: EdgeInsets.only(
+            left: 20,
+            right: 20,
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              spacing: Sizes.s8,
+              children: [
+                Container(
+                  margin: EdgeInsets.all(10),
+                  height: 4,
                   width: 40,
-                  color: ConstColors.dividerColor,
-                ),
-              ),
-              PoppinsText(
-                text: "Leave a Review",
-                fontSize: Sizes.s20,
-                fontWeight: TextWeight.semiBold,
-              ),
-              Divider(color: ConstColors.dividerColor),
-              Container(
-                height: Sizes.s110,
-                width: Sizes.s110,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  image: DecorationImage(image: AssetImage(Assets.workout)),
-                ),
-              ),
-              PoppinsText(
-                text: data.programName ?? "unknown",
-                fontSize: Sizes.s16,
-                fontWeight: TextWeight.semiBold,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                spacing: Sizes.s10,
-                children: [
-                  CustomChip(
-                    text: "${getWeeksFromDuration(data.duration)} week",
-                    color: ConstColors.secondary,
-                  ),
-                  CustomChip(
-                    text: data.levelOf ?? "unknown",
-                    color: ConstColors.secondary,
-                  ),
-                ],
-              ),
-              Divider(color: ConstColors.dividerColor),
-              PoppinsText(
-                text: "How is your program?",
-                fontSize: Sizes.s20,
-                fontWeight: TextWeight.semiBold,
-              ),
-              PoppinsText(
-                text: "Give your rating of the program & your reviews",
-                fontSize: Sizes.s12,
-                color: ConstColors.greyA1A1,
-              ),
-              Consumer<DiscoverViewModel>(
-                builder: (context, vm, _) {
-                  return RatingStars(
-                    selectedRating: vm.selectedRating,
-                    onRatingSelected: (newvalue) {
-                      vm.selectStart(newvalue);
-                    },
-                  );
-                },
-              ),
-              CustomTextField(controller: reviewController, title: "Amazing"),
-              SizedBox(height: Sizes.s20),
-              Row(
-                spacing: Sizes.s10,
-                children: [
-                  Expanded(
-                    child: CustomButton(
-                      buttonText: "Cancel",
-                      buttonColor: ConstColors.secondary,
-                      textColor: ConstColors.black,
-                      onTap: () => Navigator.pop(context),
-                    ),
-                  ),
 
-                  Expanded(
-                    child: Consumer<DiscoverViewModel>(
-                      builder: (context, vm, _) {
-                        return CustomButton(
-                          loading: vm.isloading,
-                          onTap: () async {
-                            double newRating = vm.getingRating(
-                              data.rating ?? 0.0,
-                              data.ratingCount ?? 0,
-                            );
-                            final List<String> reviewList = List.from(
-                              data.review ?? [],
-                            );
-                            if (reviewController.text.isNotEmpty) {
-                              reviewList.add(reviewController.text);
-                            }
-                            ProgramModel? success = await vm
-                                .giveRatingAndReview(
-                                  data.programId!,
-                                  newRating,
-                                  (data.ratingCount ?? 0) + 1,
-                                  data,
-                                  reviewList,
-                                );
-                            if (success != null && context.mounted) {
-                              Navigator.popUntil(
-                                context,
-                                (route) => route.isFirst,
-                              );
-                            }
-                          },
-                          buttonText: "Submit",
-                        );
-                      },
-                    ),
+                  decoration: BoxDecoration(
+                    color: ConstColors.dividerColor,
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                ],
-              ),
-            ],
+                ),
+                PoppinsText(
+                  text: "Leave a Review",
+                  fontSize: Sizes.s20,
+                  fontWeight: TextWeight.semiBold,
+                ),
+                Divider(color: ConstColors.dividerColor),
+                Container(
+                  height: Sizes.s110,
+                  width: Sizes.s110,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    image: DecorationImage(image: AssetImage(Assets.workout)),
+                  ),
+                ),
+                PoppinsText(
+                  text: data.programName ?? "unknown",
+                  fontSize: Sizes.s16,
+                  fontWeight: TextWeight.semiBold,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  spacing: Sizes.s10,
+                  children: [
+                    CustomChip(
+                      text: "${getWeeksFromDuration(data.duration)} week",
+                      color: ConstColors.secondary,
+                    ),
+                    CustomChip(
+                      text: data.levelOf ?? "unknown",
+                      color: ConstColors.secondary,
+                    ),
+                  ],
+                ),
+                Divider(color: ConstColors.dividerColor),
+                PoppinsText(
+                  text: "How is your program?",
+                  fontSize: Sizes.s20,
+                  fontWeight: TextWeight.semiBold,
+                ),
+                PoppinsText(
+                  text: "Give your rating of the program & your reviews",
+                  fontSize: Sizes.s12,
+                  color: ConstColors.greyA1A1,
+                ),
+                Consumer<DiscoverViewModel>(
+                  builder: (context, vm, _) {
+                    return RatingStars(
+                      selectedRating: vm.selectedRating,
+                      onRatingSelected: (newvalue) {
+                        vm.selectStart(newvalue);
+                      },
+                    );
+                  },
+                ),
+                CustomTextField(controller: reviewController, title: "Amazing"),
+                SizedBox(height: Sizes.s20),
+                Row(
+                  spacing: Sizes.s10,
+                  children: [
+                    Expanded(
+                      child: CustomButton(
+                        buttonText: "Cancel",
+                        buttonColor: ConstColors.secondary,
+                        textColor: ConstColors.black,
+                        onTap: () => Navigator.pop(context),
+                      ),
+                    ),
+
+                    Expanded(
+                      child: Consumer<DiscoverViewModel>(
+                        builder: (context, vm, _) {
+                          return CustomButton(
+                            loading: vm.isloading,
+                            onTap: () async {
+                              double newRating = vm.getingRating(
+                                data.rating ?? 0.0,
+                                data.ratingCount ?? 0,
+                              );
+                              final List<String> reviewList = List.from(
+                                data.review ?? [],
+                              );
+                              if (reviewController.text.isNotEmpty) {
+                                reviewList.add(reviewController.text);
+                              }
+                              ProgramModel? success = await vm
+                                  .giveRatingAndReview(
+                                    data.programId!,
+                                    newRating,
+                                    (data.ratingCount ?? 0) + 1,
+                                    data,
+                                    reviewList,
+                                  );
+                              if (success != null && context.mounted) {
+                                Navigator.popUntil(
+                                  context,
+                                  (route) => route.isFirst,
+                                );
+                              }
+                            },
+                            buttonText: "Submit",
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 5),
+              ],
+            ),
           ),
         ),
       ),
