@@ -41,6 +41,7 @@ class _ProgramSearchScreenState extends State<ProgramSearchScreen> {
   @override
   void dispose() {
     _focusNode.dispose();
+    widget.controller.dispose();
     super.dispose();
   }
 
