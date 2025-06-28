@@ -23,7 +23,7 @@ class DiscoverViewModel extends ChangeNotifier {
       ProgramModel item = model.copyWith(
         rating: rating,
         review: reviewList,
-        ratingCount: newCount
+        ratingCount: newCount,
       );
 
       await instance<ProgramServices>().ratingCreate(docId, item);

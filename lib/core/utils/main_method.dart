@@ -11,18 +11,16 @@ import 'package:path_provider/path_provider.dart';
 class MainMethod {
   static Future<void> init() async {
     WidgetsFlutterBinding.ensureInitialized();
-    // GetStorage.init();
+
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
 
     var directory = await getApplicationDocumentsDirectory();
     Hive.init(directory.path);
-
     Hive.registerAdapter(WorkoutModelAdapter());
     Hive.registerAdapter(VideoModelAdapter());
     Hive.registerAdapter(ProgramModelAdapter());
-
     initlocator();
     // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   }

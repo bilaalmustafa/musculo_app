@@ -15,6 +15,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
+import '../../../../../../core/config/routes.dart';
+
 class WarmUp extends StatefulWidget {
   const WarmUp({super.key});
 
@@ -23,6 +25,7 @@ class WarmUp extends StatefulWidget {
 }
 
 class _WarmUpState extends State<WarmUp> {
+  final TextEditingController _searchController = TextEditingController();
   late AddWorkoutVeiwModel _addWorkoutVeiwModel;
   @override
   void initState() {
@@ -31,6 +34,13 @@ class _WarmUpState extends State<WarmUp> {
     if (_addWorkoutVeiwModel.storagevideos.isEmpty) {
       _addWorkoutVeiwModel.loadVideos();
     }
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _addWorkoutVeiwModel.searchQuery = ''; // Clear search when leaving screen
+    super.dispose();
   }
 
   @override
@@ -55,8 +65,15 @@ class _WarmUpState extends State<WarmUp> {
                     ),
                     CustomTextField(
                       title: "search exercise",
-                      sufIcon: Assets.filterIcon,
+                      controller: _searchController,
+                      // sufIcon: Assets.filterIcon,
                       preIcon: Assets.searchIcon,
+                      // onTap: () {
+                      //   Navigator.pushNamed(context, Routes.filterscreen);
+                      // },
+                      onChanged: (value) {
+                        vm.searchQuery = value;
+                      },
                     ),
                   ],
                 ),
@@ -84,7 +101,7 @@ class _WarmUpState extends State<WarmUp> {
                                     fontWeight: TextWeight.semiBold,
                                   ),
                                   PoppinsText(
-                                    text: "${vm.storagevideos.length} found",
+                                    text: "${vm.filteredVideos.length} found",
                                     fontSize: Sizes.s12,
                                     fontWeight: TextWeight.bold,
                                   ),
@@ -95,7 +112,7 @@ class _WarmUpState extends State<WarmUp> {
                                 child: ListView.separated(
                                   itemBuilder: (context, index) {
                                     // final controller = _controllers[index];
-                                    final video = vm.storagevideos[index];
+                                    final video = vm.filteredVideos[index];
                                     return InkWell(
                                       onTap: () {
                                         vm.videoSelected(video);
@@ -124,7 +141,7 @@ class _WarmUpState extends State<WarmUp> {
                                   separatorBuilder:
                                       (context, index) =>
                                           const SizedBox(height: 10),
-                                  itemCount: vm.storagevideos.length,
+                                  itemCount: vm.filteredVideos.length,
                                 ),
                               ),
                             ],

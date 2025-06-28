@@ -16,6 +16,24 @@ class WorkoutItems extends StatelessWidget {
   final bool seleted;
   @override
   Widget build(BuildContext context) {
+    String formatProgramTime(int totalTimeInSeconds) {
+      int totalMinutes = totalTimeInSeconds ~/ 60;
+
+      if (totalMinutes < 60) {
+        return "$totalMinutes Mins";
+      } else {
+        int hours = totalMinutes ~/ 60;
+        int minutes = totalMinutes % 60;
+
+        // Round up to the next hour if minutes >= 45
+        if (minutes >= 45) {
+          hours += 1;
+        }
+
+        return "$hours Hr";
+      }
+    }
+
     return Container(
       margin: EdgeInsets.symmetric(horizontal: Sizes.s20, vertical: Sizes.s10),
 
@@ -61,7 +79,7 @@ class WorkoutItems extends StatelessWidget {
                   spacing: Sizes.s5,
                   children: [
                     CustomChip(
-                      text: " ${workoutModel?.totalTime.toString()} Min",
+                      text: formatProgramTime(workoutModel?.totalTime ?? 0),
                       color: ConstColors.secondary,
                     ),
                     CustomChip(

@@ -14,11 +14,14 @@ class CustomTextField extends StatelessWidget {
     this.onTap,
     this.enabled = true,
     this.validator,
-    this.onChanged, 
+    this.onChanged,
     this.keyboardType,
 
     this.preIcon,
     this.sufIcon,
+    this.readOnly,
+    this.onclick,
+    this.focusNode,
   });
   final String title;
   final IconData? suffexicon;
@@ -28,11 +31,13 @@ class CustomTextField extends StatelessWidget {
   final VoidCallback? onTap;
   final bool enabled;
   final String? Function(String?)? validator;
-    final Function(String)? onChanged; 
+  final Function(String)? onChanged;
   final TextInputType? keyboardType;
-
+  final Function()? onclick;
   final String? preIcon;
   final String? sufIcon;
+  final bool? readOnly;
+  final FocusNode? focusNode;
 
   @override
   Widget build(BuildContext context) {
@@ -42,13 +47,15 @@ class CustomTextField extends StatelessWidget {
       controller: controller,
       obscureText: obscureText,
       onChanged: onChanged,
+      onTap: onclick,
+      focusNode: focusNode,
       keyboardType: keyboardType,
+      readOnly: readOnly ?? false,
       decoration: InputDecoration(
         hintText: title,
         hintStyle: const TextStyle(
           color: ConstColors.grey6A7,
           fontSize: Sizes.s13,
-        
         ),
 
         fillColor: ConstColors.secondary,
