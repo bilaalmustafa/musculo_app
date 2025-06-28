@@ -50,6 +50,8 @@ class WorkoutModel extends HiveObject {
   final double? rating;
    @HiveField(15)
   final List<String>? review;
+    @HiveField(16)
+  final int? ratingCount;
   WorkoutModel({
     this.workoutId,
     this.userId,
@@ -66,7 +68,8 @@ class WorkoutModel extends HiveObject {
     this.description,
     this.categorizedVideos,
     this.rating,
-    this.review
+    this.review,
+    this.ratingCount
   });
 
   factory WorkoutModel.fromJson(Map<String, dynamic> json) {
@@ -89,6 +92,7 @@ class WorkoutModel extends HiveObject {
       gender: json['gender'] as String?,
       totalTime: json['totalTime'] as int?,
       price: json['price'] as int?,
+        ratingCount: json['ratingCount'] as int?,
       rating: json['rating'] as double?,
       dateTime:
           json['dateTime'] != null ? DateTime.tryParse(json['dateTime']) : null,
@@ -122,6 +126,7 @@ class WorkoutModel extends HiveObject {
       'description': description,
       "rating":rating,
       "review":review,
+      "ratingCount":ratingCount,
       'categorizedVideos': categorizedVideos?.map(
         (key, value) => MapEntry(key, value.map((v) => v.toJson()).toList()),
       ),
@@ -140,6 +145,7 @@ class WorkoutModel extends HiveObject {
     String? gender,
     int? totalTime,
     int? price,
+     int? ratingCount,
     DateTime? dateTime,
     String? description,
     double? rating,
@@ -158,6 +164,7 @@ class WorkoutModel extends HiveObject {
       gender: gender ?? this.gender,
       totalTime: totalTime ?? this.totalTime,
       price: price ?? this.price,
+      ratingCount: ratingCount ?? this.ratingCount,
       dateTime: dateTime ?? this.dateTime,
       description: description ?? this.description,
       rating: rating ?? this.rating,

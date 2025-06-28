@@ -34,7 +34,10 @@ class ReportProvider with ChangeNotifier {
     required String userId,
     String? contentId,
     required String contentType,
-    String? name,
+    String? userName,
+    String? contentName,
+    
+     double? rating,
     String? reason,
     String? otherReason,
     String? email,
@@ -48,8 +51,11 @@ class ReportProvider with ChangeNotifier {
       final report = ReportModel(
         userId: userId,
         contentId: contentId,
+        userName: userName,
+        rating: rating,
+        contentName: contentName,
         contentType: contentType,
-        name: name,
+      
         reason: _selectReason,
         otherReason: _selectReason == "Other" ? otherReason : null,
         email: email,

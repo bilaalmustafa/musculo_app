@@ -4,6 +4,9 @@ import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/paragraph_text.dart';
+import 'package:provider/provider.dart';
+
+import '../../home_and_training_screens/view_model/user_view_model.dart';
 
 class CoachProfileTextScreen extends StatefulWidget {
   const CoachProfileTextScreen({super.key});
@@ -18,6 +21,8 @@ class _CoachProfileTextScreenState extends State<CoachProfileTextScreen> {
   bool goalisExpanded = false;
   @override
   Widget build(BuildContext context) {
+    final creatorVm = context.read<UserViewModel>();
+    final data = creatorVm.userModel;
     return Scaffold(
       backgroundColor: ConstColors.white,
       body: SingleChildScrollView(
@@ -34,12 +39,7 @@ class _CoachProfileTextScreenState extends State<CoachProfileTextScreen> {
                 fontWeight: TextWeight.semiBold,
               ),
               ParagraphText(
-                text:
-                    "This is a long paragraph. It spans many lines. "
-                    "We only want to show a few lines and then let the user tap View More. "
-                    "This helps keep the UI clean and readable for longer content.This is a long paragraph. It spans many lines. "
-                    "We only want to show a few lines and then let the user tap View More. "
-                    "This helps keep the UI clean and readable for longer content.",
+                text: data?.overviewText ?? "",
                 isExpanded: overisExpanded,
                 onTap:
                     () => setState(() {
@@ -47,13 +47,12 @@ class _CoachProfileTextScreenState extends State<CoachProfileTextScreen> {
                     }),
               ),
               PoppinsText(
-                text: "Expereince",
+                text: "Experience",
                 fontSize: Sizes.s20,
                 fontWeight: TextWeight.semiBold,
               ),
               ParagraphText(
-                text:
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
+                text: data?.experienceText ?? "",
                 isExpanded: expisExpanded,
                 onTap:
                     () => setState(() {
@@ -66,12 +65,8 @@ class _CoachProfileTextScreenState extends State<CoachProfileTextScreen> {
                 fontWeight: TextWeight.semiBold,
               ),
               ParagraphText(
-                text:
-                    "This is a long paragraph. It spans many lines. "
-                    "We only want to show a few lines and then let the user tap View More. "
-                    "This helps keep the UI clean and readable for longer content.This is a long paragraph. It spans many lines. "
-                    "We only want to show a few lines and then let the user tap View More. "
-                    "This helps keep the UI clean and readable for longer content.",
+                text: data?.goalText ?? "",
+
                 isExpanded: goalisExpanded,
                 onTap:
                     () => setState(() {

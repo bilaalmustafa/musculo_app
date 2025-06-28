@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/components/share_picture.dart';
 import 'package:musculo_app/core/constants/assets.dart';
@@ -7,23 +8,16 @@ import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 
 class Transectionitem extends StatelessWidget {
-  const Transectionitem({
-    super.key,
-
-    required this.amount,
-    required this.date,
-
-    required this.time,
-  });
+  const Transectionitem({super.key, required this.amount, required this.date, required this.isGain});
 
   final double amount;
-
-  final String date;
-  final String time;
+  final bool isGain;
+  final DateTime date;
 
   @override
   Widget build(BuildContext context) {
-    final bool isGain = amount >= 0;
+    final String formattedDate = DateFormat('MMM dd, yyyy').format(date);
+    final String formattedTime = DateFormat('hh:mm a').format(date);
     return Row(
       children: [
         CircleAvatar(
@@ -45,7 +39,7 @@ class Transectionitem extends StatelessWidget {
               Row(
                 children: [
                   PoppinsText(
-                    text: date,
+                    text: formattedDate,
                     fontSize: Sizes.s13,
                     fontWeight: TextWeight.regular,
                   ),
@@ -58,7 +52,7 @@ class Transectionitem extends StatelessWidget {
                     ),
                   ),
                   PoppinsText(
-                    text: time,
+                    text: formattedTime,
                     fontSize: Sizes.s13,
                     fontWeight: TextWeight.regular,
                   ),

@@ -12,6 +12,8 @@ import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_scre
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/custom_chip.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/analysis_containers.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/paragraph_text.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/show_rating_bottomsheet.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/component/show_rating_sheet.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/config/routes.dart';
@@ -87,54 +89,65 @@ class _TraningPreviewScreenState extends State<TraningPreviewScreen> {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   onSelected: (value) {
-                    if (value == 'like') {
-                      // navigate to favirate screen
+                    if (value == 'Rate') {
+                      showModalBottomSheet(
+                        isScrollControlled: true,
+                        barrierColor: ConstColors.black.withValues(alpha: .8),
+                        constraints: BoxConstraints(
+                          maxHeight: context.screenheight * 0.7,
+                        ),
+                        backgroundColor: ConstColors.white,
+                        context: context,
+                        builder: (context) {
+                          return ShowrateSheet(
+                            workoutModel: widget.workoutModel,
+                          );
+                        },
+                      );
                     }
 
                     if (value == "feedback") {
                       Navigator.pushNamed(
                         context,
                         Routes.feedbScreen,
-                        arguments: {'feedbackType': 'WorkOut'},
+                        arguments: {
+                          'feedbackType': 'WorkOut',
+                          'contentId': widget.workoutModel.workoutId,
+                          'rating': widget.workoutModel.rating,
+                          'contentName': widget.workoutModel.workoutName,
+                        },
                       );
                     }
                     if (value == "report") {
                       Navigator.pushNamed(
                         context,
                         Routes.reportScreen,
-                        arguments: {'reportType': 'Report workOut'},
+                        arguments: {
+                          'reportType': 'Report workOut',
+                          'contentId': widget.workoutModel.workoutId,
+                          'rating': widget.workoutModel.rating,
+                          'contentName': widget.workoutModel.workoutName,
+                        },
                       );
                     }
                   },
                   itemBuilder:
                       (context) => [
                         PopupMenuItem(
-                          value: 'Like',
-                          child: Consumer<ProfileProvider>(
-                            builder: (context, vm, _) {
-                              final isFavorite = vm.favorateWorkout.any(
-                                (w) => w.workoutId == data.workoutId,
-                              );
-                              return InkWell(
-                                onTap: () => vm.addFaverateWorkout(data),
-                                child: Row(
-                                  children: [
-                                    SharePicture(
-                                      imagePath:
-                                          isFavorite
-                                              ? Assets.heartFill
-                                              : Assets.heartIcon,
-                                    ),
-                                    SizedBox(width: Sizes.s8),
-                                    PoppinsText(
-                                      text: 'Like Workout',
-                                      fontSize: Sizes.s14,
-                                      fontWeight: TextWeight.medium,
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
+                          value: 'Rate',
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.star_border_outlined,
+                                color: ConstColors.black,
+                              ),
+                              SizedBox(width: Sizes.s8),
+                              PoppinsText(
+                                text: 'Rate Workout',
+                                fontSize: Sizes.s14,
+                                fontWeight: TextWeight.medium,
+                              ),
+                            ],
                           ),
                         ),
                         PopupMenuItem(

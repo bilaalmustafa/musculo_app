@@ -95,7 +95,7 @@ class ProgramItemDis extends StatelessWidget {
                     Consumer<ProfileProvider>(
                       builder: (context, vm, _) {
                         final isFavorite = vm.favoritePrograms.any(
-                          (w) => w.programName == program.programName,
+                          (w) => w.programId == program.programId,
                         );
                         return InkWell(
                           onTap: () {

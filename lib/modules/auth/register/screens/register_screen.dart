@@ -6,6 +6,7 @@ import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/shared_appbar.dart';
 import 'package:musculo_app/core/config/routes.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
+import 'package:musculo_app/model/user_model.dart';
 
 import 'package:musculo_app/modules/auth/register/screens/age_screen.dart';
 import 'package:musculo_app/modules/auth/register/screens/agreement_screen.dart';
@@ -97,7 +98,8 @@ class _RegisterScrenState extends State<RegisterScren> {
                 } else if (_currentPage < 6 - 1) {
                   _goToNextPage();
                 } else {
-                  User? user = await context.read<AuthViewModel>().signUp();
+                  UserModel? user =
+                      await context.read<AuthViewModel>().signUp();
                   if (user != null && context.mounted) {
                     showDialog(
                       barrierDismissible: true,
@@ -116,7 +118,7 @@ class _RegisterScrenState extends State<RegisterScren> {
                         Navigator.pushNamedAndRemoveUntil(
                           context,
                           Routes.bottomnavigationbarscreen,
-                         
+
                           (route) => false,
                         );
                       }

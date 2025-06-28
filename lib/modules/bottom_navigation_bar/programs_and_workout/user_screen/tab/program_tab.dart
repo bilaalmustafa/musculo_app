@@ -9,7 +9,7 @@ import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/core/services/creator_services.dart';
 import 'package:musculo_app/model/programs_model.dart';
 
-import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/program_item.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/Program_Item_Dis.dart';
 
 class ProgramTabDisScreen extends StatefulWidget {
   const ProgramTabDisScreen({super.key});
@@ -62,8 +62,7 @@ class _ProgramTabDisScreenState extends State<ProgramTabDisScreen> {
           return ListView.builder(
             itemCount: data.length,
             itemBuilder: (context, index) {
-              log(" index Userid ${data[index].userId}");
-              log(" index name ${data[index].programName}");
+           
               return ProgramItemDis(program: data[index]);
             },
           );

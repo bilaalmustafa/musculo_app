@@ -21,6 +21,7 @@ import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_scre
 // import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/congratulation_screen.dart';
 // import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/training_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/creator_profile_screens/becomecreator.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/profile/creator_profile_screens/ceator_my_program_workout.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/creator_profile_screens/creator_profile.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/creator_profile_screens/creatorinfo_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/creator_profile_screens/payment_screen.dart';
@@ -77,6 +78,7 @@ class Routes {
   static const String reportScreen = "/reporttab_screen";
   static const String motivationalScreen = "/motivational_text_screen";
   static const String motivationalListScreen = "/motivational_list_screen";
+  static const String creatorMyProgramWorkout = "/creator_my_program_workout_screen";
 }
 
 class RouteGenerator {
@@ -118,6 +120,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => AccountinfoScreen());
       case Routes.myProgramWorkout:
         return MaterialPageRoute(builder: (_) => const Myprogramworkout());
+      case Routes.creatorMyProgramWorkout:
+        return MaterialPageRoute(builder: (_) => const CreatorMyprogramworkout());
       case Routes.favoriteScreen:
         return MaterialPageRoute(builder: (_) => const FavoritesScreen());
       case Routes.becomeCreatorScreen:
@@ -125,7 +129,9 @@ class RouteGenerator {
 
       case Routes.programDetailPageView:
         final programModel = routeSitting.arguments as ProgramModel;
-        return MaterialPageRoute(builder: (_) =>  ProgramDetailPageView( programModel:programModel ,));
+        return MaterialPageRoute(
+          builder: (_) => ProgramDetailPageView(programModel: programModel),
+        );
       case Routes.coachProfile:
         return MaterialPageRoute(builder: (_) => const CoachProfile());
       case Routes.addworkoutpageview:
@@ -141,14 +147,20 @@ class RouteGenerator {
       case Routes.feedbScreen:
         final args = routeSitting.arguments as Map<String, dynamic>;
         final feedbackType = args['feedbackType'] as String;
+        final rating =  args["rating"] as double;
+        final contentId= args['contentId'] as String;
+        final contentName = args['contentName'] as String?;
         return MaterialPageRoute(
-          builder: (_) => FeedBScreen(feedbackType: feedbackType),
+          builder: (_) => FeedBScreen(feedbackType: feedbackType, contentId: contentId, rating: rating, contentName: contentName),
         );
       case Routes.reportScreen:
         final args = routeSitting.arguments as Map<String, dynamic>;
         final reportType = args['reportType'] as String;
+          final rating =  args["rating"] as double;
+        final contentId= args['contentId'] as String;
+        final contentName = args['contentName'] as String?;
         return MaterialPageRoute(
-          builder: (_) => Reportstab(reportType: reportType),
+          builder: (_) => Reportstab(reportType: reportType, contentId: contentId, rating: rating, contentName: contentName),
         );
 
       // case Routes.programScreen:

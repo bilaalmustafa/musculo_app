@@ -15,10 +15,20 @@ import 'package:provider/provider.dart';
 import '../../../../components/custom_button.dart';
 import '../../../../components/logo_title_appbar.dart';
 import '../../../auth/register/component/show_dialog_box.dart';
+import '../../home_and_training_screens/view_model/user_view_model.dart';
 
 class Reportstab extends StatefulWidget {
-  const Reportstab({super.key, required this.reportType});
+  const Reportstab({
+    super.key,
+    required this.reportType,
+    this.contentId,
+    this.rating,
+    this.contentName,
+  });
   final String reportType;
+  final String? contentId;
+  final double? rating;
+  final String? contentName;
 
   @override
   State<Reportstab> createState() => _ReportstabState();
@@ -48,6 +58,7 @@ class _ReportstabState extends State<Reportstab> {
 
   @override
   Widget build(BuildContext context) {
+    final userViewModel = context.read<UserViewModel>().userModel;
     return Scaffold(
       appBar: LogoTitleAppBar(title: widget.reportType),
       backgroundColor: ConstColors.white,
@@ -172,7 +183,11 @@ class _ReportstabState extends State<Reportstab> {
 
                 if (formkey.currentState!.validate()) {
                   await provider.submitReport(
-                    userId: AuthService().currentUser?.uid ?? 'anonoymous',
+                    userId: userViewModel?.userId ?? 'anonoymous',
+                    contentId: widget.contentId ?? "unknown",
+                    rating: widget.rating ?? 0.0,
+                    contentName: widget.contentName ?? "unknown",
+                    userName: userViewModel?.name ?? 'Anonymous',
                     contentType: widget.reportType,
                     note: noteController.text.toString().trim(),
                     email: emailController.text.toString().trim(),

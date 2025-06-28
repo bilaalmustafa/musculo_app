@@ -1,27 +1,21 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/model/programs_model.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/view_model/user_view_model.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/profile/component/programItems.dart';
-import 'package:provider/provider.dart';
 
-import '../../programs_and_workout/component/program_item.dart';
+import '../../programs_and_workout/component/Program_Item_Dis.dart';
 
 class Programs extends StatelessWidget {
-  Programs({
+  const Programs({
     super.key,
     required this.tabselect,
     required this.programModelList,
   });
   final int tabselect;
-  List<ProgramModel> programModelList;
+  final List<ProgramModel> programModelList;
 
   @override
   Widget build(BuildContext context) {
     final programList = programModelList;
-    // final userVm = context.read<UserViewModel>();
-    // final programList = userVm.userModel?.listOfPrograms ?? [];
 
     return Scaffold(
       backgroundColor: ConstColors.secondary,
@@ -36,10 +30,7 @@ class Programs extends StatelessWidget {
               : ListView.builder(
                 itemCount: programList.length,
                 itemBuilder: (context, index) {
-                  return ProgramItemDis(
-               
-                    program: programList[index],
-                  );
+                  return ProgramItemDis(program: programList[index]);
                 },
               ),
     );

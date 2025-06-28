@@ -20,10 +20,9 @@
       }
     }
   },
-  "functions": [
-    {
+  "functions": {
       "source": "functions",
-      "codebase": "default",
+      "codebase": "musculo",
       "ignore": [
         "node_modules",
         ".git",
@@ -32,5 +31,4 @@
         "*.local"
       ]
     }
-  ]
 }

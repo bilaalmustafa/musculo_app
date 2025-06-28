@@ -6,8 +6,12 @@ import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
+import 'package:musculo_app/model/user_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/creator_list_tile.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/rating_star.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/view_model/user_view_model.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/screen/view_model/discover_view_model.dart';
+import 'package:provider/provider.dart';
 
 class ShowRatingBottomSheet extends StatefulWidget {
   const ShowRatingBottomSheet({super.key});
@@ -17,9 +21,11 @@ class ShowRatingBottomSheet extends StatefulWidget {
 }
 
 class _ShowRatingBottomSheetState extends State<ShowRatingBottomSheet> {
-  int selectedRating = 2;
+  TextEditingController reviewController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final creatorVm = context.read<UserViewModel>();
+    final data = creatorVm.userModel;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Column(
@@ -48,15 +54,17 @@ class _ShowRatingBottomSheetState extends State<ShowRatingBottomSheet> {
             textAlign: TextAlign.center,
           ),
 
-          RatingStars(
-            selectedRating: selectedRating,
-            onRatingSelected: (newvalue) {
-              setState(() {
-                selectedRating = newvalue;
-              });
+          Consumer<UserViewModel>(
+            builder: (context, vm, _) {
+              return RatingStars(
+                selectedRating: vm.selectedRating,
+                onRatingSelected: (newvalue) {
+                  vm.selectStart(newvalue);
+                },
+              );
             },
           ),
-          CustomTextField(title: "Amazing"),
+          CustomTextField(controller: reviewController, title: "Amazing"),
           Divider(color: ConstColors.secondary, height: 2),
           Row(
             spacing: Sizes.s10,
@@ -72,10 +80,35 @@ class _ShowRatingBottomSheetState extends State<ShowRatingBottomSheet> {
                 ),
               ),
               Expanded(
-                child: CustomButton(
-                  buttonText: "Submit",
-                  onTap: () {
-                    // submit code here
+                child: Consumer<UserViewModel>(
+                  builder: (context, vm, _) {
+                    return CustomButton(
+                      loading: vm.isLoading,
+                      onTap: () async {
+                        double newRating = vm.getingRating(
+                          data?.rating ?? 0.0,
+                          data?.countRating ?? 0,
+                        );
+                        final List<String> reviewList = List.from(
+                          data?.review ?? [],
+                        );
+                        if (reviewController.text.isNotEmpty) {
+                          reviewList.add(reviewController.text);
+                        }
+                        UserModel? success = await vm
+                            .postCreatorRatingAndReview(
+                              data?.userId ?? "",
+                              newRating,
+                              (data?.countRating ?? 0) + 1,
+                              data!,
+                              reviewList,
+                            );
+                        if (success != null && context.mounted) {
+                          Navigator.popUntil(context, (route) => route.isFirst);
+                        }
+                      },
+                      buttonText: "Submit",
+                    );
                   },
                 ),
               ),

@@ -4,22 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:musculo_app/core/config/injections.dart';
 import 'package:musculo_app/core/services/creator_services.dart';
 import 'package:musculo_app/model/programs_model.dart';
+import 'package:musculo_app/model/workouts_model.dart';
 
 class DiscoverViewModel extends ChangeNotifier {
   bool isloading = false;
   int selectedRating = 2;
-  Future<ProgramModel?> giveRatingAndReview(
+  Future<ProgramModel?> postProgramRatingAndReview(
     String docId,
     double rating,
     int newCount,
-    ProgramModel programModel,
+    ProgramModel model,
     List<String> reviewList,
   ) async {
     try {
       isloading = true;
       notifyListeners();
 
-      ProgramModel item = programModel.copyWith(
+      ProgramModel item = model.copyWith(
         rating: rating,
         review: reviewList,
         ratingCount: newCount
@@ -47,5 +48,34 @@ class DiscoverViewModel extends ChangeNotifier {
     final double newRating =
         ((oldRating * oldCount) + selectedRating) / (oldCount + 1);
     return newRating;
+  }
+   Future<WorkoutModel?> postWorkoutRatingAndReview(
+    String docId,
+    double rating,
+    int newCount,
+    WorkoutModel model,
+    List<String> reviewList,
+  ) async {
+    try {
+      isloading = true;
+      notifyListeners();
+
+      WorkoutModel item = model.copyWith(
+        rating: rating,
+        review: reviewList,
+        ratingCount: newCount
+      );
+
+      await instance<WorkoutServices>().workoutratingCreate(docId, item);
+
+      isloading = false;
+      notifyListeners();
+      return item;
+    } catch (e) {
+      log("discoveError $e");
+      isloading = false;
+      notifyListeners();
+      return null;
+    }
   }
 }

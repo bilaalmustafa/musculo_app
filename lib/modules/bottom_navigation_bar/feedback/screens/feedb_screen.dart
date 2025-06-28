@@ -6,6 +6,7 @@ import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/services/auth_services.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/feedback/components/feedbackfield.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/feedback/view_model/feedback_view_model.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/view_model/user_view_model.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../components/customTextField.dart';
@@ -15,8 +16,11 @@ import '../../../../core/constants/sizes.dart';
 import '../../../auth/register/component/show_dialog_box.dart';
 
 class FeedBScreen extends StatefulWidget {
-  const FeedBScreen({super.key, required this.feedbackType});
+  const FeedBScreen({super.key, required this.feedbackType,required this.contentId, this.rating, this.contentName});
   final String feedbackType;
+  final String? contentId;
+  final double? rating;
+  final String? contentName;
 
   @override
   State<FeedBScreen> createState() => _FeedBScreenState();
@@ -38,6 +42,7 @@ class _FeedBScreenState extends State<FeedBScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final userViewModel = context.read<UserViewModel>().userModel;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: ConstColors.white,
@@ -87,12 +92,16 @@ class _FeedBScreenState extends State<FeedBScreen> {
               onTap: () async {
                 if (formKey.currentState!.validate()) {
                   await provider.submitFeedback(
-                    userId: AuthService().currentUser?.uid ?? 'anonymous',
-                    contentId: null,
+                    
+                    userId: userViewModel!.userId ?? " Anonymous",
+                    contentId: widget.contentId ?? "unknown",
+                    rating: widget.rating ?? 0.0,
                     contentType: widget.feedbackType,
                     email: emailController.text.trim(),
                     suggestion: suggestionController.text.trim(),
                     feedbackMessage: feedbackController.text.trim(),
+                    userName: userViewModel.name ?? " Anonymous",
+                    contentName: widget.contentName ?? "unknown",
                   );
                   if (context.mounted) {
                     formKey.currentState?.reset();

@@ -78,7 +78,7 @@ class FirebaseService<T> {
         });
   }
 
-  Stream<List<T>> getAllcreatorworkout(String type, String uid) {
+  Stream<List<T>> getAllcreatorExercise(String type, String uid) {
     return FirebaseFirestore.instance
         .collection(collectionName)
         .where("userId", isEqualTo: uid)

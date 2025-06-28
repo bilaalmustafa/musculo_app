@@ -5,7 +5,8 @@ class FeedbackModel {
   final String? userId;
   final String? contentId;
   final String? contentType; // e.g. 'program', 'workout', 'creator', 'company'
-  final String? name; // optional name (e.g. creator name)
+  final String? userName;
+  final String? contentName; // optional name (e.g. creator name)
   final double? rating;
   final String? feedbackMessage;
   final String? email;
@@ -18,7 +19,8 @@ class FeedbackModel {
     this.userId,
     this.contentId,
     this.contentType,
-    this.name,
+    this.userName,
+    this.contentName,
     this.rating,
     this.feedbackMessage,
     this.email,
@@ -31,7 +33,8 @@ class FeedbackModel {
     String? userId,
     String? contentId,
     String? contentType,
-    String? name,
+    String? userName,
+    String? contentName,
     double? rating,
     String? feedbackMessage,
     String? email,
@@ -43,7 +46,8 @@ class FeedbackModel {
       userId: userId ?? this.userId,
       contentId: contentId ?? this.contentId,
       contentType: contentType ?? this.contentType,
-      name: name ?? this.name,
+      userName: userName ?? this.userName,
+      contentName: contentName ?? this.contentName,
       rating: rating ?? this.rating,
       feedbackMessage: feedbackMessage ?? this.feedbackMessage,
       email: email ?? this.email,
@@ -59,7 +63,8 @@ class FeedbackModel {
       userId: json['userId'],
       contentId: json['contentId'],
       contentType: json['contentType'],
-      name: json['name'],
+      userName: json['userName'],
+      contentName: json['contentName'],
       rating: (json['rating'] as num?)?.toDouble(),
       feedbackMessage: json['feedbackMessage'],
       email: json['email'],
@@ -74,7 +79,8 @@ class FeedbackModel {
       'userId': userId,
       'contentId': contentId,
       'contentType': contentType,
-      'name': name,
+      'userName': userName,
+      'contentName': contentName,
       'rating': rating,
       'feedbackMessage': feedbackMessage,
       'email': email,

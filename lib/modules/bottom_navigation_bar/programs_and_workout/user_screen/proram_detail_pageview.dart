@@ -102,14 +102,24 @@ class _ProgramDetailPageViewState extends State<ProgramDetailPageView> {
                       Navigator.pushNamed(
                         context,
                         Routes.feedbScreen,
-                        arguments: {'feedbackType': 'Program'},
+                        arguments: {
+                          'feedbackType': 'Program',
+                          'contentId': widget.programModel.programId,
+                          'rating': widget.programModel.rating,
+                          'contentName': widget.programModel.programName,
+                        },
                       );
                     }
                     if (value == "report") {
                       Navigator.pushNamed(
                         context,
                         Routes.reportScreen,
-                        arguments: {'reportType': 'Report Program'},
+                        arguments: {
+                          'reportType': 'Report Program',
+                          'contentId': widget.programModel.programId,
+                          'rating': widget.programModel.rating,
+                          'contentName': widget.programModel.programName,
+                        },
                       );
                     }
                   },

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/custom_shimmer.dart';
@@ -40,10 +42,10 @@ class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
 class _HomeAppBarState extends State<HomeAppBar> {
   final AuthService _authservces = instance<AuthService>();
 
-  Future<UserModel?>? _Future;
+  Future<UserModel?>? _future;
   @override
   void initState() {
-    _Future = context.read<UserViewModel>().getUserById(
+    _future = context.read<UserViewModel>().getUserById(
       _authservces.currentUser!.uid,
     );
 
@@ -69,7 +71,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
             fontWeight: TextWeight.semiBold,
           ),
           FutureBuilder<UserModel?>(
-            future: _Future,
+            future: _future,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return CustomShimmer(
@@ -86,7 +88,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
                 );
               } else {
                 return PoppinsText(
-                  text: snapshot.data!.name ?? " User name",
+                  text: snapshot.data?.name ?? " User name",
                   fontSize: Sizes.s20,
                   color:
                       widget.isSwitch ? ConstColors.white : ConstColors.black,

@@ -12,8 +12,10 @@ import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/feedback/screens/reportstab.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/coach/coach_profile_text_tab.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/coach/program/workouts_tab.dart';
+import 'package:provider/provider.dart';
 
 import '../../home_and_training_screens/component/show_rating_bottom_sheet.dart';
+import '../../home_and_training_screens/view_model/user_view_model.dart';
 
 class CoachProfile extends StatefulWidget {
   const CoachProfile({super.key});
@@ -34,6 +36,8 @@ class _CoachProfileState extends State<CoachProfile> {
 
   @override
   Widget build(BuildContext context) {
+    final creatorVm = context.read<UserViewModel>();
+    final data = creatorVm.userModel;
     return Scaffold(
       backgroundColor: ConstColors.white,
       appBar: SharedAppBar(
@@ -43,60 +47,59 @@ class _CoachProfileState extends State<CoachProfile> {
             borderRadius: BorderRadius.circular(20),
           ),
           onSelected: (value) {
-            // if (value == "rate") {
-            //   showModalBottomSheet(
-            //     isScrollControlled: true,
-            //     barrierColor: ConstColors.black.withValues(alpha: .8),
-            //     constraints: BoxConstraints(
-            //       maxHeight: context.screenheight * 0.7,
-            //     ),
-            //     backgroundColor: ConstColors.white,
-            //     context: context,
-            //     builder: (context) => ShowRatingBottomSheet(),
-            //   );
-            // }
-            // if (value == "edit") {
-            //   showModalBottomSheet(
-            //     isScrollControlled: true,
-            //     barrierColor: ConstColors.black.withValues(alpha: .8),
-            //     constraints: BoxConstraints(
-            //       maxHeight: context.screenheight * 0.7,
-            //     ),
-            //     backgroundColor: ConstColors.white,
-            //     context: context,
-            //     builder: (context) => ShowRatingBottomSheet(),
-            //   );
-            // }
+            if (value == "rate") {
+              showModalBottomSheet(
+                isScrollControlled: true,
+                barrierColor: ConstColors.black.withValues(alpha: .8),
+                constraints: BoxConstraints(
+                  maxHeight: context.screenheight * 0.7,
+                ),
+                backgroundColor: ConstColors.white,
+                context: context,
+                builder: (context) => ShowRatingBottomSheet(),
+              );
+            }
+
             if (value == "feedback") {
               Navigator.pushNamed(
                 context,
                 Routes.feedbScreen,
-                arguments: {'feedbackType': 'Creator'},
+                arguments: {
+                  'feedbackType': 'Creator',
+                  'contentId': data?.userId ?? "",
+                  'rating': data?.rating ?? 0.0,
+                  'contentName': data?.name ?? "",
+                },
               );
             }
             if (value == "report") {
               Navigator.pushNamed(
                 context,
                 Routes.reportScreen,
-                arguments: {'reportType': 'Report Creator'},
+                arguments: {
+                  'reportType': 'Report Creator',
+                  'contentId': data?.userId ?? "",
+                  'rating': data?.rating ?? 0.0,
+                  'contentName': data?.name ?? "",
+                },
               );
             }
           },
           itemBuilder:
               (context) => [
-                // PopupMenuItem(
-                //   value: 'rate',
-                //   child: Row(
-                //     children: [
-                //       Icon(
-                //         Icons.star_border_outlined,
-                //         color: ConstColors.black,
-                //       ),
-                //       const SizedBox(width: 8),
-                //       const Text('Rate Creator'),
-                //     ],
-                //   ),
-                // ),
+                PopupMenuItem(
+                  value: 'rate',
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.star_border_outlined,
+                        color: ConstColors.black,
+                      ),
+                      const SizedBox(width: 8),
+                      const Text('Rate Creator'),
+                    ],
+                  ),
+                ),
                 // PopupMenuItem(
                 //   value: 'edit',
                 //   child: Row(
@@ -164,11 +167,14 @@ class _CoachProfileState extends State<CoachProfile> {
               children: [
                 CircleAvatar(
                   radius: 55,
-                  backgroundImage: AssetImage(Assets.coachProfile),
+                  backgroundImage:
+                      data?.profileImageUrl != null
+                          ? NetworkImage(data!.profileImageUrl!)
+                          : AssetImage(Assets.coachProfile),
                 ),
                 SizedBox(height: Sizes.s10),
                 PoppinsText(
-                  text: "Coach name",
+                  text: data?.name ?? "Unknown",
                   fontSize: Sizes.s20,
                   fontWeight: TextWeight.semiBold,
                 ),
@@ -179,7 +185,10 @@ class _CoachProfileState extends State<CoachProfile> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.star, color: ConstColors.orange, size: 20),
-                    PoppinsText(text: "4.6", fontSize: Sizes.s10),
+                    PoppinsText(
+                      text: "${data?.rating ?? 0.0}",
+                      fontSize: Sizes.s10,
+                    ),
                     Container(height: 15, width: 1.5, color: Colors.black),
                     Container(
                       padding: EdgeInsets.all(4),
@@ -190,9 +199,11 @@ class _CoachProfileState extends State<CoachProfile> {
                       child: Row(
                         spacing: Sizes.s2,
                         children: [
-                          SharePicture(imagePath: Assets.daimond),
+                          data?.subPlane != "Free"
+                              ? SharePicture(imagePath: Assets.daimond)
+                              : Container(),
                           PoppinsText(
-                            text: "Premium Creator",
+                            text: "${data?.subPlane ?? ""} Creator",
                             fontSize: Sizes.s10,
                           ),
                         ],

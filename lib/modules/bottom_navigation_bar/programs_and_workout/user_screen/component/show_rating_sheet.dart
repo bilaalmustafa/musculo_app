@@ -7,20 +7,20 @@ import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/model/programs_model.dart';
+import 'package:musculo_app/model/workouts_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/custom_chip.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/rating_star.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/screen/view_model/discover_view_model.dart';
 import 'package:provider/provider.dart';
 
-import '../screen/view_model/discover_view_model.dart';
-
-class ShowrateBottomSheet extends StatefulWidget {
-  const ShowrateBottomSheet({super.key, required this.programModel});
-  final ProgramModel programModel;
+class ShowrateSheet extends StatefulWidget {
+  const ShowrateSheet({super.key, required this.workoutModel});
+  final WorkoutModel workoutModel;
   @override
-  State<ShowrateBottomSheet> createState() => _ShowrateBottomSheetState();
+  State<ShowrateSheet> createState() => _ShowrateSheetState();
 }
 
-class _ShowrateBottomSheetState extends State<ShowrateBottomSheet> {
+class _ShowrateSheetState extends State<ShowrateSheet> {
   TextEditingController reviewController = TextEditingController();
 
   @override
@@ -31,14 +31,24 @@ class _ShowrateBottomSheetState extends State<ShowrateBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final data = widget.programModel;
-    String getWeeksFromDuration(int? durationInDays) {
-      if (durationInDays == null || durationInDays <= 0) return "0";
+    final data = widget.workoutModel;
 
-      if (durationInDays < 7) return "1";
+   String formatProgramTime(int totalTimeInSeconds) {
+      int totalMinutes = totalTimeInSeconds ~/ 60;
 
-      final weeks = (durationInDays / 7).ceil();
-      return weeks.toString();
+      if (totalMinutes < 60) {
+        return "$totalMinutes Mins";
+      } else {
+        int hours = totalMinutes ~/ 60;
+        int minutes = totalMinutes % 60;
+
+        // Round up to the next hour if minutes >= 45
+        if (minutes >= 45) {
+          hours += 1;
+        }
+
+        return "$hours Hr";
+      }
     }
 
     return ChangeNotifierProvider(
@@ -74,7 +84,7 @@ class _ShowrateBottomSheetState extends State<ShowrateBottomSheet> {
                 ),
               ),
               PoppinsText(
-                text: data.programName ?? "unknown",
+                text: data.workoutName ?? "unknown",
                 fontSize: Sizes.s16,
                 fontWeight: TextWeight.semiBold,
               ),
@@ -83,7 +93,7 @@ class _ShowrateBottomSheetState extends State<ShowrateBottomSheet> {
                 spacing: Sizes.s10,
                 children: [
                   CustomChip(
-                    text: "${getWeeksFromDuration(data.duration)} week",
+                    text: formatProgramTime(data.totalTime ?? 0),
                     color: ConstColors.secondary,
                   ),
                   CustomChip(
@@ -143,9 +153,9 @@ class _ShowrateBottomSheetState extends State<ShowrateBottomSheet> {
                             if (reviewController.text.isNotEmpty) {
                               reviewList.add(reviewController.text);
                             }
-                            ProgramModel? success = await vm
-                                .postProgramRatingAndReview(
-                                  data.programId!,
+                            WorkoutModel? success = await vm
+                                .postWorkoutRatingAndReview(
+                                  data.workoutId!,
                                   newRating,
                                   (data.ratingCount ?? 0) + 1,
                                   data,

@@ -40,9 +40,7 @@ class _UserProfileState extends State<UserProfile> {
   @override
   Widget build(BuildContext context) {
     final userVm = context.watch<UserViewModel>();
-    final userName = userVm.userModel?.name ?? "User name";
-    final finishedWorkouts = userVm.userModel?.finishedWorkouts ?? 0;
-    final minutesSpent = userVm.userModel?.spentMinutes ?? 0;
+    final data = userVm.userModel;
 
     return SafeArea(
       child: Scaffold(
@@ -126,7 +124,7 @@ class _UserProfileState extends State<UserProfile> {
               SizedBox(height: Sizes.s10),
 
               PoppinsText(
-                text: userName,
+                text: data?.name ?? "User name",
                 fontSize: Sizes.s24,
                 fontWeight: FontWeight.w600,
               ),
@@ -173,13 +171,19 @@ class _UserProfileState extends State<UserProfile> {
                   CongrateContainer(
                     imagePath:
                         isCreator ? Assets.runnerIcon : Assets.runnerIcon,
-                    digit: isCreator ? "15" : finishedWorkouts.toString(),
+                    digit:
+                        isCreator
+                            ? userVm.soldProgram(data).toString()
+                            : data?.finishedWorkouts.toString() ?? "0",
                     text: isCreator ? "Programs Sold" : "Finished Workout",
                   ),
                   CongrateContainer(
                     imagePath:
                         isCreator ? Assets.walletIcon : Assets.timeCircle,
-                    digit: isCreator ? '250£' : minutesSpent.toString(),
+                    digit:
+                        isCreator
+                            ? ' ${userVm.getBalance(data).toStringAsFixed(1)}£'
+                            : data?.spentMinutes.toString() ?? "0",
                     text: isCreator ? "Earnings" : "Minutes Spent",
                   ),
                 ],
@@ -280,7 +284,10 @@ class _UserProfileState extends State<UserProfile> {
 
                   trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
                   onTap: () {
-                    // Navigator.pushNamed(context, Routes.myProgramWorkout);
+                    Navigator.pushNamed(
+                      context,
+                      Routes.creatorMyProgramWorkout,
+                    );
                     // program workout code here
                   },
                 ),

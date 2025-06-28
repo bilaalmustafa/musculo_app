@@ -5,8 +5,11 @@ import 'package:musculo_app/components/customTextField.dart';
 import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/components/share_picture.dart';
+import 'package:musculo_app/core/config/injections.dart';
 // import 'package:musculo_app/components/shared_appbar.dart';
 import 'package:musculo_app/core/config/validator.dart';
+import 'package:musculo_app/core/services/auth_services.dart';
+import 'package:musculo_app/model/user_model.dart';
 import 'package:musculo_app/modules/auth/sign_in/component/social_button_row.dart';
 import 'package:musculo_app/core/config/routes.dart';
 import 'package:musculo_app/core/constants/assets.dart';
@@ -14,6 +17,7 @@ import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/modules/auth/view_model/auth_view_model.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/view_model/user_view_model.dart';
 import 'package:provider/provider.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -91,14 +95,31 @@ class _SignInScreenState extends State<SignInScreen> {
                                     _passController.text.trim(),
                                   );
                                   if (user != null && context.mounted) {
-                                    Fluttertoast.showToast(
-                                      msg: "Signin Successfully",
-                                    );
-                                    Navigator.pushNamedAndRemoveUntil(
-                                      context,
-                                      Routes.bottomnavigationbarscreen,
-                                      (route) => false,
-                                    );
+                                    UserModel? userDoc = await context
+                                        .read<UserViewModel>()
+                                        .getUserById(user.uid);
+                                    if (userDoc != null) {
+                                      if (userDoc.role == "user") {
+                                        Fluttertoast.showToast(
+                                          msg: "Signin Successfully",
+                                        );
+                                        Navigator.pushNamedAndRemoveUntil(
+                                          context,
+                                          Routes.bottomnavigationbarscreen,
+                                          (route) => false,
+                                        );
+                                      } else {
+                                        await FirebaseAuth.instance.signOut();
+                                        Fluttertoast.showToast(
+                                          msg:
+                                              "Admins cannot log in to the app.",
+                                        );
+                                      }
+                                    } else {
+                                      Fluttertoast.showToast(
+                                        msg: "User data not found.",
+                                      );
+                                    }
                                   }
                                 }
                               },

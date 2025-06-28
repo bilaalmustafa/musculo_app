@@ -23,10 +23,11 @@ class FeedbackProvider with ChangeNotifier {
     String? contentId,
     required String contentType,
     double? rating,
-    String? name,
+    String? userName,
     String? feedbackMessage,
     String? email,
     String? suggestion,
+    String? contentName,
     String? imageUrl,
   }) async {
     try {
@@ -37,7 +38,8 @@ class FeedbackProvider with ChangeNotifier {
         userId: userId,
         contentId: contentId,
         contentType: contentType,
-        name: name,
+        userName: userName,
+        contentName: contentName,
         rating: rating,
         feedbackMessage: feedbackMessage,
         email: email,

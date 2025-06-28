@@ -25,14 +25,16 @@ class ProgramServices extends FirebaseService<ProgramModel> {
       ProgramModel? result = await update(id, item);
 
       return result;
-    } catch (e, Strc) {
-      Fluttertoast.showToast(msg: "error $e   strace $Strc");
+    } catch (e, strc) {
+      Fluttertoast.showToast(msg: "error $e   strace $strc");
       log("errror $e");
-      rethrow; // Pass the error up the chain
+      rethrow; 
     }
   }
 
   Stream<List<ProgramModel>> getPrograms() => getAllDiscovery("Program");
+   Stream<List<ProgramModel>> getCreatorPrograms(String uid) =>
+      getAllcreatorExercise("Program", uid);
 }
 
 class WorkoutServices extends FirebaseService<WorkoutModel> {
@@ -49,5 +51,31 @@ class WorkoutServices extends FirebaseService<WorkoutModel> {
 
   Stream<List<WorkoutModel>> getWorkout() => getAllDiscovery("Workout");
   Stream<List<WorkoutModel>> getCreatorWorkout(String uid) =>
-      getAllcreatorworkout("Workout", uid);
+      getAllcreatorExercise("Workout", uid);
+
+
+  Future<WorkoutModel?> ratingCreate(String id, WorkoutModel item) async {
+    try {
+      WorkoutModel? result = await update(id, item);
+
+      return result;
+    } catch (e, strc) {
+      Fluttertoast.showToast(msg: "error $e   strace $strc");
+    
+      rethrow; // Pass the error up the chain
+    }
+  }
+
+  Future<WorkoutModel?> workoutratingCreate(String id, WorkoutModel item) async {
+    try {
+      WorkoutModel? result = await update(id, item);
+
+      return result;
+    } catch (e, strc) {
+      Fluttertoast.showToast(msg: "error $e   strace $strc");
+      log("errror $e");
+      rethrow; // Pass the error up the chain
+    }
+  }
+  
 }

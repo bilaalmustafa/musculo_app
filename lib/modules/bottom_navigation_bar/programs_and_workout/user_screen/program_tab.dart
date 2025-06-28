@@ -8,7 +8,7 @@ import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/core/services/creator_services.dart';
 import 'package:musculo_app/model/programs_model.dart';
 
-import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/program_item.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/Program_Item_Dis.dart';
 
 class ProgramTab extends StatefulWidget {
   const ProgramTab({super.key, required this.tabselect});
