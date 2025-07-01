@@ -10,11 +10,14 @@ import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/congrate_container.dart';
 
-import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/show_rating_bottom_sheet.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/show_share_bottom_sheet.dart';
 
+import '../../../../../model/user_model.dart';
+import '../../component/show_rating_bottom_sheet.dart';
+
 class CongratulationScreen extends StatefulWidget {
-  const CongratulationScreen({super.key});
+  final UserModel creator;
+  const CongratulationScreen({super.key, required this.creator});
 
   @override
   State<CongratulationScreen> createState() => _CongratulationScreenState();
@@ -102,7 +105,9 @@ class _CongratulationScreenState extends State<CongratulationScreen> {
                             backgroundColor: ConstColors.white,
                             context: context,
                             builder: (context) {
-                              return ShowRatingBottomSheet();
+                              return ShowRatingBottomSheet(
+                                creator: widget.creator,
+                              );
                             },
                           );
                         },

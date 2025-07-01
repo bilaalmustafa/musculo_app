@@ -31,6 +31,8 @@ class UserModeTab extends StatefulWidget {
 class _UserModeTabState extends State<UserModeTab> {
   Stream<List<ProgramModel>>? stream;
   final TextEditingController _searchController = TextEditingController();
+
+  FocusNode _homeFocusNode = FocusNode();
   // final AuthService _authservces = instance<AuthService>();
   // late UserViewModel authViewModel;
   // Future<UserModel?>? _future;
@@ -42,8 +44,17 @@ class _UserModeTabState extends State<UserModeTab> {
     // authViewModel = context.read<UserViewModel>();
 
     stream = instance<ProgramServices>().getPrograms();
+    _homeFocusNode = FocusNode();
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _homeFocusNode.dispose();
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -69,7 +80,7 @@ class _UserModeTabState extends State<UserModeTab> {
                   preIcon: Assets.searchIcon,
                   sufIcon: Assets.filterIcon,
                   readOnly: true,
-
+                  focusNode: _homeFocusNode,
                   onclick: () {
                     Navigator.push(
                       context,
@@ -80,8 +91,9 @@ class _UserModeTabState extends State<UserModeTab> {
                             ),
                       ),
                     );
+
+                    _homeFocusNode.unfocus();
                   },
-                  // suffexicon: Icons.filter_list_outlined,
                 ),
                 CarasoulContainer(),
                 Row(
