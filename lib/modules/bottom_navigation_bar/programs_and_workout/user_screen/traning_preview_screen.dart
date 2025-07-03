@@ -12,12 +12,12 @@ import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_scre
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/custom_chip.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/analysis_containers.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/paragraph_text.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/show_rating_bottomsheet.dart';
+
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/component/show_rating_sheet.dart';
-import 'package:provider/provider.dart';
 
 import '../../../../core/config/routes.dart';
-import '../../profile/profile_view_model/profile_view_model.dart';
+import '../../../../core/services/user_service.dart';
+import '../../../../model/user_model.dart';
 
 class TraningPreviewScreen extends StatefulWidget {
   const TraningPreviewScreen({super.key, required this.workoutModel});
@@ -286,7 +286,29 @@ class _TraningPreviewScreenState extends State<TraningPreviewScreen> {
                       fontSize: Sizes.s16,
                       fontWeight: TextWeight.semiBold,
                     ),
-                    CreatorListTile(),
+                    FutureBuilder<UserModel?>(
+                      future: UserService().userById(
+                        widget.workoutModel.userId!,
+                      ),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Padding(
+                            padding: EdgeInsets.all(16),
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+
+                        if (snapshot.hasError || !snapshot.hasData) {
+                          return const Padding(
+                            padding: EdgeInsets.all(16),
+                            child: Text("Creator not found"),
+                          );
+                        }
+
+                        return CreatorListTile(creator: snapshot.data!);
+                      },
+                    ),
                   ],
                 ),
               ),

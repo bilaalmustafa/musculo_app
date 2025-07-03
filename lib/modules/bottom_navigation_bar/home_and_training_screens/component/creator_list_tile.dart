@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/poppins_text.dart';
@@ -12,21 +10,24 @@ import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/view_model/user_view_model.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../model/user_model.dart';
+
 class CreatorListTile extends StatelessWidget {
-  const CreatorListTile({super.key});
+  final UserModel creator;
+  const CreatorListTile({super.key, required this.creator});
 
   @override
   Widget build(BuildContext context) {
-    final creatorVm = context.read<UserViewModel>();
-    final data = creatorVm.userModel;
+    // final creatorVm = context.read<UserViewModel>();
+    // final data = creatorVm.userModel;
 
     return ListTile(
       contentPadding: EdgeInsets.zero,
       leading: CircleAvatar(
         radius: 30,
         backgroundImage:
-            data?.profileImageUrl != null
-                ? NetworkImage(data?.profileImageUrl ?? "")
+            creator.profileImageUrl != null
+                ? NetworkImage(creator.profileImageUrl ?? "")
                 : AssetImage(Assets.maskgroup),
       ),
       title: Wrap(
@@ -35,12 +36,12 @@ class CreatorListTile extends StatelessWidget {
         crossAxisAlignment: WrapCrossAlignment.center,
         children: [
           PoppinsText(
-            text: data?.name ?? "unknown",
+            text: creator.name ?? "unknown",
             fontSize: Sizes.s14,
             fontWeight: TextWeight.semiBold,
           ),
 
-          data?.subPlane == "Free" || data?.subPlane == null
+          creator.subPlane == "Free" || creator.subPlane == null
               ? Container()
               : SharePicture(imagePath: Assets.official),
         ],
@@ -52,7 +53,7 @@ class CreatorListTile extends StatelessWidget {
         children: [
           Icon(Icons.star, color: ConstColors.orange, size: Sizes.s20),
           PoppinsText(
-            text: "${data?.rating ?? 0.0} (${data?.review.length ?? 0} review)",
+            text: "${creator.rating ?? 0.0} (${creator.review.length} review)",
             fontSize: Sizes.s10,
             fontWeight: TextWeight.regular,
             color: ConstColors.greyA1A1,
@@ -64,7 +65,11 @@ class CreatorListTile extends StatelessWidget {
         buttonHeight: Sizes.s36,
         buttonWidth: Sizes.s120,
         onTap: () {
-          Navigator.pushNamed(context, Routes.coachProfile);
+          Navigator.pushNamed(
+            context,
+            Routes.coachProfile,
+            arguments: creator.userId,
+          );
         },
       ),
     );

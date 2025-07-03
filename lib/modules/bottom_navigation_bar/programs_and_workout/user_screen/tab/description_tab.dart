@@ -5,10 +5,15 @@ import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
+import 'package:musculo_app/core/services/user_service.dart';
 import 'package:musculo_app/model/programs_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/creator_list_tile.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/custom_chip.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/analysis_containers.dart';
+
+import '../../../../../core/config/injections.dart';
+import '../../../../../model/user_model.dart';
+import '../../component/paragraph_text.dart';
 
 class DescriptionTab extends StatefulWidget {
   const DescriptionTab({super.key, required this.programModel});
@@ -87,45 +92,83 @@ class _ProgramDetailScreenState extends State<DescriptionTab> {
                     fontSize: Sizes.s16,
                     fontWeight: TextWeight.semiBold,
                   ),
-
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
+                  ParagraphText(
+                    text:
                         "This is a long paragraph. It spans many lines. "
                         "We only want to show a few lines and then let the user tap View More. "
                         "This helps keep the UI clean and readable for longer content.This is a long paragraph. It spans many lines. "
                         "We only want to show a few lines and then let the user tap View More. "
                         "This helps keep the UI clean and readable for longer content.",
-                        maxLines: isExpanded ? null : 5,
-                        overflow: TextOverflow.fade,
-                        style: TextStyle(fontSize: 13),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            isExpanded = !isExpanded;
-                          });
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 4.0),
-                          child: Text(
-                            isExpanded ? "View Less" : "View More...",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+
+                    isExpanded: isExpanded,
+
+                    onTap:
+                        () => setState(() {
+                          isExpanded = !isExpanded;
+                        }),
                   ),
+
+                  // Column(
+                  //   crossAxisAlignment: CrossAxisAlignment.start,
+                  //   children: [
+                  //     Text(
+                  //       "This is a long paragraph. It spans many lines. "
+                  //       "We only want to show a few lines and then let the user tap View More. "
+                  //       "This helps keep the UI clean and readable for longer content.This is a long paragraph. It spans many lines. "
+                  //       "We only want to show a few lines and then let the user tap View More. "
+                  //       "This helps keep the UI clean and readable for longer content.",
+                  //       maxLines: isExpanded ? null : 5,
+                  //       overflow: TextOverflow.fade,
+                  //       style: TextStyle(fontSize: 13),
+                  //     ),
+                  //     InkWell(
+                  //       onTap: () {
+                  //         setState(() {
+                  //           isExpanded = !isExpanded;
+                  //         });
+                  //       },
+                  //       child: Padding(
+                  //         padding: const EdgeInsets.only(top: 4.0),
+                  //         child: Text(
+                  //           isExpanded ? "View Less" : "View More...",
+                  //           style: TextStyle(
+                  //             color: Colors.black,
+                  //             fontWeight: FontWeight.bold,
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                   PoppinsText(
                     text: "Creator",
                     fontSize: Sizes.s16,
                     fontWeight: TextWeight.semiBold,
                   ),
-                  CreatorListTile(),
+
+                  FutureBuilder<UserModel?>(
+                    future: instance<UserService>().userById(
+                      widget.programModel.userId!,
+                    ),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Padding(
+                          padding: EdgeInsets.all(16),
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+
+                      if (snapshot.hasError || !snapshot.hasData) {
+                        return const Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Text("Creator not found"),
+                        );
+                      }
+
+                      return CreatorListTile(creator: snapshot.data!);
+                    },
+                  ),
+
                   PoppinsText(
                     text: "Workouts ",
                     fontSize: Sizes.s16,

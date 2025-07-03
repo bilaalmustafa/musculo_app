@@ -6,11 +6,11 @@ import 'package:firebase_storage/firebase_storage.dart'
 import 'package:flutter/material.dart';
 import 'package:musculo_app/core/config/injections.dart';
 import 'package:musculo_app/core/services/creator_services.dart';
-import 'package:musculo_app/core/services/firebase_service.dart';
+
 import 'package:musculo_app/model/video_model.dart';
 import 'package:musculo_app/model/workouts_model.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:video_player/video_player.dart';
+
 import 'package:video_thumbnail/video_thumbnail.dart';
 
 class AddWorkoutVeiwModel extends ChangeNotifier {

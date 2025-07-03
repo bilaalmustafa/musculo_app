@@ -8,36 +8,55 @@ class ParagraphText extends StatelessWidget {
     required this.onTap,
     required this.text,
   });
+
   final bool isExpanded;
   final String text;
-
   final VoidCallback onTap;
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          text,
-          maxLines: isExpanded ? null : 5,
-          overflow: TextOverflow.fade,
-          style: TextStyle(fontSize: 13, color: ConstColors.grey7575),
-        ),
-        InkWell(
-          onTap: onTap,
-
-          child: Padding(
-            padding: const EdgeInsets.only(top: 4.0),
-            child: Text(
-              isExpanded ? "View Less" : "View More...",
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Create a TextPainter to measure the text
+        final textPainter = TextPainter(
+          text: TextSpan(
+            text: text,
+            style: TextStyle(fontSize: 13, color: ConstColors.grey7575),
           ),
-        ),
-      ],
+          maxLines: 5,
+          textDirection: TextDirection.ltr,
+        )..layout(maxWidth: constraints.maxWidth);
+
+        // Check if the text exceeds 5 lines
+        final bool isTextOverflowing = textPainter.didExceedMaxLines;
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              text,
+              maxLines: isExpanded ? null : 5,
+              overflow: isExpanded ? null : TextOverflow.fade,
+              style: TextStyle(fontSize: 13, color: ConstColors.grey7575),
+            ),
+            if (isTextOverflowing ||
+                isExpanded) // Show button only if text overflows or is expanded
+              InkWell(
+                onTap: onTap,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 4.0),
+                  child: Text(
+                    isExpanded ? "View Less" : "View More...",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        );
+      },
     );
   }
 }

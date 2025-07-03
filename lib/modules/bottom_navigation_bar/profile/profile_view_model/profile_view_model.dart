@@ -159,4 +159,12 @@ class ProfileProvider extends ChangeNotifier {
       return 'Error uploading image: $e';
     }
   }
+
+  int _selectTab = 0;
+  int get selectTab => _selectTab;
+
+  void setTab(int val) {
+    _selectTab = val;
+    notifyListeners();
+  }
 }
