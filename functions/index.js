@@ -1,8 +1,56 @@
 const {onCall, HttpsError} = require("firebase-functions/v2/https");
 const admin = require("firebase-admin");
-
+const stripe= require("stripe")("sk_test_51MikpdSDuIYZV8eSOEOY2Y5ZAECPFyujfeaREKy9bR5aAKc5TQD5HXkY5L7BscA6e9SXzqo7agNIgc6nIVaUWVes00c1S2vqZ3");
 admin.initializeApp();
 const db = admin.firestore();
+
+// Function to handle Stripe payment intent creation
+exports.stripePaymentintentRequest= onCall(async(request)=>{
+  try {
+  const { email, amount, currency } = request.data;
+
+    if (!email || !amount || !currency) {
+      throw new HttpsError("invalid-argument", "Missing email, amount, or currency.");
+    }
+
+
+    let cunstomerId;
+    const cunstomerList=await stripe.customers.list({
+      email: email,
+      limit:1,
+    });
+    if(cunstomerList.data.length>0){
+      cunstomerId=cunstomerList.data[0].id;
+    } else{
+      const customer=await stripe.customers.create({
+        email:email
+      });
+      cunstomerId=customer.id
+    }
+    const ephemeralKey = await stripe.ephemeralKeys.create( 
+      { customer: cunstomerId },           
+     { apiVersion: '2024-06-20' });
+  
+      const paymentIntent=await stripe.paymentIntents.create({
+        amount: amount,
+        currency:currency,
+        customer: cunstomerId,
+         automatic_payment_methods: {
+        enabled: true,
+      },
+      });
+     return { paymentIntent: paymentIntent.client_secret,
+        ephemeralKey: ephemeralKey.secret,
+        customer: cunstomerId,
+        success:true,
+        message: "Payment intent created successfully",}
+  } catch (error) {
+    console.error("Stripe Payment Intent Error:", error.message);
+    throw new HttpsError("unknown", error.message);
+  }
+})
+
+
 
 
 exports.registerUser = onCall(async (request) => {
@@ -24,34 +72,6 @@ exports.registerUser = onCall(async (request) => {
     }
   try {
    
-    // const userDoc = {
-    //   email: email || null,
-    //   name : name || null,
-    //   gender:gender || null,
-    //   role: "user",
-    //   age: age || null,
-    //   profileImageUrl: null,
-    //   userid: uid,
-    //   level_of_fitness:level_of_fitness || null,
-    //   dateOB: null,
-    //   overviewText: "",
-    //   experienceText: "",
-    //   goalText: "",
-    //   favExercise: "",
-    //   status: "active",
-    //   list_of_programs: [],
-    //   list_of_workouts: [],
-    //   finishedwork: 0,
-    //   spentMins: 0,
-    //   sold: [],
-    //   subPlane: null,
-    //   rating: 0.0,
-    //   review: [],
-    //   countRating: 0,
-    //   withdraw: 0.0,
-    //   subscriptionDate: null,
-    //   createdAt: admin.firestore.FieldValue.serverTimestamp(),
-    // };
     // 🔐 Create Firebase Auth user
     const userRecord = await admin.auth().createUser({
             email: email,

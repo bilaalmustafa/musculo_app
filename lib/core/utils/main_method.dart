@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:musculo_app/core/config/injections.dart';
 import 'package:musculo_app/firebase_options.dart';
@@ -11,6 +12,8 @@ import 'package:path_provider/path_provider.dart';
 class MainMethod {
   static Future<void> init() async {
     WidgetsFlutterBinding.ensureInitialized();
+    Stripe.publishableKey =
+        "pk_test_51MikpdSDuIYZV8eSumHPQGsTZUGIbUKMM6oqAVt8yPDgjDWb9h659J2y0fE5tuhdxfPgFEbgeP2zNrER1UeGUOBb007fiSXgWU";
 
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,

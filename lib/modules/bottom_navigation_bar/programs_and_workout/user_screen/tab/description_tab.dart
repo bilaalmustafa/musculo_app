@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
+import 'package:musculo_app/core/services/payment_service.dart';
 import 'package:musculo_app/model/programs_model.dart';
+import 'package:musculo_app/model/user_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/creator_list_tile.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/custom_chip.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/view_model/user_view_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/analysis_containers.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/screen/view_model/discover_view_model.dart';
+import 'package:provider/provider.dart';
 
 class DescriptionTab extends StatefulWidget {
   const DescriptionTab({super.key, required this.programModel});
@@ -19,7 +25,20 @@ class DescriptionTab extends StatefulWidget {
 }
 
 class _ProgramDetailScreenState extends State<DescriptionTab> {
-  bool isExpanded = false;
+  bool isExpanded = false, isPurchased = false;
+  @override
+  void initState() {
+    final usermodel = context.read<UserViewModel>().userModel;
+    Future.delayed(Duration.zero, () {
+      final alreadyPurchased = usermodel!.listOfPrograms.any(
+        (w) => w.programId == widget.programModel.programId,
+      );
+      setState(() {
+        isPurchased = alreadyPurchased;
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -180,7 +199,44 @@ class _ProgramDetailScreenState extends State<DescriptionTab> {
                 ],
               ),
             ),
-            Expanded(flex: 7, child: CustomButton(buttonText: "Buy")),
+            Expanded(
+              flex: 7,
+              child: Consumer<DiscoverViewModel>(
+                builder: (context, vm, _) {
+                  return CustomButton(
+                    loading: vm.isloading,
+                    onTap: () async {
+                      UserModel? usermodel =
+                          context.read<UserViewModel>().userModel;
+                      bool response = await PaymentService.initPaymentSheet(
+                        email: usermodel?.email ?? "",
+                        amount: data.price?.toDouble() ?? 0.0,
+                      );
+                      if (response) {
+                        usermodel!.listOfPrograms.add(data);
+
+                        UserModel? success = await vm.parchaseProgram(
+                          usermodel.userId!,
+                          usermodel,
+                          usermodel.listOfPrograms,
+                        );
+                        if (success != null) {
+                          setState(() {
+                            isPurchased = usermodel.listOfPrograms.contains(
+                              data,
+                            );
+                            Fluttertoast.showToast(
+                              msg: "Program Purchased Successfully",
+                            );
+                          });
+                        }
+                      }
+                    },
+                    buttonText: isPurchased ? "Purchased" : "Buy",
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),

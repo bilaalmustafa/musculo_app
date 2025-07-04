@@ -36,7 +36,7 @@ class UserService extends FirebaseService<UserModel> {
       rethrow; // Pass the error up the chain
     }
   }
-  Future<UserModel?> creatorRatingCreate(String id, UserModel item) async {
+  Future<UserModel?> updateData(String id, UserModel item) async {
     try {
       UserModel? result = await update(id, item);
 

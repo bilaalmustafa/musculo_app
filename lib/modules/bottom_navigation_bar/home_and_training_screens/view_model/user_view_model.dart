@@ -102,7 +102,7 @@ class UserViewModel with ChangeNotifier {
         countRating: newCount
       );
 
-      await instance<UserService>().creatorRatingCreate(docId, item);
+      await instance<UserService>().updateData(docId, item);
 
       isLoading = false;
       notifyListeners();

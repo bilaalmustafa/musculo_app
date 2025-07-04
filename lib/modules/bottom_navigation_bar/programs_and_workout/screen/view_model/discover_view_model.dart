@@ -1,9 +1,12 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:musculo_app/core/config/injections.dart';
 import 'package:musculo_app/core/services/creator_services.dart';
+import 'package:musculo_app/core/services/user_service.dart';
 import 'package:musculo_app/model/programs_model.dart';
+import 'package:musculo_app/model/user_model.dart';
 import 'package:musculo_app/model/workouts_model.dart';
 
 class DiscoverViewModel extends ChangeNotifier {
@@ -49,7 +52,8 @@ class DiscoverViewModel extends ChangeNotifier {
         ((oldRating * oldCount) + selectedRating) / (oldCount + 1);
     return newRating;
   }
-   Future<WorkoutModel?> postWorkoutRatingAndReview(
+
+  Future<WorkoutModel?> postWorkoutRatingAndReview(
     String docId,
     double rating,
     int newCount,
@@ -63,7 +67,7 @@ class DiscoverViewModel extends ChangeNotifier {
       WorkoutModel item = model.copyWith(
         rating: rating,
         review: reviewList,
-        ratingCount: newCount
+        ratingCount: newCount,
       );
 
       await instance<WorkoutServices>().workoutratingCreate(docId, item);
@@ -73,6 +77,60 @@ class DiscoverViewModel extends ChangeNotifier {
       return item;
     } catch (e) {
       log("discoveError $e");
+      isloading = false;
+      notifyListeners();
+      return null;
+    }
+  }
+
+  Future<UserModel?> parchaseWorkout(
+    String uid,
+    UserModel userModel,
+    List<WorkoutModel> workoutItem,
+  ) async {
+    try {
+      isloading = true;
+      notifyListeners();
+      UserModel userdate = userModel.copyWith(listOfWorkouts: workoutItem);
+
+      // Call the purchase API or service here
+      final result = await instance<UserService>().updateData(
+        uid,
+        userdate,
+      );
+
+      isloading = false;
+      notifyListeners();
+      return result;
+    } catch (e) {
+      log("purchaseError $e");
+      isloading = false;
+      notifyListeners();
+      return null;
+    }
+  }
+
+   Future<UserModel?> parchaseProgram(
+    String uid,
+    UserModel userModel,
+    List<ProgramModel> programItem,
+  ) async {
+    try {
+      isloading = true;
+      notifyListeners();
+      UserModel userdate = userModel.copyWith(listOfPrograms: programItem);
+
+      // Call the purchase API or service here
+      final result = await instance<UserService>().updateData(
+        uid,
+        userdate,
+      );
+
+      isloading = false;
+      notifyListeners();
+      return result;
+    } catch (e) {
+      log("purchaseError $e");
       isloading = false;
       notifyListeners();
       return null;
