@@ -1,7 +1,10 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
   // firebase auth instance
@@ -65,6 +68,12 @@ class AuthService {
   Future<bool> signOut() async {
     try {
       await _firebaseAuth.signOut();
+      final googleSignIn = GoogleSignIn();
+      if (await googleSignIn.isSignedIn()) {
+        await googleSignIn.signOut();
+      }
+
+      await FacebookAuth.instance.logOut();
       return true;
     } catch (e) {
       Fluttertoast.showToast(msg: "Error signing out: $e");

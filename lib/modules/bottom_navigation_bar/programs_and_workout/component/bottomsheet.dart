@@ -77,7 +77,6 @@ class LogoutBottomSheet extends StatelessWidget {
 
                         onTap: () async {
                           // logout Logic here
-                          Navigator.pop(context);
                           await vm.logout();
 
                           // Navigate to SignIn screen and remove all previous routes

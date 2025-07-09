@@ -6,10 +6,19 @@ class AccountStorage {
   static const _secure = FlutterSecureStorage();
 
   /// Save credentials securely
-  static Future<void> saveCredentials(String email, String password) async {
+  static Future<void> saveCredentials(
+    String email,
+    String password,
+
+    String provider,
+  ) async {
     await _secure.write(
       key: 'account:$email',
-      value: jsonEncode({'email': email, 'password': password}),
+      value: jsonEncode({
+        'email': email,
+        'password': password,
+        'provider': provider,
+      }),
     );
 
     final prefs = await SharedPreferences.getInstance();
@@ -31,7 +40,11 @@ class AccountStorage {
     final json = await _secure.read(key: 'account:$email');
     if (json == null) return null;
     final data = jsonDecode(json);
-    return {'email': data['email'], 'password': data['password']};
+    return {
+      'email': data['email'],
+      'password': data['password'],
+      'provider': data['provider'] ?? 'email',
+    };
   }
 
   /// Delete account
