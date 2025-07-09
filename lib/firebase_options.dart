@@ -70,8 +70,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '332527150538',
     projectId: 'musculo-2ba15',
     storageBucket: 'musculo-2ba15.appspot.com',
-    androidClientId: '332527150538-kh4am4skcvd8ejg17heb5r8npkl76b0j.apps.googleusercontent.com',
-    iosClientId: '332527150538-8ropr5fh8kmbb87v6go6obihemasun9f.apps.googleusercontent.com',
-    iosBundleId: 'com.example.musculoApp',
+    androidClientId:
+        '332527150538-kh4am4skcvd8ejg17heb5r8npkl76b0j.apps.googleusercontent.com',
+    iosClientId:
+        '332527150538-8ropr5fh8kmbb87v6go6obihemasun9f.apps.googleusercontent.com',
+    iosBundleId: 'com.dartsync.musculoApp',
   );
 }

@@ -1,20 +1,27 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
 import 'package:musculo_app/core/config/injections.dart';
+import 'package:musculo_app/core/config/routes.dart';
+
 import 'package:musculo_app/core/services/account_storage.dart';
 import 'package:musculo_app/core/services/auth_services.dart';
-import 'package:musculo_app/core/services/user_service.dart';
+import 'package:musculo_app/main.dart';
+
 import 'package:musculo_app/model/user_model.dart' as u;
 import 'package:musculo_app/model/user_model.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class AuthViewModel with ChangeNotifier {
   final _authServices = AuthService();
-
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passController = TextEditingController();
   final TextEditingController firstnameController = TextEditingController();
@@ -91,6 +98,7 @@ class AuthViewModel with ChangeNotifier {
         await AccountStorage.saveCredentials(
           emailController.text.trim(),
           passController.text,
+          'email',
         );
 
         log('User created successfully: ${response.data['message']}');
@@ -209,7 +217,7 @@ class AuthViewModel with ChangeNotifier {
 
     if (user != null) {
       currentUser = user;
-      await AccountStorage.saveCredentials(email, pass);
+      await AccountStorage.saveCredentials(email, pass, 'email');
     }
 
     isLoading = false;
@@ -234,9 +242,28 @@ class AuthViewModel with ChangeNotifier {
 
   Future<void> switchAccount(String email) async {
     final creds = await AccountStorage.getCredentials(email);
-    if (creds != null) {
-      await signIn(creds['email']!, creds['password']!);
-      await AccountStorage.saveCredentials(creds['email']!, creds['password']!);
+    if (creds == null) return;
+    final storedEmail = creds['email']!;
+    final password = creds['password']!;
+    final provider = creds['provider'] ?? 'email';
+    try {
+      final context = navigatorKey.currentContext!;
+      switch (provider) {
+        case 'email':
+          await signIn(storedEmail, password);
+          break;
+        case 'google':
+          await loginWithGoogle(context);
+          break;
+        case 'facebook':
+          await signInWithFacebook(context);
+          break;
+        default:
+          Fluttertoast.showToast(msg: "Unknown provider: $provider");
+      }
+      await AccountStorage.saveCredentials(storedEmail, password, provider);
+    } catch (e) {
+      Fluttertoast.showToast(msg: "Switch failed: ${e.toString()}");
     }
   }
 
@@ -247,5 +274,151 @@ class AuthViewModel with ChangeNotifier {
   Future<void> removeAccount(String email) async {
     await AccountStorage.deleteAccount(email);
     notifyListeners();
+  }
+
+  //.............. FaceBook login function ..............
+  // Future<UserCredential> signInWithFacebook() async {
+  //   // Trigger the signin flow
+  //   final LoginResult loginResult = await FacebookAuth.instance.login(
+  //     permissions: ['email', 'public_profile'],
+  //   );
+
+  //   // create credential from the access token
+  //   final OAuthCredential facebookAuthCredential =
+  //       FacebookAuthProvider.credential(
+  //         '${loginResult.accessToken?.tokenString}',
+  //       );
+
+  //   // Once signed in return the usercredential
+  //   return _auth.signInWithCredential(facebookAuthCredential);
+  // }
+  Future<void> signInWithFacebook(BuildContext context) async {
+    try {
+      // Trigger the sign-in flow
+      final LoginResult loginResult = await FacebookAuth.instance.login(
+        permissions: ['email', 'public_profile'],
+      );
+
+      // Check if the login was successful
+      if (loginResult.status == LoginStatus.success &&
+          loginResult.accessToken != null) {
+        // Create credential from access token
+        final OAuthCredential facebookAuthCredential =
+            FacebookAuthProvider.credential(
+              loginResult.accessToken!.tokenString,
+            );
+
+        // Sign in to Firebase
+        final UserCredential userCredential = await _auth.signInWithCredential(
+          facebookAuthCredential,
+        );
+        final User? user = userCredential.user;
+
+        if (user != null) {
+          final userData = await FacebookAuth.instance.getUserData();
+
+          final userModel = u.UserModel(
+            userId: user.uid,
+            email: user.email ?? userData["email"] ?? '',
+            name: user.displayName ?? userData["name"] ?? '',
+            profileImageUrl:
+                user.photoURL ?? (userData["picture"]?["data"]?["url"] ?? ''),
+            gender: '',
+            age: 0,
+            levelOfFitness: '',
+          );
+          // save to Firestore
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.uid)
+              .set(userModel.toJson(), SetOptions(merge: true));
+          currentUser = user;
+          notifyListeners();
+          final email = user.email ?? userData["email"];
+          if (email != null && email.isNotEmpty) {
+            await AccountStorage.saveCredentials(email, '', 'facebook');
+          }
+        }
+
+        if (context.mounted) {
+          // Navigate to the home screen
+          Navigator.pushReplacementNamed(
+            context,
+            Routes.bottomnavigationbarscreen,
+          );
+        }
+        Fluttertoast.showToast(msg: "Facebook sign-in successful!");
+      } else if (loginResult.status == LoginStatus.cancelled) {
+        Fluttertoast.showToast(msg: "Facebook sign-in cancelled.");
+      } else {
+        Fluttertoast.showToast(msg: "Facebook sign-in failed.");
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: "Error: ${e.toString()}");
+    }
+  }
+
+  Future<void> loginWithGoogle(BuildContext context) async {
+    try {
+      // Start the interactive sign-in process using the new method
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      // If the user cancels, googleUser will be null
+      if (googleUser == null) {
+        log('Google Sign-In was canceled by the user.');
+        Fluttertoast.showToast(msg: "Sign-in canceled");
+        return; // Stop the function here
+      }
+
+      // Obtain the authentication details from the request
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      // Create a new credential for Firebase
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // Sign in to Firebase with the credential
+      final UserCredential userCredential = await _auth.signInWithCredential(
+        credential,
+      );
+      final User? user = userCredential.user;
+
+      if (user != null) {
+        final userModel = u.UserModel(
+          userId: user.uid,
+          email: user.email ?? '',
+          name: user.displayName ?? '',
+          profileImageUrl: user.photoURL ?? '',
+          gender: '',
+          age: 0,
+          levelOfFitness: '',
+        );
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .set(userModel.toJson(), SetOptions(merge: true));
+        currentUser = user;
+        notifyListeners();
+      }
+      if (user!.email != null) {
+        await AccountStorage.saveCredentials(user.email!, '', 'google');
+      }
+      if (context.mounted) {
+        Navigator.pushReplacementNamed(
+          context,
+          Routes.bottomnavigationbarscreen,
+        );
+      }
+
+      Fluttertoast.showToast(msg: "Successfully signed in!");
+    } catch (e) {
+      log('Error during Google Sign-In: $e');
+      Fluttertoast.showToast(msg: 'An error occurred during sign-in.');
+    } finally {
+      log('googleSign() → finished');
+    }
   }
 }

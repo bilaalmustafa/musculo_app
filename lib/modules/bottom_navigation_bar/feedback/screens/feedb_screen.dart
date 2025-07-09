@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:musculo_app/components/shared_appbar.dart';
 import 'package:musculo_app/core/config/validator.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
-import 'package:musculo_app/core/services/auth_services.dart';
+
 import 'package:musculo_app/modules/bottom_navigation_bar/feedback/components/feedbackfield.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/feedback/view_model/feedback_view_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/view_model/user_view_model.dart';
@@ -16,7 +16,13 @@ import '../../../../core/constants/sizes.dart';
 import '../../../auth/register/component/show_dialog_box.dart';
 
 class FeedBScreen extends StatefulWidget {
-  const FeedBScreen({super.key, required this.feedbackType,required this.contentId, this.rating, this.contentName});
+  const FeedBScreen({
+    super.key,
+    required this.feedbackType,
+    required this.contentId,
+    this.rating,
+    this.contentName,
+  });
   final String feedbackType;
   final String? contentId;
   final double? rating;
@@ -92,7 +98,6 @@ class _FeedBScreenState extends State<FeedBScreen> {
               onTap: () async {
                 if (formKey.currentState!.validate()) {
                   await provider.submitFeedback(
-                    
                     userId: userViewModel!.userId ?? " Anonymous",
                     contentId: widget.contentId ?? "unknown",
                     rating: widget.rating ?? 0.0,
@@ -103,6 +108,7 @@ class _FeedBScreenState extends State<FeedBScreen> {
                     userName: userViewModel.name ?? " Anonymous",
                     contentName: widget.contentName ?? "unknown",
                   );
+
                   if (context.mounted) {
                     formKey.currentState?.reset();
                     emailController.clear();
