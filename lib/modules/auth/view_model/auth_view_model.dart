@@ -18,6 +18,7 @@ import 'package:musculo_app/main.dart';
 import 'package:musculo_app/model/user_model.dart' as u;
 import 'package:musculo_app/model/user_model.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthViewModel with ChangeNotifier {
   final _authServices = AuthService();
@@ -91,15 +92,22 @@ class AuthViewModel with ChangeNotifier {
       notifyListeners();
       log("Response from Cloud Function: ${response.data["success"]}");
       if (response.data['success'] == true) {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailController.text.trim(),
-          password: passController.text.trim(),
-        );
+        final UserCredential credential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
+              email: emailController.text.trim(),
+              password: passController.text.trim(),
+            );
+        final User? user = credential.user;
         await AccountStorage.saveCredentials(
           emailController.text.trim(),
           passController.text,
           'email',
         );
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('isLoggedIn', true);
+        if (user != null) {
+          await prefs.setString('uid', user.uid);
+        }
 
         log('User created successfully: ${response.data['message']}');
 
@@ -218,6 +226,10 @@ class AuthViewModel with ChangeNotifier {
     if (user != null) {
       currentUser = user;
       await AccountStorage.saveCredentials(email, pass, 'email');
+
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isLoggedIn', true);
+      await prefs.setString('uid', user.uid);
     }
 
     isLoading = false;
@@ -276,22 +288,6 @@ class AuthViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  //.............. FaceBook login function ..............
-  // Future<UserCredential> signInWithFacebook() async {
-  //   // Trigger the signin flow
-  //   final LoginResult loginResult = await FacebookAuth.instance.login(
-  //     permissions: ['email', 'public_profile'],
-  //   );
-
-  //   // create credential from the access token
-  //   final OAuthCredential facebookAuthCredential =
-  //       FacebookAuthProvider.credential(
-  //         '${loginResult.accessToken?.tokenString}',
-  //       );
-
-  //   // Once signed in return the usercredential
-  //   return _auth.signInWithCredential(facebookAuthCredential);
-  // }
   Future<void> signInWithFacebook(BuildContext context) async {
     try {
       // Trigger the sign-in flow
@@ -334,6 +330,12 @@ class AuthViewModel with ChangeNotifier {
               .set(userModel.toJson(), SetOptions(merge: true));
           currentUser = user;
           notifyListeners();
+
+          // Save UID and login state to SharedPreferences
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setBool('isLoggedIn', true);
+          await prefs.setString('uid', user.uid);
+
           final email = user.email ?? userData["email"];
           if (email != null && email.isNotEmpty) {
             await AccountStorage.saveCredentials(email, '', 'facebook');
@@ -403,7 +405,12 @@ class AuthViewModel with ChangeNotifier {
         currentUser = user;
         notifyListeners();
       }
-      if (user!.email != null) {
+      // Save UID and login state to SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isLoggedIn', true);
+      await prefs.setString('uid', user!.uid);
+
+      if (user.email != null) {
         await AccountStorage.saveCredentials(user.email!, '', 'google');
       }
       if (context.mounted) {

@@ -1,14 +1,16 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:musculo_app/core/config/routes.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashServices {
   Future<void> splashFunction(BuildContext context) async {
     await Future.delayed(const Duration(seconds: 2));
 
-    User? user = FirebaseAuth.instance.currentUser;
+    final prefs = await SharedPreferences.getInstance();
+    final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+    final uid = prefs.getString('uid');
 
-    if (user != null && context.mounted) {
+    if (isLoggedIn && uid != null && uid.isNotEmpty && context.mounted) {
       Navigator.pushReplacementNamed(context, Routes.bottomnavigationbarscreen);
     } else {
       Navigator.pushReplacementNamed(context, Routes.getStarted);
