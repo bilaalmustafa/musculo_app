@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:musculo_app/components/customTextField.dart';
 import 'package:musculo_app/components/loader/home_loader.dart';
 import 'package:musculo_app/components/poppins_text.dart';
+import 'package:musculo_app/core/config/routes.dart';
 
 import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
@@ -31,6 +32,8 @@ class UserModeTab extends StatefulWidget {
 class _UserModeTabState extends State<UserModeTab> {
   Stream<List<ProgramModel>>? stream;
   final TextEditingController _searchController = TextEditingController();
+
+  FocusNode _homeFocusNode = FocusNode();
   // final AuthService _authservces = instance<AuthService>();
   // late UserViewModel authViewModel;
   // Future<UserModel?>? _future;
@@ -42,8 +45,17 @@ class _UserModeTabState extends State<UserModeTab> {
     // authViewModel = context.read<UserViewModel>();
 
     stream = instance<ProgramServices>().getPrograms();
+    _homeFocusNode = FocusNode();
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _homeFocusNode.dispose();
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -69,7 +81,7 @@ class _UserModeTabState extends State<UserModeTab> {
                   preIcon: Assets.searchIcon,
                   sufIcon: Assets.filterIcon,
                   readOnly: true,
-
+                  focusNode: _homeFocusNode,
                   onclick: () {
                     Navigator.push(
                       context,
@@ -80,8 +92,9 @@ class _UserModeTabState extends State<UserModeTab> {
                             ),
                       ),
                     );
+
+                    _homeFocusNode.unfocus();
                   },
-                  // suffexicon: Icons.filter_list_outlined,
                 ),
                 CarasoulContainer(),
                 Row(
@@ -200,6 +213,7 @@ class _UserModeTabState extends State<UserModeTab> {
                                     return ShowBottomSheet(
                                       title: 'Choose Program',
                                       modelData: userVm.listOfPrograms,
+                                      usermodel: userVm,
                                     );
                                   },
                                 );
@@ -224,7 +238,10 @@ class _UserModeTabState extends State<UserModeTab> {
                   ),
                 ListView.separated(
                   shrinkWrap: true,
-                  itemCount: userVm.listOfPrograms.length,
+                  itemCount:
+                      userVm.listOfPrograms.length >= 3
+                          ? 3
+                          : userVm.listOfPrograms.length,
                   physics: NeverScrollableScrollPhysics(),
                   itemBuilder:
                       (context, index) => ProgramVideoItem(
@@ -261,6 +278,7 @@ class _UserModeTabState extends State<UserModeTab> {
                                     return ShowBottomSheet(
                                       title: 'Choose Workout',
                                       modelData: userVm.listOfWorkouts,
+                                      usermodel: userVm,
                                     );
                                   },
                                 );
@@ -286,12 +304,27 @@ class _UserModeTabState extends State<UserModeTab> {
                 ListView.separated(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: userVm.listOfWorkouts.length,
+                  itemCount:
+                      userVm.listOfWorkouts.length >= 3
+                          ? 3
+                          : userVm.listOfWorkouts.length,
                   itemBuilder:
                       (context, index) => WorkoutVideoItem(
                         workouts: userVm.listOfWorkouts[index],
                         image: Assets.playbutt,
                         onChanged: (value) {},
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            Routes.trainingscreen,
+
+                            arguments: {
+                              'workoutData':
+                                  userVm.listOfWorkouts[index], // WorkoutModel
+                              'userModel': userVm, // UserModel
+                            },
+                          );
+                        },
                       ),
                   separatorBuilder: (context, index) => SizedBox(height: 20),
                 ),

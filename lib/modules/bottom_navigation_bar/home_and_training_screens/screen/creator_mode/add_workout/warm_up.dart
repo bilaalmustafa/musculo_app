@@ -13,6 +13,7 @@ import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_scre
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/component/reels_item.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:video_player/video_player.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
 import '../../../../../../core/config/routes.dart';
@@ -25,6 +26,7 @@ class WarmUp extends StatefulWidget {
 }
 
 class _WarmUpState extends State<WarmUp> {
+  // late VideoPlayerController _controller;
   final TextEditingController _searchController = TextEditingController();
   late AddWorkoutVeiwModel _addWorkoutVeiwModel;
   @override
@@ -39,6 +41,7 @@ class _WarmUpState extends State<WarmUp> {
   @override
   void dispose() {
     _searchController.dispose();
+    // _controller.dispose();
     _addWorkoutVeiwModel.searchQuery = ''; // Clear search when leaving screen
     super.dispose();
   }
@@ -126,6 +129,7 @@ class _WarmUpState extends State<WarmUp> {
                                                 builder:
                                                     (context) =>
                                                         VideoFrameScreen(
+                                                          // controller: _controller,
                                                           videourl: video.url,
                                                         ),
                                               ),

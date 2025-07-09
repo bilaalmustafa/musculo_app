@@ -6,6 +6,7 @@ import 'package:musculo_app/core/config/injections.dart';
 import 'package:musculo_app/core/services/creator_services.dart';
 import 'package:musculo_app/core/services/user_service.dart';
 import 'package:musculo_app/model/programs_model.dart';
+import 'package:musculo_app/model/sold_model.dart';
 import 'package:musculo_app/model/user_model.dart';
 import 'package:musculo_app/model/workouts_model.dart';
 
@@ -94,10 +95,7 @@ class DiscoverViewModel extends ChangeNotifier {
       UserModel userdate = userModel.copyWith(listOfWorkouts: workoutItem);
 
       // Call the purchase API or service here
-      final result = await instance<UserService>().updateData(
-        uid,
-        userdate,
-      );
+      final result = await instance<UserService>().updateData(uid, userdate);
 
       isloading = false;
       notifyListeners();
@@ -110,7 +108,7 @@ class DiscoverViewModel extends ChangeNotifier {
     }
   }
 
-   Future<UserModel?> parchaseProgram(
+  Future<UserModel?> parchaseProgram(
     String uid,
     UserModel userModel,
     List<ProgramModel> programItem,
@@ -121,10 +119,31 @@ class DiscoverViewModel extends ChangeNotifier {
       UserModel userdate = userModel.copyWith(listOfPrograms: programItem);
 
       // Call the purchase API or service here
-      final result = await instance<UserService>().updateData(
-        uid,
-        userdate,
-      );
+      final result = await instance<UserService>().updateData(uid, userdate);
+
+      isloading = false;
+      notifyListeners();
+      return result;
+    } catch (e) {
+      log("purchaseError $e");
+      isloading = false;
+      notifyListeners();
+      return null;
+    }
+  }
+
+  Future<UserModel?> addSoldInList(
+    String uid,
+    UserModel userModel,
+    List<SoldModel> soldItem,
+  ) async {
+    try {
+      isloading = true;
+      notifyListeners();
+      UserModel userdate = userModel.copyWith(sold: soldItem);
+
+      // Call the purchase API or service here
+      final result = await instance<UserService>().updateData(uid, userdate);
 
       isloading = false;
       notifyListeners();

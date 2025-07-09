@@ -17,7 +17,7 @@ class PaymentService {
       );
       final result = await callable.call({
         'email': email,
-        'amount': (200 * 100).toInt(),
+        'amount': (amount * 100).toInt(),
         'currency': 'usd',
       });
 
@@ -31,16 +31,8 @@ class PaymentService {
           style: ThemeMode.light,
         ),
       );
-      try {
-        await Stripe.instance.presentPaymentSheet();
-        Fluttertoast.showToast(msg: "Payment Successful");
-      } on StripeException catch (e) {
-        Fluttertoast.showToast(
-          msg: "Payment cancelled or failed: ${e.error.localizedMessage}",
-        );
-      } catch (e) {
-        Fluttertoast.showToast(msg: "Unknown error: $e");
-      }
+
+      await Stripe.instance.presentPaymentSheet();
       Fluttertoast.showToast(msg: "Payment Completed");
       return true;
     } catch (e) {

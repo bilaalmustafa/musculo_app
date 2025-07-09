@@ -41,16 +41,16 @@ class _ShowrateBottomSheetState extends State<ShowrateBottomSheet> {
       return weeks.toString();
     }
 
-    return ChangeNotifierProvider(
-      create: (context) => DiscoverViewModel(),
-      child: FractionallySizedBox(
-        heightFactor: 1,
-        child: Container(
-          padding: EdgeInsets.only(
-            left: 20,
-            right: 20,
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-          ),
+    return FractionallySizedBox(
+      heightFactor: 1,
+      child: Padding(
+        padding: EdgeInsets.only(
+          left: 20,
+          right: 20,
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: ChangeNotifierProvider(
+          create: (context) => DiscoverViewModel(),
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -60,47 +60,11 @@ class _ShowrateBottomSheetState extends State<ShowrateBottomSheet> {
                   margin: EdgeInsets.all(10),
                   height: 4,
                   width: 40,
-  decoration: BoxDecoration(
+                  decoration: BoxDecoration(
                     color: ConstColors.dividerColor,
                     borderRadius: BorderRadius.circular(8),
                   ),
-                child:   Expanded(
-                    child: Consumer<DiscoverViewModel>(
-                      builder: (context, vm, _) {
-                        return CustomButton(
-                          loading: vm.isloading,
-                          onTap: () async {
-                            double newRating = vm.getingRating(
-                              data.rating ?? 0.0,
-                              data.ratingCount ?? 0,
-                            );
-                            final List<String> reviewList = List.from(
-                              data.review ?? [],
-                            );
-                            if (reviewController.text.isNotEmpty) {
-                              reviewList.add(reviewController.text);
-                            }
-                            ProgramModel? success = await vm
-                                .postProgramRatingAndReview(
-                                  data.programId!,
-                                  newRating,
-                                  (data.ratingCount ?? 0) + 1,
-                                  data,
-                                  reviewList,
-                                );
-                            if (success != null && context.mounted) {
-                              Navigator.popUntil(
-                                context,
-                                (route) => route.isFirst,
-                              );
-                            }
-                          },
-                          buttonText: "Submit",
-                        );
-                      },
-                    ),
-                
-                ),),
+                ),
                 PoppinsText(
                   text: "Leave a Review",
                   fontSize: Sizes.s20,

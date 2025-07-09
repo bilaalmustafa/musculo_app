@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/core/config/injections.dart';

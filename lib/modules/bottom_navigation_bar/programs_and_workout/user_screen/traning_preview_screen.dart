@@ -4,10 +4,12 @@ import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/components/share_picture.dart';
 import 'package:musculo_app/core/config/extensions.dart';
+import 'package:musculo_app/core/config/injections.dart';
 import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
+import 'package:musculo_app/model/sold_model.dart';
 import 'package:musculo_app/model/user_model.dart';
 import 'package:musculo_app/model/workouts_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/creator_list_tile.dart';
@@ -17,11 +19,13 @@ import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/c
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/paragraph_text.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/show_rating_bottomsheet.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/screen/view_model/discover_view_model.dart';
+
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/component/show_rating_sheet.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/config/routes.dart';
-import '../../profile/profile_view_model/profile_view_model.dart';
+import '../../../../core/services/user_service.dart';
+import '../../../../model/user_model.dart';
 
 class TraningPreviewScreen extends StatefulWidget {
   const TraningPreviewScreen({super.key, required this.workoutModel});
@@ -304,7 +308,29 @@ class _TraningPreviewScreenState extends State<TraningPreviewScreen> {
                       fontSize: Sizes.s16,
                       fontWeight: TextWeight.semiBold,
                     ),
-                    CreatorListTile(),
+                    FutureBuilder<UserModel?>(
+                      future: UserService().userById(
+                        widget.workoutModel.userId!,
+                      ),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Padding(
+                            padding: EdgeInsets.all(16),
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+
+                        if (snapshot.hasError || !snapshot.hasData) {
+                          return const Padding(
+                            padding: EdgeInsets.all(16),
+                            child: Text("Creator not found"),
+                          );
+                        }
+
+                        return CreatorListTile(creator: snapshot.data!);
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -341,20 +367,59 @@ class _TraningPreviewScreenState extends State<TraningPreviewScreen> {
                     onTap: () async {
                       UserModel? usermodel =
                           context.read<UserViewModel>().userModel;
-                      usermodel!.listOfWorkouts.add(data);
+                      final creatorId = widget.workoutModel.userId!;
 
-                      UserModel? success = await vm.parchaseWorkout(
-                        usermodel.userId!,
-                        usermodel,
-                        usermodel.listOfWorkouts,
-                      );
-                      if (success != null) {
-                        setState(() {
-                          isPurchased = usermodel.listOfWorkouts.contains(data);
-                          Fluttertoast.showToast(
-                            msg: "Workout Purchased Successfully",
+                      UserModel? creatorModel = await instance<UserService>()
+                          .userById(creatorId);
+
+                      bool response = true;
+                      // await PaymentService.initPaymentSheet(
+                      //   email: usermodel?.email ?? "",
+                      //   amount: data.price?.toDouble() ?? 0.0,
+                      // );
+
+                      if (response) {
+                        usermodel!.listOfWorkouts.add(data);
+
+                        UserModel? success = await vm.parchaseWorkout(
+                          usermodel.userId!,
+                          usermodel,
+                          usermodel.listOfWorkouts,
+                        );
+                        if (creatorModel != null) {
+                          // Ensure sold list is not null
+                          List<SoldModel> updatedSoldList = List.from(
+                            creatorModel.sold,
                           );
-                        });
+                          SoldModel soldItem = SoldModel(
+                            type: "workout",
+                            packegeMode: true,
+                            userId: data.userId!,
+                            contentName: data.workoutName ?? "unknow",
+                            contentId: data.workoutId!,
+                            contentPrice: data.price?.toDouble() ?? 0.0,
+                            buyDate: DateTime.now(),
+                          );
+                          updatedSoldList.add(soldItem);
+
+                          // 3️⃣ Update Creator Document in Firestore
+                          await vm.addSoldInList(
+                            creatorModel.userId!,
+                            creatorModel,
+                            updatedSoldList,
+                          );
+                        }
+
+                        if (success != null) {
+                          setState(() {
+                            isPurchased = usermodel.listOfWorkouts.contains(
+                              data,
+                            );
+                            Fluttertoast.showToast(
+                              msg: "Workout Purchased Successfully",
+                            );
+                          });
+                        }
                       }
                     },
                     buttonText: isPurchased ? "Purchased" : "Buy",

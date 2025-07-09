@@ -7,7 +7,9 @@ import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/core/services/payment_service.dart';
+import 'package:musculo_app/core/services/user_service.dart';
 import 'package:musculo_app/model/programs_model.dart';
+import 'package:musculo_app/model/sold_model.dart';
 import 'package:musculo_app/model/user_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/creator_list_tile.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/custom_chip.dart';
@@ -15,6 +17,10 @@ import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_scre
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/analysis_containers.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/screen/view_model/discover_view_model.dart';
 import 'package:provider/provider.dart';
+
+import '../../../../../core/config/injections.dart';
+import '../../../../../model/user_model.dart';
+import '../../component/paragraph_text.dart';
 
 class DescriptionTab extends StatefulWidget {
   const DescriptionTab({super.key, required this.programModel});
@@ -25,9 +31,11 @@ class DescriptionTab extends StatefulWidget {
 }
 
 class _ProgramDetailScreenState extends State<DescriptionTab> {
+  Future<UserModel?>? future;
   bool isExpanded = false, isPurchased = false;
   @override
   void initState() {
+    future = instance<UserService>().userById(widget.programModel.userId!);
     final usermodel = context.read<UserViewModel>().userModel;
     Future.delayed(Duration.zero, () {
       final alreadyPurchased = usermodel!.listOfPrograms.any(
@@ -106,45 +114,81 @@ class _ProgramDetailScreenState extends State<DescriptionTab> {
                     fontSize: Sizes.s16,
                     fontWeight: TextWeight.semiBold,
                   ),
-
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
+                  ParagraphText(
+                    text:
                         "This is a long paragraph. It spans many lines. "
                         "We only want to show a few lines and then let the user tap View More. "
                         "This helps keep the UI clean and readable for longer content.This is a long paragraph. It spans many lines. "
                         "We only want to show a few lines and then let the user tap View More. "
                         "This helps keep the UI clean and readable for longer content.",
-                        maxLines: isExpanded ? null : 5,
-                        overflow: TextOverflow.fade,
-                        style: TextStyle(fontSize: 13),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            isExpanded = !isExpanded;
-                          });
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 4.0),
-                          child: Text(
-                            isExpanded ? "View Less" : "View More...",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+
+                    isExpanded: isExpanded,
+
+                    onTap:
+                        () => setState(() {
+                          isExpanded = !isExpanded;
+                        }),
                   ),
+
+                  // Column(
+                  //   crossAxisAlignment: CrossAxisAlignment.start,
+                  //   children: [
+                  //     Text(
+                  //       "This is a long paragraph. It spans many lines. "
+                  //       "We only want to show a few lines and then let the user tap View More. "
+                  //       "This helps keep the UI clean and readable for longer content.This is a long paragraph. It spans many lines. "
+                  //       "We only want to show a few lines and then let the user tap View More. "
+                  //       "This helps keep the UI clean and readable for longer content.",
+                  //       maxLines: isExpanded ? null : 5,
+                  //       overflow: TextOverflow.fade,
+                  //       style: TextStyle(fontSize: 13),
+                  //     ),
+                  //     InkWell(
+                  //       onTap: () {
+                  //         setState(() {
+                  //           isExpanded = !isExpanded;
+                  //         });
+                  //       },
+                  //       child: Padding(
+                  //         padding: const EdgeInsets.only(top: 4.0),
+                  //         child: Text(
+                  //           isExpanded ? "View Less" : "View More...",
+                  //           style: TextStyle(
+                  //             color: Colors.black,
+                  //             fontWeight: FontWeight.bold,
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                   PoppinsText(
                     text: "Creator",
                     fontSize: Sizes.s16,
                     fontWeight: TextWeight.semiBold,
                   ),
-                  CreatorListTile(),
+
+                  FutureBuilder<UserModel?>(
+                    future: future,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Padding(
+                          padding: EdgeInsets.all(16),
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+
+                      if (snapshot.hasError || !snapshot.hasData) {
+                        return const Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Text("Creator not found"),
+                        );
+                      }
+
+                      return CreatorListTile(creator: snapshot.data!);
+                    },
+                  ),
+
                   PoppinsText(
                     text: "Workouts ",
                     fontSize: Sizes.s16,
@@ -208,10 +252,16 @@ class _ProgramDetailScreenState extends State<DescriptionTab> {
                     onTap: () async {
                       UserModel? usermodel =
                           context.read<UserViewModel>().userModel;
-                      bool response = await PaymentService.initPaymentSheet(
-                        email: usermodel?.email ?? "",
-                        amount: data.price?.toDouble() ?? 0.0,
-                      );
+                      final creatorId = widget.programModel.userId!;
+
+                      UserModel? creatorModel = await instance<UserService>()
+                          .userById(creatorId);
+
+                      bool response = true;
+                      // await PaymentService.initPaymentSheet(
+                      //   email: usermodel?.email ?? "",
+                      //   amount: data.price?.toDouble() ?? 0.0,
+                      // );
                       if (response) {
                         usermodel!.listOfPrograms.add(data);
 
@@ -220,6 +270,29 @@ class _ProgramDetailScreenState extends State<DescriptionTab> {
                           usermodel,
                           usermodel.listOfPrograms,
                         );
+                        if (creatorModel != null) {
+                          // Ensure sold list is not null
+                          List<SoldModel> updatedSoldList = List.from(
+                            creatorModel.sold,
+                          );
+                          SoldModel soldItem = SoldModel(
+                            type: "program",
+                            packegeMode: true,
+                            userId: data.userId!,
+                            contentName: data.programName ?? "unknow",
+                            contentId: data.programId!,
+                            contentPrice: data.price?.toDouble() ?? 0.0,
+                            buyDate: DateTime.now(),
+                          );
+                          updatedSoldList.add(soldItem);
+
+                          // 3️⃣ Update Creator Document in Firestore
+                          await vm.addSoldInList(
+                            creatorModel.userId!,
+                            creatorModel,
+                            updatedSoldList,
+                          );
+                        }
                         if (success != null) {
                           setState(() {
                             isPurchased = usermodel.listOfPrograms.contains(

@@ -8,25 +8,28 @@ class VersionChipsRow extends StatelessWidget {
     super.key,
     required this.selectedindex,
     required this.onSelected,
+    required this.length,
   });
-  final int selectedindex;
+  final int selectedindex, length;
   final ValueChanged<int> onSelected;
   @override
   Widget build(BuildContext context) {
-    List<String> versions = ["version 01", "version 02", "version 03"];
+    // List<String> versions = ["version 01", "version 02", "version 03"];
     return Container(
       height: Sizes.s40,
       width: double.infinity,
       color: ConstColors.secondary,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: List.generate(versions.length, (index) {
+        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: List.generate(length, (index) {
           final isSelected = index == selectedindex;
-          return VersionChip(
-            text: versions[index],
-            btncolor: isSelected ? ConstColors.black : ConstColors.secondary,
-            txtcolor: isSelected ? ConstColors.white : ConstColors.black,
-            onTap: () => onSelected(index),
+          return Expanded(
+            child: VersionChip(
+              text: "version 0${index + 1}",
+              btncolor: isSelected ? ConstColors.black : ConstColors.secondary,
+              txtcolor: isSelected ? ConstColors.white : ConstColors.black,
+              onTap: () => onSelected(index),
+            ),
           );
         }),
       ),

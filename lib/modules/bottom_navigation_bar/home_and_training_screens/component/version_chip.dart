@@ -20,9 +20,10 @@ class VersionChip extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10),
         alignment: Alignment.center,
         height: Sizes.s40,
-        width: context.screenwidth * 0.3,
+      
         decoration: BoxDecoration(
           color: btncolor,
           borderRadius: BorderRadius.circular(Sizes.s10),

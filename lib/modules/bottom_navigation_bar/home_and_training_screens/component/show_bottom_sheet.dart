@@ -5,13 +5,20 @@ import 'package:musculo_app/core/config/routes.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
+import 'package:musculo_app/model/user_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/program_video_item.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/workout_video_items.dart';
 
 class ShowBottomSheet extends StatefulWidget {
   final String? title;
   final dynamic modelData;
-  const ShowBottomSheet({super.key, this.title, this.modelData});
+  final UserModel usermodel;
+  const ShowBottomSheet({
+    super.key,
+    this.title,
+    this.modelData,
+    required this.usermodel,
+  });
 
   @override
   State<ShowBottomSheet> createState() => _ShowBottomSheetState();
@@ -103,7 +110,16 @@ class _ShowBottomSheetState extends State<ShowBottomSheet> {
                   buttonText: "Start",
                   onTap: () {
                     if (selectedIndex != null) {
-                      Navigator.pushNamed(context, Routes.trainingscreen);
+                      final selectedModel = widget.modelData[selectedIndex!];
+                      Navigator.pushNamed(
+                        context,
+                        Routes.trainingscreen,
+
+                        arguments: {
+                          'workoutData': selectedModel, // WorkoutModel
+                          'userModel': widget.usermodel, // UserModel
+                        },
+                      );
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(

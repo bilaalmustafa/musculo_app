@@ -3,57 +3,58 @@ import 'package:musculo_app/modules/auth/register/component/customVideoPlayer.da
 import 'package:video_player/video_player.dart';
 
 class VideoFrameScreen extends StatefulWidget {
-  const VideoFrameScreen({super.key, required this.videourl});
+  VideoFrameScreen({super.key, required this.videourl, this.controller});
   final String videourl;
-
+  VideoPlayerController? controller;
   @override
   State<VideoFrameScreen> createState() => _VideoFrameScreenState();
 }
 
 class _VideoFrameScreenState extends State<VideoFrameScreen> {
-  late VideoPlayerController _controller;
+  // late VideoPlayerController _controller;
   bool _isInitialized = false;
-  bool _isPlaying = false;
 
-  @override
-  void initState() {
-    super.initState();
-    _initializeVideoPlayer();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _initializeVideo();
+  // }
 
-  Future<void> _initializeVideoPlayer() async {
-    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.videourl));
+  // @override
+  // void didUpdateWidget(covariant VideoFrameScreen oldWidget) {
+  //   super.didUpdateWidget(oldWidget);
+  //   if (oldWidget.videourl != widget.videourl) {
+  //     _controller.dispose();
+  //     _initializeVideo();
+  //   }
+  // }
 
-    try {
-      await _controller.initialize();
-      setState(() {
-        _isInitialized = true;
-      });
-    } catch (e) {
-      debugPrint("Error initializing video: $e");
-      setState(() {
-        _isInitialized = false;
-      });
-    }
-  }
+  // void _initializeVideo() {
+  //   _controller = VideoPlayerController.networkUrl(Uri.parse(widget.videourl))
+  //     ..initialize().then((_) {
+  //       setState(() {
+  //         _isInitialized = true;
+  //       });
+  //     });
+  // }
 
-  void _togglePlayPause() {
-    setState(() {
-      if (_controller.value.isPlaying) {
-        _controller.pause();
-        _isPlaying = false;
-      } else {
-        _controller.play();
-        _isPlaying = true;
-      }
-    });
-  }
+  // @override
+  // void dispose() {
+  //   _controller.dispose();
+  //   super.dispose();
+  // }
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+  // void _togglePlayPause() {
+  //   setState(() {
+  //     if  (widget. controller.value.isPlaying) {
+  //       widget. controller.pause();
+  //       _isPlaying = false;
+  //     } else {
+  //       widget. controller.play();
+  //       _isPlaying = true;
+  //     }
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -62,32 +63,33 @@ class _VideoFrameScreenState extends State<VideoFrameScreen> {
         padding: const EdgeInsets.all(8.0),
         child: Center(
           child:
-              _isInitialized
+              widget.controller != null &&
+                      widget.controller!.value.isInitialized
                   ? Stack(
                     alignment: Alignment.center,
                     children: [
                       Container(
                         width: double.infinity,
                         height: 300,
-                        child: CustomVideoPlayer(controller: _controller),
-                      ),
-                      GestureDetector(
-                        onTap: _togglePlayPause,
-                        child: Container(
-                          width: double.infinity,
-                          height: 300,
-                          color: Colors.black26, // transparent overlay
-                          child: Center(
-                            child: Icon(
-                              _controller.value.isPlaying
-                                  ? Icons.pause_circle_filled
-                                  : Icons.play_circle_fill,
-                              size: 64,
-                              color: Colors.white,
-                            ),
-                          ),
+                        child: AspectRatio(
+                          aspectRatio: widget.controller!.value.aspectRatio,
+                          child: VideoPlayer(widget.controller!),
                         ),
                       ),
+                      // Container(
+                      //   width: double.infinity,
+                      //   height: 300,
+                      //   color: Colors.black26, // transparent overlay
+                      //   child: Center(
+                      //     child: Icon(
+                      //       widget. controller!.value.isPlaying
+                      //           ? Icons.pause_circle_filled
+                      //           : Icons.play_circle_fill,
+                      //       size: 64,
+                      //       color: Colors.white,
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   )
                   : const CircularProgressIndicator(),

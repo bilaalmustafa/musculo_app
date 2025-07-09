@@ -5,7 +5,8 @@ admin.initializeApp();
 const db = admin.firestore();
 
 // Function to handle Stripe payment intent creation
-exports.stripePaymentintentRequest= onCall(async(request)=>{
+exports.stripePaymentintentRequest= onCall( { enforceAppCheck: true, }, async(request)=>{
+  
   try {
   const { email, amount, currency } = request.data;
 

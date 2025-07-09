@@ -22,7 +22,7 @@ class WorkoutVideoItem extends StatelessWidget {
     this.index,
     this.selectedIndex,
     this.onChanged,
-    this.workouts,
+    this.workouts, this.onTap,
   });
 
   final String? image;
@@ -35,6 +35,7 @@ class WorkoutVideoItem extends StatelessWidget {
   final int? selectedIndex;
   final ValueChanged<int>? onChanged;
   final WorkoutModel? workouts;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +91,14 @@ class WorkoutVideoItem extends StatelessWidget {
             },
           )
         else if (image != null)
-          SharePicture(imagePath: image!, height: Sizes.s50, width: Sizes.s50),
+          InkWell(
+            onTap:  onTap,
+            child: SharePicture(
+              imagePath: image!,
+              height: Sizes.s50,
+              width: Sizes.s50,
+            ),
+          ),
       ],
     );
   }

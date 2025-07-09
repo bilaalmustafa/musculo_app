@@ -104,6 +104,7 @@ class _ShowSheetBottomState extends State<ShowSheetBottom> {
                                           MaterialPageRoute(
                                             builder:
                                                 (context) => VideoFrameScreen(
+                                               
                                                   videourl: video.url,
                                                 ),
                                           ),

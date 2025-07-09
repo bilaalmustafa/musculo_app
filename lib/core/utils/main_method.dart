@@ -1,3 +1,4 @@
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -14,7 +15,6 @@ class MainMethod {
     WidgetsFlutterBinding.ensureInitialized();
     Stripe.publishableKey =
         "pk_test_51MikpdSDuIYZV8eSumHPQGsTZUGIbUKMM6oqAVt8yPDgjDWb9h659J2y0fE5tuhdxfPgFEbgeP2zNrER1UeGUOBb007fiSXgWU";
-
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
