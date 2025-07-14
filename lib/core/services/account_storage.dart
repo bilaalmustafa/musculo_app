@@ -11,6 +11,8 @@ class AccountStorage {
     String password,
 
     String provider,
+    String? profileImageUrl,
+    String? userName,
   ) async {
     await _secure.write(
       key: 'account:$email',
@@ -18,9 +20,12 @@ class AccountStorage {
         'email': email,
         'password': password,
         'provider': provider,
+        'profileImageUrl': profileImageUrl ?? '',
+        'userName': userName ?? '',
       }),
     );
 
+    // save acco
     final prefs = await SharedPreferences.getInstance();
     final accounts = prefs.getStringList('accounts') ?? [];
     accounts.remove(email);
@@ -44,6 +49,8 @@ class AccountStorage {
       'email': data['email'],
       'password': data['password'],
       'provider': data['provider'] ?? 'email',
+      'profileImageUrl': data['profileImageUrl'] ?? '',
+      'userName': data['userName'] ?? '',
     };
   }
 

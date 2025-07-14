@@ -90,6 +90,7 @@ class AuthViewModel with ChangeNotifier {
       // Always set loading to false
       isLoading = false;
       notifyListeners();
+
       log("Response from Cloud Function: ${response.data["success"]}");
       if (response.data['success'] == true) {
         final UserCredential credential = await FirebaseAuth.instance
@@ -102,25 +103,22 @@ class AuthViewModel with ChangeNotifier {
           emailController.text.trim(),
           passController.text,
           'email',
+          user!.displayName,
+          user.photoURL,
         );
         final prefs = await SharedPreferences.getInstance();
         await prefs.setBool('isLoggedIn', true);
-        if (user != null) {
-          await prefs.setString('uid', user.uid);
-        }
+        await prefs.setString('uid', user.uid);
 
         log('User created successfully: ${response.data['message']}');
 
         return userModel;
       } else {
         // Handle unsuccessful response
-
         log('Failed to create user: ${response.data['message']}');
-
         Fluttertoast.showToast(
           msg: response.data['message'] ?? 'Registration failed',
         );
-
         return null;
       }
     } on FirebaseFunctionsException catch (e) {
@@ -128,7 +126,6 @@ class AuthViewModel with ChangeNotifier {
       notifyListeners();
 
       log("Cloud Function Errorrrr: ${e.code} - ${e.message}");
-
       if (kDebugMode) {
         print(
           'Cloud Function Error: codeee: ${e.code}, message: ${e.message}, details: ${e.details}',
@@ -143,7 +140,6 @@ class AuthViewModel with ChangeNotifier {
       notifyListeners();
 
       log("Unexpected error: $e");
-
       if (kDebugMode) {
         print('Unexpected error: $e');
       }
@@ -153,80 +149,49 @@ class AuthViewModel with ChangeNotifier {
     }
   }
 
-  // Future<User?> signUp() async {
-  //   try {
-  //     isLoading = true;
-  //     notifyListeners();
-  //     User? user = await _authServices.signUpWithEmailAndPassword(
-  //       emailController.text.trim(),
-  //       passController.text.trim(),
-  //     );
-  //     if (user != null) {
-  //       // currentUser = user;
-  //       await AccountStorage.saveCredentials(
-  //         emailController.text.trim(),
-  //         passController.text,
-  //       );
-  //       await Future.delayed(Duration(seconds: 3)); // short delay
-  //       await FirebaseAuth.instance.signOut();
-
-  //     // ✅ 3. Sign in again to ensure token is valid
-  //     UserCredential signedIn = await FirebaseAuth.instance
-  //         .signInWithEmailAndPassword(
-  //             email: emailController.text.trim(),
-  //             password: passController.text.trim());
-
-  //     User currentUser = signedIn.user!;
-  //     await currentUser.getIdToken(true);
-  //       final userModel = u.UserModel(
-  //         email: emailController.text.trim(),
-  //         name:
-  //             "${firstnameController.text.trim()} ${surenameController.text.trim()} ",
-  //         gender: isMale ? "Male" : "Female",
-  //         age: selectedage,
-  //         levelOfFitness: fitnessLevel,
-  //         userId: user.uid,
-  //         // status: "Pending",
-  //       );
-
-  //       // Call Cloud Function
-  //       final createUserCallable = FirebaseFunctions.instance.httpsCallable(
-  //         'createUser',
-  //       );
-  //       await createUserCallable.call(userModel.toJson());
-  //       // await UserService().createUser(user.uid);
-  //     }
-  //     isLoading = false;
-  //     notifyListeners();
-  //     return user;
-  //   } catch (e) {
-  //     log("Error signing up userrrrr: $e");
-  //     FlutterError.reportError(
-  //       FlutterErrorDetails(
-  //         exception: e,
-  //         stack: StackTrace.current,
-  //         library: 'AuthViewModel',
-  //         context: ErrorDescription('Error during user sign up'),
-  //       ),
-  //     );
-  //     isLoading = false;
-  //     notifyListeners();
-  //     return null;
-  //   }
-  // }
-
   Future<User?> signIn(String email, String pass) async {
+    //   show loading
     isLoading = true;
     notifyListeners();
+
+    //   sign in with email and password
     User? user = await instance<AuthService>().signInWithEmailAndPassword(
       email,
       pass,
     );
 
+    //  get user data profileImageUrl and DisplayName
     if (user != null) {
       currentUser = user;
-      await AccountStorage.saveCredentials(email, pass, 'email');
+      String? profileImageUrl;
+      String? displayName;
 
+      try {
+        final userDoc =
+            await FirebaseFirestore.instance
+                .collection('users')
+                .doc(user.uid)
+                .get();
+
+        if (userDoc.exists) {
+          final userData = userDoc.data();
+          profileImageUrl = userData?['profileImageUrl'];
+          displayName = userData?['name'];
+        }
+      } catch (e) {
+        log('Error fetching user data from Firestore: $e');
+      }
+
+      //    store data in AccountStorage
+      await AccountStorage.saveCredentials(
+        email,
+        pass,
+        'email',
+        profileImageUrl,
+        displayName,
+      );
+
+      //    store user id in shared preferences
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('isLoggedIn', true);
       await prefs.setString('uid', user.uid);
@@ -238,9 +203,11 @@ class AuthViewModel with ChangeNotifier {
   }
 
   Future<void> logout() async {
+    // show loading
     isLoading = true;
     notifyListeners();
 
+    // signout current user
     await _authServices.signOut();
     currentUser = null;
 
@@ -249,48 +216,82 @@ class AuthViewModel with ChangeNotifier {
   }
 
   Future<String?> getCurrentUserEmail() async {
-    return FirebaseAuth.instance.currentUser?.email;
+    return _auth.currentUser?.email;
   }
 
   Future<void> switchAccount(String email) async {
+    // get save credentials
     final creds = await AccountStorage.getCredentials(email);
     if (creds == null) return;
     final storedEmail = creds['email']!;
     final password = creds['password']!;
     final provider = creds['provider'] ?? 'email';
+    final profileImageUrl = creds['profileImageUrl'];
+    final userName = creds['userName'];
+
     try {
       final context = navigatorKey.currentContext!;
       switch (provider) {
+        // when provider email then fetch updated data from firestore
         case 'email':
-          await signIn(storedEmail, password);
+          final user = await signIn(storedEmail, password);
+          if (user != null) {
+            try {
+              final userDoc =
+                  await FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(user.uid)
+                      .get();
+
+              if (userDoc.exists) {
+                final userData = userDoc.data();
+                final updatedProfileImageUrl = userData?['profileImageUrl'];
+                final updatedDisplayName = userData?['name'];
+
+                // Update stored credentials with fresh data
+                await AccountStorage.saveCredentials(
+                  storedEmail,
+                  password,
+                  provider,
+                  updatedProfileImageUrl,
+                  updatedDisplayName,
+                );
+              }
+            } catch (e) {
+              log('Error updating user data: $e');
+            }
+          }
           break;
+        // when login with google
         case 'google':
           await loginWithGoogle(context);
           break;
+        // when login with facebook
         case 'facebook':
           await signInWithFacebook(context);
           break;
         default:
           Fluttertoast.showToast(msg: "Unknown provider: $provider");
       }
-      await AccountStorage.saveCredentials(storedEmail, password, provider);
     } catch (e) {
       Fluttertoast.showToast(msg: "Switch failed: ${e.toString()}");
     }
   }
 
   Future<List<String>> getSavedAccounts() async {
+    // get saved accounts
     return await AccountStorage.getSavedEmails();
   }
 
   Future<void> removeAccount(String email) async {
+    // delete account code
     await AccountStorage.deleteAccount(email);
     notifyListeners();
   }
 
   Future<void> signInWithFacebook(BuildContext context) async {
     try {
-      // Trigger the sign-in flow
+      //     Trigger the sign-in flow
       final LoginResult loginResult = await FacebookAuth.instance.login(
         permissions: ['email', 'public_profile'],
       );
@@ -310,9 +311,11 @@ class AuthViewModel with ChangeNotifier {
         );
         final User? user = userCredential.user;
 
+        // if user are not null then get facebook userData
         if (user != null) {
           final userData = await FacebookAuth.instance.getUserData();
 
+          // add facebook userData from firestore through userModel
           final userModel = u.UserModel(
             userId: user.uid,
             email: user.email ?? userData["email"] ?? '',
@@ -323,7 +326,7 @@ class AuthViewModel with ChangeNotifier {
             age: 0,
             levelOfFitness: '',
           );
-          // save to Firestore
+
           await FirebaseFirestore.instance
               .collection('users')
               .doc(user.uid)
@@ -331,24 +334,32 @@ class AuthViewModel with ChangeNotifier {
           currentUser = user;
           notifyListeners();
 
-          // Save UID and login state to SharedPreferences
+          //       Save UID and login state to SharedPreferences
           final prefs = await SharedPreferences.getInstance();
           await prefs.setBool('isLoggedIn', true);
           await prefs.setString('uid', user.uid);
 
+          //       if the user Email are not null then save data in Account Storage
           final email = user.email ?? userData["email"];
           if (email != null && email.isNotEmpty) {
-            await AccountStorage.saveCredentials(email, '', 'facebook');
+            await AccountStorage.saveCredentials(
+              email,
+              '',
+              'facebook',
+              userData['picture']?['data']?['url'] ?? '',
+              userData['name'] ?? user.displayName,
+            );
           }
         }
 
+        //      Navigate to the BottomNavigation screen
         if (context.mounted) {
-          // Navigate to the home screen
           Navigator.pushReplacementNamed(
             context,
             Routes.bottomnavigationbarscreen,
           );
         }
+
         Fluttertoast.showToast(msg: "Facebook sign-in successful!");
       } else if (loginResult.status == LoginStatus.cancelled) {
         Fluttertoast.showToast(msg: "Facebook sign-in cancelled.");
@@ -362,32 +373,33 @@ class AuthViewModel with ChangeNotifier {
 
   Future<void> loginWithGoogle(BuildContext context) async {
     try {
-      // Start the interactive sign-in process using the new method
+      //    Start and get all google user
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-      // If the user cancels, googleUser will be null
+      //    If the user cancels, googleUser will be null
       if (googleUser == null) {
         log('Google Sign-In was canceled by the user.');
         Fluttertoast.showToast(msg: "Sign-in canceled");
-        return; // Stop the function here
+        return;
       }
 
-      // Obtain the authentication details from the request
+      //    Request authentication details
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
 
-      // Create a new credential for Firebase
+      //    Create a new credential for Firebase
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      // Sign in to Firebase with the credential
+      //    Sign in to Firebase with the credential
       final UserCredential userCredential = await _auth.signInWithCredential(
         credential,
       );
       final User? user = userCredential.user;
 
+      // if user not equall to null then store data in firestore through UserModel
       if (user != null) {
         final userModel = u.UserModel(
           userId: user.uid,
@@ -405,14 +417,24 @@ class AuthViewModel with ChangeNotifier {
         currentUser = user;
         notifyListeners();
       }
+
       // Save UID and login state to SharedPreferences
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('isLoggedIn', true);
       await prefs.setString('uid', user!.uid);
 
+      // if Email not null then save data in Account Storage
       if (user.email != null) {
-        await AccountStorage.saveCredentials(user.email!, '', 'google');
+        await AccountStorage.saveCredentials(
+          user.email!,
+          '',
+          'google',
+          user.photoURL,
+          user.displayName,
+        );
       }
+
+      // Navigate to BottomNavigation screen
       if (context.mounted) {
         Navigator.pushReplacementNamed(
           context,

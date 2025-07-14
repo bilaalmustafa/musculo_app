@@ -167,11 +167,11 @@ class _AccountinfoScreenState extends State<AccountinfoScreen> {
               UserModel? updatedUser = await context
                   .read<UserViewModel>()
                   .updateUserData(
-                  id:   userViewModel.userModel!.userId!,
-                  uname:   nameController.text.trim(),
-                  udob:   selectedDate!,
-                  ugenger:   selectedGender,
-                  ulevel:   selectedLevel,
+                    id: userViewModel.userModel!.userId!,
+                    uname: nameController.text.trim(),
+                    udob: selectedDate,
+                    ugenger: selectedGender,
+                    ulevel: selectedLevel,
                   );
 
               if (updatedUser != null && context.mounted) {
