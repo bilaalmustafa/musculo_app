@@ -20,7 +20,7 @@ class ProgramVideoItem extends StatelessWidget {
     this.index,
     this.selectedIndex,
     this.onChanged,
-    this.program,
+    this.program, this.onTap,
   });
 
   final String? image;
@@ -33,6 +33,7 @@ class ProgramVideoItem extends StatelessWidget {
   final int? selectedIndex;
   final ValueChanged<int>? onChanged;
   final ProgramModel? program;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +89,14 @@ class ProgramVideoItem extends StatelessWidget {
             },
           )
         else if (image != null)
-          SharePicture(imagePath: image!, height: Sizes.s50, width: Sizes.s50),
+          InkWell(
+            onTap: onTap,
+            child: SharePicture(
+              imagePath: image!,
+              height: Sizes.s50,
+              width: Sizes.s50,
+            ),
+          ),
       ],
     );
   }

@@ -32,6 +32,14 @@ android {
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
+//     buildTypes {
+//     release {
+//         signingConfig = signingConfigs.getByName("debug")
+//         minifyEnabled true
+//         shrinkResources true
+//         proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+//     }
+// }
 
     buildTypes {
         release {
@@ -40,9 +48,14 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
-}
+
 
 flutter {
     source = "../.."
 }
     
+dependencies {
+    implementation("com.facebook.android:facebook-android-sdk:latest.release")
+    implementation("com.stripe:stripe-android:20.+")
+}
+}

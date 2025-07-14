@@ -31,6 +31,8 @@ class CongratulationScreen extends StatefulWidget {
 }
 
 class _CongratulationScreenState extends State<CongratulationScreen> {
+  final GlobalKey _shareKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     final allVideos =
@@ -57,36 +59,50 @@ class _CongratulationScreenState extends State<CongratulationScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(height: Sizes.s20),
-                    SharePicture(
-                      imagePath: Assets.congrate,
-                      width: Sizes.s250,
-                      height: Sizes.s250,
-                    ),
-                    PoppinsText(
-                      text: "Congratulation!",
-                      fontSize: Sizes.s26,
-                      fontWeight: TextWeight.semiBold,
-                    ),
-                    PoppinsText(
-                      text: "You’ve completed the workout!",
-                      fontSize: Sizes.s13,
-                      fontWeight: TextWeight.regular,
-                      color: ConstColors.greyA1A1,
-                    ),
+                    RepaintBoundary(
+                      key: _shareKey,
+                      child: Container(
+                        width: double.infinity,
+                        color: ConstColors.white,
+                        child: Column(
+                          spacing: Sizes.s14,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SharePicture(
+                              imagePath: Assets.congrate,
+                              width: Sizes.s250,
+                              height: Sizes.s250,
+                            ),
+                            PoppinsText(
+                              text: "Congratulation!",
+                              fontSize: Sizes.s26,
+                              fontWeight: TextWeight.semiBold,
+                            ),
+                            PoppinsText(
+                              text: "You’ve completed the workout!",
+                              fontSize: Sizes.s13,
+                              fontWeight: TextWeight.regular,
+                              color: ConstColors.greyA1A1,
+                            ),
 
-                    Row(
-                      children: [
-                        CongrateContainer(
-                          imagePath: Assets.runnerIcon,
-                          digit: "${allVideos.length}",
-                          text: "Finished Workout",
+                            Row(
+                              children: [
+                                CongrateContainer(
+                                  imagePath: Assets.runnerIcon,
+                                  digit: "${allVideos.length}",
+                                  text: "Finished Workout",
+                                ),
+                                CongrateContainer(
+                                  imagePath: Assets.timeCircle,
+                                  digit: "${widget.workoutData.totalTime}",
+                                  text: "Minutes Spent",
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                        CongrateContainer(
-                          imagePath: Assets.timeCircle,
-                          digit: "${widget.workoutData.totalTime}",
-                          text: "Minutes Spent",
-                        ),
-                      ],
+                      ),
                     ),
                     CustomButton(
                       preIconData: Icons.camera_enhance,
@@ -102,7 +118,7 @@ class _CongratulationScreenState extends State<CongratulationScreen> {
                           backgroundColor: ConstColors.white,
                           context: context,
                           builder: (context) {
-                            return ShowShareBottomSheet();
+                            return ShowShareBottomSheet(shareKey: _shareKey);
                           },
                         );
                       },

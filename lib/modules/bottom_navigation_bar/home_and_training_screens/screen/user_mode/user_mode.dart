@@ -247,6 +247,18 @@ class _UserModeTabState extends State<UserModeTab> {
                       (context, index) => ProgramVideoItem(
                         image: Assets.playbutt,
                         program: userVm.listOfPrograms[index],
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            Routes.trainingscreen,
+
+                            arguments: {
+                              'workoutData':
+                                  userVm.listOfPrograms[index],
+                              'userModel': userVm, // UserModel
+                            },
+                          );
+                        },
                       ),
                   separatorBuilder: (context, index) => SizedBox(height: 20),
                 ),

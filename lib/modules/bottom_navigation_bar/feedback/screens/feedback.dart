@@ -14,6 +14,7 @@ import '../../../../core/constants/assets.dart';
 
 import '../../../../core/services/auth_services.dart';
 import '../../../auth/register/component/show_dialog_box.dart';
+import '../../home_and_training_screens/view_model/user_view_model.dart';
 import '../components/feedbackfield.dart';
 
 class FeedbackScreen extends StatefulWidget {
@@ -39,6 +40,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final userViewModel = context.read<UserViewModel>().userModel;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: ConstColors.white,
@@ -99,6 +101,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                     userId: AuthService().currentUser?.uid ?? 'anonymous',
                     contentId: null,
                     contentType: 'Company',
+                    userName: userViewModel!.name,
                     email: emailController.text.trim(),
                     suggestion: suggestionController.text.trim(),
                     feedbackMessage: feedbackController.text.trim(),

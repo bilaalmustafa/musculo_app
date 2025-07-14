@@ -22,7 +22,7 @@
           }
         },
         {
-          "client_id": "332527150538-sitk13h96rue4ooldqa3hogl70igt5dk.apps.googleusercontent.com",
+          "client_id": "332527150538-q3jsmbvb5lg5b3re3rkj911lqfnjoshp.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -39,10 +39,10 @@
               "client_type": 3
             },
             {
-              "client_id": "332527150538-9uu29sg10ur0pt600nbmc98kl1i5n3e2.apps.googleusercontent.com",
+              "client_id": "332527150538-8ropr5fh8kmbb87v6go6obihemasun9f.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.musculo"
+                "bundle_id": "com.example.musculoApp"
               }
             }
           ]
@@ -58,7 +58,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "332527150538-sitk13h96rue4ooldqa3hogl70igt5dk.apps.googleusercontent.com",
+          "client_id": "332527150538-q3jsmbvb5lg5b3re3rkj911lqfnjoshp.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -75,10 +75,10 @@
               "client_type": 3
             },
             {
-              "client_id": "332527150538-9uu29sg10ur0pt600nbmc98kl1i5n3e2.apps.googleusercontent.com",
+              "client_id": "332527150538-8ropr5fh8kmbb87v6go6obihemasun9f.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.musculo"
+                "bundle_id": "com.example.musculoApp"
               }
             }
           ]
@@ -94,7 +94,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "332527150538-sitk13h96rue4ooldqa3hogl70igt5dk.apps.googleusercontent.com",
+          "client_id": "332527150538-6a2il3mtm58ghe8kmh91sfip5u5r5tj8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.musculo_app",
+            "certificate_hash": "eb15b22afce606a506a8041dafc05f63a67b320c"
+          }
+        },
+        {
+          "client_id": "332527150538-q3jsmbvb5lg5b3re3rkj911lqfnjoshp.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -111,10 +119,10 @@
               "client_type": 3
             },
             {
-              "client_id": "332527150538-9uu29sg10ur0pt600nbmc98kl1i5n3e2.apps.googleusercontent.com",
+              "client_id": "332527150538-8ropr5fh8kmbb87v6go6obihemasun9f.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.musculo"
+                "bundle_id": "com.example.musculoApp"
               }
             }
           ]

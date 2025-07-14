@@ -48,14 +48,10 @@ class VideoListItem extends StatelessWidget {
             ),
             child:
                 tumbnail != null
-                    ? ClipRRect(
-                      borderRadius: BorderRadius.circular(Sizes.s10),
-                      child: Image.memory(tumbnail!, fit: BoxFit.fill),
-                    )
-                    : SizedBox(
-                      width: 10,
-                      height: 10,
-                      child: CircularProgressIndicator(),
+                    ? Image.memory(tumbnail!, fit: BoxFit.fill)
+                    : CircularProgressIndicator(
+                      padding: EdgeInsets.all(20),
+                      color: ConstColors.black,
                     ),
           ),
           isSelected

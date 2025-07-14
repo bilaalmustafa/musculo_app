@@ -1,7 +1,3 @@
-import 'dart:async';
-import 'dart:developer';
-import 'dart:typed_data';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/custom_button.dart';
@@ -22,8 +18,7 @@ import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_scre
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_workout/video_frame_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/user_mode/user_mode_veiwModel/user_mode_viewModel.dart';
 import 'package:provider/provider.dart';
-import 'package:video_player/video_player.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
+
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class TrainingScreen extends StatefulWidget {
@@ -32,7 +27,7 @@ class TrainingScreen extends StatefulWidget {
     required this.modelData,
     required this.userModel,
   });
-  final WorkoutModel modelData;
+  final dynamic modelData;
   final UserModel userModel;
 
   @override
@@ -41,8 +36,8 @@ class TrainingScreen extends StatefulWidget {
 
 class _TrainingScreenState extends State<TrainingScreen> {
   late UserModeViewmodel userMode;
-  VideoPlayerController? _controller;
-  bool _isControllerInitialized = false;
+  late List<VideoModel> allVideos;
+  // bool _isControllerInitialized = false;
   // bool isPlayed = false;
 
   @override
@@ -50,11 +45,15 @@ class _TrainingScreenState extends State<TrainingScreen> {
     super.initState();
 
     userMode = context.read<UserModeViewmodel>();
-    final allVideos =
-        widget.modelData.categorizedVideos?.values.expand((v) => v).toList() ??
-        [];
+    allVideos = userMode.extractAllVideos(widget.modelData);
+
     if (allVideos.isNotEmpty) {
-      initializeController(allVideos[0].url);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Provider.of<UserModeViewmodel>(
+          context,
+          listen: false,
+        ).initializeController(allVideos[0].url);
+      });
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<UserModeViewmodel>(
@@ -72,50 +71,50 @@ class _TrainingScreenState extends State<TrainingScreen> {
     super.dispose();
   }
 
-  void initializeController(String url) async {
-    print('Initializing controller for: $url');
+  // void initializeController(String url) async {
+  //   print('Initializing controller for: $url');
 
-    if (mounted) {
-      setState(() {
-        _isControllerInitialized = false;
-      });
-    }
+  //   if (mounted) {
+  //     setState(() {
+  //       _isControllerInitialized = false;
+  //     });
+  //   }
 
-    if (_controller != null) {
-      log('Disposing existing controller');
-      await _controller!.dispose();
-    }
+  //   if (_controller != null) {
+  //     log('Disposing existing controller');
+  //     await _controller!.dispose();
+  //   }
 
-    _controller = VideoPlayerController.networkUrl(Uri.parse(url));
+  //   _controller = VideoPlayerController.networkUrl(Uri.parse(url));
 
-    try {
-      log('Starting controller initialization...');
-      await _controller!.initialize();
-      log('Controller initialized successfully');
-      if (mounted) {
-        setState(() {
-          _isControllerInitialized = true;
-        });
-      }
-    } catch (e) {
-      log('Error initializing video controller: $e');
-      if (mounted) {
-        setState(() {
-          _isControllerInitialized = false;
-        });
-      }
-    }
-  }
+  //   try {
+  //     log('Starting controller initialization...');
+  //     await _controller!.initialize();
+  //     log('Controller initialized successfully');
+  //     if (mounted) {
+  //       setState(() {
+  //         _isControllerInitialized = true;
+  //       });
+  //     }
+  //   } catch (e) {
+  //     log('Error initializing video controller: $e');
+  //     if (mounted) {
+  //       setState(() {
+  //         _isControllerInitialized = false;
+  //       });
+  //     }
+  //   }
+  // }
 
-  static const int totalSeconds = 600; // 10 minutes
+  // static const int totalSeconds = 600; // 10 minutes
   int elapsedSeconds = 0;
   @override
   Widget build(BuildContext context) {
-    final Map<String, List<VideoModel>> videoListMap =
-        widget.modelData.categorizedVideos ?? {};
-    final List<VideoModel> allVideos =
-        videoListMap.values.expand((videos) => videos).toList();
-
+    // final Map<String, List<VideoModel>> videoListMap =
+    //     widget.modelData.categorizedVideos ?? {};
+    // final List<VideoModel> allVideos =
+    //     videoListMap.values.expand((videos) => videos).toList();
+    final List<VideoModel> allVideos = this.allVideos;
     return Scaffold(
       backgroundColor: ConstColors.white,
       body: SafeArea(
@@ -140,7 +139,7 @@ class _TrainingScreenState extends State<TrainingScreen> {
                           child: CustomButton(
                             onTap: () {
                               vm.previousVideo();
-                              initializeController(
+                              vm.initializeController(
                                 allVideos[vm.selectedVideo].url,
                               );
                               // vm.startTimer(
@@ -172,7 +171,7 @@ class _TrainingScreenState extends State<TrainingScreen> {
                                 );
                               } else {
                                 vm.nextVideo(allVideos, context);
-                                initializeController(
+                                vm.initializeController(
                                   allVideos[vm.selectedVideo].url,
                                 );
                                 // vm.startTimer(
@@ -191,7 +190,7 @@ class _TrainingScreenState extends State<TrainingScreen> {
                         selectedindex: vm.selectedbtn,
                         onSelected: (index) {
                           vm.selectVersionChip(index);
-                          initializeController(
+                          vm.initializeController(
                             allVideos[vm.selectedVideo]
                                 .versionList[vm.selectedbtn]
                                 .url,
@@ -204,21 +203,23 @@ class _TrainingScreenState extends State<TrainingScreen> {
                       color: ConstColors.secondary,
 
                       child:
-                          _controller != null && _isControllerInitialized
+                          vm.controller != null && vm.isControllerInitialized
                               ? vm.selectedbtn <= 0
                                   ? VideoFrameScreen(
-                                    controller: _controller,
+                                    controller: vm.controller,
                                     videourl: allVideos[vm.selectedVideo].url,
                                   )
                                   : VideoFrameScreen(
-                                    controller: _controller,
+                                    controller: vm.controller,
                                     videourl:
                                         allVideos[vm.selectedVideo]
                                             .versionList[vm.selectedbtn]
                                             .url,
                                   )
                               : const Center(
-                                child: CircularProgressIndicator(),
+                                child: CircularProgressIndicator(
+                                  color: ConstColors.black,
+                                ),
                               ),
                     ),
 
@@ -238,9 +239,10 @@ class _TrainingScreenState extends State<TrainingScreen> {
                             selectedIndex: vm.selectedVideo,
                             onTap: () {
                               vm.selectVideoItem(index);
-                              initializeController(
+                              vm.initializeController(
                                 allVideos[vm.selectedVideo].url,
                               );
+
                               // vm.startTimer(
                               //   allVideos[vm.selectedVideo].restTime,
                               // );
@@ -254,6 +256,7 @@ class _TrainingScreenState extends State<TrainingScreen> {
 
                     vm.remainingSeconds == 0
                         ? Column(
+                          spacing: Sizes.s10,
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -263,23 +266,16 @@ class _TrainingScreenState extends State<TrainingScreen> {
                                   width: Sizes.s120,
                                   child: CustomButton(
                                     onTap: () {
-                                      setState(() {
-                                        if (_controller!.value.isPlaying) {
-                                          _controller!.pause();
-                                        } else {
-                                          _controller!.play();
-                                          vm.stopTimer();
-                                        }
-                                      });
+                                      vm.playAndPause();
                                     },
                                     buttonText:
-                                        _controller!.value.isPlaying
+                                        vm.controller!.value.isPlaying
                                             ? "PAUSE"
                                             : "PLAY",
                                     textColor: ConstColors.white,
 
                                     buttonColor:
-                                        _controller!.value.isPlaying
+                                        vm.controller!.value.isPlaying
                                             ? ConstColors.black
                                             : ConstColors.green4AD,
                                     preIconData: CupertinoIcons.pause_solid,
@@ -308,6 +304,11 @@ class _TrainingScreenState extends State<TrainingScreen> {
                                 ),
                                 SharePicture(imagePath: Assets.swap),
                               ],
+                            ),
+                            PoppinsText(
+                              text: vm.formatDuration(vm.currentPosition),
+                              fontSize: Sizes.s24,
+                              fontWeight: TextWeight.semiBold,
                             ),
                           ],
                         )

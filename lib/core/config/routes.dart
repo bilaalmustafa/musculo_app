@@ -96,9 +96,9 @@ class RouteGenerator {
         );
       case Routes.trainingscreen:
         final argu = routeSitting.arguments as Map<String, dynamic>;
-        final modelData = argu["workoutData"] as WorkoutModel;
-          final userModel = argu["userModel"] as UserModel;
-      
+        final modelData = argu["workoutData"] as dynamic;
+        final userModel = argu["userModel"] as UserModel;
+
         return MaterialPageRoute(
           builder:
               (_) => ChangeNotifierProvider(
@@ -110,12 +110,16 @@ class RouteGenerator {
               ),
         );
       case Routes.congrate:
-       final argu = routeSitting.arguments as Map<String, dynamic>;
+        final argu = routeSitting.arguments as Map<String, dynamic>;
         final modelData = argu["workoutData"] as WorkoutModel;
-          final userModel = argu["userModel"] as UserModel;
+        final userModel = argu["userModel"] as UserModel;
         // final creator = routeSitting.arguments as UserModel;
         return MaterialPageRoute(
-          builder: (_) => CongratulationScreen(creator: userModel, workoutData:modelData , ),
+          builder:
+              (_) => CongratulationScreen(
+                creator: userModel,
+                workoutData: modelData,
+              ),
         );
       case Routes.filterscreen:
         return MaterialPageRoute(builder: (_) => const FilterScreen());

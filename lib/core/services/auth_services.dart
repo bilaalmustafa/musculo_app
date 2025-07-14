@@ -1,7 +1,11 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
   // firebase auth instance
@@ -65,6 +69,16 @@ class AuthService {
   Future<bool> signOut() async {
     try {
       await _firebaseAuth.signOut();
+      final googleSignIn = GoogleSignIn();
+      if (await googleSignIn.isSignedIn()) {
+        await googleSignIn.signOut();
+      }
+
+      await FacebookAuth.instance.logOut();
+      // Clear shared preferences
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove('isLoggedIn');
+      await prefs.remove('uid');
       return true;
     } catch (e) {
       Fluttertoast.showToast(msg: "Error signing out: $e");
