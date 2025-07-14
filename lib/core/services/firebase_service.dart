@@ -1,14 +1,8 @@
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:musculo_app/model/video_model.dart';
-import 'package:video_player/video_player.dart';
-
 import '../../model/motivational_text_model.dart';
 
 class FirebaseService<T> {
@@ -22,6 +16,7 @@ class FirebaseService<T> {
     required this.toJson,
   });
 
+  // create user code
   Future<bool> create(String id, T item) async {
     try {
       await FirebaseFirestore.instance
@@ -35,6 +30,7 @@ class FirebaseService<T> {
     }
   }
 
+  // update function code
   Future<T?> update(String id, T item) async {
     try {
       await FirebaseFirestore.instance
@@ -49,6 +45,7 @@ class FirebaseService<T> {
     }
   }
 
+  // get by userID function
   Future<T?> getById(String id) async {
     try {
       DocumentSnapshot doc =
@@ -63,11 +60,12 @@ class FirebaseService<T> {
       }
       return null;
     } catch (e) {
-      print(e);
+      log(e.toString());
       throw Exception('Error fetching document: $e');
     }
   }
 
+  // get all discovery function code
   Stream<List<T>> getAllDiscovery(String type) {
     return FirebaseFirestore.instance
         .collection(collectionName)
@@ -78,6 +76,7 @@ class FirebaseService<T> {
         });
   }
 
+  // get all creator excercise code
   Stream<List<T>> getAllcreatorExercise(String type, String uid) {
     return FirebaseFirestore.instance
         .collection(collectionName)
@@ -89,6 +88,7 @@ class FirebaseService<T> {
         });
   }
 
+  // upload images function code
   Future<String?> uploadImage(File image, String uploadPath) async {
     try {
       Reference storageRef = FirebaseStorage.instance
@@ -126,6 +126,8 @@ class FirebaseService<T> {
   //   return videos;
   // }
   // Add method to fetch all documents
+
+  // get all data from firestore
   Future<List<T>> getAll() async {
     try {
       QuerySnapshot snapshot =
@@ -140,7 +142,7 @@ class FirebaseService<T> {
         return fromJson(data);
       }).toList();
     } catch (e) {
-      print('Error fetching all documents: $e');
+      log('Error fetching all documents: $e');
       return [];
     }
   }
@@ -161,7 +163,6 @@ class FirebaseService<T> {
       allItems.shuffle();
       return allItems.take(limit).toList();
     } catch (e) {
-      print('Error fetching random items: $e');
       return [];
     }
   }
@@ -173,7 +174,7 @@ class FirebaseService<T> {
           .collection(collectionName)
           .doc(id)
           .delete();
-      Fluttertoast.showToast(msg: "Deleted successfully!");
+
       return null;
     } catch (e) {
       Fluttertoast.showToast(msg: "Unable to delete ${T.runtimeType}: $e");
@@ -181,6 +182,7 @@ class FirebaseService<T> {
     }
   }
 
+  // get all motivational code by user ID
   Future<List<MotivationalTextModel>> getMotivationalTextsByUserId(
     String userId,
   ) async {
@@ -197,8 +199,22 @@ class FirebaseService<T> {
         return MotivationalTextModel.fromJson(data, id: doc.id);
       }).toList();
     } catch (e) {
-      print('Error fetching motivational texts: $e');
       throw Exception('Failed to fetch motivational texts');
     }
+  }
+
+  // get all motivational code by user ID
+  Stream<List<T>> streamByUserId(String userId) {
+    return FirebaseFirestore.instance
+        .collection(collectionName)
+        .where("userId", isEqualTo: userId)
+        .orderBy("createdAt", descending: true)
+        .snapshots()
+        .map((snapshot) {
+          return snapshot.docs.map((doc) {
+            final data = doc.data();
+            return fromJson({...data, 'id': doc.id});
+          }).toList();
+        });
   }
 }

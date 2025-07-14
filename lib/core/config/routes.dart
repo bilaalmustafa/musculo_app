@@ -38,6 +38,7 @@ import 'package:provider/provider.dart';
 import '../../model/motivational_text_model.dart';
 import '../../modules/bottom_navigation_bar/profile/user_profile_screens/favorites_screen.dart';
 import '../../modules/bottom_navigation_bar/programs_and_workout/coach/coach_profile.dart';
+
 import '../../modules/bottom_navigation_bar/programs_and_workout/user_screen/proram_detail_pageview.dart';
 
 class Routes {

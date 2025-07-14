@@ -51,7 +51,7 @@ class LogoAppBar extends StatelessWidget implements PreferredSizeWidget {
                 fontSize: Sizes.s20,
                 fontWeight: TextWeight.semiBold,
               ),
-              trailing: SharePicture(imagePath: Assets.moreHrizontal),
+              // trailing: SharePicture(imagePath: Assets.moreHrizontal),
             ),
           ),
           huintText != null

@@ -22,39 +22,32 @@ class MotivationalListScreen extends StatefulWidget {
 
 class _MotivationalListScreenState extends State<MotivationalListScreen> {
   @override
-  void initState() {
-    super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final userId = FirebaseAuth.instance.currentUser!.uid;
-      Provider.of<MotivationalTextProvider>(
-        context,
-        listen: false,
-      ).fetchMotivationalTextsByUserId(userId);
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ConstColors.white,
       appBar: SharedAppBar(title: 'Motivational Text'),
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: Consumer<MotivationalTextProvider>(
-          builder: (context, provider, child) {
-            if (provider.isLoading) {
+        child: StreamBuilder<List<MotivationalTextModel>>(
+          stream: Provider.of<MotivationalTextProvider>(
+            context,
+            listen: false,
+          ).motivationalTextStream(FirebaseAuth.instance.currentUser!.uid),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             }
 
-            if (provider.motivationalTexts.isEmpty) {
+            if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return const Center(child: Text("No motivational texts found."));
             }
 
+            final motivationalTexts = snapshot.data!;
+
             return ListView.builder(
-              itemCount: provider.motivationalTexts.length,
+              itemCount: motivationalTexts.length,
               itemBuilder: (context, index) {
-                final text = provider.motivationalTexts[index];
+                final text = motivationalTexts[index];
                 return Card(
                   color: Colors.white,
                   child: ListTile(
@@ -71,8 +64,8 @@ class _MotivationalListScreenState extends State<MotivationalListScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         GestureDetector(
-                          onTap: () {
-                            Navigator.push(
+                          onTap: () async {
+                            await Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder:
@@ -91,6 +84,11 @@ class _MotivationalListScreenState extends State<MotivationalListScreen> {
                         const SizedBox(height: 8),
                         GestureDetector(
                           onTap: () async {
+                            final provider =
+                                Provider.of<MotivationalTextProvider>(
+                                  context,
+                                  listen: false,
+                                );
                             await _confirmAndDelete(context, provider, text);
                           },
                           child: SharePicture(
@@ -112,11 +110,12 @@ class _MotivationalListScreenState extends State<MotivationalListScreen> {
           },
         ),
       ),
+
       floatingActionButton: FloatingActionButton(
         backgroundColor: ConstColors.black,
         shape: const CircleBorder(),
-        onPressed: () {
-          Navigator.pushNamed(context, Routes.motivationalScreen);
+        onPressed: () async {
+          await Navigator.pushNamed(context, Routes.motivationalScreen);
         },
         child: const Icon(Icons.add, color: ConstColors.white),
       ),
@@ -143,12 +142,13 @@ Future<void> _confirmAndDelete(
           ),
           TextButton(
             onPressed: () {
-              Navigator.of(dialogContext).pop(true);
               if (text.id == null) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Invalid item: missing ID.')),
                 );
-                return;
+                Navigator.of(dialogContext).pop(false);
+              } else {
+                Navigator.of(dialogContext).pop(true);
               }
             },
             child: const Text('Delete', style: TextStyle(color: Colors.red)),
@@ -158,7 +158,7 @@ Future<void> _confirmAndDelete(
     },
   );
 
-  if (confirm == true) {
+  if (confirm == true && text.id != null) {
     await provider.deleteMotivationalText(text.id!);
     Fluttertoast.showToast(msg: '"${text.title}" deleted');
   }

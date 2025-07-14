@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/const_colors.dart';
 import '../../../../components/profileappbar.dart';
+import '../../programs_and_workout/bottom_navigation_view_model.dart';
 import '../profile_view_model/profile_view_model.dart';
 import 'programes.dart';
 import 'workouts.dart';
@@ -85,7 +87,13 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         backgroundColor: ConstColors.black,
         shape: const CircleBorder(),
 
-        onPressed: () {},
+        onPressed: () {
+          Navigator.popUntil(context, (route) => route.isFirst);
+          Provider.of<BottomNavigationProvider>(
+            context,
+            listen: false,
+          ).setIndex(1);
+        },
         child: Icon(Icons.add, color: ConstColors.white),
       ),
     );
