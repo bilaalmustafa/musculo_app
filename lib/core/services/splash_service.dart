@@ -11,7 +11,11 @@ class SplashServices {
     final uid = prefs.getString('uid');
 
     if (isLoggedIn && uid != null && uid.isNotEmpty && context.mounted) {
-      Navigator.pushReplacementNamed(context, Routes.bottomnavigationbarscreen);
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        Routes.bottomnavigationbarscreen,
+        (route) => false,
+      );
     } else {
       Navigator.pushReplacementNamed(context, Routes.getStarted);
     }
