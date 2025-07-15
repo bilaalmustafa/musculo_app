@@ -76,7 +76,15 @@ class _ShowrateBottomSheetState extends State<ShowrateBottomSheet> {
                   width: Sizes.s110,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
-                    image: DecorationImage(image: AssetImage(Assets.workout)),
+                    border: Border.all(width: 1, color: ConstColors.black),
+                    // image: DecorationImage(image: AssetImage(Assets.workout)),
+                  ),
+                  child: Center(
+                    child: PoppinsText(
+                      text: data.creatorName![0].toUpperCase(),
+                      fontSize: 32,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
                 PoppinsText(

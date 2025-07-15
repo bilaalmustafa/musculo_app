@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/components/share_picture.dart';
-import 'package:musculo_app/core/constants/assets.dart';
+
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
@@ -20,7 +20,8 @@ class ProgramVideoItem extends StatelessWidget {
     this.index,
     this.selectedIndex,
     this.onChanged,
-    this.program, this.onTap,
+    this.program,
+    this.onTap,
   });
 
   final String? image;
@@ -43,11 +44,19 @@ class ProgramVideoItem extends StatelessWidget {
           width: 90,
           height: 90,
           decoration: BoxDecoration(
-            color: ConstColors.secondary,
+            color: ConstColors.white,
             borderRadius: BorderRadius.circular(10),
-            image: DecorationImage(
-              image: AssetImage(programImage ?? Assets.workout),
-              fit: BoxFit.fill,
+            border: Border.all(width: 0.5, color: ConstColors.black),
+            // image: DecorationImage(
+            //   image: AssetImage(programImage ?? Assets.workout),
+            //   fit: BoxFit.fill,
+            // ),
+          ),
+          child: Center(
+            child: PoppinsText(
+              text: program!.creatorName![0].toUpperCase(),
+              fontSize: 28,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ),

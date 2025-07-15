@@ -4,7 +4,7 @@ import 'package:musculo_app/components/share_picture.dart';
 import 'package:musculo_app/core/config/routes.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/Program_Item_Dis.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/program_item_dis.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../components/customTextField.dart';

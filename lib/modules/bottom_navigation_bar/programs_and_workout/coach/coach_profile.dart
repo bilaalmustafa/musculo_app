@@ -13,6 +13,9 @@ import 'package:musculo_app/modules/bottom_navigation_bar/profile/profile_view_m
 
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/coach/coach_profile_text_tab.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/coach/program/workouts_tab.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/tab/program_tab.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/tab/work_out_tab.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/work_out_tab.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/services/user_service.dart';
@@ -246,7 +249,7 @@ class _CoachProfileState extends State<CoachProfile> {
                     });
                     return TabButtons(
                       selecttab: tabVm.selectTab,
-                      tabNames: ["Description", "Programs/Workouts"],
+                      tabNames: ["Description", "Workouts", "Programs"],
                       onChange: (index) {
                         tabVm.setTab(index);
                         _pageController.animateToPage(
@@ -266,7 +269,9 @@ class _CoachProfileState extends State<CoachProfile> {
                   controller: _pageController,
                   children: [
                     CoachProfileTextScreen(creator: data),
-                    ProgramWorkOutsTab(),
+                    WorkOutTabDisScreen(userId: data.userId),
+                    // ProgramWorkOutsTab(),
+                    ProgramTabDisScreen(userId: data.userId),
                   ],
                 ),
               ),

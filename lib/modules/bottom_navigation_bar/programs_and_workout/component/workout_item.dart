@@ -55,12 +55,26 @@ class WorkOutItemDis extends StatelessWidget {
           Expanded(
             flex: 1,
             child: Container(
+              // margin: EdgeInsets.all(50),
+              // padding: EdgeInsets.all(40),
+              // width: 100,
+              // height: 120,
               decoration: BoxDecoration(
+                color: ConstColors.white,
                 borderRadius: BorderRadius.circular(Sizes.s8),
+                border: Border.all(width: 0.5, color: ConstColors.black),
+
                 // color: ConstColors.amber,
-                image: DecorationImage(
-                  image: AssetImage(Assets.workout),
-                  fit: BoxFit.cover,
+                // image: DecorationImage(
+                //   image: AssetImage(Assets.workout),
+                //   fit: BoxFit.cover,
+                // ),
+              ),
+              child: Center(
+                child: PoppinsText(
+                  text: workout.creatorName![0].toUpperCase(),
+                  fontSize: 32,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),

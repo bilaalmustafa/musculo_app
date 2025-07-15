@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/components/share_picture.dart';
-import 'package:musculo_app/core/constants/assets.dart';
+
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
-import 'package:musculo_app/model/programs_model.dart';
+
 import 'package:musculo_app/model/workouts_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/custom_chip.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/profile/user_profile_screens/programes.dart';
 
 class WorkoutVideoItem extends StatelessWidget {
   const WorkoutVideoItem({
@@ -22,7 +21,8 @@ class WorkoutVideoItem extends StatelessWidget {
     this.index,
     this.selectedIndex,
     this.onChanged,
-    this.workouts, this.onTap,
+    this.workouts,
+    this.onTap,
   });
 
   final String? image;
@@ -45,11 +45,19 @@ class WorkoutVideoItem extends StatelessWidget {
           width: 90,
           height: 90,
           decoration: BoxDecoration(
-            color: ConstColors.secondary,
+            color: ConstColors.white,
             borderRadius: BorderRadius.circular(10),
-            image: DecorationImage(
-              image: AssetImage(programImage ?? Assets.workout),
-              fit: BoxFit.fill,
+            border: Border.all(width: 0.5, color: ConstColors.black),
+            // image: DecorationImage(
+            //   image: AssetImage(programImage ?? Assets.workout),
+            //   fit: BoxFit.fill,
+            // ),
+          ),
+          child: Center(
+            child: PoppinsText(
+              text: workouts!.creatorName![0].toUpperCase(),
+              fontSize: 28,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ),
@@ -92,7 +100,7 @@ class WorkoutVideoItem extends StatelessWidget {
           )
         else if (image != null)
           InkWell(
-            onTap:  onTap,
+            onTap: onTap,
             child: SharePicture(
               imagePath: image!,
               height: Sizes.s50,

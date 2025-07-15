@@ -17,7 +17,7 @@ import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_scre
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/view_model/user_view_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/analysis_containers.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/paragraph_text.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/show_rating_bottomsheet.dart';
+
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/screen/view_model/discover_view_model.dart';
 
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/component/show_rating_sheet.dart';
@@ -25,7 +25,6 @@ import 'package:provider/provider.dart';
 
 import '../../../../core/config/routes.dart';
 import '../../../../core/services/user_service.dart';
-import '../../../../model/user_model.dart';
 
 class TraningPreviewScreen extends StatefulWidget {
   const TraningPreviewScreen({super.key, required this.workoutModel});

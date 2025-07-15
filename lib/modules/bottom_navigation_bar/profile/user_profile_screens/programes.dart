@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/model/programs_model.dart';
 
-import '../../programs_and_workout/component/Program_Item_Dis.dart';
+import '../../programs_and_workout/component/program_item_dis.dart';
 
 class Programs extends StatelessWidget {
   const Programs({

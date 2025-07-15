@@ -13,7 +13,8 @@ import '../../../../core/utils/workout_filter.dart';
 import '../screen/view_model/discover_filter_provider.dart';
 
 class WorkOutTabDisScreen extends StatefulWidget {
-  const WorkOutTabDisScreen({super.key});
+  final String? userId;
+  const WorkOutTabDisScreen({super.key, this.userId});
 
   @override
   State<WorkOutTabDisScreen> createState() => _WorkOutTabDisScreenState();
@@ -57,10 +58,19 @@ class _WorkOutTabDisScreenState extends State<WorkOutTabDisScreen> {
               );
               final data = snapshot.data ?? [];
               print('Total fetched: ${data.length}');
+
+              // filter creator workout here
+              final filteredByCreator =
+                  widget.userId != null
+                      ? data.where((w) => w.userId == widget.userId).toList()
+                      : data;
+              print('After creator filter: ${filteredByCreator.length}');
+
+              // apply discover filter (search, plan type, price, etc) .
               final filtered =
                   (filter.isFilterApplied || query.isNotEmpty)
                       ? WorkoutFilterUtil.applyFilters(data, filter, query)
-                      : data;
+                      : filteredByCreator;
 
               if (filtered.isEmpty) {
                 return Center(

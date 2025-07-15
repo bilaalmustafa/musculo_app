@@ -11,7 +11,7 @@ class Assets {
   static const String lock = "$_icons/Lock.svg";
   static const String message = "$_icons/Message.svg";
   static const String show = "$_icons/Show.svg";
-  static const String male = "$_icons/male.svg";
+  static const String male = "$_icons/male.svg"; // not used
   static const String female = "$_icons/female.svg";
   static const String filterIcon = "$_icons/Filter.svg";
   static const String searchIcon = "$_icons/Search.svg";
@@ -37,7 +37,7 @@ class Assets {
   static const String chartBlack = "$_icons/ChartBlack.svg";
   static const String star1 = "$_icons/Star1.svg";
   static const String upload1 = "$_icons/Upload1.svg";
-  static const String sqaure1 = "$_icons/Close Square1.png";
+  static const String sqaure1 = "$_icons/Close Square1.png"; // not used
   static const String arrowUp = "$_icons/ArrowUp2.svg";
   static const String reportIcon = "$_icons/Shield Fail.svg";
   static const String deleteIcon = "$_icons/Delete.svg";

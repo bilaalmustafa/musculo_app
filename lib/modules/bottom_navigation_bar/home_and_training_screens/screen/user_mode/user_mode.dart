@@ -253,8 +253,7 @@ class _UserModeTabState extends State<UserModeTab> {
                             Routes.trainingscreen,
 
                             arguments: {
-                              'workoutData':
-                                  userVm.listOfPrograms[index],
+                              'workoutData': userVm.listOfPrograms[index],
                               'userModel': userVm, // UserModel
                             },
                           );
