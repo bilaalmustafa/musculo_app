@@ -92,8 +92,17 @@ class RouteGenerator {
       case Routes.registerscreen:
         return MaterialPageRoute(builder: (_) => const RegisterScren());
       case Routes.bottomnavigationbarscreen:
+        final args = routeSitting.arguments as Map<String, dynamic>?;
+        final int initialMainTabIndex =
+            args?['initialMainTabIndex'] as int? ?? 0;
+        final int initialHomeScreenSubTab =
+            args?['initialHomeScreenSubTab'] as int? ?? 0;
         return MaterialPageRoute(
-          builder: (_) => const BottomNavigationScreen(),
+          builder:
+              (_) => BottomNavigationScreen(
+                initialMainTabIndex: initialMainTabIndex,
+                initialHomeScreenSubTab: initialHomeScreenSubTab,
+              ),
         );
       case Routes.trainingscreen:
         final argu = routeSitting.arguments as Map<String, dynamic>;

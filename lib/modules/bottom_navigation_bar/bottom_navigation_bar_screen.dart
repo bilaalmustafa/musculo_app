@@ -12,19 +12,47 @@ import 'package:provider/provider.dart';
 import 'programs_and_workout/bottom_navigation_view_model.dart';
 
 class BottomNavigationScreen extends StatefulWidget {
-  const BottomNavigationScreen({super.key});
+  final int initialMainTabIndex;
+  final int initialHomeScreenSubTab;
+  const BottomNavigationScreen({
+    super.key,
+    this.initialMainTabIndex = 0,
+    this.initialHomeScreenSubTab = 0,
+  });
 
   @override
   State<BottomNavigationScreen> createState() => _BottomNavigationScreenState();
 }
 
 class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
-  final List<Widget> _screens = [
-    HomeScreen(),
-    DiscoverScreen(),
-    FeedbackScreen(),
-    UserProfile(),
-  ];
+  List<Widget> get _screens {
+    return [
+      HomeScreen(
+        initialTabIndex:
+            widget.initialMainTabIndex == 0
+                ? widget.initialHomeScreenSubTab
+                : 0,
+      ),
+      DiscoverScreen(),
+      FeedbackScreen(),
+      UserProfile(),
+    ];
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Get the provider instance (listen: false because we are only calling methods)
+      final bottomProvider = Provider.of<BottomNavigationProvider>(
+        context,
+        listen: false,
+      );
+
+      // Set the initial main tab index in the provider
+      bottomProvider.setIndex(widget.initialMainTabIndex);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

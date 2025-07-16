@@ -18,28 +18,34 @@ class ShowDialogBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: ConstColors.white,
-      title: Image(image: AssetImage(Assets.group)),
-      content: Column(
-        spacing: Sizes.s20,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          PoppinsText(
-            text: title ?? "Congratulation!",
-            fontSize: Sizes.s24,
-            fontWeight: TextWeight.semiBold,
-          ),
-          PoppinsText(
-            textAlign: TextAlign.center,
-            text: message,
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) {}
+      },
+      child: AlertDialog(
+        backgroundColor: ConstColors.white,
+        title: Image(image: AssetImage(Assets.group)),
+        content: Column(
+          spacing: Sizes.s20,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            PoppinsText(
+              text: title ?? "Congratulation!",
+              fontSize: Sizes.s24,
+              fontWeight: TextWeight.semiBold,
+            ),
+            PoppinsText(
+              textAlign: TextAlign.center,
+              text: message,
 
-            fontSize: Sizes.s13,
-            fontWeight: TextWeight.regular,
-          ),
+              fontSize: Sizes.s13,
+              fontWeight: TextWeight.regular,
+            ),
 
-          if (bottomWidget != null) bottomWidget!,
-        ],
+            if (bottomWidget != null) bottomWidget!,
+          ],
+        ),
       ),
     );
   }

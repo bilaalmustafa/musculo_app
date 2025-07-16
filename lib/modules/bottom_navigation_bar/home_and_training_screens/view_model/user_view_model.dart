@@ -4,6 +4,7 @@ import 'package:musculo_app/core/services/creator_services.dart';
 import 'package:musculo_app/core/services/user_service.dart';
 import 'package:musculo_app/model/programs_model.dart';
 import 'package:musculo_app/model/user_model.dart';
+import 'package:musculo_app/model/workouts_model.dart';
 
 class UserViewModel with ChangeNotifier {
   UserModel? userModel;
@@ -51,17 +52,13 @@ class UserViewModel with ChangeNotifier {
 
   int cancelCount(UserModel? creatorVm) {
     final cancelledCount =
-        creatorVm?.sold
-            .where((item) => item.packegeMode == false)
-            .length;
+        creatorVm?.sold.where((item) => item.packegeMode == false).length;
     return cancelledCount ?? 0;
   }
 
   int soldProgram(UserModel? creatorVm) {
     final cancelledCount =
-        creatorVm?.sold
-            .where((item) => item.packegeMode == true)
-            .length;
+        creatorVm?.sold.where((item) => item.packegeMode == true).length;
     return cancelledCount ?? 0;
   }
 
@@ -71,21 +68,27 @@ class UserViewModel with ChangeNotifier {
         .fold<double>(0.0, (sum, item) => sum + item.contentPrice);
     return balance ?? 0.0;
   }
-    selectStart(int value) {
+
+  selectStart(int value) {
     selectedRating = value;
     notifyListeners();
   }
+
   double getingRating(final double oldRating, int oldCount) {
     final double newRating =
         ((oldRating * oldCount) + selectedRating) / (oldCount + 1);
     return newRating;
   }
+
   Stream<List<ProgramModel>> getProgamOfCreatoe(String uid) {
     return instance<ProgramServices>().getCreatorPrograms(uid);
   }
 
+  Stream<List<WorkoutModel>> getWorkOutOfCreator(String uid) {
+    return instance<WorkoutServices>().getCreatorWorkout(uid);
+  }
 
-    Future<UserModel?> postCreatorRatingAndReview(
+  Future<UserModel?> postCreatorRatingAndReview(
     String docId,
     double rating,
     int newCount,
@@ -99,7 +102,7 @@ class UserViewModel with ChangeNotifier {
       UserModel item = model.copyWith(
         rating: rating,
         review: reviewList,
-        countRating: newCount
+        countRating: newCount,
       );
 
       await instance<UserService>().updateData(docId, item);
@@ -108,7 +111,6 @@ class UserViewModel with ChangeNotifier {
       notifyListeners();
       return item;
     } catch (e) {
-     
       isLoading = false;
       notifyListeners();
       return null;

@@ -16,21 +16,21 @@ class SharedAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actionIcon,
     this.iconImage,
     this.trailing,
+    this.onBackPressed,
   });
   double? progress;
   String? title;
   IconData? actionIcon;
   String? iconImage;
   final Widget? trailing;
+  final VoidCallback? onBackPressed;
   @override
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: ConstColors.white,
       leading: IconButton(
         icon: const SharePicture(imagePath: Assets.arrowleft),
-        onPressed: () {
-          Navigator.pop(context);
-        },
+        onPressed: onBackPressed ?? () => Navigator.of(context).pop(),
       ),
       title:
           title != null

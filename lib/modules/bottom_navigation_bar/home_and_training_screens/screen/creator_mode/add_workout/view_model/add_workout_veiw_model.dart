@@ -237,18 +237,11 @@ class AddWorkoutVeiwModel extends ChangeNotifier {
       item,
     );
     isLoading = false;
-    workoutNameController.clear();
-    descriptionController.clear();
-    typeofworkout = "";
-    gender = null;
-
-    selected = null;
-    sectionofWorkout = [false, false, false, false, false];
-    selectedSections.clear();
-    selectedVideos.clear();
-    selectedDate = null;
-    levelofworkout = "";
-    notifyListeners();
+    if (success) {
+      clearData();
+    } else {
+      notifyListeners();
+    }
     return success;
   }
 
@@ -354,5 +347,38 @@ class AddWorkoutVeiwModel extends ChangeNotifier {
               video.name.toLowerCase().contains(_searchQuery.toLowerCase()),
         )
         .toList();
+  }
+
+  // this method clear data here
+  void clearData() {
+    // Reset controllers
+    workoutNameController.clear();
+    descriptionController.clear();
+    priceController.clear();
+    dateController.clear();
+
+    // Reset simple properties
+    typeofworkout = "";
+    levelofworkout = "";
+    gender = null;
+    selected = null;
+    selectedDate = null;
+    difficulty = 5;
+    currentSectionIndex = 0;
+
+    // Reset boolean flags
+    isTypeofworkoutSelect = false;
+    isLevelofworkoutslect = false;
+    isSectionofWorkout = false;
+    sectionofWorkout = [false, false, false, false, false];
+
+    // Clear lists and maps
+    selectedSections.clear();
+    selectedVideos.clear();
+    selectedList.clear();
+    addVersionList.clear();
+
+    // Notify listeners to update the UI
+    notifyListeners();
   }
 }
