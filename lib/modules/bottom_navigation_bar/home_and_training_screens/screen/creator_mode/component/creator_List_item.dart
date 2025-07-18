@@ -40,9 +40,18 @@ class CreatorListItems extends StatelessWidget {
 
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(Sizes.s10),
-              image: DecorationImage(image: AssetImage(Assets.workout)),
+              border: Border.all(width: 0.5, color: ConstColors.black),
+              // image: DecorationImage(image: AssetImage(Assets.workout)),
+            ),
+            child: Center(
+              child: PoppinsText(
+                text: programModel.creatorName![0].toUpperCase(),
+                fontSize: 28,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
+          SizedBox(width: 5),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

@@ -50,13 +50,13 @@ class Assets {
   static const String group = "$_assets/Group.png";
   static const String bgimage = "$_assets/bgimage.png";
   static const String man = "$_assets/man.png";
-  static const String discovery = "$_assets/Discovery.png";
-  static const String playbutton = "$_assets/PlayButton.png";
+  static const String discovery = "$_assets/Discovery.png"; // not used
+  static const String playbutton = "$_assets/PlayButton.png"; // not used
   static const String workout = "$_assets/workuot.png";
   static const String profilebgpng = "$_assets/profilebg.png";
   static const String gpayment = "$_assets/gpayment.png";
   static const String ellipse = "$_assets/Ellipse.png";
-  static const String monog = "$_assets/monog.png";
+  static const String monog = "$_assets/monog.png"; // not used
   static const String whatsappimage = "$_assets/Mask Group.png";
   static const String twitterImage = "$_assets/twitterImage.png";
   static const String instagramImage = "$_assets/instagramImage.png";
@@ -73,11 +73,11 @@ class Assets {
   static const String next = "$_svgs/next.svg";
   static const String swap = "$_svgs/Swap.svg";
   static const String congrate = "$_svgs/cong.svg";
-  static const String whatsapp = "$_svgs/whatsApp.svg";
-  static const String twitter = "$_svgs/x.svg";
-  static const String insta = "$_svgs/meta.svg";
+  static const String whatsapp = "$_svgs/whatsApp.svg"; // not used
+  static const String twitter = "$_svgs/x.svg"; // not used
+  static const String insta = "$_svgs/meta.svg"; // not used
   static const String official = "$_svgs/official.svg";
-  static const String monugram = "$_svgs/monugram.svg";
+  static const String monugram = "$_svgs/monugram.svg"; // not used
   static const String addUser = "$_svgs/Add User.svg";
   static const String switchUser = "$_svgs/switch_user.svg";
   static const String notification = "$_svgs/Notification.svg";
@@ -88,7 +88,7 @@ class Assets {
   static const String heartIcon = "$_svgs/Heart.svg";
   static const String calendarIcon = "$_svgs/Calendar.svg";
   static const String documentIcon = "$_svgs/Document.svg";
-  static const String empty = "$_svgs/empty.svg";
+  static const String empty = "$_svgs/empty.svg"; // used
 
   static const String profilebg = "$_svgs/profilebg.svg";
   static const String tWallet = "$_svgs/tWallet.svg";

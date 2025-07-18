@@ -6,6 +6,7 @@ import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/model/programs_model.dart';
 import 'package:musculo_app/model/workouts_model.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/creatorworkoutsprogram.dart';
 
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/component/analysis_listtile.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/component/creator_List_item.dart';
@@ -71,9 +72,10 @@ class _CreatorModeTabState extends State<CreatorModeTab> {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: SingleChildScrollView(
+
+              SizedBox(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
                   child: Column(
                     children: [
                       Row(
@@ -94,7 +96,6 @@ class _CreatorModeTabState extends State<CreatorModeTab> {
                           ),
                         ],
                       ),
-
                       Row(
                         children: [
                           AnalysisLisTile(
@@ -112,118 +113,183 @@ class _CreatorModeTabState extends State<CreatorModeTab> {
                       ),
 
                       SizedBox(height: Sizes.s20),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          PoppinsText(
-                            text: "Your Programs",
-                            fontSize: Sizes.s20,
-                            fontWeight: TextWeight.semiBold,
-                            color: ConstColors.black,
-                          ),
-                          PoppinsText(
-                            text: "See All",
-                            fontSize: Sizes.s14,
-                            fontWeight: TextWeight.semiBold,
-                            color: ConstColors.black,
-                          ),
-                        ],
-                      ),
                     ],
                   ),
                 ),
               ),
-              Expanded(
-                child: StreamBuilder<List<ProgramModel>>(
-                  stream: vm.getProgamOfCreatoe(creatorVm?.userId ?? ""),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
-                    }
-                    if (snapshot.hasError) {
-                      return Center(child: Text("Error: ${snapshot.error}"));
-                    }
-                    final programs = snapshot.data ?? [];
-                    if (programs.isEmpty) {
-                      return PoppinsText(
-                        text: "No Programs",
-                        fontSize: Sizes.s16,
-                        color: ConstColors.greyA1A1,
-                      );
-                    }
-
-                    return ListView.separated(
-                      itemBuilder: (context, index) {
-                        return CreatorListItems(programModel: programs[index]);
-                      },
-                      separatorBuilder: (_, index) {
-                        return SizedBox(height: Sizes.s20);
-                      },
-                      itemCount: programs.length,
-                    );
-                  },
-                ),
-              ),
-
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    PoppinsText(
-                      text: "Your Workouts",
-                      fontSize: Sizes.s20,
-                      fontWeight: TextWeight.semiBold,
-                      color: ConstColors.black,
-                    ),
-                    PoppinsText(
-                      text: "See All",
-                      fontSize: Sizes.s14,
-                      fontWeight: TextWeight.semiBold,
-                      color: ConstColors.black,
-                    ),
-                  ],
-                ),
-              ),
 
               Expanded(
-                child: StreamBuilder<List<WorkoutModel>>(
-                  stream: vm.getWorkOutOfCreator(creatorVm?.userId ?? ""),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
-                    }
-                    if (snapshot.hasError) {
-                      return Center(child: Text("Error: ${snapshot.error}"));
-                    }
-                    final workouts = snapshot.data ?? [];
-                    if (workouts.isEmpty) {
-                      return PoppinsText(
-                        text: "No Workout",
-                        fontSize: Sizes.s16,
-                        color: ConstColors.greyA1A1,
-                      );
-                    }
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20.0,
+                        ).copyWith(bottom: 5),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            PoppinsText(
+                              text: "Your Programs",
+                              fontSize: Sizes.s20,
+                              fontWeight: TextWeight.semiBold,
+                              color: ConstColors.black,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                _showBottomSheet(
+                                  context: context,
+                                  title: 'Your Programs',
 
-                    return ListView.separated(
-                      itemBuilder: (context, index) {
-                        return CreatorWorkoutList(
-                          workoutModel: workouts[index],
-                        );
-                      },
-                      separatorBuilder: (_, index) {
-                        return SizedBox(height: Sizes.s20);
-                      },
-                      itemCount: workouts.length,
-                    );
-                  },
+                                  child:
+                                      CreatorWorkoutsProgramList<ProgramModel>(
+                                        stream: vm.getProgamOfCreatoe(
+                                          creatorVm?.userId ?? "",
+                                        ),
+                                        itemBuilder:
+                                            (program) => CreatorListItems(
+                                              programModel: program,
+                                            ),
+                                        emptyMessage: "No Programs",
+                                      ),
+                                );
+                              },
+
+                              child: PoppinsText(
+                                text: "See All",
+                                fontSize: Sizes.s14,
+                                fontWeight: TextWeight.semiBold,
+                                color: ConstColors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 180,
+                        child: CreatorWorkoutsProgramList<ProgramModel>(
+                          stream: vm.getProgamOfCreatoe(
+                            creatorVm?.userId ?? '',
+                          ),
+                          itemBuilder:
+                              (program) =>
+                                  CreatorListItems(programModel: program),
+                          emptyMessage: 'No Programs',
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                        ).copyWith(bottom: 5),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            PoppinsText(
+                              text: "Your Workouts",
+                              fontSize: Sizes.s20,
+                              fontWeight: TextWeight.semiBold,
+                              color: ConstColors.black,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                _showBottomSheet(
+                                  context: context,
+                                  title: 'Your Workouts',
+                                  child:
+                                      CreatorWorkoutsProgramList<WorkoutModel>(
+                                        stream: vm.getWorkOutOfCreator(
+                                          creatorVm?.userId ?? "",
+                                        ),
+                                        itemBuilder:
+                                            (workout) => CreatorWorkoutList(
+                                              workoutModel: workout,
+                                            ),
+                                        emptyMessage: "No Workouts",
+                                      ),
+                                );
+                              },
+
+                              child: PoppinsText(
+                                text: "See All",
+                                fontSize: Sizes.s14,
+                                fontWeight: TextWeight.semiBold,
+                                color: ConstColors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 220,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 0),
+                          child: CreatorWorkoutsProgramList<WorkoutModel>(
+                            stream: vm.getWorkOutOfCreator(
+                              creatorVm?.userId ?? '',
+                            ),
+                            itemBuilder:
+                                (workout) =>
+                                    CreatorWorkoutList(workoutModel: workout),
+                            emptyMessage: 'No Workouts',
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
           );
         },
       ),
+    );
+  }
+
+  void _showBottomSheet({
+    required BuildContext context,
+    required String title,
+    required Widget child,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: ConstColors.white,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+      ),
+      builder:
+          (_) => SizedBox(
+            height: MediaQuery.of(context).size.height * 0.60,
+            child: Column(
+              children: [
+                const SizedBox(height: 8),
+                Container(
+                  height: Sizes.s4,
+                  width: Sizes.s50,
+                  color: ConstColors.greyb3b3,
+                ),
+                const SizedBox(height: 10),
+                PoppinsText(
+                  text: title,
+                  fontSize: Sizes.s20,
+                  fontWeight: TextWeight.semiBold,
+                  color: ConstColors.black,
+                ),
+                const SizedBox(height: 10),
+                Divider(
+                  color: ConstColors.secondary,
+                  thickness: 2,
+                  indent: 20,
+                  endIndent: 20,
+                ),
+                SizedBox(height: 10),
+                Expanded(child: child),
+                SizedBox(height: 10),
+              ],
+            ),
+          ),
     );
   }
 }
