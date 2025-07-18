@@ -1,5 +1,3 @@
-import 'dart:async';
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/customTextField.dart';
 import 'package:musculo_app/components/poppins_text.dart';
@@ -7,16 +5,12 @@ import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
-import 'package:musculo_app/model/video_model.dart';
+
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_workout/video_frame_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_workout/view_model/add_workout_veiw_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/component/reels_item.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:provider/provider.dart';
-import 'package:video_player/video_player.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
 
-import '../../../../../../core/config/routes.dart';
+import 'package:provider/provider.dart';
 
 class WarmUp extends StatefulWidget {
   const WarmUp({super.key});
@@ -127,11 +121,12 @@ class _WarmUpState extends State<WarmUp> {
                                               context,
                                               MaterialPageRoute(
                                                 builder:
-                                                    (context) =>
-                                                        VideoFrameScreen(
-                                                          // controller: _controller,
-                                                          videourl: video.url,
-                                                        ),
+                                                    (
+                                                      context,
+                                                    ) => VideoFrameScreen(
+                                                      // controller: _controller,
+                                                      videourl: video.url,
+                                                    ),
                                               ),
                                             ),
                                         selected: vm.selectedList.contains(

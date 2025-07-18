@@ -214,6 +214,7 @@ class AddWorkoutVeiwModel extends ChangeNotifier {
     String userId,
     String creatorName,
   ) async {
+    log('AddWorkoutVeiwModel: creatediscoveryPost called');
     isLoading = true;
     notifyListeners();
     WorkoutModel item = WorkoutModel(
@@ -232,14 +233,21 @@ class AddWorkoutVeiwModel extends ChangeNotifier {
       totalTime: getTotalIntervalTimeInSeconds(),
       categorizedVideos: selectedVideos,
     );
+
+    log(
+      'AddWorkoutVeiwModel: Preparing to send WorkoutModel to WorkoutServices.createDiscovery',
+    );
+    log('AddWorkoutVeiwModel: WorkoutModel ID: $docId');
     bool success = await instance<WorkoutServices>().createDiscovery(
       docId,
       item,
     );
     isLoading = false;
     if (success) {
+      log('AddWorkoutVeiwModel: Workout created successfully. Clearing data.');
       clearData();
     } else {
+      log('AddWorkoutVeiwModel: Failed to create workout.');
       notifyListeners();
     }
     return success;

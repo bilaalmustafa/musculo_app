@@ -60,13 +60,11 @@ class _AddWorkoutPageViewState extends State<AddWorkoutPageView> {
     }
   }
 
-  // Add this method inside your _AddWorkoutPageViewState class
   void _resetWorkoutCreation() {
     // 1. Reset the PageView controller to the first page
     _pageController.jumpToPage(0);
 
-    // 2. Clear all the data from your view model
-    //    You need to add a 'clearData' method to your AddWorkoutVeiwModel
+    //    You need to clear all  'clearData'
     context.read<AddWorkoutVeiwModel>().clearData();
 
     // 3. Close the dialog
