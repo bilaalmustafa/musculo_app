@@ -261,7 +261,7 @@ class _CreatorModeTabState extends State<CreatorModeTab> {
       ),
       builder:
           (_) => SizedBox(
-            height: MediaQuery.of(context).size.height * 0.60,
+            height: MediaQuery.of(context).size.height * 0.61,
             child: Column(
               children: [
                 const SizedBox(height: 8),
@@ -284,8 +284,15 @@ class _CreatorModeTabState extends State<CreatorModeTab> {
                   indent: 20,
                   endIndent: 20,
                 ),
-                SizedBox(height: 10),
+                // SizedBox(height: 10),
                 Expanded(child: child),
+
+                Divider(
+                  color: ConstColors.secondary,
+                  thickness: 2,
+                  indent: 20,
+                  endIndent: 20,
+                ),
                 SizedBox(height: 10),
               ],
             ),

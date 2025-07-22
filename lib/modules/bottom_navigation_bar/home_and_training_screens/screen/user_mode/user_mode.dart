@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/customTextField.dart';
+import 'package:musculo_app/components/custom_shimmer.dart';
 import 'package:musculo_app/components/loader/home_loader.dart';
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/core/config/routes.dart';
@@ -20,6 +21,7 @@ import 'package:provider/provider.dart';
 import '../../../../../core/config/injections.dart';
 import '../../../../../core/services/creator_services.dart';
 import '../../../../../model/programs_model.dart';
+import '../../../programs_and_workout/component/program_item_dis.dart';
 import 'program_search_screen.dart';
 
 class UserModeTab extends StatefulWidget {
@@ -58,6 +60,7 @@ class _UserModeTabState extends State<UserModeTab> {
     super.dispose();
   }
 
+  List<ProgramModel> _topTenPrograms = [];
   @override
   Widget build(BuildContext context) {
     // final usermodeldata = authViewModel.userModel;
@@ -106,11 +109,75 @@ class _UserModeTabState extends State<UserModeTab> {
                       fontWeight: TextWeight.semiBold,
                       color: ConstColors.black,
                     ),
-                    PoppinsText(
-                      text: "See All",
-                      fontSize: Sizes.s14,
-                      fontWeight: TextWeight.medium,
-                      color: ConstColors.black,
+                    GestureDetector(
+                      onTap: () {
+                        // TODO: here we add BottomSheet of top ten Programs;
+
+                        showModalBottomSheet(
+                          context: context,
+                          backgroundColor: ConstColors.secondary,
+                          isScrollControlled: true,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(32),
+                            ),
+                          ),
+                          builder:
+                              (_) => SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.71,
+                                child: Column(
+                                  children: [
+                                    const SizedBox(height: 8),
+                                    Container(
+                                      height: Sizes.s4,
+                                      width: Sizes.s50,
+                                      decoration: BoxDecoration(
+                                        color: ConstColors.greyb3b3,
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    PoppinsText(
+                                      text: "Top Programs",
+                                      fontSize: Sizes.s18,
+                                      fontWeight: TextWeight.semiBold,
+                                      color: ConstColors.black,
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Divider(
+                                      color: ConstColors.greyE6EA,
+                                      thickness: 2,
+                                      indent: 20,
+                                      endIndent: 20,
+                                    ),
+                                    Expanded(
+                                      child: ListView.builder(
+                                        itemCount: _topTenPrograms.length,
+                                        itemBuilder: (context, index) {
+                                          final program =
+                                              _topTenPrograms[index];
+                                          return ProgramItemDis(
+                                            program: program,
+                                          );
+
+                                          // ItemContainer(
+                                          //   program: program,
+                                          // );
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                        );
+                      },
+                      child: PoppinsText(
+                        text: "See All",
+                        fontSize: Sizes.s14,
+                        fontWeight: TextWeight.medium,
+                        color: ConstColors.black,
+                      ),
                     ),
                   ],
                 ),
@@ -120,7 +187,7 @@ class _UserModeTabState extends State<UserModeTab> {
                     stream: stream,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: CircularProgressIndicator());
+                        return Center(child: CustomShimmer(height: 150));
                       }
 
                       if (snapshot.hasError) {
@@ -134,7 +201,7 @@ class _UserModeTabState extends State<UserModeTab> {
                       }
 
                       final programs = snapshot.data ?? [];
-                      print('here we print programs ${programs.length}');
+                      // print('here we print programs ${programs.length}');
 
                       //  Sort programs by rating (highest first)
                       programs.sort(
@@ -151,19 +218,19 @@ class _UserModeTabState extends State<UserModeTab> {
                         );
                       }
 
-                      final topTenPrograms = programs.take(10).toList();
+                      _topTenPrograms = programs.take(10).toList();
 
                       return ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: topTenPrograms.length,
+                        itemCount: _topTenPrograms.length,
                         itemBuilder: (context, index) {
-                          final program = topTenPrograms[index];
+                          final program = _topTenPrograms[index];
 
                           return Padding(
                             padding: EdgeInsets.only(
                               left: index == 0 ? 0 : 8, // more space at start
                               right:
-                                  index == topTenPrograms.length - 1
+                                  index == _topTenPrograms.length - 1
                                       ? 0
                                       : 8, // more space at end
                             ),

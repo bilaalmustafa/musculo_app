@@ -23,6 +23,7 @@ import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/s
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/component/show_rating_sheet.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../components/custom_shimmer.dart';
 import '../../../../core/config/routes.dart';
 import '../../../../core/services/user_service.dart';
 
@@ -78,12 +79,30 @@ class _TraningPreviewScreenState extends State<TraningPreviewScreen> {
           Stack(
             children: [
               Container(
-                color: ConstColors.black,
                 width: double.infinity,
                 height: context.screenheight * 0.3,
-                child: SharePicture(
-                  imagePath: Assets.bellyFat,
-                  fit: BoxFit.cover,
+                decoration: BoxDecoration(
+                  color: ConstColors.black,
+                  boxShadow: [
+                    BoxShadow(
+                      color: ConstColors.grey888,
+                      blurRadius: 10,
+                      spreadRadius: 5,
+                    ),
+                  ],
+                ),
+
+                // child: SharePicture(
+                //   imagePath: Assets.bellyFat,
+                //   fit: BoxFit.cover,
+                // ),
+                child: Center(
+                  child: PoppinsText(
+                    text: widget.workoutModel.creatorName![0].toUpperCase(),
+                    fontSize: 60,
+                    fontWeight: FontWeight.w600,
+                    color: ConstColors.white,
+                  ),
                 ),
               ),
 
@@ -316,7 +335,7 @@ class _TraningPreviewScreenState extends State<TraningPreviewScreen> {
                             ConnectionState.waiting) {
                           return const Padding(
                             padding: EdgeInsets.all(16),
-                            child: CircularProgressIndicator(),
+                            child: CustomShimmer(height: 50),
                           );
                         }
 

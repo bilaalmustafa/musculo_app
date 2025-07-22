@@ -62,11 +62,14 @@ class ProgramItemDis extends StatelessWidget {
           Expanded(
             flex: 1,
             child: Container(
+              width: 80,
+              height: 80,
               // width: context.screenheight * 0.12,
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(Sizes.s8),
-                border: Border.all(width: 0.5, color: ConstColors.black),
+                color: ConstColors.black,
+                // borderRadius: BorderRadius.circular(Sizes.s8),
+                border: Border.all(width: 0.5, color: ConstColors.gre9E9E),
+                shape: BoxShape.circle,
                 // color: ConstColors.amber,
                 // image: DecorationImage(
                 //   image: AssetImage(Assets.workout),
@@ -78,6 +81,7 @@ class ProgramItemDis extends StatelessWidget {
                   text: program.creatorName![0].toUpperCase(),
                   fontSize: 32,
                   fontWeight: FontWeight.w500,
+                  color: ConstColors.white,
                 ),
               ),
             ),

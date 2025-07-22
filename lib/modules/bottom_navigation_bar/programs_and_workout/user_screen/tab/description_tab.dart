@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:musculo_app/components/custom_button.dart';
+import 'package:musculo_app/components/custom_shimmer.dart';
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
@@ -174,7 +175,7 @@ class _ProgramDetailScreenState extends State<DescriptionTab> {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Padding(
                           padding: EdgeInsets.all(16),
-                          child: CircularProgressIndicator(),
+                          child: CustomShimmer(height: 50),
                         );
                       }
 

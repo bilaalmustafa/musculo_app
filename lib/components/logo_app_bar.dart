@@ -61,11 +61,12 @@ class LogoAppBar extends StatelessWidget implements PreferredSizeWidget {
                 controller: controller,
 
                 sufIcon:
-                    filter.isFilterApplied
+                    filter.isFilterApplied || filter.query.isNotEmpty
                         ? Assets.crossIcon
                         : Assets.filterIcon,
                 onTap: () {
-                  if (filter.isFilterApplied) {
+                  if (filter.isFilterApplied || filter.query.isNotEmpty) {
+                    controller!.clear();
                     filter.clear();
                   } else {
                     Navigator.pushNamed(context, Routes.filterscreen);

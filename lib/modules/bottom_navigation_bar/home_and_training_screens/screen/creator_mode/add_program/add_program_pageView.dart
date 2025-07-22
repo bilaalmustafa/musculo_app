@@ -4,10 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/shared_appbar.dart';
-import 'package:musculo_app/core/config/injections.dart';
+
 import 'package:musculo_app/core/constants/const_colors.dart';
-import 'package:musculo_app/core/services/creator_services.dart';
-import 'package:musculo_app/model/user_model.dart';
+
 import 'package:musculo_app/modules/auth/register/component/show_dialog_box.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_program/add_indended.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_program/add_program_name.dart';
@@ -34,6 +33,12 @@ class _AddProgramPageviewState extends State<AddProgramPageview> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
   void _goToNextPage() {
     if (_currentPage < 8 - 1) {
       _currentPage++;
@@ -46,184 +51,235 @@ class _AddProgramPageviewState extends State<AddProgramPageview> {
     }
   }
 
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
+  void _goToPreviousPage() {
+    if (_currentPage > 0) {
+      _currentPage--;
+      _pageController.animateToPage(
+        _currentPage,
+        duration: const Duration(milliseconds: 100),
+        curve: Curves.easeInOut,
+      );
+      setState(() {}); // Update progress bar
+    }
+  }
+
+  void _resetProgramCreation() {
+    // 1. Reset the PageView controller to the first page
+    _pageController.jumpToPage(0);
+
+    //    You need to clear all  'clearData'
+    context.read<AddProgramViewModel>().clearData();
+
+    // 3. Close the dialog
+    Navigator.of(context).pop();
+
+    // 4. Trigger a rebuild to update the UI (like the progress bar)
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     double progress = (_currentPage + 1) / 8;
-    return Scaffold(
-      backgroundColor: ConstColors.white,
-      appBar: SharedAppBar(progress: progress),
+    return PopScope(
+      canPop: _currentPage == 0,
+      onPopInvokedWithResult: (didPop, result) {
+        if (_currentPage == 0) {
+          context.read<AddProgramViewModel>().clearData();
+        } else {
+          _goToPreviousPage();
+        }
+      },
+      child: Scaffold(
+        backgroundColor: ConstColors.white,
+        appBar: SharedAppBar(
+          progress: progress,
+          onBackPressed: () {
+            if (_currentPage > 0) {
+              _goToPreviousPage();
+            } else {
+              context.read<AddProgramViewModel>().clearData();
+              Navigator.of(context).pop();
+            }
+          },
+        ),
 
-      body: PageView(
-        controller: _pageController,
-        physics: NeverScrollableScrollPhysics(),
-        children: [
-          AddProgramName(),
-          AddIndended(),
-          TypeOfProgram(),
-          LevelOfProgram(),
-          DurationOfProgram(),
-          DaysAWeeks(),
-          DaysAWeeksFromCalender(),
-          AddYourProgram(),
-        ],
-
-        onPageChanged: (index) {
-          setState(() {
-            _currentPage = index;
-          });
-        },
-      ),
-
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-        ).copyWith(bottom: 20),
-        child: Row(
-          spacing: 10,
+        body: PageView(
+          controller: _pageController,
+          physics: NeverScrollableScrollPhysics(),
           children: [
-            Visibility(
-              visible: _currentPage + 1 == 8,
+            AddProgramName(),
+            AddIndended(),
+            TypeOfProgram(),
+            LevelOfProgram(),
+            DurationOfProgram(),
+            DaysAWeeks(),
+            DaysAWeeksFromCalender(),
+            AddYourProgram(),
+          ],
 
-              child: Expanded(
-                child: CustomButton(
-                  textColor: ConstColors.black,
-                  buttonColor: ConstColors.secondary,
-                  buttonText: "Add Later",
-                  onTap: () {},
-                ),
-              ), // optional to preserve layout
-            ),
+          onPageChanged: (index) {
+            setState(() {
+              _currentPage = index;
+            });
+          },
+        ),
 
-            Expanded(
-              child: Consumer<AddProgramViewModel>(
-                builder: (context, vm, _) {
-                  return CustomButton(
-                    loading: vm.isLoading,
-                    buttonText: "Continue",
-                    onTap: () async {
-                      if (_currentPage < 8 - 1) {
-                        switch (_currentPage) {
-                          case 0:
-                            if (vm.validateAndSaveForm()) {
-                              _goToNextPage();
-                            }
-                            break;
-                          case 1:
-                            if (vm.intededvalidate()) {
-                              _goToNextPage();
-                            }
-                            break;
-                          case 2:
-                            if (vm.typeofProgramvalidate()) {
-                              _goToNextPage();
-                            }
-                            break;
-                          case 3:
-                            if (vm.levelofProgramsvalidate()) {
-                              _goToNextPage();
-                            }
-                          case 4:
-                            if (vm.validateAddDuratuon()  && vm.validateAndSaveForm()) {
-                              _goToNextPage();
-                            }
-                          case 5:
-                            if (vm.validateofSeletedTime()) {
-                              _goToNextPage();
-                            }
-                          case 6:
-                            if (vm.validateofSeleteddays()) {
-                              _goToNextPage();
-                            }
-                            break;
-                          default:
-                            _goToNextPage();
-                        }
-                      } else {
-                        if (vm.sectectedworksvalidation()) {
-                          final userVm =
-                              context.read<UserViewModel>().userModel!;
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+          ).copyWith(bottom: 20),
+          child: Row(
+            spacing: 10,
+            children: [
+              Visibility(
+                visible: _currentPage + 1 == 8,
 
-                          String id =
-                              DateTime.now().millisecondsSinceEpoch.toString();
+                child: Expanded(
+                  child: CustomButton(
+                    textColor: ConstColors.black,
+                    buttonColor: ConstColors.secondary,
+                    buttonText: "Add Later",
+                    onTap: () {},
+                  ),
+                ), // optional to preserve layout
+              ),
 
-                          bool success = await vm.creatediscoveryPost(
-                            id,
-                            userVm.userId!,
-                            userVm.name!,
-                          );
+              Expanded(
+                child: Consumer<AddProgramViewModel>(
+                  builder: (context, vm, _) {
+                    return CustomButton(
+                      loading: vm.isLoading,
+                      buttonText: "Continue",
+                      onTap: () async {
+                        if (_currentPage < 8 - 1) {
+                          switch (_currentPage) {
+                            case 0:
+                              if (vm.validateAndSaveForm()) {
+                                _goToNextPage();
+                              }
+                              break;
+                            case 1:
+                              if (vm.intededvalidate()) {
+                                _goToNextPage();
+                              }
+                              break;
+                            case 2:
+                              if (vm.typeofProgramvalidate()) {
+                                _goToNextPage();
+                              }
+                              break;
+                            case 3:
+                              if (vm.levelofProgramsvalidate()) {
+                                _goToNextPage();
+                              }
+                            case 4:
+                              if (vm.validateAddDuratuon() &&
+                                  vm.validateAndSaveForm()) {
+                                _goToNextPage();
+                              }
+                            case 5:
+                              if (vm.validateofSeletedTime()) {
+                                _goToNextPage();
+                              }
+                            case 6:
+                              if (vm.validateofSeleteddays()) {
+                                _goToNextPage();
+                              }
+                              break;
+                            default:
+                              _goToNextPage();
+                          }
+                        } else {
+                          if (vm.sectectedworksvalidation()) {
+                            final userVm =
+                                context.read<UserViewModel>().userModel!;
 
-                          log("Success: ${success.toString()}");
+                            String id =
+                                DateTime.now().millisecondsSinceEpoch
+                                    .toString();
 
-                          if (success && context.mounted) {
-                            Fluttertoast.showToast(
-                              msg: "Program Posted Successfully!",
+                            bool success = await vm.creatediscoveryPost(
+                              id,
+                              userVm.userId!,
+                              userVm.name!,
                             );
 
-                            showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (context) {
-                                return ShowDialogBox(
-                                  message: "Your program is live!",
-                                  bottomWidget: Column(
-                                    spacing: 10,
-                                    children: [
-                                      CustomButton(
-                                        buttonText: "Create another program",
-                                        onTap: () {
-                                          Navigator.of(context).pop();
-                                          Navigator.pushNamed(
-                                            context,
-                                            Routes.addprogrampageview,
-                                          );
-                                          // Navigator.pushNamedAndRemoveUntil(
-                                          //   context,
-                                          //   Routes.addprogrampageview,
-                                          //   (route) => false,
-                                          // );
-                                          setState(() {
-                                            _currentPage = 0;
-                                          });
-                                        },
-                                      ),
-                                      CustomButton(
-                                        buttonText: "Back to home page",
-                                        buttonColor: ConstColors.secondary,
-                                        textColor: ConstColors.black,
-                                        onTap: () {
-                                          Navigator.of(context).pop();
-                                          Navigator.pushNamedAndRemoveUntil(
-                                            context,
-                                            Routes.bottomnavigationbarscreen,
-                                            (route) => false,
-                                          );
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            );
-                          } else if (context.mounted) {
-                            Fluttertoast.showToast(
-                              msg: "Failed to post program. Please try again.",
-                              backgroundColor: Colors.red,
-                            );
+                            log("Success: ${success.toString()}");
+
+                            if (success && context.mounted) {
+                              Fluttertoast.showToast(
+                                msg: "Program Posted Successfully!",
+                              );
+
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                barrierColor: Colors.black.withValues(
+                                  alpha: 0.9,
+                                ),
+                                builder: (context) {
+                                  return ShowDialogBox(
+                                    message: "Your program is live!",
+                                    bottomWidget: Column(
+                                      spacing: 10,
+                                      children: [
+                                        CustomButton(
+                                          buttonText: "Create another program",
+                                          onTap: () {
+                                            _resetProgramCreation();
+                                            // Navigator.of(context).pop();
+                                            // Navigator.pushNamed(
+                                            //   context,
+                                            //   Routes.addprogrampageview,
+                                            // );
+                                            // // Navigator.pushNamedAndRemoveUntil(
+                                            // //   context,
+                                            // //   Routes.addprogrampageview,
+                                            // //   (route) => false,
+                                            // // );
+                                            // setState(() {
+                                            //   _currentPage = 0;
+                                            // });
+                                          },
+                                        ),
+                                        CustomButton(
+                                          buttonText: "Back to home page",
+                                          buttonColor: ConstColors.secondary,
+                                          textColor: ConstColors.black,
+                                          onTap: () {
+                                            Navigator.of(context).pop();
+                                            Navigator.pushNamedAndRemoveUntil(
+                                              context,
+                                              Routes.bottomnavigationbarscreen,
+                                              (Route<dynamic> route) => false,
+                                              arguments: {
+                                                'initialMainTabIndex': 0,
+                                                'initialHomeScreenSubTab': 1,
+                                              },
+                                            );
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              );
+                            } else if (context.mounted) {
+                              Fluttertoast.showToast(
+                                msg:
+                                    "Failed to post program. Please try again.",
+                                backgroundColor: Colors.red,
+                              );
+                            }
                           }
                         }
-                      }
-                    },
-                  );
-                },
+                      },
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

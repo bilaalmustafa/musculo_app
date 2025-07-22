@@ -51,7 +51,12 @@ class _ShowBottomSheetState extends State<ShowBottomSheet> {
             color: ConstColors.black,
           ),
           SizedBox(height: 10),
-          Divider(color: ConstColors.secondary, thickness: 2),
+          Divider(
+            color: ConstColors.greyE6EA,
+            thickness: 2,
+            indent: 20,
+            endIndent: 20,
+          ),
           SizedBox(height: 10),
           Expanded(
             child: ListView.separated(

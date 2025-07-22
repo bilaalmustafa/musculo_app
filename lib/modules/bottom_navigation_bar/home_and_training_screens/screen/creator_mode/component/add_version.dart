@@ -31,6 +31,8 @@ class _AddVersionState extends State<AddVersion> {
               backgroundColor: ConstColors.white,
               isScrollControlled: true,
               context: context,
+              isDismissible: false,
+              barrierColor: Colors.black.withValues(alpha: 0.8),
 
               builder: (context) {
                 return ShowSheetBottom(selectedVideo: widget.videomodelData);

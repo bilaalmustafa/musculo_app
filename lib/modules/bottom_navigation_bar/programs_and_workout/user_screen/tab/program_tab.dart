@@ -10,6 +10,7 @@ import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/c
 
 import 'package:provider/provider.dart';
 
+import '../../../../../components/custom_shimmer.dart';
 import '../../../../../core/utils/program_filter.dart';
 import '../../screen/view_model/discover_filter_provider.dart';
 
@@ -41,7 +42,7 @@ class _ProgramTabDisScreenState extends State<ProgramTabDisScreen> {
             stream: stream,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
+                return Center(child: CustomShimmer(height: 50));
               }
               if (snapshot.hasError) {
                 return Center(

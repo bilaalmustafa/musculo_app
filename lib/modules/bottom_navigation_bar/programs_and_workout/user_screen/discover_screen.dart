@@ -50,6 +50,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   void dispose() {
     _pageController.dispose();
     _searchController.dispose();
+
     super.dispose();
   }
 

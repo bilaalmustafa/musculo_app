@@ -88,17 +88,17 @@ class Assets {
   static const String heartIcon = "$_svgs/Heart.svg";
   static const String calendarIcon = "$_svgs/Calendar.svg";
   static const String documentIcon = "$_svgs/Document.svg";
-  static const String empty = "$_svgs/empty.svg"; // used
+  static const String empty = "$_svgs/empty.svg"; // not used
 
-  static const String profilebg = "$_svgs/profilebg.svg";
+  static const String profilebg = "$_svgs/profilebg.svg"; // not used
   static const String tWallet = "$_svgs/tWallet.svg";
   static const String downSquare = "$_svgs/Down Square.svg";
   static const String rdownSquare = "$_svgs/RDown Square.svg";
   static const String mailDraw = "$_svgs/mailDraw.svg";
   static const String arrowleft = "$_svgs/ArrowLeft.svg";
   static const String playbutt = "$_svgs/Play Button.svg";
-  static const String dumbellImage = "$_svgs/dumbell.svg";
+  static const String dumbellImage = "$_svgs/dumbell.svg"; // not used
   static const String closeSquare = "$_svgs/Close Square.svg";
-  static const String whatsappIcon = "$_svgs/whatsapp icon.svg";
+  static const String whatsappIcon = "$_svgs/whatsapp icon.svg"; // not used
   static const String eidtSquare = "$_svgs/Edit Square.svg";
 }

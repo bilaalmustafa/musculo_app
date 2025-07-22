@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:musculo_app/components/custom_shimmer.dart';
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
@@ -33,7 +34,7 @@ class _CarasoulContainerState extends State<CarasoulContainer> {
     return Consumer<MotivationalTextProvider>(
       builder: (context, provider, child) {
         if (provider.isLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: CustomShimmer(height: 150));
         }
 
         if (provider.motivationalTexts.isEmpty) {

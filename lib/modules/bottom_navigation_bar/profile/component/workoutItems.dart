@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/core/config/routes.dart';
-import 'package:musculo_app/core/constants/assets.dart';
+
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
@@ -49,14 +49,24 @@ class WorkoutItems extends StatelessWidget {
           Expanded(
             flex: 3,
             child: Container(
-              width: Sizes.s100,
-              height: Sizes.s100,
+              width: 70,
+              height: 70,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(Sizes.s8),
-                color: ConstColors.amber,
-                image: DecorationImage(
-                  image: AssetImage(Assets.workout),
-                  fit: BoxFit.cover,
+                // borderRadius: BorderRadius.circular(Sizes.s8),
+                color: ConstColors.black,
+                shape: BoxShape.circle,
+                border: Border.all(width: 1, color: ConstColors.gre9E9E),
+                // image: DecorationImage(
+                //   image: AssetImage(Assets.workout),
+                //   fit: BoxFit.cover,
+                // ),
+              ),
+              child: Center(
+                child: PoppinsText(
+                  text: workoutModel?.creatorName![0].toUpperCase() ?? '?',
+                  fontSize: 32,
+                  fontWeight: FontWeight.w500,
+                  color: ConstColors.white,
                 ),
               ),
             ),
@@ -105,6 +115,7 @@ class WorkoutItems extends StatelessWidget {
                           () => Navigator.pushNamed(
                             context,
                             Routes.traningpreviewscreen,
+                            arguments: workoutModel,
                           ),
                     ),
                   ],

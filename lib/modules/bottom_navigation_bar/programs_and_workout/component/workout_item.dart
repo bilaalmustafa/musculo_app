@@ -57,12 +57,13 @@ class WorkOutItemDis extends StatelessWidget {
             child: Container(
               // margin: EdgeInsets.all(50),
               // padding: EdgeInsets.all(40),
-              // width: 100,
-              // height: 120,
+              width: 80,
+              height: 80,
               decoration: BoxDecoration(
-                color: ConstColors.white,
-                borderRadius: BorderRadius.circular(Sizes.s8),
-                border: Border.all(width: 0.5, color: ConstColors.black),
+                color: ConstColors.black,
+                // borderRadius: BorderRadius.circular(Sizes.s8),
+                border: Border.all(width: 0.5, color: ConstColors.gre9E9E),
+                shape: BoxShape.circle,
 
                 // color: ConstColors.amber,
                 // image: DecorationImage(
@@ -75,6 +76,7 @@ class WorkOutItemDis extends StatelessWidget {
                   text: workout.creatorName![0].toUpperCase(),
                   fontSize: 32,
                   fontWeight: FontWeight.w500,
+                  color: ConstColors.white,
                 ),
               ),
             ),

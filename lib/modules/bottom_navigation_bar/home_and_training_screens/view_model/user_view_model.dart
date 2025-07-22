@@ -40,7 +40,7 @@ class UserViewModel with ChangeNotifier {
       overviewText: cOveriew,
       experienceText: cExperience,
       goalText: cGoal,
-      favExercise: cOveriew,
+      favExercise: cExercise,
       subPlane: cPlan,
     );
     await instance<UserService>().update(id!, userModel!);

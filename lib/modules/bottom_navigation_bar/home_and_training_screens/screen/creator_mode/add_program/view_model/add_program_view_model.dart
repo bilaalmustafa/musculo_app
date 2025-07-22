@@ -223,22 +223,9 @@ class AddProgramViewModel extends ChangeNotifier {
       docId,
       item,
     );
-    isLoading = false;
-    programNameController.clear();
-    addOwnDuraionController.clear();
-    intendedoption = "";
-    typeofProgram = "";
-    levelofProgram = "";
-    selectedTime = null;
-    sliderValue = 0;
-    radioOption = null;
-    addOwnDuraionController.clear();
-    _selectedDates.clear();
-    selectedWeekdays.clear();
-    priceController.clear();
 
-    workoutList.clear();
-    notifyListeners();
+    isLoading = false;
+    clearData();
     return success;
   }
 
@@ -247,6 +234,34 @@ class AddProgramViewModel extends ChangeNotifier {
 
   set searchWorkOutQuery(String query) {
     _searchWorkoutQuery = query.trim();
+    notifyListeners();
+  }
+
+  void clearData() {
+    // Clear text controllers
+    programNameController.clear();
+    addOwnDuraionController.clear();
+    priceController.clear();
+
+    // Reset dropdown/radio selections
+    intendedoption = "";
+    typeofProgram = "";
+    levelofProgram = "";
+    selectedTime = null;
+    radioOption = null;
+
+    // Reset other values
+    sliderValue = 0;
+    workoutList.clear();
+    _selectedDates.clear();
+    _searchWorkoutQuery = "";
+
+    // Reset flags
+    isintendedselect = false;
+    isTypeofProgramSelect = false;
+    isLevelofProgramslect = false;
+
+    // Notify listeners to update the UI
     notifyListeners();
   }
 }

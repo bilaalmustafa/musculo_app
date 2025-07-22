@@ -10,6 +10,7 @@ import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/u
 import 'package:provider/provider.dart';
 
 import 'programs_and_workout/bottom_navigation_view_model.dart';
+import 'programs_and_workout/screen/view_model/discover_filter_provider.dart';
 
 class BottomNavigationScreen extends StatefulWidget {
   final int initialMainTabIndex;
@@ -110,6 +111,13 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
         ],
         currentIndex: bottomProvider.selectedIndex,
         onTap: (index) {
+          if (bottomProvider.selectedIndex == 1 && index != 1) {
+            final discoverProvider = Provider.of<DiscoverFilter>(
+              context,
+              listen: false,
+            );
+            discoverProvider.clear();
+          }
           bottomProvider.setIndex(index);
         },
       ),

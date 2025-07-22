@@ -86,10 +86,11 @@ class _AddWorkoutPageViewState extends State<AddWorkoutPageView> {
     return PopScope(
       canPop: _currentPage == 0,
       onPopInvokedWithResult: (didPop, result) {
-        if (didPop) {
-          return;
+        if (_currentPage == 0) {
+          context.read<AddWorkoutVeiwModel>().clearData();
+        } else {
+          _goToPreviousPage();
         }
-        _goToPreviousPage();
       },
       child: Scaffold(
         backgroundColor: ConstColors.white,
@@ -99,6 +100,7 @@ class _AddWorkoutPageViewState extends State<AddWorkoutPageView> {
             if (_currentPage > 0) {
               _goToPreviousPage();
             } else {
+              context.read<AddWorkoutVeiwModel>().clearData();
               Navigator.of(context).pop();
             }
           },

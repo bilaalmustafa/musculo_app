@@ -75,8 +75,10 @@ class _ShowrateBottomSheetState extends State<ShowrateBottomSheet> {
                   height: Sizes.s110,
                   width: Sizes.s110,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(width: 1, color: ConstColors.black),
+                    color: ConstColors.black,
+                    // borderRadius: BorderRadius.circular(8),
+                    border: Border.all(width: 1, color: ConstColors.gre9E9E),
+                    shape: BoxShape.circle,
                     // image: DecorationImage(image: AssetImage(Assets.workout)),
                   ),
                   child: Center(
@@ -84,6 +86,7 @@ class _ShowrateBottomSheetState extends State<ShowrateBottomSheet> {
                       text: data.creatorName![0].toUpperCase(),
                       fontSize: 32,
                       fontWeight: FontWeight.w500,
+                      color: ConstColors.white,
                     ),
                   ),
                 ),

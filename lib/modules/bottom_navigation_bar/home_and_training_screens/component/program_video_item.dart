@@ -41,12 +41,13 @@ class ProgramVideoItem extends StatelessWidget {
     return Row(
       children: [
         Container(
-          width: 90,
-          height: 90,
+          width: 70,
+          height: 70,
           decoration: BoxDecoration(
-            color: ConstColors.white,
-            borderRadius: BorderRadius.circular(10),
+            color: ConstColors.black,
+            // borderRadius: BorderRadius.circular(10),
             border: Border.all(width: 0.5, color: ConstColors.black),
+            shape: BoxShape.circle,
             // image: DecorationImage(
             //   image: AssetImage(programImage ?? Assets.workout),
             //   fit: BoxFit.fill,
@@ -57,6 +58,7 @@ class ProgramVideoItem extends StatelessWidget {
               text: program!.creatorName![0].toUpperCase(),
               fontSize: 28,
               fontWeight: FontWeight.w500,
+              color: ConstColors.white,
             ),
           ),
         ),

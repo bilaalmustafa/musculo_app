@@ -35,12 +35,14 @@ class CreatorListItems extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            height: Sizes.s80,
-            width: Sizes.s100,
+            height: 70,
+            width: 70,
 
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(Sizes.s10),
-              border: Border.all(width: 0.5, color: ConstColors.black),
+              color: ConstColors.black,
+              // borderRadius: BorderRadius.circular(Sizes.s10),
+              border: Border.all(width: 0.5, color: ConstColors.gre9E9E),
+              shape: BoxShape.circle,
               // image: DecorationImage(image: AssetImage(Assets.workout)),
             ),
             child: Center(
@@ -48,10 +50,11 @@ class CreatorListItems extends StatelessWidget {
                 text: programModel.creatorName![0].toUpperCase(),
                 fontSize: 28,
                 fontWeight: FontWeight.w500,
+                color: ConstColors.white,
               ),
             ),
           ),
-          SizedBox(width: 5),
+          SizedBox(width: 10),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

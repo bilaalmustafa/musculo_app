@@ -5,7 +5,7 @@ import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
-import 'package:musculo_app/model/programs_model.dart';
+
 import 'package:musculo_app/model/workouts_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/custom_chip.dart';
 
@@ -36,12 +36,14 @@ class CreatorWorkoutList extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            height: Sizes.s80,
-            width: Sizes.s100,
+            height: 70,
+            width: 70,
 
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(Sizes.s10),
-              border: Border.all(width: 0.5, color: ConstColors.black),
+              // borderRadius: BorderRadius.circular(Sizes.s10),
+              color: ConstColors.black,
+              shape: BoxShape.circle,
+              border: Border.all(width: 0.5, color: ConstColors.gre9E9E),
               // image: DecorationImage(image: AssetImage(Assets.workout)),
             ),
             child: Center(
@@ -49,6 +51,7 @@ class CreatorWorkoutList extends StatelessWidget {
                 text: workoutModel.creatorName![0].toUpperCase(),
                 fontSize: 28,
                 fontWeight: FontWeight.w500,
+                color: ConstColors.white,
               ),
             ),
           ),

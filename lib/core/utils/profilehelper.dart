@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
-import 'package:provider/provider.dart';
-
-import '../../modules/bottom_navigation_bar/profile/profile_view_model/profile_view_model.dart';
+import 'package:musculo_app/core/services/profile_image_services.dart';
 
 class ProfileHelper {
   static void showImagePickerBottomSheet(BuildContext context) {
@@ -69,7 +67,10 @@ class ProfileHelper {
     required ImageSource source,
   }) {
     return GestureDetector(
-      onTap: () => _pickImage(context, source),
+      onTap: () async {
+        Navigator.pop(context);
+        await ProfileImageService().pickAndUploadImageAndUpdateProfile(source);
+      },
       child: Column(
         children: [
           Container(
@@ -88,15 +89,5 @@ class ProfileHelper {
         ],
       ),
     );
-  }
-
-  static Future<void> _pickImage(
-    BuildContext context,
-    ImageSource source,
-  ) async {
-    Navigator.pop(context); // Close bottom sheet
-
-    final profileProvider = context.read<ProfileProvider>();
-    await profileProvider.pickImage(source);
   }
 }
