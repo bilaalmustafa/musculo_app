@@ -42,10 +42,10 @@ class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
 class _HomeAppBarState extends State<HomeAppBar> {
   final AuthService _authservces = instance<AuthService>();
 
-  Future<UserModel?>? _future;
+  Stream<UserModel?>? _stream;
   @override
   void initState() {
-    _future = context.read<UserViewModel>().getUserById(
+    _stream = context.read<UserViewModel>().getUserByIdstream(
       _authservces.currentUser!.uid,
     );
 
@@ -70,8 +70,8 @@ class _HomeAppBarState extends State<HomeAppBar> {
             color: ConstColors.greyB1B1,
             fontWeight: TextWeight.semiBold,
           ),
-          FutureBuilder<UserModel?>(
-            future: _future,
+          StreamBuilder<UserModel?>(
+            stream: _stream,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return CustomShimmer(

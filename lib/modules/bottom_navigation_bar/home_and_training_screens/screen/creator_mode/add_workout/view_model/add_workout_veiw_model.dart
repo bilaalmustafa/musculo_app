@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:firebase_storage/firebase_storage.dart'
     show FirebaseStorage, Reference;
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:musculo_app/core/config/injections.dart';
 import 'package:musculo_app/core/services/creator_services.dart';
 
@@ -246,22 +247,62 @@ class AddWorkoutVeiwModel extends ChangeNotifier {
     sectionofWorkout = [false, false, false, false, false];
     selectedSections.clear();
     selectedVideos.clear();
+    selectedList.clear();
+    addVersionList.clear();
     selectedDate = null;
     levelofworkout = "";
+    currentSectionIndex = 0;
     notifyListeners();
     return success;
   }
 
   void addVersionToVideo(VideoModel targetVideo) {
     for (var version in addVersionList) {
-      if (!targetVideo.versionList.contains(version)) {
-        targetVideo.versionList.add(version);
+      // Check if the version already exists in targetVideo's versionList
+      final alreadyExists = targetVideo.versionList.any(
+        (v) => v.name == version.name,
+      );
+
+      if (!alreadyExists) {
+        if (targetVideo.versionList.length < 3) {
+          final shallowVersion = version.copyWith(versionList: []);
+          targetVideo.versionList.add(shallowVersion);
+        } else {
+          Fluttertoast.showToast(
+            msg: "Cannot add more than 3 versions to ${targetVideo.name}",
+          );
+          break; // stop loop when limit is reached
+        }
       }
     }
-    addVersionList.clear(); // Optionally clear after adding
+
+    addVersionList.clear();
     notifyListeners();
   }
 
+  // void addVersionToVideo(VideoModel targetVideo) {
+  //   for (var version in addVersionList) {
+  //     if (!targetVideo.versionList.any((v) => v.name == version.name)) {
+  //       // Clone the video but with EMPTY versionList to prevent deep nesting
+  //       final shallowVersion = version.copyWith(versionList: []);
+  //       targetVideo.versionList.add(shallowVersion);
+  //     }
+  //   }
+  //   addVersionList.clear();
+  //   notifyListeners();
+  // }
+
+  // void addVersionToVideo(VideoModel targetVideo) {
+  //   for (var version in addVersionList) {
+  //     if (!targetVideo.versionList.contains(version)) {
+  //       targetVideo.versionList.add(version);
+  //     }
+  //   }
+  //   addVersionList.clear(); // Optionally clear after adding
+  //   notifyListeners();
+  // }
+
+  // generate video thumbnail
   void loadVideos() async {
     final stream = fetchVideosWithDuration(batchSize: 5);
     _videoSubscription = stream.listen(
@@ -299,6 +340,7 @@ class AddWorkoutVeiwModel extends ChangeNotifier {
     );
   }
 
+  // load vedios from firebase
   Stream<VideoModel> fetchVideosWithDuration({int batchSize = 5}) async* {
     final storageRef = FirebaseStorage.instance;
     final listResult = await storageRef.ref('/all_exe').listAll();

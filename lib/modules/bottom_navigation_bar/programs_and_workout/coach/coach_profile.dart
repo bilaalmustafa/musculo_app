@@ -38,8 +38,8 @@ class _CoachProfileState extends State<CoachProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<UserModel?>(
-      future: UserService().userById(widget.userId),
+    return StreamBuilder<UserModel?>(
+      stream: UserService().userByIdstream(widget.userId),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(

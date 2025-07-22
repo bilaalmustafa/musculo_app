@@ -99,7 +99,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                         .read<UserViewModel>()
                                         .getUserById(user.uid);
                                     if (userDoc != null) {
-                                      if (userDoc.role == "user") {
+                                      if (userDoc.role != "admin") {
                                         Fluttertoast.showToast(
                                           msg: "Signin Successfully",
                                         );

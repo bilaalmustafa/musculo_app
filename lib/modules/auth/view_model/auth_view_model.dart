@@ -91,7 +91,7 @@ class AuthViewModel with ChangeNotifier {
       isLoading = false;
       notifyListeners();
 
-      log("Response from Cloud Function: ${response.data["success"]}");
+      
       if (response.data['success'] == true) {
         final UserCredential credential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(

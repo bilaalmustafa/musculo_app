@@ -1,8 +1,15 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/components/share_picture.dart';
 import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
+import 'package:musculo_app/model/user_model.dart';
+import 'package:musculo_app/modules/auth/view_model/auth_view_model.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/view_model/user_view_model.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/profile/profile_view_model/profile_view_model.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../components/custom_button.dart';
 import '../../../../components/shared_appbar.dart';
@@ -101,36 +108,50 @@ class _PaymentScreenState extends State<PaymentScreen> {
       ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(16),
-        child: CustomButton(
-          onTap:
-              _selectpay != null
-                  ? () {
-                    // navigation handle here
-                    showDialog(
-                      context: context,
-                      barrierColor: Colors.black.withValues(alpha: 0.9),
-                      builder: (BuildContext context) {
-                        return ShowDialogBox(
-                          message:
-                              'You are now a creator, start selling workouts and programs.',
-                          bottomWidget: CustomButton(
-                            buttonText: 'Back',
-                            textColor: ConstColors.black,
-                            buttonColor: ConstColors.secondary,
-                            onTap: () {
-                              Navigator.pushNamed(
-                                context,
-                                Routes.bottomnavigationbarscreen,
-                              );
-                            },
-                          ),
-                        );
-                      },
-                    );
-                  }
-                  : null,
+        child: Consumer<ProfileProvider>(
+          builder: (context, vm, _) {
+            return CustomButton(
+              loading: vm.isLoading,
+              onTap:
+                  _selectpay != null
+                      ? () async {
+                        final uid =
+                            context.read<UserViewModel>().userModel!.userId;
+                        log(" uiddd $uid");
+                        if (uid != null) {
+                          UserModel? success = await vm.getCreatorPlan(uid);
 
-          buttonText: 'Continues',
+                          if (success != null && context.mounted) {
+                            showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              barrierColor: Colors.black.withValues(alpha: 0.9),
+                              builder: (BuildContext context) {
+                                return ShowDialogBox(
+                                  message:
+                                      'You are now a creator, start selling workouts and programs.',
+                                  bottomWidget: CustomButton(
+                                    buttonText: 'Back',
+                                    textColor: ConstColors.black,
+                                    buttonColor: ConstColors.secondary,
+                                    onTap: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        Routes.bottomnavigationbarscreen,
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
+                            );
+                          }
+                        }
+                      }
+                      : null,
+
+              buttonText: 'Continues',
+            );
+          },
         ),
       ),
     );

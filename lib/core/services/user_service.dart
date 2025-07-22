@@ -12,7 +12,9 @@ class UserService extends FirebaseService<UserModel> {
         fromJson: UserModel.fromJson,
         toJson: (user) => user.toJson(),
       );
-
+Stream<UserModel?> userByIdstream(String id) {
+  return getByIdstream(id);
+}
   Future<UserModel?> userById(String id) async {
     return await getById(id);
   }

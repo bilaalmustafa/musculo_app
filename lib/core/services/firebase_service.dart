@@ -48,6 +48,24 @@ class FirebaseService<T> {
       throw Exception('Error : $e');
     }
   }
+Stream<T?> getByIdstream(String id) {
+  try {
+    return FirebaseFirestore.instance
+        .collection(collectionName)
+        .doc(id)
+        .snapshots()
+        .map((doc) {
+          if (doc.exists) {
+            final data = doc.data() as Map<String, dynamic>;
+            return fromJson(data);
+          }
+          return null;
+        });
+  } catch (e) {
+    print(e);
+    throw Exception('Error fetching document: $e');
+  }
+}
 
   Future<T?> getById(String id) async {
     try {
