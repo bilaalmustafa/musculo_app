@@ -82,7 +82,8 @@ class _FilterScreenState extends State<FilterScreen> {
               CustomChips(
                 selectedIndex: filtered.tempPremium ? 0 : -1,
                 optionslist: premium,
-                onSelect: (_) => filtered.setTempPremium(!filtered.premium),
+                onSelect:
+                    (value) => filtered.setTempPremium(filtered.tempPremium),
               ),
               PoppinsText(
                 text: "Price",
@@ -92,7 +93,7 @@ class _FilterScreenState extends State<FilterScreen> {
               RangSliders(
                 min: 0,
                 max: 500,
-                type: "£",
+                type: "€",
                 currentRange: filtered.tempPrice,
                 valuechange: (value) => filtered.setTempPrice(value),
               ),

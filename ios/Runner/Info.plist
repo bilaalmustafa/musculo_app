@@ -7,6 +7,8 @@
     <true/>
 </dict>
 <dict>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>We use Apple Pay to process your purchases.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>

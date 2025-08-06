@@ -3,7 +3,6 @@ import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/model/video_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/component/show_sheet_bottom.dart';
-import 'package:video_player/video_player.dart';
 
 class AddVersion extends StatefulWidget {
   const AddVersion({
@@ -32,6 +31,8 @@ class _AddVersionState extends State<AddVersion> {
               backgroundColor: ConstColors.white,
               isScrollControlled: true,
               context: context,
+              isDismissible: false,
+              barrierColor: Colors.black.withValues(alpha: 0.8),
 
               builder: (context) {
                 return ShowSheetBottom(selectedVideo: widget.videomodelData);

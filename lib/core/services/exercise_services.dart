@@ -28,12 +28,12 @@ class ProgramServices extends FirebaseService<ProgramModel> {
     } catch (e, strc) {
       Fluttertoast.showToast(msg: "error $e   strace $strc");
       log("errror $e");
-      rethrow; 
+      rethrow;
     }
   }
 
   Stream<List<ProgramModel>> getPrograms() => getAllDiscovery("Program");
-   Stream<List<ProgramModel>> getCreatorPrograms(String uid) =>
+  Stream<List<ProgramModel>> getCreatorPrograms(String uid) =>
       getAllcreatorExercise("Program", uid);
 }
 
@@ -53,7 +53,6 @@ class WorkoutServices extends FirebaseService<WorkoutModel> {
   Stream<List<WorkoutModel>> getCreatorWorkout(String uid) =>
       getAllcreatorExercise("Workout", uid);
 
-
   Future<WorkoutModel?> ratingCreate(String id, WorkoutModel item) async {
     try {
       WorkoutModel? result = await update(id, item);
@@ -61,12 +60,15 @@ class WorkoutServices extends FirebaseService<WorkoutModel> {
       return result;
     } catch (e, strc) {
       Fluttertoast.showToast(msg: "error $e   strace $strc");
-    
+
       rethrow; // Pass the error up the chain
     }
   }
 
-  Future<WorkoutModel?> workoutratingCreate(String id, WorkoutModel item) async {
+  Future<WorkoutModel?> workoutratingCreate(
+    String id,
+    WorkoutModel item,
+  ) async {
     try {
       WorkoutModel? result = await update(id, item);
 
@@ -77,5 +79,4 @@ class WorkoutServices extends FirebaseService<WorkoutModel> {
       rethrow; // Pass the error up the chain
     }
   }
-  
 }

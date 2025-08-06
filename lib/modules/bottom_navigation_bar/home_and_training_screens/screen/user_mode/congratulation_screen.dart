@@ -9,21 +9,24 @@ import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/core/services/user_service.dart';
+import 'package:musculo_app/model/video_model.dart';
 import 'package:musculo_app/model/workouts_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/congrate_container.dart';
 
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/show_share_bottom_sheet.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/user_mode/user_mode_veiwModel/user_mode_viewModel.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../../model/user_model.dart';
 import '../../component/show_rating_bottom_sheet.dart';
 
 class CongratulationScreen extends StatefulWidget {
   final UserModel creator;
-  final WorkoutModel workoutData;
+  final dynamic vedioData;
   const CongratulationScreen({
     super.key,
     required this.creator,
-    required this.workoutData,
+    required this.vedioData,
   });
 
   @override
@@ -32,18 +35,32 @@ class CongratulationScreen extends StatefulWidget {
 
 class _CongratulationScreenState extends State<CongratulationScreen> {
   final GlobalKey _shareKey = GlobalKey();
+  late UserModeViewmodel userMode;
+  late List<VideoModel> allVideos;
+
+  @override
+  void initState() {
+    userMode = context.read<UserModeViewmodel>();
+    allVideos = userMode.extractAllVideos(widget.vedioData);
+    userMode.updateUserWorkoutStats(
+      userId: widget.creator.userId ?? '',
+      finishedWorkoutCount: allVideos.length,
+      minutesSpent: widget.vedioData.totalTime ?? 0,
+    );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final allVideos =
-        widget.workoutData.categorizedVideos?.values
-            .expand((v) => v)
-            .toList() ??
-        [];
+    // final allVideos =
+    //     widget.vedioData.categorizedVideos?.values
+    //         .expand((v) => v)
+    //         .toList() ??
+    //     [];
     return Scaffold(
       backgroundColor: Colors.white,
       body: StreamBuilder(
-        stream: UserService().userByIdstream(widget.workoutData.userId ?? ""),
+        stream: UserService().userByIdstream(widget.vedioData.userId ?? ""),
         builder: (context, snapshot) {
           final data = snapshot.data;
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -95,7 +112,7 @@ class _CongratulationScreenState extends State<CongratulationScreen> {
                                 ),
                                 CongrateContainer(
                                   imagePath: Assets.timeCircle,
-                                  digit: "${widget.workoutData.totalTime}",
+                                  digit: "${widget.vedioData.totalTime}",
                                   text: "Minutes Spent",
                                 ),
                               ],

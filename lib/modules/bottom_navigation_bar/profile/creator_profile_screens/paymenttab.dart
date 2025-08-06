@@ -47,10 +47,15 @@ class _PaymenttabState extends State<Paymenttab> {
                   itemBuilder: (context, index) {
                     List<SoldModel> soldItems = userdata.sold;
 
-                    return Transectionitem(
-                      amount: soldItems[index].contentPrice,
-                      date: soldItems[index].buyDate,
-                      isGain: soldItems[index].packegeMode,
+                    return Column(
+                      children: [
+                        Transectionitem(
+                          amount: soldItems[index].contentPrice,
+                          date: soldItems[index].buyDate,
+                          isGain: soldItems[index].packegeMode,
+                        ),
+                        const SizedBox(height: 12), // space between items
+                      ],
                     );
                   },
                 ),

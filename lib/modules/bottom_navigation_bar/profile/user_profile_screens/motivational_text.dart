@@ -98,26 +98,6 @@ class _MotivationalTextScreenState extends State<MotivationalTextScreen> {
             return Row(
               spacing: Sizes.s10,
               children: [
-                // Expanded(
-                //   child: CustomButton(
-                //     loading: provider.isLoading,
-                //     buttonText: 'Clear',
-                //     textColor: Colors.black,
-                //     buttonColor: ConstColors.secondary,
-
-                //     onTap: () {
-                //       // formKey.currentState?.reset();
-                //       // titleController.clear();
-                //       // descriptionController.clear();
-                //       Navigator.push(
-                //         context,
-                //         MaterialPageRoute(
-                //           builder: (context) => MotivationalListScreen(),
-                //         ),
-                //       );
-                //     },
-                //   ),
-                // ),
                 Expanded(
                   child: CustomButton(
                     loading: provider.isLoading,

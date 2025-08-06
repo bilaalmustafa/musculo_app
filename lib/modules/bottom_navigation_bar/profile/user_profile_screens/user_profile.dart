@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:musculo_app/components/custom_button.dart';
+import 'package:musculo_app/components/custom_shimmer.dart';
 import 'package:musculo_app/components/logo_title_appbar.dart';
 
 import 'package:musculo_app/components/poppins_text.dart';
@@ -9,16 +11,18 @@ import 'package:musculo_app/components/share_picture.dart';
 import 'package:musculo_app/core/config/routes.dart';
 import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
+import 'package:musculo_app/core/services/profile_image_services.dart';
 import 'package:musculo_app/core/utils/profilehelper.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/view_model/user_view_model.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/profile/profile_view_model/profile_view_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/notification_switch.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/constants/const_colors.dart';
 import '../../../../core/constants/fonts.dart';
 import '../../home_and_training_screens/component/congrate_container.dart';
 import '../../programs_and_workout/component/customlisttile.dart';
-import '../profile_view_model/profile_view_model.dart';
 
 class UserProfile extends StatefulWidget {
   const UserProfile({super.key});
@@ -29,19 +33,29 @@ class UserProfile extends StatefulWidget {
 
 class _UserProfileState extends State<UserProfile> {
   bool isCreator = false;
+  final ProfileImageService _profileImageService = ProfileImageService();
 
   @override
   void initState() {
-    Future.microtask(() {
-      context.read<ProfileProvider>().loadProfileImage();
-    });
     super.initState();
+    _loadSavedSwitchState();
+  }
+
+  Future<void> _loadSavedSwitchState() async {
+    final prefs = await SharedPreferences.getInstance();
+    final saved = prefs.getBool('isSwitch');
+    if (saved != null) {
+      setState(() {
+        isCreator = saved;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final userVm = context.watch<UserViewModel>();
     final data = userVm.userModel;
+    final uid = FirebaseAuth.instance.currentUser?.uid ?? '';
 
     return SafeArea(
       child: Scaffold(
@@ -56,69 +70,46 @@ class _UserProfileState extends State<UserProfile> {
                 child: SizedBox(
                   height: Sizes.s120,
                   width: Sizes.s300,
-                  child: Consumer<ProfileProvider>(
-                    builder: (context, profileProvider, child) {
-                      final img = profileProvider.user?.profileImageUrl;
-                      return Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          SharePicture(imagePath: Assets.groupCircle),
-                          CircleAvatar(
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      SharePicture(imagePath: Assets.groupCircle),
+                      StreamBuilder(
+                        stream: _profileImageService.userProfileImageStream(
+                          uid,
+                        ),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircleAvatar(
+                              maxRadius: Sizes.s55,
+                              backgroundColor: ConstColors.greyE0E0,
+                              child: CustomShimmer(height: 0),
+                            );
+                          }
+                          final imageUrl = snapshot.data;
+                          return CircleAvatar(
                             maxRadius: Sizes.s55,
                             backgroundColor: ConstColors.greyE0E0,
                             backgroundImage:
-                                img != null
-                                    ? NetworkImage(img)
-                                    : AssetImage(Assets.profileDImage)
-                                        as ImageProvider,
-                          ),
+                                imageUrl != null
+                                    ? NetworkImage(imageUrl)
+                                    : AssetImage(Assets.profileDImage),
+                          );
+                        },
+                      ),
 
-                          // loading indicator
-                          if (profileProvider.isUploading)
-                            Container(
-                              width: 150,
-                              height: 150,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.black54,
-                              ),
-                              child: Center(
-                                child: CircularProgressIndicator(
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                    Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          Transform.translate(
-                            offset: Offset(Sizes.s40, Sizes.s40),
-                            child: InkWell(
-                              onTap: () {
-                                ProfileHelper.showImagePickerBottomSheet(
-                                  context,
-                                );
-                              },
+                      Transform.translate(
+                        offset: Offset(Sizes.s40, Sizes.s40),
+                        child: InkWell(
+                          onTap: () {
+                            ProfileHelper.showImagePickerBottomSheet(context);
+                          },
 
-                              child: SharePicture(imagePath: Assets.eidtSquare),
-                              // Container(
-                              //   width: Sizes.s20,
-                              //   height: Sizes.s20,
-                              //   decoration: BoxDecoration(
-                              //     shape: BoxShape.rectangle,
-                              //     borderRadius: BorderRadius.circular(Sizes.s4),
-                              //     color: ConstColors.black,
-                              //   ),
-                              //   child: Icon(
-                              //     Icons.edit,
-                              //     color: Colors.white,
-                              //     size: Sizes.s20,
-                              //   ),
-                              // ),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
+                          child: SharePicture(imagePath: Assets.eidtSquare),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -141,7 +132,9 @@ class _UserProfileState extends State<UserProfile> {
                   NotificationSwitch(
                     value: isCreator,
                     useCupertino: true,
-                    onChanged: (value) {
+                    onChanged: (value) async {
+                      final prefs = await SharedPreferences.getInstance();
+                      await prefs.setBool('isSwitch', value);
                       setState(() {
                         isCreator = value;
                       });
@@ -185,7 +178,7 @@ class _UserProfileState extends State<UserProfile> {
                         isCreator ? Assets.walletIcon : Assets.timeCircle,
                     digit:
                         isCreator
-                            ? ' ${userVm.getBalance(data).toStringAsFixed(1)}£'
+                            ? ' ${userVm.getBalance(data).toStringAsFixed(1)}€'
                             : data?.spentMinutes.toString() ?? "0",
                     text: isCreator ? "Earnings" : "Minutes Spent",
                   ),
@@ -350,11 +343,10 @@ class _UserProfileState extends State<UserProfile> {
                     if (uid != null) {
                       bool? success = await vm.cancelCreatorPlan(uid);
                       if (success != null && context.mounted) {
-                        Navigator.of(context).pop();
-                        // Navigator.pushNamed(
-                        //   context,
-                        //   Routes.bottomnavigationbarscreen,
-                        // );
+                        Navigator.pushNamed(
+                          context,
+                          Routes.bottomnavigationbarscreen,
+                        );
                         Fluttertoast.showToast(msg: "plane cancel successfull");
                       }
                     }

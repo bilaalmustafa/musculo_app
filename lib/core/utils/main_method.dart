@@ -1,8 +1,10 @@
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:musculo_app/core/config/injections.dart';
+import 'package:musculo_app/core/services/notification_services.dart';
 import 'package:musculo_app/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:musculo_app/model/programs_model.dart';
@@ -13,8 +15,13 @@ import 'package:path_provider/path_provider.dart';
 class MainMethod {
   static Future<void> init() async {
     WidgetsFlutterBinding.ensureInitialized();
+
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     Stripe.publishableKey =
-        "pk_test_51MikpdSDuIYZV8eSumHPQGsTZUGIbUKMM6oqAVt8yPDgjDWb9h659J2y0fE5tuhdxfPgFEbgeP2zNrER1UeGUOBb007fiSXgWU";
+        "pk_test_51RofpWBkqmbwnoQDkjHKPHdp3Hp3rbajUJY7BxCquGLcl24R45J5EMNpG0MHRd1tDAzuxQ2f5KQYmC6To6iGdcAw00nVSgUuXb";
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );

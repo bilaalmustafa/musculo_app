@@ -7,23 +7,27 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class PasswordResetProvider with ChangeNotifier {
   bool isloading = false;
-
-  Future<bool> sendPasswordResetOTP(String email) async {
+  bool isverified = false;
+  final functions = FirebaseFunctions.instance;
+  Future<bool> sendOtp(String email) async {
     try {
       isloading = true;
       notifyListeners();
-      final HttpsCallable callable = FirebaseFunctions.instance.httpsCallable(
-        'sendPasswordResetOTP',
-      );
-      final response = await callable.call({'email': email});
-      Fluttertoast.showToast(msg: 'OTP sent: ${response.data}');
-      print('OTP sent: ${response.data}');
+      final result = await functions.httpsCallable('sendOtpIfUserExists').call({
+        'email': email,
+      });
+
+      log('Success: ${result.data}');
       isloading = false;
       notifyListeners();
       return true;
+    } on FirebaseFunctionsException catch (e) {
+      log('FirebaseFunctionsException: ${e.code} - ${e.message}');
+      isloading = false;
+      notifyListeners();
+      return false;
     } catch (e) {
-      Fluttertoast.showToast(msg: 'Failed to send OTP: $e');
-      log("opt: $e");
+      log('General error: $e');
       isloading = false;
       notifyListeners();
       return false;
@@ -32,19 +36,59 @@ class PasswordResetProvider with ChangeNotifier {
 
   Future<bool> verifyPasswordResetOTP(String email, String otp) async {
     try {
-      final HttpsCallable callable = FirebaseFunctions.instance.httpsCallable(
-        'verifyPasswordResetOTP',
-      );
-      final response = await callable.call({'email': email, 'otp': otp});
-      print('OTP verified: ${response.data}');
+      isverified = true;
+      notifyListeners();
+      final result = await functions
+          .httpsCallable('verifyPasswordResetOTP')
+          .call({'email': email, 'otp': otp});
+
+      log('Success: ${result.data}');
+      isverified = false;
+      notifyListeners();
       return true;
+    } on FirebaseFunctionsException catch (e) {
+      log('FirebaseFunctionsException: ${e.code} - ${e.message}');
+      isverified = false;
+      notifyListeners();
+      return false;
     } catch (e) {
-      print('Failed to verify OTP: $e');
+      log('General error: $e');
+      isverified = false;
+      notifyListeners();
       return false;
     }
   }
 
-  Future<bool> resetPassword(String newPassword) async {
+  Future<bool> resetPassword(
+    String newPassword,
+    String otp,
+    String email,
+  ) async {
+    try {
+      isverified = true;
+      notifyListeners();
+      final result = await functions.httpsCallable('resetPassword').call({
+        'email': email,
+        'otp': otp,
+        'newPassword': newPassword,
+      });
+
+      log('Success: ${result.data}');
+      isverified = false;
+      notifyListeners();
+      return true;
+    } on FirebaseFunctionsException catch (e) {
+      log('FirebaseFunctionsException: ${e.code} - ${e.message}');
+      isverified = false;
+      notifyListeners();
+      return false;
+    } catch (e) {
+      log('General error: $e');
+      isverified = false;
+      notifyListeners();
+      return false;
+    }
+
     try {
       await FirebaseAuth.instance.currentUser?.updatePassword(newPassword);
       print('Password updated successfully');

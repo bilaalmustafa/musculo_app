@@ -14,6 +14,7 @@ import '../../modules/auth/view_model/forgot_view_model.dart';
 import '../../modules/bottom_navigation_bar/feedback/view_model/feedback_view_model.dart';
 import '../../modules/bottom_navigation_bar/profile/profile_view_model/motivational_view_model.dart';
 import '../../modules/bottom_navigation_bar/profile/profile_view_model/profile_view_model.dart';
+import '../../modules/bottom_navigation_bar/programs_and_workout/bottom_navigation_view_model.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
         ChangeNotifierProvider(create: (_) => DiscoverViewModel()),
         ChangeNotifierProvider(create: (_) => DiscoverFilter()),
+        ChangeNotifierProvider(create: (_) => BottomNavigationProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

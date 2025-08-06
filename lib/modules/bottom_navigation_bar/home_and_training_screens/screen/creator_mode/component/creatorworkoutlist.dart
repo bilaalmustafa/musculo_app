@@ -5,12 +5,13 @@ import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
-import 'package:musculo_app/model/programs_model.dart';
+
+import 'package:musculo_app/model/workouts_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/custom_chip.dart';
 
-class CreatorListItems extends StatelessWidget {
-  const CreatorListItems({super.key, required this.programModel});
-  final ProgramModel programModel;
+class CreatorWorkoutList extends StatelessWidget {
+  const CreatorWorkoutList({super.key, required this.workoutModel});
+  final WorkoutModel workoutModel;
   @override
   Widget build(BuildContext context) {
     String formatProgramTime(int totalTimeInSeconds) {
@@ -39,27 +40,27 @@ class CreatorListItems extends StatelessWidget {
             width: 70,
 
             decoration: BoxDecoration(
-              color: ConstColors.black,
               // borderRadius: BorderRadius.circular(Sizes.s10),
-              border: Border.all(width: 0.5, color: ConstColors.gre9E9E),
+              color: ConstColors.black,
               shape: BoxShape.circle,
+              border: Border.all(width: 0.5, color: ConstColors.gre9E9E),
               // image: DecorationImage(image: AssetImage(Assets.workout)),
             ),
             child: Center(
               child: PoppinsText(
-                text: programModel.creatorName![0].toUpperCase(),
+                text: workoutModel.creatorName![0].toUpperCase(),
                 fontSize: 28,
                 fontWeight: FontWeight.w500,
                 color: ConstColors.white,
               ),
             ),
           ),
-          SizedBox(width: 10),
+          SizedBox(width: 5),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               PoppinsText(
-                text: programModel.programName ?? "Program Name",
+                text: workoutModel.workoutName ?? "Workout Name",
                 fontSize: Sizes.s16,
                 fontWeight: TextWeight.semiBold,
                 color: ConstColors.black,
@@ -69,11 +70,11 @@ class CreatorListItems extends StatelessWidget {
                 spacing: 10,
                 children: [
                   CustomChip(
-                    text: formatProgramTime(programModel.totalTime ?? 0),
+                    text: formatProgramTime(workoutModel.totalTime ?? 0),
                     color: ConstColors.secondary,
                   ),
                   CustomChip(
-                    text: programModel.levelOf ?? "Level",
+                    text: workoutModel.levelOf ?? "Level",
                     color: ConstColors.secondary,
                   ),
                 ],

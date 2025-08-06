@@ -1,0 +1,21 @@
+{
+  "provider": "apple_pay",
+  "data": {
+    "merchantIdentifier": "merchant.com.yourcompany.appname",
+    "displayName": "Musculo App",
+    "merchantCapabilities": ["3DS", "debit", "credit"],
+    "supportedNetworks": ["visa", "masterCard", "amex"],
+    "countryCode": "DE",
+    "currencyCode": "EUR",
+    "requiredBillingContactFields": ["postalAddress", "name"],
+    "requiredShippingContactFields": ["phone", "email"],
+    "shippingMethods": [
+      {
+        "identifier": "free",
+        "detail": "Delivers in five business days",
+        "label": "Free Shipping",
+        "amount": "9.99"
+      }
+    ]
+  }
+}

@@ -41,7 +41,7 @@ class CreatorListTile extends StatelessWidget {
             fontWeight: TextWeight.semiBold,
           ),
 
-          creator.subPlane == "Free" || creator.subPlane == null
+          creator.subPlane == "free"
               ? Container()
               : SharePicture(imagePath: Assets.official),
         ],

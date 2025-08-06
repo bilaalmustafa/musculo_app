@@ -1,14 +1,14 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/components/profileappbar.dart';
-import 'package:musculo_app/model/programs_model.dart';
+
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/view_model/user_view_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/user_profile_screens/programes.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/user_profile_screens/workouts.dart';
 import 'package:provider/provider.dart';
+
+import '../../programs_and_workout/bottom_navigation_view_model.dart';
 
 class Myprogramworkout extends StatefulWidget {
   const Myprogramworkout({super.key});
@@ -73,6 +73,11 @@ class _MyprogramworkoutState extends State<Myprogramworkout> {
 
         onPressed: () {
           // here floating action code here
+          Navigator.popUntil(context, (route) => route.isFirst);
+          Provider.of<BottomNavigationProvider>(
+            context,
+            listen: false,
+          ).setIndex(1);
         },
         child: Icon(Icons.add, color: ConstColors.white),
       ),

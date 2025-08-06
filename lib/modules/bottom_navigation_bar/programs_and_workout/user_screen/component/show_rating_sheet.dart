@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:musculo_app/components/customTextField.dart';
 import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/poppins_text.dart';
-import 'package:musculo_app/core/constants/assets.dart';
+
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
@@ -84,8 +84,19 @@ class _ShowrateSheetState extends State<ShowrateSheet> {
                   height: Sizes.s110,
                   width: Sizes.s110,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    image: DecorationImage(image: AssetImage(Assets.workout)),
+                    color: ConstColors.black,
+                    // borderRadius: BorderRadius.circular(8),
+                    border: Border.all(width: 1, color: ConstColors.gre9E9E),
+                    shape: BoxShape.circle,
+                    // image: DecorationImage(image: AssetImage(Assets.workout)),
+                  ),
+                  child: Center(
+                    child: PoppinsText(
+                      text: data.creatorName![0].toUpperCase(),
+                      fontSize: 32,
+                      fontWeight: FontWeight.w500,
+                      color: ConstColors.white,
+                    ),
                   ),
                 ),
                 PoppinsText(

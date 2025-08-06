@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:musculo_app/components/customTextField.dart';
 import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/poppins_text.dart';
-import 'package:musculo_app/core/config/routes.dart';
+
 import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/model/video_model.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/vedioplayer.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_workout/video_frame_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_workout/view_model/add_workout_veiw_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/component/reels_item.dart';
@@ -24,14 +25,6 @@ class ShowSheetBottom extends StatefulWidget {
 
 class _ShowSheetBottomState extends State<ShowSheetBottom> {
   final TextEditingController _searchController = TextEditingController();
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    _searchController.dispose();
-
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,10 +64,16 @@ class _ShowSheetBottomState extends State<ShowSheetBottom> {
                     controller: _searchController,
                     title: "search exercise",
                     preIcon: Assets.searchIcon,
-                    // sufIcon: Assets.filterIcon,
-                    // onTap: () {
-                    //   Navigator.pushNamed(context, Routes.filterscreen);
-                    // },
+                    sufIcon:
+                        _searchController.text.isNotEmpty
+                            ? Assets.crossIcon
+                            : null,
+                    onTap: () {
+                      setState(() {
+                        _searchController.clear();
+                        vm.searchQuery = '';
+                      });
+                    },
                     onChanged: (value) {
                       vm.searchQuery = value;
                     },
@@ -103,9 +102,8 @@ class _ShowSheetBottomState extends State<ShowSheetBottom> {
                                           context,
                                           MaterialPageRoute(
                                             builder:
-                                                (context) => VideoFrameScreen(
-                                               
-                                                  videourl: video.url,
+                                                (context) => Vedioplayercreen(
+                                                  videoUrl: video.url,
                                                 ),
                                           ),
                                         ),
@@ -138,13 +136,19 @@ class _ShowSheetBottomState extends State<ShowSheetBottom> {
                           buttonText: "Back",
                           buttonColor: ConstColors.secondary,
                           textColor: ConstColors.black,
-                          onTap: () => Navigator.pop(context),
+                          onTap: () {
+                            _searchController.clear();
+                            vm.searchQuery = '';
+                            Navigator.pop(context);
+                          },
                         ),
                       ),
                       Expanded(
                         child: CustomButton(
                           onTap: () {
                             vm.addVersionToVideo(widget.selectedVideo);
+                            _searchController.clear();
+                            vm.searchQuery = '';
                             Navigator.pop(context);
                           },
                           buttonText: "Add",

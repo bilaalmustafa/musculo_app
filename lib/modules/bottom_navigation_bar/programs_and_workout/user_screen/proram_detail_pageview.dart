@@ -12,6 +12,7 @@ import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/c
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/tab/description_tab.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/tab/history_tab.dart';
 
+import '../../../../components/poppins_text.dart';
 import '../../../../core/config/routes.dart';
 
 class ProgramDetailPageView extends StatefulWidget {
@@ -52,9 +53,22 @@ class _ProgramDetailPageViewState extends State<ProgramDetailPageView> {
                 width: double.infinity,
                 height: context.screenheight * 0.3,
                 decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(Assets.rectanglework),
-                    fit: BoxFit.fill,
+                  color: ConstColors.black,
+                  boxShadow: [
+                    BoxShadow(
+                      color: ConstColors.grey888,
+                      blurRadius: 10,
+                      spreadRadius: 5,
+                    ),
+                  ],
+                ),
+
+                child: Center(
+                  child: PoppinsText(
+                    text: widget.programModel.creatorName![0].toUpperCase(),
+                    fontSize: 60,
+                    fontWeight: FontWeight.w600,
+                    color: ConstColors.white,
                   ),
                 ),
               ),

@@ -32,7 +32,7 @@ class _DurationOfProgramState extends State<DaysAWeeksFromCalender> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 PoppinsText(
-                  text: "Pick $maxSelections day’s a week ?",
+                  text: "Select $maxSelections day’s a week ?",
                   fontSize: Sizes.s24,
                   fontWeight: TextWeight.semiBold,
                 ),

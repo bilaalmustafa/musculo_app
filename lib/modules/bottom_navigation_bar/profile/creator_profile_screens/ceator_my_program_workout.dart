@@ -2,10 +2,11 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:musculo_app/core/config/injections.dart';
+import 'package:musculo_app/core/config/routes.dart';
 
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/components/profileappbar.dart';
-import 'package:musculo_app/core/services/creator_services.dart';
+import 'package:musculo_app/core/services/exercise_services.dart';
 import 'package:musculo_app/model/programs_model.dart';
 import 'package:musculo_app/model/workouts_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/view_model/user_view_model.dart';
@@ -118,7 +119,14 @@ class _CreatorMyprogramworkoutState extends State<CreatorMyprogramworkout> {
         shape: const CircleBorder(),
 
         onPressed: () {
-          // here floating action code here
+          // TODO: HERE WE NAVIGATE TO ADD WORKOUT SCREEN
+          if (_currentPage == 0) {
+            // Navigate to Add Workout screen
+            Navigator.pushNamed(context, Routes.addworkoutpageview);
+          } else if (_currentPage == 1) {
+            // Navigate to Add Program screen
+            Navigator.pushNamed(context, Routes.addprogrampageview);
+          }
         },
         child: Icon(Icons.add, color: ConstColors.white),
       ),

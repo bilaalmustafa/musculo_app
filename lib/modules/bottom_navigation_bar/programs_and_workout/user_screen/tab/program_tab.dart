@@ -4,17 +4,19 @@ import 'package:musculo_app/core/config/injections.dart';
 
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
-import 'package:musculo_app/core/services/creator_services.dart';
+import 'package:musculo_app/core/services/exercise_services.dart';
 import 'package:musculo_app/model/programs_model.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/Program_Item_Dis.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/program_item_dis.dart';
 
 import 'package:provider/provider.dart';
 
+import '../../../../../components/custom_shimmer.dart';
 import '../../../../../core/utils/program_filter.dart';
 import '../../screen/view_model/discover_filter_provider.dart';
 
 class ProgramTabDisScreen extends StatefulWidget {
-  const ProgramTabDisScreen({super.key});
+  final String? userId;
+  const ProgramTabDisScreen({super.key, this.userId});
 
   @override
   State<ProgramTabDisScreen> createState() => _ProgramTabDisScreenState();
@@ -40,7 +42,7 @@ class _ProgramTabDisScreenState extends State<ProgramTabDisScreen> {
             stream: stream,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
+                return Center(child: CustomShimmer(height: 50));
               }
               if (snapshot.hasError) {
                 return Center(
@@ -57,10 +59,19 @@ class _ProgramTabDisScreenState extends State<ProgramTabDisScreen> {
               );
               final data = snapshot.data ?? [];
               print('Total fetched: ${data.length}');
+
+              // if user id not null then fetch that program
+              final filteredByCreator =
+                  widget.userId != null
+                      ? data.where((p) => p.userId == widget.userId).toList()
+                      : data;
+              print('After creator filter: ${filteredByCreator.length}');
+
+              // apply discover filter (search, plan type, price, etc) .
               final filtered =
                   (filter.isFilterApplied || query.isNotEmpty)
                       ? ProgramFilterUtil.applyFilters(data, filter, query)
-                      : data;
+                      : filteredByCreator;
 
               if (filtered.isEmpty) {
                 return Center(

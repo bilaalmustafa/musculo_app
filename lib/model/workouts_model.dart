@@ -46,11 +46,11 @@ class WorkoutModel extends HiveObject {
 
   @HiveField(13)
   final Map<String, List<VideoModel>>? categorizedVideos;
- @HiveField(14)
+  @HiveField(14)
   final double? rating;
-   @HiveField(15)
+  @HiveField(15)
   final List<String>? review;
-    @HiveField(16)
+  @HiveField(16)
   final int? ratingCount;
   WorkoutModel({
     this.workoutId,
@@ -69,7 +69,7 @@ class WorkoutModel extends HiveObject {
     this.categorizedVideos,
     this.rating,
     this.review,
-    this.ratingCount
+    this.ratingCount,
   });
 
   factory WorkoutModel.fromJson(Map<String, dynamic> json) {
@@ -83,7 +83,7 @@ class WorkoutModel extends HiveObject {
           json['addedTo'] != null
               ? List<String>.from(json['addedTo'] as List)
               : null,
-               review:
+      review:
           json['review'] != null
               ? List<String>.from(json['review'] as List)
               : null,
@@ -92,7 +92,7 @@ class WorkoutModel extends HiveObject {
       gender: json['gender'] as String?,
       totalTime: json['totalTime'] as int?,
       price: json['price'] as int?,
-        ratingCount: json['ratingCount'] as int?,
+      ratingCount: json['ratingCount'] as int?,
       rating: json['rating'] as double?,
       dateTime:
           json['dateTime'] != null ? DateTime.tryParse(json['dateTime']) : null,
@@ -124,9 +124,9 @@ class WorkoutModel extends HiveObject {
       'price': price,
       'dateTime': dateTime?.toIso8601String(),
       'description': description,
-      "rating":rating,
-      "review":review,
-      "ratingCount":ratingCount,
+      "rating": rating,
+      "review": review,
+      "ratingCount": ratingCount,
       'categorizedVideos': categorizedVideos?.map(
         (key, value) => MapEntry(key, value.map((v) => v.toJson()).toList()),
       ),
@@ -145,7 +145,7 @@ class WorkoutModel extends HiveObject {
     String? gender,
     int? totalTime,
     int? price,
-     int? ratingCount,
+    int? ratingCount,
     DateTime? dateTime,
     String? description,
     double? rating,

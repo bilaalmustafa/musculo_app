@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/core/config/validator.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
+
 import 'package:musculo_app/model/user_model.dart';
 import 'package:provider/provider.dart';
 
@@ -63,109 +64,113 @@ class _InformationtabState extends State<Informationtab> {
   @override
   Widget build(BuildContext context) {
     final data = userVm.userModel;
+
     return Scaffold(
       backgroundColor: ConstColors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: Sizes.s15,
-          children: [
-            Center(
-              child: SizedBox(
-                height: Sizes.s120,
-                width: Sizes.s300,
-                child: Stack(
-                  alignment: Alignment.center,
+      resizeToAvoidBottomInset: true,
+      body: Form(
+        key: _formKey,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.manual,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CircleAvatar(
-                      maxRadius: 55,
-                      backgroundColor: Colors.grey[200],
-                      backgroundImage:
-                          data?.profileImageUrl != null
-                              ? NetworkImage(data?.profileImageUrl ?? "")
-                              : null,
-                      child:
-                          data?.profileImageUrl == null
-                              ? Icon(
-                                Icons.person,
-                                size: Sizes.s50,
-                                color: Colors.black,
-                              )
-                              : null,
+                    // Center(
+                    //   child: SizedBox(
+                    //     height: Sizes.s120,
+                    //     width: Sizes.s300,
+                    //     child: Stack(
+                    //       alignment: Alignment.center,
+                    //       children: [
+                    //         CircleAvatar(
+                    //           maxRadius: 55,
+                    //           backgroundColor: Colors.grey[200],
+                    //           backgroundImage:
+                    //               data?.profileImageUrl != null
+                    //                   ? NetworkImage(data!.profileImageUrl!)
+                    //                   : null,
+                    //           child:
+                    //               data?.profileImageUrl == null
+                    //                   ? const Icon(
+                    //                     Icons.person,
+                    //                     size: Sizes.s50,
+                    //                     color: Colors.black,
+                    //                   )
+                    //                   : null,
+                    //         ),
+                    //         Transform.translate(
+                    //           offset: const Offset(40, 40),
+                    //           child: InkWell(
+                    //             onTap: () {},
+                    //             child: SharePicture(
+                    //               imagePath: Assets.eidtSquare,
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
+                    const SizedBox(height: 15),
+                    CustomTextField(
+                      controller: nameController,
+                      title: "Full Name",
+                      validator: (value) => Validator.valueExists(value),
                     ),
-                    Transform.translate(
-                      offset: Offset(40, 40),
-                      child: InkWell(
-                        onTap: () {
-                          // edit code here
-                        },
-                        child: SharePicture(imagePath: Assets.eidtSquare),
-                        //  Container(
-                        //   width: Sizes.s20,
-                        //   height: Sizes.s20,
-                        //   decoration: BoxDecoration(
-                        //     shape: BoxShape.rectangle,
-                        //     borderRadius: BorderRadius.circular(4),
-                        //     color: Colors.black,
-                        //   ),
-                        //   child: Icon(Icons.edit, color: Colors.white, size: 20),
-                        // ),
-                      ),
+                    const SizedBox(height: 15),
+                    CustomTextField(
+                      controller: overviewController,
+                      title: "Overview",
                     ),
+                    const SizedBox(height: 15),
+                    CustomTextField(
+                      controller: experienceController,
+                      title: "Experience",
+                    ),
+                    const SizedBox(height: 15),
+                    CustomTextField(controller: goalController, title: "Goal"),
+                    const SizedBox(height: 15),
+                    CustomDropdown(
+                      value: _selectExcercise,
+                      items: const [
+                        'Incline Dumbbell Press',
+                        'Bench Press',
+                        'Push-Ups',
+                        'Upper Body',
+                      ],
+                      hint: 'Select Favorite Excersice',
+                      onChanged: (value) {
+                        setState(() {
+                          _selectExcercise = value;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 15),
+                    CustomDropdown(
+                      value: _selectPlan,
+                      textColor: ConstColors.greyA1A1,
+                      items: const [],
+                      //  hint: 'Select Plan',
+                      onChanged: (value) {},
+                    ),
+                    const SizedBox(height: 110), // reserve space above button
                   ],
                 ),
               ),
-            ),
-            Form(
-              key: _formKey,
-              child: CustomTextField(
-                controller: nameController,
-                title: "Full Name",
-                validator: (value) => Validator.valueExists(value),
-              ),
-            ),
-            CustomTextField(controller: overviewController, title: "Overview"),
-            CustomTextField(
-              controller: experienceController,
-              title: "Experience",
-            ),
-            CustomTextField(controller: goalController, title: "Goal"),
-            CustomDropdown(
-              value: _selectExcercise,
-              items: const [
-                'Incline Dumbbell Press',
-                'Bench Press',
-                'Push-Ups',
-                'Upper Body',
-              ],
-              hint: 'Select Favorites Excercise',
-              onChanged: (value) {
-                setState(() {
-                  _selectExcercise = value;
-                });
-              },
-            ),
-            CustomDropdown(
-              value: _selectPlan,
-              items: const ['Free', 'Premium'],
-              hint: 'Select Plan',
-              onChanged: (value) {
-                setState(() {
-                  _selectPlan = value;
-                });
-              },
-            ),
-          ],
+            );
+          },
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 5),
         child: CustomButton(
           loading: userVm.isLoading,
           buttonText: "Update",
           onTap: () async {
-            // log("Updating User: ${widget.userModel.toString()}");
-
             if (_formKey.currentState!.validate()) {
               UserModel? updatedUser = await context
                   .read<UserViewModel>()
@@ -176,12 +181,11 @@ class _InformationtabState extends State<Informationtab> {
                     cExperience: experienceController.text.trim(),
                     cGoal: goalController.text.trim(),
                     cExercise: _selectExcercise,
-                    cPlan: _selectPlan,
                   );
 
               if (updatedUser != null && context.mounted) {
                 Fluttertoast.showToast(msg: "Updated Successfully");
-
+                print('............>$_selectExcercise');
                 nameController.clear();
                 Navigator.pop(context);
               } else {

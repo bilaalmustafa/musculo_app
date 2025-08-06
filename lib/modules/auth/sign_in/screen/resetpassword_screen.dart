@@ -75,12 +75,12 @@ class _ResetpasswordScreenState extends State<ResetpasswordScreen> {
                   if (formKey.currentState!.validate()) {
                     final email = emailController.text.trim();
 
-                    bool sendOpt = await vm.sendPasswordResetOTP(email);
+                    bool sendOpt = await vm.sendOtp(email);
 
                     if (sendOpt && context.mounted) {
-                      Navigator.pushNamed(context, Routes.verifyPasswordScreen);
+                      Navigator.pushNamed(context, Routes.verifyPasswordScreen
+                          , arguments: email);
                     }
-                    
                   }
                 } catch (e) {
                   Fluttertoast.showToast(msg: "Error: $e");

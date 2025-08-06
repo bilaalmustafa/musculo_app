@@ -1,9 +1,7 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/poppins_text.dart';
-import 'package:musculo_app/core/config/extensions.dart';
+
 import 'package:musculo_app/core/config/routes.dart';
 import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
@@ -64,13 +62,26 @@ class ProgramItemDis extends StatelessWidget {
           Expanded(
             flex: 1,
             child: Container(
-              width: context.screenheight * 0.12,
+              width: 80,
+              height: 80,
+              // width: context.screenheight * 0.12,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(Sizes.s8),
+                color: ConstColors.black,
+                // borderRadius: BorderRadius.circular(Sizes.s8),
+                border: Border.all(width: 0.5, color: ConstColors.gre9E9E),
+                shape: BoxShape.circle,
                 // color: ConstColors.amber,
-                image: DecorationImage(
-                  image: AssetImage(Assets.workout),
-                  fit: BoxFit.cover,
+                // image: DecorationImage(
+                //   image: AssetImage(Assets.workout),
+                //   fit: BoxFit.cover,
+                // ),
+              ),
+              child: Center(
+                child: PoppinsText(
+                  text: program.creatorName![0].toUpperCase(),
+                  fontSize: 32,
+                  fontWeight: FontWeight.w500,
+                  color: ConstColors.white,
                 ),
               ),
             ),
@@ -146,7 +157,7 @@ class ProgramItemDis extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     PoppinsText(
-                      text: " ${program.price} £",
+                      text: " ${program.price} €",
                       fontSize: Sizes.s14,
                       fontWeight: TextWeight.semiBold,
                     ),

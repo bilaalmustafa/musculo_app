@@ -7,27 +7,59 @@ import 'package:musculo_app/modules/bottom_navigation_bar/feedback/screens/feedb
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/user_mode/home_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/user_profile_screens/user_profile.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/discover_screen.dart';
+import 'package:provider/provider.dart';
+
+import 'programs_and_workout/bottom_navigation_view_model.dart';
+import 'programs_and_workout/screen/view_model/discover_filter_provider.dart';
 
 class BottomNavigationScreen extends StatefulWidget {
-  const BottomNavigationScreen({super.key});
+  final int initialMainTabIndex;
+  final int initialHomeScreenSubTab;
+  const BottomNavigationScreen({
+    super.key,
+    this.initialMainTabIndex = 0,
+    this.initialHomeScreenSubTab = 0,
+  });
 
   @override
   State<BottomNavigationScreen> createState() => _BottomNavigationScreenState();
 }
 
 class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
-  int _selectedIndex = 0;
-  final List<Widget> _screens = [
-    HomeScreen(),
-    DiscoverScreen(),
-    FeedbackScreen(),
-    UserProfile(),
-  ];
+  List<Widget> get _screens {
+    return [
+      HomeScreen(
+        initialTabIndex:
+            widget.initialMainTabIndex == 0
+                ? widget.initialHomeScreenSubTab
+                : 0,
+      ),
+      DiscoverScreen(),
+      FeedbackScreen(),
+      UserProfile(),
+    ];
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Get the provider instance (listen: false because we are only calling methods)
+      final bottomProvider = Provider.of<BottomNavigationProvider>(
+        context,
+        listen: false,
+      );
+
+      // Set the initial main tab index in the provider
+      bottomProvider.setIndex(widget.initialMainTabIndex);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final bottomProvider = Provider.of<BottomNavigationProvider>(context);
     return Scaffold(
-      body: _screens[_selectedIndex],
+      body: _screens[bottomProvider.selectedIndex],
       backgroundColor: ConstColors.white,
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -38,17 +70,21 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
           fontWeight: FontWeight.bold, // Your desired weight
           fontSize: 12,
         ),
+
         items: [
           BottomNavigationBarItem(
             icon: SharePicture(
-              imagePath: _selectedIndex == 0 ? Assets.home1 : Assets.homeIcon,
+              imagePath:
+                  bottomProvider.selectedIndex == 0
+                      ? Assets.home1
+                      : Assets.homeIcon,
             ),
             label: 'Home',
           ),
           BottomNavigationBarItem(
             icon: SharePicture(
               imagePath:
-                  _selectedIndex == 1
+                  bottomProvider.selectedIndex == 1
                       ? Assets.discoveryIcon1
                       : Assets.discoveryIcon,
             ),
@@ -57,7 +93,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
           BottomNavigationBarItem(
             icon: SharePicture(
               imagePath:
-                  _selectedIndex == 2
+                  bottomProvider.selectedIndex == 2
                       ? Assets.feedbackIcon1
                       : Assets.feedbackIcon,
             ),
@@ -66,16 +102,24 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
           BottomNavigationBarItem(
             icon: SharePicture(
               imagePath:
-                  _selectedIndex == 3 ? Assets.profilIcon1 : Assets.profilIcon,
+                  bottomProvider.selectedIndex == 3
+                      ? Assets.profilIcon1
+                      : Assets.profilIcon,
             ),
             label: 'Profile',
           ),
         ],
-        currentIndex: _selectedIndex,
-        onTap:
-            (value) => setState(() {
-              _selectedIndex = value;
-            }),
+        currentIndex: bottomProvider.selectedIndex,
+        onTap: (index) {
+          if (bottomProvider.selectedIndex == 1 && index != 1) {
+            final discoverProvider = Provider.of<DiscoverFilter>(
+              context,
+              listen: false,
+            );
+            discoverProvider.clear();
+          }
+          bottomProvider.setIndex(index);
+        },
       ),
     );
   }

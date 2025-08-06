@@ -28,7 +28,7 @@ class _ShowRatingBottomSheetState extends State<ShowRatingBottomSheet> {
     final creator = widget.creator;
 
     return FractionallySizedBox(
-      heightFactor: 0.9,
+      heightFactor: 1,
       child: Padding(
         padding: EdgeInsets.only(
           left: 20,

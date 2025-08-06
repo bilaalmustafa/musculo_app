@@ -6,12 +6,11 @@ import 'package:musculo_app/core/config/routes.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
-import 'package:musculo_app/core/services/creator_services.dart';
+import 'package:musculo_app/core/services/exercise_services.dart';
 import 'package:musculo_app/model/workouts_model.dart';
 import 'package:musculo_app/modules/auth/view_model/auth_view_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_program/view_model/add_program_view_model.dart';
 
-import 'package:musculo_app/modules/bottom_navigation_bar/profile/component/programItems.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/component/workoutItems.dart';
 import 'package:provider/provider.dart';
 
@@ -40,12 +39,13 @@ class _AddProgramNameState extends State<AddYourProgram> {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    _searchWorkoutController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   // TODO: implement dispose
+  //   _searchWorkoutController.dispose();
+
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -77,11 +77,14 @@ class _AddProgramNameState extends State<AddYourProgram> {
                   title: "Search workouts",
                   preIcon: Assets.searchIcon,
                   sufIcon:
-                      (isFilterApplied) ? Assets.crossIcon : Assets.filterIcon,
+                      (isFilterApplied) || query.isNotEmpty
+                          ? Assets.crossIcon
+                          : Assets.filterIcon,
                   onTap: () {
                     if (isFilterApplied || query.isNotEmpty) {
                       // Clear filters
                       discoverFilter.clear();
+                      _searchWorkoutController.clear();
                     } else {
                       Navigator.pushNamed(context, Routes.filterscreen);
                     }

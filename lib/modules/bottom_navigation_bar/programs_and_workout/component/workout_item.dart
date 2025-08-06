@@ -55,12 +55,28 @@ class WorkOutItemDis extends StatelessWidget {
           Expanded(
             flex: 1,
             child: Container(
+              // margin: EdgeInsets.all(50),
+              // padding: EdgeInsets.all(40),
+              width: 80,
+              height: 80,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(Sizes.s8),
+                color: ConstColors.black,
+                // borderRadius: BorderRadius.circular(Sizes.s8),
+                border: Border.all(width: 0.5, color: ConstColors.gre9E9E),
+                shape: BoxShape.circle,
+
                 // color: ConstColors.amber,
-                image: DecorationImage(
-                  image: AssetImage(Assets.workout),
-                  fit: BoxFit.cover,
+                // image: DecorationImage(
+                //   image: AssetImage(Assets.workout),
+                //   fit: BoxFit.cover,
+                // ),
+              ),
+              child: Center(
+                child: PoppinsText(
+                  text: workout.creatorName![0].toUpperCase(),
+                  fontSize: 32,
+                  fontWeight: FontWeight.w500,
+                  color: ConstColors.white,
                 ),
               ),
             ),
@@ -133,7 +149,7 @@ class WorkOutItemDis extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     PoppinsText(
-                      text: "${workout.price ?? 0} £",
+                      text: "${workout.price ?? 0} €",
                       fontSize: Sizes.s14,
                       fontWeight: TextWeight.semiBold,
                     ),

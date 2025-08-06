@@ -6,7 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart'
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:musculo_app/core/config/injections.dart';
-import 'package:musculo_app/core/services/creator_services.dart';
+import 'package:musculo_app/core/services/exercise_services.dart';
 
 import 'package:musculo_app/model/video_model.dart';
 import 'package:musculo_app/model/workouts_model.dart';
@@ -215,6 +215,7 @@ class AddWorkoutVeiwModel extends ChangeNotifier {
     String userId,
     String creatorName,
   ) async {
+    log('AddWorkoutVeiwModel: creatediscoveryPost called');
     isLoading = true;
     notifyListeners();
     WorkoutModel item = WorkoutModel(
@@ -233,26 +234,23 @@ class AddWorkoutVeiwModel extends ChangeNotifier {
       totalTime: getTotalIntervalTimeInSeconds(),
       categorizedVideos: selectedVideos,
     );
+
+    log(
+      'AddWorkoutVeiwModel: Preparing to send WorkoutModel to WorkoutServices.createDiscovery',
+    );
+    log('AddWorkoutVeiwModel: WorkoutModel ID: $docId');
     bool success = await instance<WorkoutServices>().createDiscovery(
       docId,
       item,
     );
     isLoading = false;
-    workoutNameController.clear();
-    descriptionController.clear();
-    typeofworkout = "";
-    gender = null;
-
-    selected = null;
-    sectionofWorkout = [false, false, false, false, false];
-    selectedSections.clear();
-    selectedVideos.clear();
-    selectedList.clear();
-    addVersionList.clear();
-    selectedDate = null;
-    levelofworkout = "";
-    currentSectionIndex = 0;
-    notifyListeners();
+    if (success) {
+      log('AddWorkoutVeiwModel: Workout created successfully. Clearing data.');
+      clearData();
+    } else {
+      log('AddWorkoutVeiwModel: Failed to create workout.');
+      notifyListeners();
+    }
     return success;
   }
 
@@ -396,5 +394,38 @@ class AddWorkoutVeiwModel extends ChangeNotifier {
               video.name.toLowerCase().contains(_searchQuery.toLowerCase()),
         )
         .toList();
+  }
+
+  // this method clear data here
+  void clearData() {
+    // Reset controllers
+    workoutNameController.clear();
+    descriptionController.clear();
+    priceController.clear();
+    dateController.clear();
+
+    // Reset simple properties
+    typeofworkout = "";
+    levelofworkout = "";
+    gender = null;
+    selected = null;
+    selectedDate = null;
+    difficulty = 5;
+    currentSectionIndex = 0;
+
+    // Reset boolean flags
+    isTypeofworkoutSelect = false;
+    isLevelofworkoutslect = false;
+    isSectionofWorkout = false;
+    sectionofWorkout = [false, false, false, false, false];
+
+    // Clear lists and maps
+    selectedSections.clear();
+    selectedVideos.clear();
+    selectedList.clear();
+    addVersionList.clear();
+
+    // Notify listeners to update the UI
+    notifyListeners();
   }
 }
