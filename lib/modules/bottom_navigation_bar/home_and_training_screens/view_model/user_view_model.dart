@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/core/config/injections.dart';
-import 'package:musculo_app/core/services/creator_services.dart';
+import 'package:musculo_app/core/services/exercise_services.dart';
 import 'package:musculo_app/core/services/user_service.dart';
 import 'package:musculo_app/model/programs_model.dart';
 import 'package:musculo_app/model/user_model.dart';
@@ -10,6 +10,12 @@ class UserViewModel with ChangeNotifier {
   UserModel? userModel;
   int selectedRating = 2;
   bool isLoading = false;
+  int selectTab = 1;
+
+  void checkBalance(int value) {
+    selectTab = value;
+    notifyListeners();
+  }
 
   Future<UserModel?> getUserById(String id) async {
     userModel = await instance<UserService>().userById(id);

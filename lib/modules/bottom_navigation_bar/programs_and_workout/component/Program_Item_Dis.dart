@@ -157,7 +157,7 @@ class ProgramItemDis extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     PoppinsText(
-                      text: " ${program.price} £",
+                      text: " ${program.price} €",
                       fontSize: Sizes.s14,
                       fontWeight: TextWeight.semiBold,
                     ),

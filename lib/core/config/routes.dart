@@ -121,14 +121,17 @@ class RouteGenerator {
         );
       case Routes.congrate:
         final argu = routeSitting.arguments as Map<String, dynamic>;
-        final modelData = argu["workoutData"] as WorkoutModel;
+        final modelData = argu["workoutData"] as dynamic;
         final userModel = argu["userModel"] as UserModel;
         // final creator = routeSitting.arguments as UserModel;
         return MaterialPageRoute(
           builder:
-              (_) => CongratulationScreen(
-                creator: userModel,
-                workoutData: modelData,
+              (_) => ChangeNotifierProvider(
+                create: (context) => UserModeViewmodel(),
+                child: CongratulationScreen(
+                  creator: userModel,
+                  vedioData: modelData,
+                ),
               ),
         );
       case Routes.filterscreen:
@@ -214,9 +217,13 @@ class RouteGenerator {
       case Routes.resetPasswordScreen:
         return MaterialPageRoute(builder: (_) => const ResetpasswordScreen());
       case Routes.verifyPasswordScreen:
-        return MaterialPageRoute(builder: (_) => const VerifypasswordScreen());
+        final email = routeSitting.arguments as String;
+        return MaterialPageRoute(builder: (_) => VerifypasswordScreen(email: email));
       case Routes.changePasswordScreen:
-        return MaterialPageRoute(builder: (_) => const ChangepasswordScreen());
+        final args = routeSitting.arguments as Map<String, String>;
+        final email = args['email'] ?? '';
+        final otp = args['otp'] ?? '';
+        return MaterialPageRoute(builder: (_) => ChangepasswordScreen(email: email, otp: otp));
       case Routes.motivationalScreen:
         final args = routeSitting.arguments as MotivationalTextModel?;
         return MaterialPageRoute(

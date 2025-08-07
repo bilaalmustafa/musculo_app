@@ -12,7 +12,6 @@ import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/model/user_model.dart';
 import 'package:musculo_app/model/video_model.dart';
 
-import 'package:musculo_app/model/workouts_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/version_chips_row.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/video_list.item.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_workout/video_frame_screen.dart';
@@ -65,55 +64,9 @@ class _TrainingScreenState extends State<TrainingScreen> {
     userMode.startTimer(10);
   }
 
-  @override
-  void dispose() {
-    // _controller.dispose();
-    super.dispose();
-  }
-
-  // void initializeController(String url) async {
-  //   print('Initializing controller for: $url');
-
-  //   if (mounted) {
-  //     setState(() {
-  //       _isControllerInitialized = false;
-  //     });
-  //   }
-
-  //   if (_controller != null) {
-  //     log('Disposing existing controller');
-  //     await _controller!.dispose();
-  //   }
-
-  //   _controller = VideoPlayerController.networkUrl(Uri.parse(url));
-
-  //   try {
-  //     log('Starting controller initialization...');
-  //     await _controller!.initialize();
-  //     log('Controller initialized successfully');
-  //     if (mounted) {
-  //       setState(() {
-  //         _isControllerInitialized = true;
-  //       });
-  //     }
-  //   } catch (e) {
-  //     log('Error initializing video controller: $e');
-  //     if (mounted) {
-  //       setState(() {
-  //         _isControllerInitialized = false;
-  //       });
-  //     }
-  //   }
-  // }
-
-  // static const int totalSeconds = 600; // 10 minutes
   int elapsedSeconds = 0;
   @override
   Widget build(BuildContext context) {
-    // final Map<String, List<VideoModel>> videoListMap =
-    //     widget.modelData.categorizedVideos ?? {};
-    // final List<VideoModel> allVideos =
-    //     videoListMap.values.expand((videos) => videos).toList();
     final List<VideoModel> allVideos = this.allVideos;
     return Scaffold(
       backgroundColor: ConstColors.white,
@@ -160,24 +113,13 @@ class _TrainingScreenState extends State<TrainingScreen> {
                             postSvgPath: Assets.next,
 
                             onTap: () {
-                              if (vm.selectedVideo == allVideos.length - 1) {
-                                Navigator.pushNamed(
-                                  context,
-                                  Routes.congrate,
-                                  arguments: {
-                                    "workoutData": widget.modelData,
-                                    "userModel": widget.userModel,
-                                  },
-                                );
-                              } else {
-                                vm.nextVideo(allVideos, context);
-                                vm.initializeController(
-                                  allVideos[vm.selectedVideo].url,
-                                );
-                                // vm.startTimer(
-                                //   allVideos[vm.selectedVideo].restTime,
-                                // );
-                              }
+                              vm.nextVideo(allVideos, context);
+                              vm.initializeController(
+                                allVideos[vm.selectedVideo].url,
+                              );
+                              // vm.startTimer(
+                              //   allVideos[vm.selectedVideo].restTime,
+                              // );
                             },
                           ),
                         ),
@@ -207,14 +149,14 @@ class _TrainingScreenState extends State<TrainingScreen> {
                               ? vm.selectedbtn <= 0
                                   ? VideoFrameScreen(
                                     controller: vm.controller,
-                                    videourl: allVideos[vm.selectedVideo].url,
+                                    // videourl: allVideos[vm.selectedVideo].url,
                                   )
                                   : VideoFrameScreen(
                                     controller: vm.controller,
-                                    videourl:
-                                        allVideos[vm.selectedVideo]
-                                            .versionList[vm.selectedbtn]
-                                            .url,
+                                    // videourl:
+                                    //     allVideos[vm.selectedVideo]
+                                    //         .versionList[vm.selectedbtn]
+                                    //         .url,
                                   )
                               : const Center(
                                 child: CircularProgressIndicator(
@@ -256,7 +198,7 @@ class _TrainingScreenState extends State<TrainingScreen> {
 
                     vm.remainingSeconds == 0
                         ? Column(
-                          spacing: Sizes.s10,
+                          spacing: Sizes.s20,
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -286,8 +228,27 @@ class _TrainingScreenState extends State<TrainingScreen> {
                                   child: CustomButton(
                                     buttonText: "END",
                                     textColor: ConstColors.white,
-                                    buttonColor: ConstColors.redF52,
+                                    buttonColor:
+                                        vm.selectedVideo == allVideos.length - 1
+                                            ? ConstColors.redF52
+                                            : ConstColors.redF52.withValues(
+                                              alpha: 0.3,
+                                            ),
                                     preSvgPath: Assets.closeSquare,
+                                    onTap: () {
+                                      if (vm.selectedVideo ==
+                                              allVideos.length - 1 &&
+                                          vm.remainingSeconds == 0) {
+                                        Navigator.pushNamed(
+                                          context,
+                                          Routes.congrate,
+                                          arguments: {
+                                            "workoutData": widget.modelData,
+                                            "userModel": widget.userModel,
+                                          },
+                                        );
+                                      }
+                                    },
                                   ),
                                 ),
                               ],
@@ -298,8 +259,8 @@ class _TrainingScreenState extends State<TrainingScreen> {
                               spacing: Sizes.s10,
                               children: [
                                 PoppinsText(
-                                  text: "Curls",
-                                  fontSize: Sizes.s20,
+                                  text: allVideos[vm.selectedVideo].name,
+                                  fontSize: Sizes.s16,
                                   fontWeight: TextWeight.semiBold,
                                 ),
                                 SharePicture(imagePath: Assets.swap),

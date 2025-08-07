@@ -40,6 +40,8 @@ class CreatorWorkoutsProgramList<T> extends StatelessWidget {
 
         return ListView.separated(
           // padding: const EdgeInsets.all(16),
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: items.length,
           itemBuilder: (context, index) => itemBuilder(items[index]),
           separatorBuilder: (_, __) => const SizedBox(height: Sizes.s20),

@@ -6,7 +6,7 @@ import 'package:musculo_app/core/config/routes.dart';
 
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/components/profileappbar.dart';
-import 'package:musculo_app/core/services/creator_services.dart';
+import 'package:musculo_app/core/services/exercise_services.dart';
 import 'package:musculo_app/model/programs_model.dart';
 import 'package:musculo_app/model/workouts_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/view_model/user_view_model.dart';

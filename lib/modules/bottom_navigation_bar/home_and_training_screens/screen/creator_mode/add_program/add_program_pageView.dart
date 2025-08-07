@@ -139,7 +139,13 @@ class _AddProgramPageviewState extends State<AddProgramPageview> {
                     textColor: ConstColors.black,
                     buttonColor: ConstColors.secondary,
                     buttonText: "Add Later",
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        Routes.bottomnavigationbarscreen,
+                        (route) => false,
+                      );
+                    },
                   ),
                 ), // optional to preserve layout
               ),

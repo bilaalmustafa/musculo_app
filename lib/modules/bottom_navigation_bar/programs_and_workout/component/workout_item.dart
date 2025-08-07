@@ -149,7 +149,7 @@ class WorkOutItemDis extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     PoppinsText(
-                      text: "${workout.price ?? 0} £",
+                      text: "${workout.price ?? 0} €",
                       fontSize: Sizes.s14,
                       fontWeight: TextWeight.semiBold,
                     ),

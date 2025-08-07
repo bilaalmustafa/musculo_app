@@ -11,6 +11,7 @@ import 'package:musculo_app/modules/bottom_navigation_bar/profile/profile_view_m
 import 'package:provider/provider.dart';
 
 import '../../../../core/config/routes.dart';
+import '../../home_and_training_screens/view_model/user_view_model.dart';
 
 class BecomecreatorScreen extends StatefulWidget {
   const BecomecreatorScreen({super.key});
@@ -22,6 +23,10 @@ class BecomecreatorScreen extends StatefulWidget {
 class _BecomecreatorScreenState extends State<BecomecreatorScreen> {
   @override
   Widget build(BuildContext context) {
+    final userVm = context.watch<UserViewModel>();
+    final data = userVm.userModel;
+
+    bool isplaneSelected = data?.subPlane == "free" ? true : false;
     return Scaffold(
       backgroundColor: ConstColors.white,
       appBar: SharedAppBar(title: 'Become a Creator'),
@@ -70,14 +75,12 @@ class _BecomecreatorScreenState extends State<BecomecreatorScreen> {
                               color: ConstColors.greyE5E5,
                             ),
                             PlanListTile(
-                              text:
-                                  'Access to a selection of basic workout programs.',
-                            ),
-                            PlanListTile(text: 'Sell programs'),
-                            PlanListTile(text: 'Sell workouts'),
-                            PlanListTile(
                               text: 'Limited ad-supported experience',
                             ),
+                            PlanListTile(text: 'Create up to 10 workouts'),
+                            PlanListTile(text: 'Create up to 10 workouts'),
+                            PlanListTile(text: 'Create up to 10 programs'),
+                            PlanListTile(text: 'basic customer service'),
                             SizedBox(height: Sizes.s10),
                             Divider(
                               height: Sizes.s1,
@@ -85,7 +88,7 @@ class _BecomecreatorScreenState extends State<BecomecreatorScreen> {
                             ),
                             SizedBox(height: Sizes.s10),
                             PoppinsText(
-                              text: 'Your Current Plan',
+                              text: isplaneSelected ? 'Your Current Plan' : '',
                               fontSize: Sizes.s16,
                               fontWeight: FontWeight.w600,
                               color: ConstColors.grey7575,
@@ -118,12 +121,12 @@ class _BecomecreatorScreenState extends State<BecomecreatorScreen> {
                           children: [
                             SizedBox(height: Sizes.s10),
                             PoppinsText(
-                              text: 'Premium--',
+                              text: 'Premium',
                               fontSize: Sizes.s16,
                               fontWeight: FontWeight.w600,
                             ),
                             PoppinsText(
-                              text: '\$9.99',
+                              text: '\€9.99',
                               fontSize: Sizes.s40,
                               fontWeight: FontWeight.w600,
                             ),
@@ -131,18 +134,17 @@ class _BecomecreatorScreenState extends State<BecomecreatorScreen> {
                               height: Sizes.s1,
                               color: ConstColors.greyE5E5,
                             ),
-                            PlanListTile(text: 'Create up to 20 Workouts'),
-                            PlanListTile(text: 'Create up to 20 Programs'),
-                            PlanListTile(text: 'Sell workouts'),
-                            PlanListTile(text: 'Sell programs'),
-                            PlanListTile(text: 'Sell programs'),
-                            PlanListTile(text: 'Ad-free experience.'),
-                            PlanListTile(text: 'Program showed in search'),
-                            PlanListTile(text: 'Diamond badge'),
+                            PlanListTile(text: 'NO ADS'),
+                            PlanListTile(text: 'UNLIMITED workouts to create'),
+                            PlanListTile(text: 'UNLIMITED programs to create'),
+                            PlanListTile(text: 'with PREMIUM badge'),
+                            PlanListTile(text: 'PRIORITY in searching'),
+                            PlanListTile(text: 'PRIORITY customer service'),
                             PlanListTile(
                               text:
-                                  'Exclusive access to new features and content.',
+                                  'Exclusive access to new features and content',
                             ),
+
                             SizedBox(height: Sizes.s10),
                             Divider(
                               height: Sizes.s1,
@@ -150,7 +152,7 @@ class _BecomecreatorScreenState extends State<BecomecreatorScreen> {
                             ),
                             SizedBox(height: Sizes.s10),
                             PoppinsText(
-                              text: 'Your Current Plan',
+                              text: isplaneSelected ? "" : 'Your Current Plan',
                               fontSize: Sizes.s16,
                               fontWeight: FontWeight.w600,
                               color: ConstColors.grey7575,
@@ -175,7 +177,6 @@ class _BecomecreatorScreenState extends State<BecomecreatorScreen> {
               onTap:
                   vm.selectPlan != null
                       ? () {
-                       
                         Navigator.pushNamed(context, Routes.creatorInfoScreen);
                       }
                       : null,

@@ -1,15 +1,21 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:musculo_app/core/config/injections.dart';
 import 'package:musculo_app/core/config/routes.dart';
+import 'package:musculo_app/core/services/user_service.dart';
 import 'package:musculo_app/model/programs_model.dart';
+import 'package:musculo_app/model/user_model.dart';
 import 'package:musculo_app/model/video_model.dart';
 import 'package:musculo_app/model/workouts_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
 class UserModeViewmodel extends ChangeNotifier {
+  UserModel? userModel;
   int selectedbtn = 0;
   int selectedVideo = 0;
   VideoPlayerController? controller;
@@ -22,6 +28,23 @@ class UserModeViewmodel extends ChangeNotifier {
   bool isControllerInitialized = false;
   int remainingSeconds = 0;
   int totalTime = 0;
+ bool isSwitch = false;
+
+
+  void toggleSwitch(bool value) async {
+    isSwitch = value;
+    notifyListeners();
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isSwitch', value);
+  }
+  Future<void> _loadSwitchState() async {
+    final prefs = await SharedPreferences.getInstance();
+    isSwitch = prefs.getBool('isSwitch') ?? false;
+    notifyListeners();
+  }
+
+
 
   void playAndPause() {
     if (controller!.value.isPlaying) {
@@ -159,6 +182,27 @@ class UserModeViewmodel extends ChangeNotifier {
         // Notify after each thumbnail is loaded 👇
         notifyListeners();
       }
+    }
+  }
+
+  Future<void> updateUserWorkoutStats({
+    required String userId,
+    required int finishedWorkoutCount,
+    required int minutesSpent,
+  }) async {
+    try {
+      userModel ??= await instance<UserService>().getById(userId);
+      final newFinishedWorkouts =
+          (userModel?.finishedWorkouts ?? 0) + finishedWorkoutCount;
+      final newSpentMinutes = (userModel?.spentMinutes ?? 0) + minutesSpent;
+      final updatedUser = userModel!.copyWith(
+        finishedWorkouts: newFinishedWorkouts,
+        spentMinutes: newSpentMinutes,
+      );
+      await instance<UserService>().update(userId, updatedUser);
+    } catch (e, stackTrace) {
+      debugPrint("❌ Failed to update user workout stats: $e");
+      debugPrint("Stack trace: $stackTrace");
     }
   }
 }

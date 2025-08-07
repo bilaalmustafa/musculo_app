@@ -7,18 +7,21 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class PaymentService {
-  static Future<bool> initPaymentSheet({
+  Future<bool> initPaymentSheet({
     required String email,
     required double amount,
   }) async {
     try {
+      if (amount < 0.5) {
+        Fluttertoast.showToast(msg: "Minimum payment amount is €0.50");
+        return false;
+      }
       final callable = FirebaseFunctions.instance.httpsCallable(
         'stripePaymentintentRequest',
       );
       final result = await callable.call({
         'email': email,
         'amount': (amount * 100).toInt(),
-        'currency': 'usd',
       });
 
       final jsonResponse = result.data;
@@ -32,8 +35,20 @@ class PaymentService {
         ),
       );
 
-      await Stripe.instance.presentPaymentSheet();
-      Fluttertoast.showToast(msg: "Payment Completed");
+      try {
+        await Stripe.instance.presentPaymentSheet();
+        Fluttertoast.showToast(msg: "Payment Completed");
+      } on StripeException catch (e) {
+        Fluttertoast.showToast(
+          msg: "Stripe error: ${e.error.localizedMessage}",
+        );
+        log("Error during payment: ${e.error.localizedMessage}");
+        return false;
+      } catch (e) {
+        Fluttertoast.showToast(msg: "Error: $e");
+        log("Error during payment: $e");
+        return false;
+      }
       return true;
     } catch (e) {
       if (e is StripeException) {

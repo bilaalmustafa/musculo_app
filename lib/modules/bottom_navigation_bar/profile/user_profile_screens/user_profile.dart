@@ -14,14 +14,15 @@ import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/core/services/profile_image_services.dart';
 import 'package:musculo_app/core/utils/profilehelper.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/view_model/user_view_model.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/profile/profile_view_model/profile_view_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/notification_switch.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/constants/const_colors.dart';
 import '../../../../core/constants/fonts.dart';
 import '../../home_and_training_screens/component/congrate_container.dart';
 import '../../programs_and_workout/component/customlisttile.dart';
-import '../profile_view_model/profile_view_model.dart';
 
 class UserProfile extends StatefulWidget {
   const UserProfile({super.key});
@@ -33,6 +34,22 @@ class UserProfile extends StatefulWidget {
 class _UserProfileState extends State<UserProfile> {
   bool isCreator = false;
   final ProfileImageService _profileImageService = ProfileImageService();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedSwitchState();
+  }
+
+  Future<void> _loadSavedSwitchState() async {
+    final prefs = await SharedPreferences.getInstance();
+    final saved = prefs.getBool('isSwitch');
+    if (saved != null) {
+      setState(() {
+        isCreator = saved;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +132,9 @@ class _UserProfileState extends State<UserProfile> {
                   NotificationSwitch(
                     value: isCreator,
                     useCupertino: true,
-                    onChanged: (value) {
+                    onChanged: (value) async {
+                      final prefs = await SharedPreferences.getInstance();
+                      await prefs.setBool('isSwitch', value);
                       setState(() {
                         isCreator = value;
                       });
@@ -159,7 +178,7 @@ class _UserProfileState extends State<UserProfile> {
                         isCreator ? Assets.walletIcon : Assets.timeCircle,
                     digit:
                         isCreator
-                            ? ' ${userVm.getBalance(data).toStringAsFixed(1)}£'
+                            ? ' ${userVm.getBalance(data).toStringAsFixed(1)}€'
                             : data?.spentMinutes.toString() ?? "0",
                     text: isCreator ? "Earnings" : "Minutes Spent",
                   ),
@@ -324,11 +343,10 @@ class _UserProfileState extends State<UserProfile> {
                     if (uid != null) {
                       bool? success = await vm.cancelCreatorPlan(uid);
                       if (success != null && context.mounted) {
-                        Navigator.of(context).pop();
-                        // Navigator.pushNamed(
-                        //   context,
-                        //   Routes.bottomnavigationbarscreen,
-                        // );
+                        Navigator.pushNamed(
+                          context,
+                          Routes.bottomnavigationbarscreen,
+                        );
                         Fluttertoast.showToast(msg: "plane cancel successfull");
                       }
                     }

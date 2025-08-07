@@ -5,25 +5,28 @@ import 'package:musculo_app/model/programs_model.dart';
 import 'package:musculo_app/model/user_model.dart';
 
 import 'dart:developer';
-import 'dart:io';
+
 import 'package:cloud_functions/cloud_functions.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
+import 'package:musculo_app/core/config/injections.dart';
+import 'package:musculo_app/core/services/creator_plane_service.dart';
+import 'package:musculo_app/model/creator_premium.dart';
 import 'package:musculo_app/model/programs_model.dart';
 import 'package:musculo_app/model/user_model.dart' as u;
-import 'package:image_picker/image_picker.dart';
+
 import 'package:musculo_app/model/user_model.dart';
+
 import 'package:musculo_app/model/workouts_model.dart';
 
 class ProfileProvider extends ChangeNotifier {
   UserModel? _user;
   bool isLoading = false;
   UserModel? get user => _user;
-  bool _isUploading = false;
+  // bool _isUploading = false;
   int? selectPlan;
   final GlobalKey<FormState> formlKey = GlobalKey<FormState>();
   final TextEditingController nameController = TextEditingController();
@@ -33,9 +36,9 @@ class ProfileProvider extends ChangeNotifier {
 
   final TextEditingController goalController = TextEditingController();
 
-  final ImagePicker _picker = ImagePicker();
+  // final ImagePicker _picker = ImagePicker();
 
-  bool get isUploading => _isUploading;
+  // bool get isUploading => _isUploading;
 
   Box<WorkoutModel>? _box;
   Box<ProgramModel>? _programBox;
@@ -49,6 +52,39 @@ class ProfileProvider extends ChangeNotifier {
     if (selectPlan != planNumber) {
       selectPlan = planNumber;
       notifyListeners();
+    }
+  }
+
+  Future<bool> creatorPremiumPlane(
+    String id,
+    String email,
+    String card,
+    double payment,
+  ) async {
+    log("creatorId: $id");
+log("email: $email");
+log("card: $card");
+log("payment: $payment");
+    try {
+      CreatorPremium premium = CreatorPremium(
+        creatorId: id,
+        creatorName: nameController.text.trim(),
+        createDate: DateTime.now(),
+        email: email,
+        card: card,
+        payment: payment,
+        paymentStatus: "Compeleted",
+      );
+      log('Sending to backend: ${premium.toJson()}');
+
+      final created = await instance<CreatorPlaneService>()
+          .createCreatorPremium(id, premium);
+      return created;
+    } catch (e) {
+      print(e);
+      Fluttertoast.showToast(msg: "Error: $e");
+      log("error: $e");
+      return false;
     }
   }
 

@@ -26,8 +26,6 @@ class CreatorModeTab extends StatefulWidget {
 }
 
 class _CreatorModeTabState extends State<CreatorModeTab> {
-  int selectTab = 1;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +47,7 @@ class _CreatorModeTabState extends State<CreatorModeTab> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     PoppinsText(
-                      text: "\$${vm.getBalance(creatorVm).toStringAsFixed(2)}",
+                      text: "€${vm.getBalance(creatorVm).toStringAsFixed(2)}",
                       fontSize: Sizes.s30,
                       color: ConstColors.white,
                       fontWeight: TextWeight.semiBold,
@@ -60,13 +58,15 @@ class _CreatorModeTabState extends State<CreatorModeTab> {
                       color: ConstColors.white,
                       fontWeight: TextWeight.regular,
                     ),
-                    DaysChip(
-                      daylist: ["1D", "1W", "1M", "3M", "1Y"],
-                      selectTab: selectTab,
-                      onTap: (index) {
-                        setState(() {
-                          selectTab = index;
-                        });
+                    Consumer<UserViewModel>(
+                      builder: (context, obj, _) {
+                        return DaysChip(
+                          daylist: ["1D", "1W", "1M", "3M", "1Y"],
+                          selectTab: obj.selectTab,
+                          onTap: (index) {
+                            obj.checkBalance(index);
+                          },
+                        );
                       },
                     ),
                   ],
@@ -106,7 +106,7 @@ class _CreatorModeTabState extends State<CreatorModeTab> {
 
                           AnalysisLisTile(
                             heading1: "Withdrawed",
-                            heading2: "\$${creatorVm?.withdraw ?? 0.0}",
+                            heading2: "€${creatorVm?.withdraw ?? 0.0}",
                             iconImage: Assets.upload1,
                           ),
                         ],
@@ -165,17 +165,12 @@ class _CreatorModeTabState extends State<CreatorModeTab> {
                           ],
                         ),
                       ),
-                      SizedBox(
-                        height: 180,
-                        child: CreatorWorkoutsProgramList<ProgramModel>(
-                          stream: vm.getProgamOfCreatoe(
-                            creatorVm?.userId ?? '',
-                          ),
-                          itemBuilder:
-                              (program) =>
-                                  CreatorListItems(programModel: program),
-                          emptyMessage: 'No Programs',
-                        ),
+                      CreatorWorkoutsProgramList<ProgramModel>(
+                        stream: vm.getProgamOfCreatoe(creatorVm?.userId ?? ''),
+                        itemBuilder:
+                            (program) =>
+                                CreatorListItems(programModel: program),
+                        emptyMessage: 'No Programs',
                       ),
                       const SizedBox(height: 10),
 
@@ -221,19 +216,16 @@ class _CreatorModeTabState extends State<CreatorModeTab> {
                           ],
                         ),
                       ),
-                      SizedBox(
-                        height: 220,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 0),
-                          child: CreatorWorkoutsProgramList<WorkoutModel>(
-                            stream: vm.getWorkOutOfCreator(
-                              creatorVm?.userId ?? '',
-                            ),
-                            itemBuilder:
-                                (workout) =>
-                                    CreatorWorkoutList(workoutModel: workout),
-                            emptyMessage: 'No Workouts',
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 0),
+                        child: CreatorWorkoutsProgramList<WorkoutModel>(
+                          stream: vm.getWorkOutOfCreator(
+                            creatorVm?.userId ?? '',
                           ),
+                          itemBuilder:
+                              (workout) =>
+                                  CreatorWorkoutList(workoutModel: workout),
+                          emptyMessage: 'No Workouts',
                         ),
                       ),
                     ],

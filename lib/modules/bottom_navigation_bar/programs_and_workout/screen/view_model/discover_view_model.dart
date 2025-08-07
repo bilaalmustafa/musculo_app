@@ -2,7 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:musculo_app/core/config/injections.dart';
-import 'package:musculo_app/core/services/creator_services.dart';
+import 'package:musculo_app/core/services/exercise_services.dart';
+import 'package:musculo_app/core/services/payment_service.dart';
 import 'package:musculo_app/core/services/user_service.dart';
 import 'package:musculo_app/model/programs_model.dart';
 import 'package:musculo_app/model/sold_model.dart';
@@ -152,6 +153,26 @@ class DiscoverViewModel extends ChangeNotifier {
       isloading = false;
       notifyListeners();
       return null;
+    }
+  }
+
+  Future<bool> payPayment(String email, double amount) async {
+    try {
+      isloading = true;
+      notifyListeners();
+
+      // Simulate a payment process
+      final ispaymentSuccessful = await instance<PaymentService>()
+          .initPaymentSheet(email: email, amount: amount);
+
+      isloading = false;
+      notifyListeners();
+      return ispaymentSuccessful; // Payment successful
+    } catch (e) {
+      log("Payment error: $e");
+      isloading = false;
+      notifyListeners();
+      return false; // Payment failed
     }
   }
 }

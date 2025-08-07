@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:musculo_app/core/config/injections.dart';
-import 'package:musculo_app/core/services/creator_services.dart';
+import 'package:musculo_app/core/services/exercise_services.dart';
 import 'package:musculo_app/model/programs_model.dart';
 import 'package:musculo_app/model/workouts_model.dart';
 

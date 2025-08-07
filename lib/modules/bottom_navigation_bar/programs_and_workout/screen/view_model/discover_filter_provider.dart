@@ -41,7 +41,7 @@ class DiscoverFilter extends ChangeNotifier {
   }
 
   void setTempPremium(bool v) {
-    tempPremium = v;
+    tempPremium = !v;
     notifyListeners();
   }
 

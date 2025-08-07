@@ -39,49 +39,49 @@ class _CreatorinfoScreenState extends State<CreatorinfoScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: Sizes.s15,
             children: [
-              Center(
-                child: SizedBox(
-                  height: Sizes.s120,
-                  width: Sizes.s300,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      CircleAvatar(
-                        maxRadius: 55,
-                        backgroundColor: Colors.grey[200],
-                        child: Icon(
-                          Icons.person,
-                          size: Sizes.s50,
-                          color: Colors.black,
-                        ),
-                      ),
-                      Transform.translate(
-                        offset: Offset(40, 40),
-                        child: InkWell(
-                          onTap: () {
-                            // edit code here
-                          },
-                          child: SharePicture(imagePath: Assets.eidtSquare),
-                          // Container(
-                          //   width: Sizes.s20,
-                          //   height: Sizes.s20,
-                          //   decoration: BoxDecoration(
-                          //     shape: BoxShape.rectangle,
-                          //     borderRadius: BorderRadius.circular(4),
-                          //     color: Colors.black,
-                          //   ),
-                          //   child: Icon(
-                          //     Icons.edit,
-                          //     color: Colors.white,
-                          //     size: Sizes.s20,
-                          //   ),
-                          // ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              // Center(
+              //   child: SizedBox(
+              //     height: Sizes.s120,
+              //     width: Sizes.s300,
+              //     child: Stack(
+              //       alignment: Alignment.center,
+              //       children: [
+              //         CircleAvatar(
+              //           maxRadius: 55,
+              //           backgroundColor: Colors.grey[200],
+              //           child: Icon(
+              //             Icons.person,
+              //             size: Sizes.s50,
+              //             color: Colors.black,
+              //           ),
+              //         ),
+              //         Transform.translate(
+              //           offset: Offset(40, 40),
+              //           child: InkWell(
+              //             onTap: () {
+              //               // edit code here
+              //             },
+              //             child: SharePicture(imagePath: Assets.eidtSquare),
+              //             // Container(
+              //             //   width: Sizes.s20,
+              //             //   height: Sizes.s20,
+              //             //   decoration: BoxDecoration(
+              //             //     shape: BoxShape.rectangle,
+              //             //     borderRadius: BorderRadius.circular(4),
+              //             //     color: Colors.black,
+              //             //   ),
+              //             //   child: Icon(
+              //             //     Icons.edit,
+              //             //     color: Colors.white,
+              //             //     size: Sizes.s20,
+              //             //   ),
+              //             // ),
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ),
               Form(
                 key: _formlKey,
                 child: Consumer<ProfileProvider>(
@@ -113,21 +113,6 @@ class _CreatorinfoScreenState extends State<CreatorinfoScreen> {
                     );
                   },
                 ),
-              ),
-              CustomDropdown(
-                value: 'Incline Dumbbell Press',
-                items: const [
-                  'Incline Dumbbell Press',
-                  'Bench Press',
-                  'Push-Ups',
-                  'Upper Body',
-                ],
-                hint: 'Select Excercise',
-                onChanged: (value) {
-                  setState(() {
-                    _selectExcercise = value;
-                  });
-                },
               ),
 
               SizedBox(

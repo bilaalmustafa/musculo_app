@@ -8,9 +8,7 @@ import 'package:musculo_app/model/user_model.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../components/customTextField.dart';
-import '../../../../components/share_picture.dart';
-import '../../../../core/constants/assets.dart';
-import '../../../../core/constants/sizes.dart';
+
 import '../../home_and_training_screens/view_model/user_view_model.dart';
 import '../component/customdropdown.dart';
 
@@ -79,42 +77,42 @@ class _InformationtabState extends State<Informationtab> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Center(
-                      child: SizedBox(
-                        height: Sizes.s120,
-                        width: Sizes.s300,
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            CircleAvatar(
-                              maxRadius: 55,
-                              backgroundColor: Colors.grey[200],
-                              backgroundImage:
-                                  data?.profileImageUrl != null
-                                      ? NetworkImage(data!.profileImageUrl!)
-                                      : null,
-                              child:
-                                  data?.profileImageUrl == null
-                                      ? const Icon(
-                                        Icons.person,
-                                        size: Sizes.s50,
-                                        color: Colors.black,
-                                      )
-                                      : null,
-                            ),
-                            Transform.translate(
-                              offset: const Offset(40, 40),
-                              child: InkWell(
-                                onTap: () {},
-                                child: SharePicture(
-                                  imagePath: Assets.eidtSquare,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    // Center(
+                    //   child: SizedBox(
+                    //     height: Sizes.s120,
+                    //     width: Sizes.s300,
+                    //     child: Stack(
+                    //       alignment: Alignment.center,
+                    //       children: [
+                    //         CircleAvatar(
+                    //           maxRadius: 55,
+                    //           backgroundColor: Colors.grey[200],
+                    //           backgroundImage:
+                    //               data?.profileImageUrl != null
+                    //                   ? NetworkImage(data!.profileImageUrl!)
+                    //                   : null,
+                    //           child:
+                    //               data?.profileImageUrl == null
+                    //                   ? const Icon(
+                    //                     Icons.person,
+                    //                     size: Sizes.s50,
+                    //                     color: Colors.black,
+                    //                   )
+                    //                   : null,
+                    //         ),
+                    //         Transform.translate(
+                    //           offset: const Offset(40, 40),
+                    //           child: InkWell(
+                    //             onTap: () {},
+                    //             child: SharePicture(
+                    //               imagePath: Assets.eidtSquare,
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
                     const SizedBox(height: 15),
                     CustomTextField(
                       controller: nameController,
@@ -159,6 +157,10 @@ class _InformationtabState extends State<Informationtab> {
                           _selectPlan = value;
                         });
                       },
+                      textColor: ConstColors.greyA1A1,
+                     
+                     
+                     
                     ),
                     const SizedBox(height: 110), // reserve space above button
                   ],
@@ -184,7 +186,6 @@ class _InformationtabState extends State<Informationtab> {
                     cExperience: experienceController.text.trim(),
                     cGoal: goalController.text.trim(),
                     cExercise: _selectExcercise,
-                    cPlan: _selectPlan,
                   );
 
               if (updatedUser != null && context.mounted) {

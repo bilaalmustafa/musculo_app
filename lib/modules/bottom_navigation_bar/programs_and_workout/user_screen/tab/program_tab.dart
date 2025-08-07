@@ -4,7 +4,7 @@ import 'package:musculo_app/core/config/injections.dart';
 
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
-import 'package:musculo_app/core/services/creator_services.dart';
+import 'package:musculo_app/core/services/exercise_services.dart';
 import 'package:musculo_app/model/programs_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/program_item_dis.dart';
 

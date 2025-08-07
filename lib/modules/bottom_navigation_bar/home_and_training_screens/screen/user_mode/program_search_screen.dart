@@ -4,6 +4,7 @@ import 'package:musculo_app/components/share_picture.dart';
 import 'package:musculo_app/core/config/routes.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
+import 'package:musculo_app/core/services/exercise_services.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/program_item_dis.dart';
 import 'package:provider/provider.dart';
 
@@ -12,7 +13,6 @@ import '../../../../../components/poppins_text.dart';
 import '../../../../../core/config/injections.dart';
 import '../../../../../core/constants/assets.dart';
 import '../../../../../core/constants/sizes.dart';
-import '../../../../../core/services/creator_services.dart';
 import '../../../../../core/utils/program_filter.dart';
 import '../../../../../model/programs_model.dart';
 import '../../../programs_and_workout/screen/view_model/discover_filter_provider.dart';

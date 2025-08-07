@@ -16,6 +16,7 @@ import 'package:musculo_app/model/user_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/view_model/user_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/notification_switch.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/constants/assets.dart';
 
@@ -38,6 +39,7 @@ class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
 
 class _HomeAppBarState extends State<HomeAppBar> {
   final AuthService _authservces = instance<AuthService>();
+  bool? _savedSwitchState;
 
   Stream<UserModel?>? _stream;
   @override
@@ -45,17 +47,35 @@ class _HomeAppBarState extends State<HomeAppBar> {
     _stream = context.read<UserViewModel>().getUserByIdstream(
       _authservces.currentUser!.uid,
     );
-
+    _loadSavedSwitchState();
     super.initState();
+  }
+
+  Future<void> _loadSavedSwitchState() async {
+    final prefs = await SharedPreferences.getInstance();
+    final saved = prefs.getBool('isSwitch');
+    if (saved != null) {
+      setState(() {
+        _savedSwitchState = saved;
+      });
+
+      // Inform parent of saved value if different
+      if (saved != widget.isSwitch) {
+        widget.valueChange(saved);
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final effectiveSwitchValue = _savedSwitchState ?? widget.isSwitch;
+
     return AppBar(
       toolbarHeight: 100,
       elevation: 0,
       bottomOpacity: 0,
       shadowColor: Colors.black,
+      automaticallyImplyLeading: false,
 
       backgroundColor: !widget.isSwitch ? ConstColors.white : ConstColors.black,
       title: Column(
@@ -106,8 +126,15 @@ class _HomeAppBarState extends State<HomeAppBar> {
         ),
         NotificationSwitch(
           useCupertino: true,
-          value: widget.isSwitch,
-          onChanged: (value) => widget.valueChange(value),
+          value: effectiveSwitchValue,
+          onChanged: (value) async {
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.setBool('isSwitch', value);
+            setState(() {
+              _savedSwitchState = value;
+            });
+            widget.valueChange(value);
+          },
         ),
         // Transform.scale(
         //   scale: 0.7,

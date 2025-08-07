@@ -237,7 +237,7 @@ class _ProgramDetailScreenState extends State<DescriptionTab> {
                   PoppinsText(text: "Price", fontSize: 13),
                   PoppinsText(
                     text:
-                        "£${data.price?.toStringAsFixed(2).toString() ?? 0.0}",
+                        "€${data.price?.toStringAsFixed(2).toString() ?? 0.0}",
                     fontSize: 16,
                     fontWeight: TextWeight.semiBold,
                   ),
@@ -251,6 +251,7 @@ class _ProgramDetailScreenState extends State<DescriptionTab> {
                   UserModel? usermodel =
                       context.read<UserViewModel>().userModel;
                   final creatorId = widget.programModel.userId!;
+
                   return CustomButton(
                     loading: vm.isloading,
                     onTap:
@@ -262,51 +263,53 @@ class _ProgramDetailScreenState extends State<DescriptionTab> {
                                     creatorId,
                                   );
 
-                              bool response = true;
-                              // await PaymentService.initPaymentSheet(
-                              //   email: usermodel?.email ?? "",
-                              //   amount: data.price?.toDouble() ?? 0.0,
-                              // );
-                              if (response) {
-                                usermodel.listOfPrograms.add(data);
+                              bool response = await vm.payPayment(
+                                usermodel.email ?? "",
+                                data.price?.toDouble() ?? 0.0,
+                              );
+                              if (!response) {
+                                Fluttertoast.showToast(msg: "Payment Failed");
+                                return;
+                              }
 
-                                UserModel? success = await vm.parchaseProgram(
-                                  usermodel.userId!,
-                                  usermodel,
-                                  usermodel.listOfPrograms,
+                              usermodel.listOfPrograms.add(data);
+
+                              UserModel? success = await vm.parchaseProgram(
+                                usermodel.userId!,
+                                usermodel,
+                                usermodel.listOfPrograms,
+                              );
+                              if (creatorModel != null) {
+                                // Ensure sold list is not null
+                                List<SoldModel> updatedSoldList = List.from(
+                                  creatorModel.sold,
                                 );
-                                if (creatorModel != null) {
-                                  // Ensure sold list is not null
-                                  List<SoldModel> updatedSoldList = List.from(
-                                    creatorModel.sold,
-                                  );
-                                  SoldModel soldItem = SoldModel(
-                                    type: "program",
-                                    packegeMode: true,
-                                    userId: data.userId!,
-                                    contentName: data.programName ?? "unknow",
-                                    contentId: data.programId!,
-                                    contentPrice: data.price?.toDouble() ?? 0.0,
-                                    buyDate: DateTime.now(),
-                                  );
-                                  updatedSoldList.add(soldItem);
+                                SoldModel soldItem = SoldModel(
+                                  type: "program",
+                                  packegeMode: true,
+                                  userId: data.userId!,
+                                  contentName: data.programName ?? "unknow",
+                                  contentId: data.programId!,
+                                  contentPrice: data.price?.toDouble() ?? 0.0,
+                                  buyDate: DateTime.now(),
+                                );
+                                updatedSoldList.add(soldItem);
 
-                                  // 3️⃣ Update Creator Document in Firestore
-                                  await vm.addSoldInList(
-                                    creatorModel.userId!,
-                                    creatorModel,
-                                    updatedSoldList,
+                                // 3️⃣ Update Creator Document in Firestore
+                                await vm.addSoldInList(
+                                  creatorModel.userId!,
+                                  creatorModel,
+                                  updatedSoldList,
+                                );
+                              }
+                              if (success != null) {
+                                setState(() {
+                                  isPurchased = usermodel.listOfPrograms
+                                      .contains(data);
+                                  Fluttertoast.showToast(
+                                    msg: "Program Purchased Successfully",
                                   );
-                                }
-                                if (success != null) {
-                                  setState(() {
-                                    isPurchased = usermodel.listOfPrograms
-                                        .contains(data);
-                                    Fluttertoast.showToast(
-                                      msg: "Program Purchased Successfully",
-                                    );
-                                  });
-                                }
+                                });
                               }
                             },
                     buttonText: isPurchased ? "Purchased" : "Buy",

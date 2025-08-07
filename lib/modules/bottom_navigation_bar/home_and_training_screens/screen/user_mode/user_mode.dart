@@ -9,6 +9,7 @@ import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
+import 'package:musculo_app/core/services/exercise_services.dart';
 
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/carasoul_container.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/item_container.dart';
@@ -19,7 +20,6 @@ import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_scre
 import 'package:provider/provider.dart';
 
 import '../../../../../core/config/injections.dart';
-import '../../../../../core/services/creator_services.dart';
 import '../../../../../model/programs_model.dart';
 import '../../../programs_and_workout/component/program_item_dis.dart';
 import 'program_search_screen.dart';
