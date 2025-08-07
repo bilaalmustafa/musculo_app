@@ -3,12 +3,10 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:musculo_app/components/poppins_text.dart';
-import 'package:musculo_app/components/share_picture.dart';
-import 'package:musculo_app/core/constants/assets.dart';
+
 import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/model/user_model.dart';
-import 'package:musculo_app/modules/auth/view_model/auth_view_model.dart';
+
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/view_model/user_view_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/profile_view_model/profile_view_model.dart';
 import 'package:provider/provider.dart';

@@ -5,7 +5,7 @@ import 'package:musculo_app/components/shared_appbar.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 
 import 'package:musculo_app/core/constants/sizes.dart';
-import 'package:musculo_app/modules/auth/register/component/show_dialog_box.dart';
+
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/component/planlisttile.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/profile_view_model/profile_view_model.dart';
 import 'package:provider/provider.dart';
@@ -61,7 +61,7 @@ class _BecomecreatorScreenState extends State<BecomecreatorScreen> {
                           children: [
                             SizedBox(height: Sizes.s10),
                             PoppinsText(
-                              text: 'Normal',
+                              text: 'Basic',
                               fontSize: Sizes.s16,
                               fontWeight: FontWeight.w600,
                             ),
@@ -74,10 +74,9 @@ class _BecomecreatorScreenState extends State<BecomecreatorScreen> {
                               height: Sizes.s1,
                               color: ConstColors.greyE5E5,
                             ),
-                            PlanListTile(
-                              text: 'Limited ad-supported experience',
-                            ),
-                            PlanListTile(text: 'Create up to 10 workouts'),
+                            PlanListTile(text: 'Sell workouts'),
+                            PlanListTile(text: 'Sell programs'),
+                            PlanListTile(text: 'Access to all exercises'),
                             PlanListTile(text: 'Create up to 10 workouts'),
                             PlanListTile(text: 'Create up to 10 programs'),
                             PlanListTile(text: 'basic customer service'),
@@ -126,7 +125,7 @@ class _BecomecreatorScreenState extends State<BecomecreatorScreen> {
                               fontWeight: FontWeight.w600,
                             ),
                             PoppinsText(
-                              text: '\€9.99',
+                              text: '€9.99',
                               fontSize: Sizes.s40,
                               fontWeight: FontWeight.w600,
                             ),
@@ -134,6 +133,9 @@ class _BecomecreatorScreenState extends State<BecomecreatorScreen> {
                               height: Sizes.s1,
                               color: ConstColors.greyE5E5,
                             ),
+                            PlanListTile(text: 'Sell workouts'),
+                            PlanListTile(text: 'Sell Programs'),
+                            PlanListTile(text: 'Access to all excercises'),
                             PlanListTile(text: 'NO ADS'),
                             PlanListTile(text: 'UNLIMITED workouts to create'),
                             PlanListTile(text: 'UNLIMITED programs to create'),

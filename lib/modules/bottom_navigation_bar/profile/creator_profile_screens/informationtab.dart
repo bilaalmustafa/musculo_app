@@ -60,7 +60,7 @@ class _InformationtabState extends State<Informationtab> {
   }
 
   @override
-  Widget build(BuildContext context) {
+Widget build(BuildContext context) {
     final data = userVm.userModel;
 
     return Scaffold(
@@ -132,21 +132,21 @@ class _InformationtabState extends State<Informationtab> {
                     const SizedBox(height: 15),
                     CustomTextField(controller: goalController, title: "Goal"),
                     const SizedBox(height: 15),
-                    CustomDropdown(
-                      value: _selectExcercise,
-                      items: const [
-                        'Incline Dumbbell Press',
-                        'Bench Press',
-                        'Push-Ups',
-                        'Upper Body',
-                      ],
-                      hint: 'Select Favorite Excersice',
-                      onChanged: (value) {
-                        setState(() {
-                          _selectExcercise = value;
-                        });
-                      },
-                    ),
+                    // CustomDropdown(
+                    //   value: _selectExcercise,
+                    //   items: const [
+                    //     'Incline Dumbbell Press',
+                    //     'Bench Press',
+                    //     'Push-Ups',
+                    //     'Upper Body',
+                    //   ],
+                    //   hint: 'Select Favorite Excersice',
+                    //   onChanged: (value) {
+                    //     setState(() {
+                    //       _selectExcercise = value;
+                    //     });
+                    //   },
+                    // ),
                     const SizedBox(height: 15),
                     CustomDropdown(
                       value: _selectPlan,
@@ -157,10 +157,8 @@ class _InformationtabState extends State<Informationtab> {
                           _selectPlan = value;
                         });
                       },
-                      textColor: ConstColors.greyA1A1,
-                     
-                     
-                     
+
+                      // textColor: ConstColors.greyA1A1,
                     ),
                     const SizedBox(height: 110), // reserve space above button
                   ],

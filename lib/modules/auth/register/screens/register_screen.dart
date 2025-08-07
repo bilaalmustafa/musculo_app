@@ -1,11 +1,11 @@
-import 'dart:developer';
 
-import 'package:firebase_auth/firebase_auth.dart';
+
+
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/shared_appbar.dart';
 import 'package:musculo_app/core/config/routes.dart';
-import 'package:musculo_app/core/constants/const_colors.dart';
+
 import 'package:musculo_app/model/user_model.dart';
 
 import 'package:musculo_app/modules/auth/register/screens/age_screen.dart';
