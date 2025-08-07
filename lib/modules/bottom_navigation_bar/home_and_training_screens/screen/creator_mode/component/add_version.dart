@@ -49,8 +49,8 @@ class _AddVersionState extends State<AddVersion> {
             child: PoppinsText(
               text:
                   widget.videomodelData.versionList.isNotEmpty
-                      ? "${widget.videomodelData.versionList.length.toString()} Version"
-                      : "Add Version",
+                      ? "${widget.videomodelData.versionList.length.toString()} version"
+                      : "Add version",
               fontSize: 10,
               color: ConstColors.white,
             ),

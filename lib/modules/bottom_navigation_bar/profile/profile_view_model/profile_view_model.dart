@@ -4,11 +4,38 @@ import 'package:hive/hive.dart';
 import 'package:musculo_app/model/programs_model.dart';
 import 'package:musculo_app/model/user_model.dart';
 
+import 'dart:developer';
+import 'dart:io';
+import 'package:cloud_functions/cloud_functions.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hive/hive.dart';
+import 'package:musculo_app/model/programs_model.dart';
+import 'package:musculo_app/model/user_model.dart' as u;
+import 'package:image_picker/image_picker.dart';
+import 'package:musculo_app/model/user_model.dart';
 import 'package:musculo_app/model/workouts_model.dart';
 
 class ProfileProvider extends ChangeNotifier {
   UserModel? _user;
+  bool isLoading = false;
   UserModel? get user => _user;
+  bool _isUploading = false;
+  int? selectPlan;
+  final GlobalKey<FormState> formlKey = GlobalKey<FormState>();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController overviewController = TextEditingController();
+
+  final TextEditingController expController = TextEditingController();
+
+  final TextEditingController goalController = TextEditingController();
+
+  final ImagePicker _picker = ImagePicker();
+
+  bool get isUploading => _isUploading;
 
   Box<WorkoutModel>? _box;
   Box<ProgramModel>? _programBox;
@@ -17,6 +44,81 @@ class ProfileProvider extends ChangeNotifier {
 
   List<WorkoutModel> get favorateWorkout => _box?.values.toList() ?? [];
   List<ProgramModel> get favoriteProgram => _programBox?.values.toList() ?? [];
+
+  void selectPlane(int planNumber) {
+    if (selectPlan != planNumber) {
+      selectPlan = planNumber;
+      notifyListeners();
+    }
+  }
+
+  Future<UserModel?> getCreatorPlan(String uid) async {
+    try {
+      isLoading = true;
+      notifyListeners();
+      final HttpsCallable creatorPlane = FirebaseFunctions.instance
+          .httpsCallable('creatorPlane');
+      final userModel = u.UserModel(
+        name: nameController.text.trim(),
+        overviewText: overviewController.text.trim(),
+        goalText: goalController.text.trim(),
+        experienceText: expController.text.trim(),
+      );
+      final HttpsCallableResult response = await creatorPlane.call({
+        ...userModel.toJson(),
+        "userid": uid,
+      });
+
+      if (response.data['success'] == true) {
+        isLoading = false;
+        notifyListeners();
+        Fluttertoast.showToast(msg: "Become creator successful");
+        nameController.clear();
+        overviewController.clear();
+        goalController.clear();
+        expController.clear();
+
+        return userModel;
+      } else {
+        isLoading = false;
+        notifyListeners();
+        return null;
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: "$e");
+      isLoading = false;
+      notifyListeners();
+      return null;
+    }
+  }
+
+  Future<bool?> cancelCreatorPlan(String uid) async {
+    try {
+      isLoading = true;
+      notifyListeners();
+      final HttpsCallable cancelcreatorPlane = FirebaseFunctions.instance
+          .httpsCallable('cancelcreatorPlane');
+      final HttpsCallableResult response = await cancelcreatorPlane.call({
+        "userid": uid,
+      });
+
+      if (response.data['success'] == true) {
+        isLoading = false;
+        notifyListeners();
+        Fluttertoast.showToast(msg: "Cancel cretor subcribtion");
+        return true;
+      } else {
+        isLoading = false;
+        notifyListeners();
+        return null;
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: "$e");
+      isLoading = false;
+      notifyListeners();
+      return null;
+    }
+  }
 
   Future<void> initFavoritesForUser(String uid) async {
     final boxName = 'favorite_workouts_$uid';

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/components/shared_appbar.dart';
 import 'package:musculo_app/core/config/routes.dart';
@@ -65,31 +66,31 @@ class _ResetpasswordScreenState extends State<ResetpasswordScreen> {
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(Sizes.s16),
-        child:
-            provider.loading
-                ? CircularProgressIndicator()
-                : CustomButton(
-                  onTap: () async {
-                    try {
-                      if (formKey.currentState!.validate()) {
-                        final email = emailController.text.trim();
-                        print('📥 Email entered: $email');
-                        await provider.callSendOtp();
+        child: Consumer<PasswordResetProvider>(
+          builder: (context, vm, _) {
+            return CustomButton(
+              loading: vm.isloading,
+              onTap: () async {
+                try {
+                  if (formKey.currentState!.validate()) {
+                    final email = emailController.text.trim();
 
-                        Navigator.pushNamed(
-                          context,
-                          Routes.verifyPasswordScreen,
-                        );
-                      }
-                    } catch (e) {
-                      ScaffoldMessenger.of(
-                        context,
-                      ).showSnackBar(SnackBar(content: Text(e.toString())));
+                    bool sendOpt = await vm.sendPasswordResetOTP(email);
+
+                    if (sendOpt && context.mounted) {
+                      Navigator.pushNamed(context, Routes.verifyPasswordScreen);
                     }
-                  },
+                    
+                  }
+                } catch (e) {
+                  Fluttertoast.showToast(msg: "Error: $e");
+                }
+              },
 
-                  buttonText: 'Continue',
-                ),
+              buttonText: 'Continue',
+            );
+          },
+        ),
       ),
     );
   }

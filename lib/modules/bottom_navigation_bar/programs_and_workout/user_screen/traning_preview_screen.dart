@@ -326,8 +326,8 @@ class _TraningPreviewScreenState extends State<TraningPreviewScreen> {
                       fontSize: Sizes.s16,
                       fontWeight: TextWeight.semiBold,
                     ),
-                    FutureBuilder<UserModel?>(
-                      future: UserService().userById(
+                    StreamBuilder<UserModel?>(
+                      stream: UserService().userByIdstream(
                         widget.workoutModel.userId!,
                       ),
                       builder: (context, snapshot) {

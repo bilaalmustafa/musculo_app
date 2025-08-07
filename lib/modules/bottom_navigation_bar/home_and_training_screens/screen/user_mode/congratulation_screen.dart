@@ -42,8 +42,8 @@ class _CongratulationScreenState extends State<CongratulationScreen> {
         [];
     return Scaffold(
       backgroundColor: Colors.white,
-      body: FutureBuilder(
-        future: UserService().userById(widget.workoutData.userId ?? ""),
+      body: StreamBuilder(
+        stream: UserService().userByIdstream(widget.workoutData.userId ?? ""),
         builder: (context, snapshot) {
           final data = snapshot.data;
           if (snapshot.connectionState == ConnectionState.waiting) {

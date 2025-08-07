@@ -34,15 +34,14 @@ class _NotificationScreenState extends State<NotificationScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             PoppinsText(
-              text: 'User Notifications',
+              text: 'General Notifications',
               fontSize: Sizes.s18,
               fontWeight: FontWeight.w600,
             ),
             SizedBox(height: Sizes.s10),
             CustomListTile(
               padding: EdgeInsets.zero,
-              title:
-                  'When changing the name of the program/workout ( for user )',
+              title: 'Phone Notifications',
               titleFontweight: FontWeight.w500,
               titleFont: Sizes.s15,
 
@@ -59,8 +58,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
             CustomListTile(
               padding: EdgeInsets.zero,
-              title:
-                  "When the price of the program/workout ( for user ) changes",
+              title: "Email Notifications",
               titleFontweight: FontWeight.w500,
               titleFont: Sizes.s15,
 
@@ -74,9 +72,17 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 },
               ),
             ),
+            SizedBox(height: Sizes.s10),
+            PoppinsText(
+              text: 'User Notifications',
+              fontSize: Sizes.s18,
+              fontWeight: FontWeight.w600,
+            ),
+            SizedBox(height: Sizes.s10),
             CustomListTile(
               padding: EdgeInsets.zero,
-              title: "Upcoming training ( For user )",
+              title: "Program or Workout Name Changed",
+
               titleFontweight: FontWeight.w500,
               titleFont: Sizes.s15,
               trailing: NotificationSwitch(
@@ -89,19 +95,12 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 },
               ),
             ),
-            SizedBox(height: Sizes.s10),
-            PoppinsText(
-              text: 'General Notifications',
-              fontSize: Sizes.s18,
-              fontWeight: FontWeight.w600,
-            ),
-            SizedBox(height: Sizes.s10),
             CustomListTile(
               padding: EdgeInsets.zero,
-              title: "Warning before cancelation",
-
+              title: "Program or Workout Price Updated",
               titleFontweight: FontWeight.w500,
               titleFont: Sizes.s15,
+
               trailing: NotificationSwitch(
                 useCupertino: true,
                 value: isNotify[3],
@@ -114,7 +113,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             ),
             CustomListTile(
               padding: EdgeInsets.zero,
-              title: "Refund warning",
+              title: "Upcoming Training Reminder",
               titleFontweight: FontWeight.w500,
               titleFont: Sizes.s15,
 
@@ -130,7 +129,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             ),
             CustomListTile(
               padding: EdgeInsets.zero,
-              title: "Receive feedback to Email",
+              title: "Refund Notice Before Cancelling Program or Workout",
               titleFontweight: FontWeight.w500,
               titleFont: Sizes.s15,
 
@@ -144,12 +143,20 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 },
               ),
             ),
+
+            SizedBox(height: Sizes.s10),
+            PoppinsText(
+              text: 'Creator Notifications',
+              fontSize: Sizes.s18,
+              fontWeight: FontWeight.w600,
+            ),
+            SizedBox(height: Sizes.s10),
             CustomListTile(
               padding: EdgeInsets.zero,
-              title: "Phone notifications",
+              title: "Receive Feedback via Email",
+
               titleFontweight: FontWeight.w500,
               titleFont: Sizes.s15,
-
               trailing: NotificationSwitch(
                 useCupertino: true,
                 value: isNotify[6],
@@ -162,10 +169,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
             ),
             CustomListTile(
               padding: EdgeInsets.zero,
-              title: "Email notifications",
+              title: "Notice Before Cancelling Your Program or Workout",
+
               titleFontweight: FontWeight.w500,
               titleFont: Sizes.s15,
-
               trailing: NotificationSwitch(
                 useCupertino: true,
                 value: isNotify[7],

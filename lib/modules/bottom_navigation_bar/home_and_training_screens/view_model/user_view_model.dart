@@ -18,6 +18,25 @@ class UserViewModel with ChangeNotifier {
     return userModel;
   }
 
+  Stream<UserModel?> getUserByIdstream(String id) {
+    isLoading = true;
+    notifyListeners();
+
+    return instance<UserService>()
+        .userByIdstream(id)
+        .map((user) {
+          userModel = user;
+          isLoading = false;
+          notifyListeners();
+          return userModel;
+        })
+        .handleError((error) {
+          isLoading = false;
+          notifyListeners();
+          print('Error fetching user: $error');
+        });
+  }
+
   Future<UserModel?> updateUserData({
     String? id,
     String? uname,

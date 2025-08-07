@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/custom_shimmer.dart';
@@ -20,6 +21,7 @@ import '../../../../core/constants/const_colors.dart';
 import '../../../../core/constants/fonts.dart';
 import '../../home_and_training_screens/component/congrate_container.dart';
 import '../../programs_and_workout/component/customlisttile.dart';
+import '../profile_view_model/profile_view_model.dart';
 
 class UserProfile extends StatefulWidget {
   const UserProfile({super.key});
@@ -124,16 +126,18 @@ class _UserProfileState extends State<UserProfile> {
               SizedBox(height: 15),
               CustomButton(
                 buttonText:
-                    isCreator
-                        ? 'Cancel creator subscription'
-                        : 'Become a Creator',
+                    data!.subPlane != null && data.subPlane == "free"
+                        ? 'Become a Creator'
+                        : "Cancel Creator Subcription",
                 buttonColor:
-                    isCreator ? ConstColors.redFF4 : ConstColors.sky22B,
+                    data.subPlane == "free"
+                        ? ConstColors.sky22B
+                        : ConstColors.redFF4,
                 onTap: () {
-                  if (!isCreator) {
+                  if (data.subPlane == "free") {
                     Navigator.pushNamed(context, Routes.becomeCreatorScreen);
                   } else {
-                    // here creator button logic here
+                    showCancelSubscriptionDialog(context);
                   }
                 },
               ),
@@ -295,6 +299,55 @@ class _UserProfileState extends State<UserProfile> {
           ),
         ),
       ),
+    );
+  }
+
+  void showCancelSubscriptionDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: ConstColors.white,
+          title: Text(
+            'Attention',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          content: Text('Do you want to cancel the creator subscription?'),
+          actions: [
+            Consumer<ProfileProvider>(
+              builder: (context, vm, _) {
+                return CustomButton(
+                  loading: vm.isLoading,
+                  buttonText: "Yes",
+                  onTap: () async {
+                    final uid = context.read<UserViewModel>().userModel!.userId;
+                    if (uid != null) {
+                      bool? success = await vm.cancelCreatorPlan(uid);
+                      if (success != null && context.mounted) {
+                        Navigator.of(context).pop();
+                        // Navigator.pushNamed(
+                        //   context,
+                        //   Routes.bottomnavigationbarscreen,
+                        // );
+                        Fluttertoast.showToast(msg: "plane cancel successfull");
+                      }
+                    }
+                  },
+                );
+              },
+            ),
+            SizedBox(height: 5),
+            CustomButton(
+              buttonText: "No",
+              textColor: ConstColors.black,
+              buttonColor: ConstColors.secondary,
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
