@@ -10,7 +10,6 @@ import 'package:provider/provider.dart';
 import '../../../../components/customTextField.dart';
 
 import '../../home_and_training_screens/view_model/user_view_model.dart';
-import '../component/customdropdown.dart';
 
 class Informationtab extends StatefulWidget {
   const Informationtab({super.key});
@@ -60,7 +59,7 @@ class _InformationtabState extends State<Informationtab> {
   }
 
   @override
-Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     final data = userVm.userModel;
 
     return Scaffold(
@@ -148,18 +147,18 @@ Widget build(BuildContext context) {
                     //   },
                     // ),
                     const SizedBox(height: 15),
-                    CustomDropdown(
-                      value: _selectPlan,
-                      items: const ['Free', 'Premium'],
-                      hint: 'Select Plan',
-                      onChanged: (value) {
-                        setState(() {
-                          _selectPlan = value;
-                        });
-                      },
+                    // CustomDropdown(
+                    //   value: _selectPlan,
+                    //   items: const ['Free', 'Premium'],
+                    //   hint: 'Select Plan',
+                    //   onChanged: (value) {
+                    //     setState(() {
+                    //       _selectPlan = value;
+                    //     });
+                    //   },
 
-                      // textColor: ConstColors.greyA1A1,
-                    ),
+                    //   // textColor: ConstColors.greyA1A1,
+                    // ),
                     const SizedBox(height: 110), // reserve space above button
                   ],
                 ),

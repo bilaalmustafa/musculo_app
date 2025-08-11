@@ -131,7 +131,7 @@ class AuthViewModel with ChangeNotifier {
         );
       }
 
-      Fluttertoast.showToast(msg: e.message ?? 'Something went wrong');
+      Fluttertoast.showToast(msg: e.details ?? 'Something went wrong');
       return null;
     } catch (e) {
       // Handle any other unexpected errors

@@ -75,7 +75,7 @@ class _DurationOfProgramState extends State<DurationOfProgram> {
                     contentPadding: EdgeInsets.zero,
                     activeColor: Colors.black,
                     title: PoppinsText(
-                      text: "Monthly program",
+                      text: "Everyday program",
                       fontSize: Sizes.s14,
                       fontWeight: TextWeight.medium,
                     ),
@@ -88,7 +88,7 @@ class _DurationOfProgramState extends State<DurationOfProgram> {
                     },
                   ),
                   PoppinsText(
-                    text: "Price",
+                    text: "Price (€)",
                     fontSize: Sizes.s14,
                     fontWeight: TextWeight.semiBold,
                   ),

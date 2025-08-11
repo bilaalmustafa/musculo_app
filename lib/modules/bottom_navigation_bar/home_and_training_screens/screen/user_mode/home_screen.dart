@@ -5,8 +5,7 @@ import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/component/home_app_bar.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/creator_mode.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/user_mode/user_mode.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/bottom_navigation_view_model.dart';
-import 'package:provider/provider.dart';
+
 
 class HomeScreen extends StatefulWidget {
   final int initialTabIndex;
