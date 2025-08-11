@@ -133,11 +133,21 @@ class _UserProfileState extends State<UserProfile> {
                     value: isCreator,
                     useCupertino: true,
                     onChanged: (value) async {
-                      final prefs = await SharedPreferences.getInstance();
-                      await prefs.setBool('isSwitch', value);
-                      setState(() {
-                        isCreator = value;
-                      });
+                      if (data?.role == 'creator') {
+                        final prefs = await SharedPreferences.getInstance();
+                        await prefs.setBool('isSwitch', value);
+                        setState(() {
+                          isCreator = value;
+                        });
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'You must become a creator to switch modes.',
+                            ),
+                          ),
+                        );
+                      }
                     },
                   ),
                 ],

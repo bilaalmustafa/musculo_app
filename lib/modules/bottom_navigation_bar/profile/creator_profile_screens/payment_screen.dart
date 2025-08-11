@@ -1,8 +1,10 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:musculo_app/components/custom_shimmer.dart';
 
 import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/model/user_model.dart';
@@ -46,6 +48,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   Future<void> _loadGPayConfig() async {
     try {
       final jsonString = await rootBundle.loadString('assets/gPay.json');
+      log(jsonString);
       final config = PaymentConfiguration.fromJsonString(jsonString);
       setState(() {
         gpayConfig = config;
@@ -78,7 +81,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           spacing: Sizes.s20,
           children: [
-            if (gpayConfig != null)
+            if (Platform.isAndroid && gpayConfig != null)
               GooglePayButton(
                 paymentConfiguration: gpayConfig!,
                 paymentItems: _paymentItems,
@@ -91,17 +94,17 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   });
                   _handlePostPaymentFlow(data);
                 },
-                loadingIndicator: const CircularProgressIndicator(),
+                loadingIndicator: CustomShimmer(height: 50),
                 margin: const EdgeInsets.only(top: 15),
                 height: 80,
                 width: double.infinity,
               )
             else
               const Padding(
-                padding: EdgeInsets.all(16),
-                child: CircularProgressIndicator(),
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: CustomShimmer(height: 80),
               ),
-            if (applepayConfig != null)
+            if (Platform.isIOS && applepayConfig != null)
               ApplePayButton(
                 paymentConfiguration: applepayConfig!,
                 paymentItems: _paymentItems,
@@ -114,12 +117,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   log('Apple Pay Result: $data');
                   _handlePostPaymentFlow(data);
                 },
-                loadingIndicator: const CircularProgressIndicator(),
+                loadingIndicator: const CustomShimmer(height: 50),
               )
             else
               const Padding(
-                padding: EdgeInsets.all(16),
-                child: CircularProgressIndicator(),
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: CustomShimmer(height: 80),
               ),
             // GestureDetector(
             //   onTap: () {

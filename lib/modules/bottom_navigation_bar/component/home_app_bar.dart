@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:musculo_app/components/custom_shimmer.dart';
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/components/share_picture.dart';
@@ -139,7 +139,11 @@ class _HomeAppBarState extends State<HomeAppBar> {
               });
               widget.valueChange(value);
             } else {
-              Fluttertoast.showToast(msg: 'Only creators can switch modes.');
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('only become a creator change mode'),
+                ),
+              );
             }
           },
         ),
