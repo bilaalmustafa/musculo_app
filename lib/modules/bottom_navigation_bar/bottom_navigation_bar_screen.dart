@@ -29,10 +29,10 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   List<Widget> get _screens {
     return [
       HomeScreen(
-        initialTabIndex:
-            widget.initialMainTabIndex == 0
-                ? widget.initialHomeScreenSubTab
-                : 0,
+        // initialTabIndex:
+        //     widget.initialMainTabIndex == 0
+        //         ? widget.initialHomeScreenSubTab
+        //         : 0,
       ),
       DiscoverScreen(),
       FeedbackScreen(),

@@ -54,12 +54,13 @@ class ProfileProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> creatorPremiumPlane(
-    String id,
-    String email,
-    String card,
-    double payment,
-  ) async {
+  Future<bool> creatoPlan({
+    required String id,
+    required String email,
+    required String planType, // 'free' or 'premium'
+    String card = "N/A",
+    double payment = 0.0,
+  }) async {
     log("creatorId: $id");
     log("email: $email");
     log("card: $card");
@@ -72,22 +73,23 @@ class ProfileProvider extends ChangeNotifier {
         email: email,
         card: card,
         payment: payment,
-        paymentStatus: "Compeleted",
+        paymentStatus: planType == "premium" ? "Compeleted" : "free",
+        planType: planType,
       );
-      log('Sending to backend: ${premium.toJson()}');
+      log('Sending to backend ($planType Creator): ${premium.toJson()}');
 
       final created = await instance<CreatorPlaneService>()
           .createCreatorPremium(id, premium);
       return created;
     } catch (e) {
-      print(e);
+      log("error : $e");
       Fluttertoast.showToast(msg: "Error: $e");
       log("error: $e");
       return false;
     }
   }
 
-  Future<UserModel?> getCreatorPlan(String uid) async {
+  Future<UserModel?> getCreatorPlan(String uid, String planType) async {
     try {
       isLoading = true;
       notifyListeners();
@@ -102,12 +104,18 @@ class ProfileProvider extends ChangeNotifier {
       final HttpsCallableResult response = await creatorPlane.call({
         ...userModel.toJson(),
         "userid": uid,
+        "planType": planType,
       });
 
       if (response.data['success'] == true) {
         isLoading = false;
         notifyListeners();
-        Fluttertoast.showToast(msg: "Become creator successful");
+        Fluttertoast.showToast(
+          msg:
+              planType == "premium"
+                  ? "Become premium creator successful"
+                  : "Become free creator successful",
+        );
         nameController.clear();
         overviewController.clear();
         goalController.clear();

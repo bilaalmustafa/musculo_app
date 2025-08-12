@@ -8,12 +8,11 @@ import 'package:provider/provider.dart';
 
 import '../../../../components/customTextField.dart';
 import '../../../../components/custom_button.dart';
-import '../../../../components/share_picture.dart';
+
 import '../../../../components/shared_appbar.dart';
 import '../../../../core/config/routes.dart';
-import '../../../../core/constants/assets.dart';
+
 import '../../../../core/constants/const_colors.dart';
-import '../component/customdropdown.dart';
 
 class CreatorinfoScreen extends StatefulWidget {
   const CreatorinfoScreen({super.key});
@@ -23,7 +22,6 @@ class CreatorinfoScreen extends StatefulWidget {
 }
 
 class _CreatorinfoScreenState extends State<CreatorinfoScreen> {
-  String _selectExcercise = '';
   bool _isChecked = false;
   final GlobalKey<FormState> _formlKey = GlobalKey<FormState>();
 
@@ -148,31 +146,45 @@ class _CreatorinfoScreenState extends State<CreatorinfoScreen> {
                       ? () {
                         if (_formlKey.currentState!.validate()) {
                           if (vm.selectPlan == 0) {
-                            showDialog(
-                              barrierDismissible: false,
-                              context: context,
-                              barrierColor: Colors.black.withValues(alpha: 0.9),
-                              builder: (BuildContext context) {
-                                return ShowDialogBox(
-                                  message:
-                                      'You are now a creator, start selling workouts and programs.',
-                                  bottomWidget: CustomButton(
-                                    buttonText: 'Back',
-                                    textColor: ConstColors.black,
-                                    buttonColor: ConstColors.secondary,
-                                    onTap: () {
-                                      Navigator.pushNamed(
-                                        context,
-                                        Routes.bottomnavigationbarscreen,
-                                      );
-                                    },
-                                  ),
-                                );
-                              },
+                            Navigator.pushNamed(
+                              context,
+                              Routes.paymentScreen,
+                              arguments: {'planType': 'Basic'},
                             );
                           } else {
-                            Navigator.pushNamed(context, Routes.paymentScreen);
+                            Navigator.pushNamed(
+                              context,
+                              Routes.paymentScreen,
+                              arguments: {'planType': 'Premium'},
+                            );
                           }
+                          // if (vm.selectPlan == 0) {
+                          //   showDialog(
+                          //     barrierDismissible: false,
+                          //     context: context,
+                          //     barrierColor: Colors.black.withValues(alpha: 0.9),
+                          //     builder: (BuildContext context) {
+                          //       return ShowDialogBox(
+                          //         message:
+                          //             'You are now a creator, start selling workouts and programs.',
+                          //         bottomWidget: CustomButton(
+                          //           buttonText: 'Back',
+                          //           textColor: ConstColors.black,
+                          //           buttonColor: ConstColors.secondary,
+                          //           onTap: () {
+                          //             Navigator.pushNamed(
+                          //               context,
+                          //               Routes.bottomnavigationbarscreen,
+                          //             );
+                          //           },
+                          //         ),
+                          //       );
+                          //     },
+                          //   );
+                          // }
+                          // else {
+                          //   Navigator.pushNamed(context, Routes.paymentScreen);
+                          // }
                         }
                       }
                       : null,

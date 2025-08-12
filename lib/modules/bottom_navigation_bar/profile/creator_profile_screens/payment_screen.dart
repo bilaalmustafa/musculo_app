@@ -21,7 +21,8 @@ import '../../../auth/register/component/show_dialog_box.dart';
 import 'package:pay/pay.dart';
 
 class PaymentScreen extends StatefulWidget {
-  const PaymentScreen({super.key});
+   final String planType;
+  const PaymentScreen({super.key, required this.planType});
 
   @override
   State<PaymentScreen> createState() => _PaymentScreenState();
@@ -41,8 +42,15 @@ class _PaymentScreenState extends State<PaymentScreen> {
   @override
   void initState() {
     super.initState();
+    if (widget.planType == 'Basic') {
+       WidgetsBinding.instance.addPostFrameCallback((_) {
+      _handlePostPaymentFlow(planType: "Basic");
+    });
+    } else {
+      
     _loadGPayConfig();
     _loadApplePayConfig();
+    }
   }
 
   Future<void> _loadGPayConfig() async {
@@ -77,7 +85,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     return Scaffold(
       backgroundColor: ConstColors.white,
       appBar: SharedAppBar(title: 'Payment Method'),
-      body: Padding(
+      body:widget.planType == 'Basic'?  const Center(child: Text("Activating free plan...")): Padding(
         padding: EdgeInsets.all(Sizes.s16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -94,7 +102,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   setState(() {
                     _gpaySuccess = true;
                   });
-                  _handlePostPaymentFlow(data);
+                  _handlePostPaymentFlow(planType: "premium", data: data);
                 },
                 loadingIndicator: CustomShimmer(height: 50),
                 margin: const EdgeInsets.only(top: 15),
@@ -117,7 +125,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 width: double.infinity,
                 onPaymentResult: (data) {
                   log('Apple Pay Result: $data');
-                  _handlePostPaymentFlow(data);
+                  _handlePostPaymentFlow(planType: "premium", data: data);
                 },
                 loadingIndicator: const CustomShimmer(height: 50),
               )
@@ -173,47 +181,60 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
   }
 
-  Future<void> _handlePostPaymentFlow(Map<String, dynamic> data) async {
+  Future<void> _handlePostPaymentFlow({
+    required String planType,
+    Map<String, dynamic>? data,
+  }) async {
     final creator = context.read<UserViewModel>().userModel;
-    if (creator != null) {
-      final profileProvider = context.read<ProfileProvider>();
+    if (creator == null) return;
+    final profileProvider = context.read<ProfileProvider>();
 
-      final createdsuccess = await profileProvider.creatorPremiumPlane(
-        creator.userId!,
-        creator.email!,
-        data['paymentMethodData']['info']['cardNetwork'] ?? 'N/A',
-        9.99,
-      );
-      if (!createdsuccess) {
-        Fluttertoast.showToast(msg: "Failed to record premium plan.");
-        return;
-      }
-      final UserModel? success = await profileProvider.getCreatorPlan(
-        creator.userId!,
-      );
-      if (success != null && context.mounted) {
-        showDialog(
-          barrierDismissible: false,
-          context: context,
-          barrierColor: Colors.black.withAlpha(230),
-          builder:
-              (_) => ShowDialogBox(
-                message:
-                    'You are now a creator, start selling workouts and programs.',
-                bottomWidget: CustomButton(
-                  buttonText: 'Back',
-                  textColor: ConstColors.black,
-                  buttonColor: ConstColors.secondary,
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      Routes.bottomnavigationbarscreen,
-                    );
-                  },
-                ),
+    String card = 'N/A';
+    double payment = 0.0;
+    if (planType == "premium" && data != null) {
+      card = data['paymentMethodData']['info']['cardNetwork'] ?? 'N/A';
+      payment = 9.99;
+    }
+
+
+    final createdsuccess = await profileProvider.creatoPlan(
+      id: creator.userId!,
+      email: creator.email!,
+      planType: planType,
+      card: card,
+      payment: payment
+    );
+    if (!createdsuccess) {
+      Fluttertoast.showToast(msg: "Failed to record ${planType=="premium" ? "premium":"Basic"} plan.");
+      return;
+    }
+
+    final UserModel? success = await profileProvider.getCreatorPlan(
+      creator.userId!,
+      planType
+    );
+    if (success != null && context.mounted) {
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        barrierColor: Colors.black.withAlpha(230),
+        builder:
+            (_) => ShowDialogBox(
+              message:
+                  'You are now a creator, start selling workouts and programs.',
+              bottomWidget: CustomButton(
+                buttonText: 'Back',
+                textColor: ConstColors.black,
+                buttonColor: ConstColors.secondary,
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    Routes.bottomnavigationbarscreen,
+                  );
+                },
               ),
-        );
-      }
+            ),
+      );
     }
   }
 }
