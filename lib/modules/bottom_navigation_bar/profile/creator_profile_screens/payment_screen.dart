@@ -50,6 +50,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       final jsonString = await rootBundle.loadString('assets/gPay.json');
       log(jsonString);
       final config = PaymentConfiguration.fromJsonString(jsonString);
+
       setState(() {
         gpayConfig = config;
       });
@@ -61,6 +62,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   Future<void> _loadApplePayConfig() async {
     try {
       final jsonString = await rootBundle.loadString('assets/applePay.json');
+      log(jsonString);
       final config = PaymentConfiguration.fromJsonString(jsonString);
       setState(() {
         applepayConfig = config;
