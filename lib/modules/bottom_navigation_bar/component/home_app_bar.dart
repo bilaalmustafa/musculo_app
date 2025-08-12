@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:musculo_app/components/custom_shimmer.dart';
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/components/share_picture.dart';
@@ -128,12 +129,22 @@ class _HomeAppBarState extends State<HomeAppBar> {
           useCupertino: true,
           value: effectiveSwitchValue,
           onChanged: (value) async {
-            final prefs = await SharedPreferences.getInstance();
-            await prefs.setBool('isSwitch', value);
-            setState(() {
-              _savedSwitchState = value;
-            });
-            widget.valueChange(value);
+            final user = await _stream!.first;
+
+            if (user?.role == 'creator') {
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.setBool('isSwitch', value);
+              setState(() {
+                _savedSwitchState = value;
+              });
+              widget.valueChange(value);
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('only become a creator change mode'),
+                ),
+              );
+            }
           },
         ),
         // Transform.scale(

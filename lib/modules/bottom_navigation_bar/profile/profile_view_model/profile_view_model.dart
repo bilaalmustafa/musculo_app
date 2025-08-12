@@ -8,19 +8,18 @@ import 'dart:developer';
 
 import 'package:cloud_functions/cloud_functions.dart';
 
-import 'package:flutter/material.dart';
-
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:hive/hive.dart';
+
 import 'package:musculo_app/core/config/injections.dart';
 import 'package:musculo_app/core/services/creator_plane_service.dart';
 import 'package:musculo_app/model/creator_premium.dart';
-import 'package:musculo_app/model/programs_model.dart';
+
 import 'package:musculo_app/model/user_model.dart' as u;
 
 import 'package:musculo_app/model/user_model.dart';
 
 import 'package:musculo_app/model/workouts_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileProvider extends ChangeNotifier {
   UserModel? _user;
@@ -62,9 +61,9 @@ class ProfileProvider extends ChangeNotifier {
     double payment,
   ) async {
     log("creatorId: $id");
-log("email: $email");
-log("card: $card");
-log("payment: $payment");
+    log("email: $email");
+    log("card: $card");
+    log("payment: $payment");
     try {
       CreatorPremium premium = CreatorPremium(
         creatorId: id,
@@ -139,6 +138,8 @@ log("payment: $payment");
       });
 
       if (response.data['success'] == true) {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.remove('isSwitch');
         isLoading = false;
         notifyListeners();
         Fluttertoast.showToast(msg: "Cancel cretor subcribtion");

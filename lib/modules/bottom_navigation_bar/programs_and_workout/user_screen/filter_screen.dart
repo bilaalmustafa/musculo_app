@@ -8,6 +8,7 @@ import 'package:musculo_app/core/config/extensions.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/view_model/user_view_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/chips.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/rang_slider.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/screen/view_model/discover_filter_provider.dart';
@@ -21,12 +22,7 @@ class FilterScreen extends StatefulWidget {
 }
 
 class _FilterScreenState extends State<FilterScreen> {
-  final List<String> options = [
-    "All",
-    "With Equipment",
-    "Without Equipment",
-    "Stretching",
-  ];
+  final List<String> options = ["All", "Without Equipment", "Stretching"];
   final List<String> gender = ["All", "Male", "Female"];
   final List<String> premium = ["Premium only "];
 
@@ -42,6 +38,7 @@ class _FilterScreenState extends State<FilterScreen> {
   @override
   Widget build(BuildContext context) {
     final filtered = context.watch<DiscoverFilter>();
+    final userRole = context.read<UserViewModel>().userModel?.role ?? '';
     return Scaffold(
       backgroundColor: ConstColors.white,
       appBar: SharedAppBar(title: "Filter"),
@@ -80,7 +77,12 @@ class _FilterScreenState extends State<FilterScreen> {
                 fontWeight: TextWeight.semiBold,
               ),
               CustomChips(
-                selectedIndex: filtered.tempPremium ? 0 : -1,
+                selectedIndex:
+                    userRole == 'creator'
+                        ? 0
+                        : filtered.tempPremium
+                        ? 0
+                        : -1,
                 optionslist: premium,
                 onSelect:
                     (value) => filtered.setTempPremium(filtered.tempPremium),
