@@ -161,7 +161,12 @@ class RouteGenerator {
       case Routes.favoriteScreen:
         return MaterialPageRoute(builder: (_) => const FavoritesScreen());
       case Routes.becomeCreatorScreen:
-        return MaterialPageRoute(builder: (_) => const BecomecreatorScreen());
+        final argu = routeSitting.arguments as Map<String, dynamic>;
+        final fromUpgradePopup = argu["fromUpgradePopup"] as bool;
+        return MaterialPageRoute(
+          builder:
+              (_) => BecomecreatorScreen(fromUpgradePopup: fromUpgradePopup),
+        );
 
       case Routes.programDetailPageView:
         final programModel = routeSitting.arguments as ProgramModel;

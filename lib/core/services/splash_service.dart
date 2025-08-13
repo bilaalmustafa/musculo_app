@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/core/config/routes.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashServices {

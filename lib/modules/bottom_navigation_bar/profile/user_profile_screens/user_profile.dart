@@ -18,7 +18,6 @@ import 'package:musculo_app/modules/bottom_navigation_bar/profile/profile_view_m
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/notification_switch.dart';
 import 'package:provider/provider.dart';
 
-
 import '../../../../core/constants/const_colors.dart';
 import '../../../../core/constants/fonts.dart';
 import '../../home_and_training_screens/component/congrate_container.dart';
@@ -141,7 +140,11 @@ class _UserProfileState extends State<UserProfile> {
                         : ConstColors.redFF4,
                 onTap: () {
                   if (data.subPlane == "free") {
-                    Navigator.pushNamed(context, Routes.becomeCreatorScreen);
+                    Navigator.pushNamed(
+                      context,
+                      Routes.becomeCreatorScreen,
+                      arguments: {'fromUpgradePopup': false},
+                    );
                   } else {
                     showCancelSubscriptionDialog(context);
                   }

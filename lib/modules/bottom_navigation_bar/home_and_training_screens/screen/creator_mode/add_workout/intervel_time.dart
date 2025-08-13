@@ -9,7 +9,7 @@ import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_scre
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/component/counter_container.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/component/reels_item.dart';
 import 'package:provider/provider.dart';
-import 'package:video_player/video_player.dart';
+
 
 class IntervelTime extends StatefulWidget {
   const IntervelTime({super.key});

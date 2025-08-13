@@ -56,6 +56,7 @@
 // }
 
 import 'package:flutter/material.dart';
+import 'package:musculo_app/components/custom_shimmer.dart';
 import 'package:provider/provider.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/services/auth_services.dart';
@@ -96,10 +97,20 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<UserModel?>(
-      stream: context
-          .read<UserViewModel>()
-          .getUserByIdstream(_authService.currentUser!.uid),
+      stream: context.read<UserViewModel>().getUserByIdstream(
+        _authService.currentUser!.uid,
+      ),
       builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(child: CustomShimmer(height: 300)),
+          );
+        }
+
+        if (snapshot.hasError) {
+          return const Scaffold(body: Center(child: Text('An error occurred')));
+        }
+
         final user = snapshot.data;
         final isCreator = (user?.role ?? 'user') == 'creator';
 
@@ -118,10 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
           body: PageView(
             physics: const NeverScrollableScrollPhysics(),
             controller: _pageController,
-            children: const [
-              UserModeTab(),
-              CreatorModeTab(),
-            ],
+            children: const [UserModeTab(), CreatorModeTab()],
           ),
         );
       },

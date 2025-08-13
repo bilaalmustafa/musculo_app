@@ -273,6 +273,14 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         authService.currentUser!.uid,
       ),
       builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(body: Center(child: CustomShimmer(height: 10)));
+        }
+
+        if (snapshot.hasError) {
+          return const Scaffold(body: Center(child: Text('An error occurred')));
+        }
+
         final user = snapshot.data;
         final isCreator = (user?.role ?? 'user') == 'creator';
 

@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
@@ -264,4 +265,18 @@ class AddProgramViewModel extends ChangeNotifier {
     // Notify listeners to update the UI
     notifyListeners();
   }
+
+  Future<int> getUserProgramCount(String userId) async {
+    final querySnapshot =
+        await FirebaseFirestore.instance
+            .collection('discovery')
+            .where('type', isEqualTo: 'Program')
+            .where('userId', isEqualTo: userId)
+            .get();
+
+    return querySnapshot.docs.length;
+  }
+
+
 }
+

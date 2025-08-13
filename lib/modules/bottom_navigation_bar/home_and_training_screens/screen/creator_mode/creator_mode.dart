@@ -151,6 +151,7 @@ class _CreatorModeTabState extends State<CreatorModeTab> {
                                               programModel: program,
                                             ),
                                         emptyMessage: "No Programs",
+                                        isInBottomSheet: true,
                                       ),
                                 );
                               },
@@ -166,13 +167,15 @@ class _CreatorModeTabState extends State<CreatorModeTab> {
                         ),
                       ),
                       CreatorWorkoutsProgramList<ProgramModel>(
-                        stream: vm.getProgamOfCreatoe(creatorVm?.userId ?? ''),
+                        stream: vm
+                            .getProgamOfCreatoe(creatorVm?.userId ?? '')
+                            .map((programs) => programs.take(3).toList()),
                         itemBuilder:
                             (program) =>
                                 CreatorListItems(programModel: program),
                         emptyMessage: 'No Programs',
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 20),
 
                       Padding(
                         padding: const EdgeInsets.symmetric(
@@ -202,6 +205,7 @@ class _CreatorModeTabState extends State<CreatorModeTab> {
                                               workoutModel: workout,
                                             ),
                                         emptyMessage: "No Workouts",
+                                        isInBottomSheet: true,
                                       ),
                                 );
                               },
@@ -219,9 +223,9 @@ class _CreatorModeTabState extends State<CreatorModeTab> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 0),
                         child: CreatorWorkoutsProgramList<WorkoutModel>(
-                          stream: vm.getWorkOutOfCreator(
-                            creatorVm?.userId ?? '',
-                          ),
+                          stream: vm
+                              .getWorkOutOfCreator(creatorVm?.userId ?? '')
+                              .map((workouts) => workouts.take(3).toList()),
                           itemBuilder:
                               (workout) =>
                                   CreatorWorkoutList(workoutModel: workout),
@@ -253,7 +257,7 @@ class _CreatorModeTabState extends State<CreatorModeTab> {
       ),
       builder:
           (_) => SizedBox(
-            height: MediaQuery.of(context).size.height * 0.61,
+            height: MediaQuery.of(context).size.height * 0.64,
             child: Column(
               children: [
                 const SizedBox(height: 8),
