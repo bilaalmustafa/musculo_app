@@ -295,19 +295,7 @@ class _AddProgramPageviewState extends State<AddProgramPageview> {
                                           buttonText: "Create another program",
                                           onTap: () {
                                             _resetProgramCreation();
-                                            // Navigator.of(context).pop();
-                                            // Navigator.pushNamed(
-                                            //   context,
-                                            //   Routes.addprogrampageview,
-                                            // );
-                                            // // Navigator.pushNamedAndRemoveUntil(
-                                            // //   context,
-                                            // //   Routes.addprogrampageview,
-                                            // //   (route) => false,
-                                            // // );
-                                            // setState(() {
-                                            //   _currentPage = 0;
-                                            // });
+                                        
                                           },
                                         ),
                                         CustomButton(
