@@ -161,7 +161,12 @@ class RouteGenerator {
       case Routes.favoriteScreen:
         return MaterialPageRoute(builder: (_) => const FavoritesScreen());
       case Routes.becomeCreatorScreen:
-        return MaterialPageRoute(builder: (_) => const BecomecreatorScreen());
+        final argu = routeSitting.arguments as Map<String, dynamic>;
+        final fromUpgradePopup = argu["fromUpgradePopup"] as bool;
+        return MaterialPageRoute(
+          builder:
+              (_) => BecomecreatorScreen(fromUpgradePopup: fromUpgradePopup),
+        );
 
       case Routes.programDetailPageView:
         final programModel = routeSitting.arguments as ProgramModel;
@@ -178,7 +183,11 @@ class RouteGenerator {
       case Routes.creatorInfoScreen:
         return MaterialPageRoute(builder: (_) => const CreatorinfoScreen());
       case Routes.paymentScreen:
-        return MaterialPageRoute(builder: (_) => const PaymentScreen());
+        final arg = routeSitting.arguments as Map<String, dynamic>;
+        final planType = arg['planType'] as String;
+        return MaterialPageRoute(
+          builder: (_) => PaymentScreen(planType: planType),
+        );
       case Routes.creatorProfileScreen:
         return MaterialPageRoute(builder: (_) => const CreatorProfileScreen());
       case Routes.feedbScreen:
@@ -218,12 +227,16 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const ResetpasswordScreen());
       case Routes.verifyPasswordScreen:
         final email = routeSitting.arguments as String;
-        return MaterialPageRoute(builder: (_) => VerifypasswordScreen(email: email));
+        return MaterialPageRoute(
+          builder: (_) => VerifypasswordScreen(email: email),
+        );
       case Routes.changePasswordScreen:
         final args = routeSitting.arguments as Map<String, String>;
         final email = args['email'] ?? '';
         final otp = args['otp'] ?? '';
-        return MaterialPageRoute(builder: (_) => ChangepasswordScreen(email: email, otp: otp));
+        return MaterialPageRoute(
+          builder: (_) => ChangepasswordScreen(email: email, otp: otp),
+        );
       case Routes.motivationalScreen:
         final args = routeSitting.arguments as MotivationalTextModel?;
         return MaterialPageRoute(

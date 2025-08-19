@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart'
     show FirebaseStorage, Reference;
 import 'package:flutter/material.dart';
@@ -427,5 +428,16 @@ class AddWorkoutVeiwModel extends ChangeNotifier {
 
     // Notify listeners to update the UI
     notifyListeners();
+  }
+
+  Future<int> getUserWorkoutCount(String userId) async {
+    final querySnapshot =
+        await FirebaseFirestore.instance
+            .collection('discovery')
+            .where('type', isEqualTo: 'Workout')
+            .where('userId', isEqualTo: userId)
+            .get();
+
+    return querySnapshot.docs.length;
   }
 }

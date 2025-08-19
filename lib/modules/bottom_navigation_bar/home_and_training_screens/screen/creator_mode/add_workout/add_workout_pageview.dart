@@ -212,6 +212,65 @@ class _AddWorkoutPageViewState extends State<AddWorkoutPageView> {
                         } else {
                           final vmUser =
                               context.read<UserViewModel>().userModel!;
+                          final userPlan = vmUser.subPlane ?? 'Basic';
+                          final workoutCount = await vm.getUserWorkoutCount(
+                            vmUser.userId!,
+                          );
+                          print('Workout .........$workoutCount');
+
+                          if (userPlan == 'Basic' &&
+                              workoutCount >= 10 &&
+                              context.mounted) {
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              barrierColor: Colors.black.withValues(alpha: 0.9),
+                              builder: (context) {
+                                return ShowDialogBox(
+                                  title: 'Upgrade Required',
+                                  message:
+                                      "You have reached the limit of 10 workout for Basic creators. Please upgrade to Premium to create more workouts.!",
+                                  bottomWidget: Column(
+                                    spacing: 10,
+                                    children: [
+                                      CustomButton(
+                                        buttonText: "Back to home page",
+                                        buttonColor: ConstColors.secondary,
+                                        textColor: ConstColors.black,
+                                        onTap: () {
+                                          Navigator.of(context).pop();
+                                          Navigator.pushNamedAndRemoveUntil(
+                                            context,
+                                            Routes.bottomnavigationbarscreen,
+                                            (Route<dynamic> route) => false,
+                                            arguments: {
+                                              'initialMainTabIndex': 0,
+                                              'initialHomeScreenSubTab': 1,
+                                            },
+                                          );
+                                        },
+                                      ),
+
+                                      CustomButton(
+                                        buttonText: "Upgrade Plan",
+                                        onTap: () {
+                                          // _resetProgramCreation();
+                                          Navigator.pushNamed(
+                                            context,
+                                            Routes.becomeCreatorScreen,
+                                            arguments: {
+                                              'fromUpgradePopup': true,
+                                            },
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                            return; // stop further processing
+                          }
 
                           String id =
                               DateTime.now().millisecondsSinceEpoch.toString();

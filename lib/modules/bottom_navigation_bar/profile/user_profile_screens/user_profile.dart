@@ -17,7 +17,6 @@ import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_scre
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/profile_view_model/profile_view_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/notification_switch.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/constants/const_colors.dart';
 import '../../../../core/constants/fonts.dart';
@@ -32,31 +31,14 @@ class UserProfile extends StatefulWidget {
 }
 
 class _UserProfileState extends State<UserProfile> {
-  bool isCreator = false;
   final ProfileImageService _profileImageService = ProfileImageService();
-
-  @override
-  void initState() {
-    super.initState();
-    _loadSavedSwitchState();
-  }
-
-  Future<void> _loadSavedSwitchState() async {
-    final prefs = await SharedPreferences.getInstance();
-    final saved = prefs.getBool('isSwitch');
-    if (saved != null) {
-      setState(() {
-        isCreator = saved;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     final userVm = context.watch<UserViewModel>();
     final data = userVm.userModel;
     final uid = FirebaseAuth.instance.currentUser?.uid ?? '';
-
+    final isCreator = data?.role == 'creator';
     return SafeArea(
       child: Scaffold(
         backgroundColor: ConstColors.white,
@@ -133,13 +115,7 @@ class _UserProfileState extends State<UserProfile> {
                     value: isCreator,
                     useCupertino: true,
                     onChanged: (value) async {
-                      if (data?.role == 'creator') {
-                        final prefs = await SharedPreferences.getInstance();
-                        await prefs.setBool('isSwitch', value);
-                        setState(() {
-                          isCreator = value;
-                        });
-                      } else {
+                      if (!isCreator) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text(
@@ -164,7 +140,11 @@ class _UserProfileState extends State<UserProfile> {
                         : ConstColors.redFF4,
                 onTap: () {
                   if (data.subPlane == "free") {
-                    Navigator.pushNamed(context, Routes.becomeCreatorScreen);
+                    Navigator.pushNamed(
+                      context,
+                      Routes.becomeCreatorScreen,
+                      arguments: {'fromUpgradePopup': false},
+                    );
                   } else {
                     showCancelSubscriptionDialog(context);
                   }

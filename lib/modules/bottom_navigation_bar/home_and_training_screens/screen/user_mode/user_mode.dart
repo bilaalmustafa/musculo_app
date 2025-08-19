@@ -333,7 +333,7 @@ class _UserModeTabState extends State<UserModeTab> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     PoppinsText(
-                      text: "Your Worouts",
+                      text: "Your Workouts",
                       fontSize: Sizes.s18,
                       fontWeight: TextWeight.semiBold,
                       color: ConstColors.black,

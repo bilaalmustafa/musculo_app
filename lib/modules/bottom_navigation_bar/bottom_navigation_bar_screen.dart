@@ -26,23 +26,21 @@ class BottomNavigationScreen extends StatefulWidget {
 }
 
 class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
-  List<Widget> get _screens {
-    return [
+  late List<Widget> _screens;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _screens = [
       HomeScreen(
-        initialTabIndex:
-            widget.initialMainTabIndex == 0
-                ? widget.initialHomeScreenSubTab
-                : 0,
+        
       ),
       DiscoverScreen(),
       FeedbackScreen(),
       UserProfile(),
     ];
-  }
 
-  @override
-  void initState() {
-    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Get the provider instance (listen: false because we are only calling methods)
       final bottomProvider = Provider.of<BottomNavigationProvider>(

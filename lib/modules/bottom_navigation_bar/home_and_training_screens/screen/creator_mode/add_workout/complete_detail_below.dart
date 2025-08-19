@@ -9,7 +9,6 @@ import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_workout/view_model/add_workout_veiw_model.dart';
 
-
 import 'package:provider/provider.dart';
 
 class CompleteDetailBelow extends StatefulWidget {
@@ -173,7 +172,7 @@ class _WarmUpState extends State<CompleteDetailBelow> {
                           ],
                         ),
                         PoppinsText(
-                          text: "Price",
+                          text: "Price (€)",
                           fontSize: Sizes.s14,
                           fontWeight: TextWeight.semiBold,
                         ),

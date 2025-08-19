@@ -11,6 +11,7 @@ class UserViewModel with ChangeNotifier {
   int selectedRating = 2;
   bool isLoading = false;
   int selectTab = 1;
+  UserModel? get user => userModel;
 
   void checkBalance(int value) {
     selectTab = value;
@@ -26,19 +27,19 @@ class UserViewModel with ChangeNotifier {
 
   Stream<UserModel?> getUserByIdstream(String id) {
     isLoading = true;
-    notifyListeners();
+    // notifyListeners();
 
     return instance<UserService>()
         .userByIdstream(id)
         .map((user) {
           userModel = user;
           isLoading = false;
-          notifyListeners();
+          // notifyListeners();
           return userModel;
         })
         .handleError((error) {
           isLoading = false;
-          notifyListeners();
+          // notifyListeners();
           print('Error fetching user: $error');
         });
   }

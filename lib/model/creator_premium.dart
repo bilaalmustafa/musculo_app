@@ -6,6 +6,7 @@ class CreatorPremium {
   final String card;
   final double payment;
   final String paymentStatus;
+  final String planType;
 
   CreatorPremium({
     required this.creatorId,
@@ -15,6 +16,7 @@ class CreatorPremium {
     required this.card,
     required this.payment,
     required this.paymentStatus,
+    required this.planType,
   });
 
   factory CreatorPremium.fromJson(Map<String, dynamic> json) {
@@ -26,6 +28,7 @@ class CreatorPremium {
       card: json['card'] ?? '',
       payment: json['payment'] ?? '',
       paymentStatus: json['paymentStatus'] ?? '',
+      planType: json['planType'] ?? '',
     );
   }
 
@@ -38,6 +41,7 @@ class CreatorPremium {
       'card': card,
       'payment': payment,
       'paymentStatus': paymentStatus,
+      'planType': planType,
     };
   }
 }

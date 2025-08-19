@@ -199,6 +199,68 @@ class _AddProgramPageviewState extends State<AddProgramPageview> {
                           if (vm.sectectedworksvalidation()) {
                             final userVm =
                                 context.read<UserViewModel>().userModel!;
+                            final userPlan = userVm.subPlane ?? 'Basic';
+                            final programCount = await vm.getUserProgramCount(
+                              userVm.userId!,
+                            );
+                            print('Program .........$programCount');
+
+                            if (userPlan == 'Basic' &&
+                                programCount >= 10 &&
+                                context.mounted) {
+
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                barrierColor: Colors.black.withValues(
+                                  alpha: 0.9,
+                                ),
+                                builder: (context) {
+                                  return ShowDialogBox(
+                                    title: 'Upgrade Required',
+                                    message:
+                                        "You have reached the limit of 10 programs for Basic creators. Please upgrade to Premium to create more programs.!",
+                                    bottomWidget: Column(
+                                      spacing: 10,
+                                      children: [
+                                        CustomButton(
+                                          buttonText: "Back to home page",
+                                          buttonColor: ConstColors.secondary,
+                                          textColor: ConstColors.black,
+                                          onTap: () {
+                                            Navigator.of(context).pop();
+                                            Navigator.pushNamedAndRemoveUntil(
+                                              context,
+                                              Routes.bottomnavigationbarscreen,
+                                              (Route<dynamic> route) => false,
+                                              arguments: {
+                                                'initialMainTabIndex': 0,
+                                                'initialHomeScreenSubTab': 1,
+                                              },
+                                            );
+                                          },
+                                        ),
+
+                                        CustomButton(
+                                          buttonText: "Upgrade Plan",
+                                          onTap: () {
+                                            // _resetProgramCreation();
+                                           Navigator.pushNamed(
+                                            context,
+                                            Routes.becomeCreatorScreen,
+                                            arguments: {
+                                              'fromUpgradePopup': true,
+                                            },
+                                          );
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              );
+                              return; // stop further processing
+                            }
 
                             String id =
                                 DateTime.now().millisecondsSinceEpoch
@@ -233,19 +295,7 @@ class _AddProgramPageviewState extends State<AddProgramPageview> {
                                           buttonText: "Create another program",
                                           onTap: () {
                                             _resetProgramCreation();
-                                            // Navigator.of(context).pop();
-                                            // Navigator.pushNamed(
-                                            //   context,
-                                            //   Routes.addprogrampageview,
-                                            // );
-                                            // // Navigator.pushNamedAndRemoveUntil(
-                                            // //   context,
-                                            // //   Routes.addprogrampageview,
-                                            // //   (route) => false,
-                                            // // );
-                                            // setState(() {
-                                            //   _currentPage = 0;
-                                            // });
+                                        
                                           },
                                         ),
                                         CustomButton(

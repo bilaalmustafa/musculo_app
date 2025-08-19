@@ -394,7 +394,7 @@ exports.registerUser = onCall(async (request) => {
 });
 
 exports.creatorPlane = onCall(async (request) => {
-  const { userid, name, overviewText, experienceText, goalText } = request.data;
+  const { userid, name, overviewText, experienceText, goalText, planType } = request.data;
 
   if (!userid) {
     throw new HttpsError('invalid-argument', 'User ID (uid) is required.');
@@ -411,7 +411,7 @@ exports.creatorPlane = onCall(async (request) => {
     const updates = {
       ...(name && { name }),
       role: 'creator', // Always update role to creator
-      subPlane: 'premium',
+      subPlane: planType || 'premium',
       ...(overviewText && { overviewText }),
       ...(experienceText && { experienceText }),
       ...(goalText && { goalText }),
