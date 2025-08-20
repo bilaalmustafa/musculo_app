@@ -214,11 +214,23 @@ class AddWorkoutVeiwModel extends ChangeNotifier {
   Future<bool> creatediscoveryPost(
     String docId,
     String userId,
-    String creatorName,
+    String creatorName,{
+      String? editingWorkoutId,
+    }
   ) async {
     log('AddWorkoutVeiwModel: creatediscoveryPost called');
     isLoading = true;
     notifyListeners();
+final bool isUpdate = editingWorkoutId != null;
+ DateTime? createdAt;
+    if (isUpdate) {
+      // If updating, fetch the existing workout to get its original createdAt timestamp.
+      final existingWorkout = await instance<WorkoutServices>().getById(editingWorkoutId!);
+      createdAt = existingWorkout?.createdAt;
+    } else {
+      // If creating, set createdAt to the current time.
+      createdAt = DateTime.now();
+    }
     WorkoutModel item = WorkoutModel(
       workoutId: docId,
       creatorName: creatorName,
@@ -234,16 +246,26 @@ class AddWorkoutVeiwModel extends ChangeNotifier {
       addedTo: selectedSections,
       totalTime: getTotalIntervalTimeInSeconds(),
       categorizedVideos: selectedVideos,
+      createdAt: createdAt,
     );
 
     log(
       'AddWorkoutVeiwModel: Preparing to send WorkoutModel to WorkoutServices.createDiscovery',
     );
     log('AddWorkoutVeiwModel: WorkoutModel ID: $docId');
-    bool success = await instance<WorkoutServices>().createDiscovery(
+    bool success; 
+    if (isUpdate) {
+       success= await instance<WorkoutServices>().updateDiscovery(
       docId,
       item,
     );
+    }else{
+      success= await instance<WorkoutServices>().createDiscovery(
+      docId,
+      item,
+    );
+    }
+   
     isLoading = false;
     if (success) {
       log('AddWorkoutVeiwModel: Workout created successfully. Clearing data.');

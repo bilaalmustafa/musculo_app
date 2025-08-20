@@ -6,9 +6,15 @@ import 'package:musculo_app/core/constants/sizes.dart';
 
 // ignore: must_be_immutable
 class CustomChip extends StatelessWidget {
-  CustomChip({super.key, required this.text, this.color = ConstColors.white});
+  CustomChip({
+    super.key,
+    required this.text,
+    this.color = ConstColors.white,
+    this.textColor = ConstColors.black2626,
+  });
   final String text;
   Color color;
+  final Color textColor;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -24,7 +30,7 @@ class CustomChip extends StatelessWidget {
         text: text,
         fontSize: Sizes.s10,
         fontWeight: TextWeight.regular,
-        color: ConstColors.black2626,
+        color: textColor,
       ),
     );
   }

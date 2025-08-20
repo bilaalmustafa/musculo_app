@@ -53,10 +53,14 @@ class _MyprogramworkoutState extends State<Myprogramworkout> {
         controller: _pageController,
         physics: const NeverScrollableScrollPhysics(),
         children: [
-          WorkOuts(workoutModelList: userVm.userModel!.listOfWorkouts),
+          WorkOuts(
+            workoutModelList:
+                userVm.userModel!.listOfWorkouts.reversed.toList(),
+          ),
           Programs(
             tabselect: _currentPage,
-            programModelList: userVm.userModel!.listOfPrograms,
+            programModelList:
+                userVm.userModel!.listOfPrograms.reversed.toList(),
           ),
         ],
 

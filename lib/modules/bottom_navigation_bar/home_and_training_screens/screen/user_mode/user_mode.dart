@@ -46,7 +46,7 @@ class _UserModeTabState extends State<UserModeTab> {
     // );
     // authViewModel = context.read<UserViewModel>();
 
-    stream = instance<ProgramServices>().getPrograms();
+    stream = instance<ProgramServices>().getPrograms(status: 'published');
     _homeFocusNode = FocusNode();
 
     super.initState();
@@ -279,7 +279,9 @@ class _UserModeTabState extends State<UserModeTab> {
                                   builder: (_) {
                                     return ShowBottomSheet(
                                       title: 'Choose Program',
-                                      modelData: userVm.listOfPrograms,
+                                      modelData:
+                                          userVm.listOfPrograms.reversed
+                                              .toList(),
                                       usermodel: userVm,
                                     );
                                   },
@@ -310,22 +312,26 @@ class _UserModeTabState extends State<UserModeTab> {
                           ? 3
                           : userVm.listOfPrograms.length,
                   physics: NeverScrollableScrollPhysics(),
-                  itemBuilder:
-                      (context, index) => ProgramVideoItem(
-                        image: Assets.playbutt,
-                        program: userVm.listOfPrograms[index],
-                        onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            Routes.trainingscreen,
+                  itemBuilder: (context, index) {
+                    final reversedList =
+                        userVm.listOfPrograms.reversed.toList();
+                    final program = reversedList[index];
+                    return ProgramVideoItem(
+                      image: Assets.playbutt,
+                      program: program,
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          Routes.trainingscreen,
 
-                            arguments: {
-                              'workoutData': userVm.listOfPrograms[index],
-                              'userModel': userVm, // UserModel
-                            },
-                          );
-                        },
-                      ),
+                          arguments: {
+                            'workoutData': userVm.listOfPrograms[index],
+                            'userModel': userVm, // UserModel
+                          },
+                        );
+                      },
+                    );
+                  },
                   separatorBuilder: (context, index) => SizedBox(height: 20),
                 ),
 
@@ -355,7 +361,9 @@ class _UserModeTabState extends State<UserModeTab> {
                                   builder: (_) {
                                     return ShowBottomSheet(
                                       title: 'Choose Workout',
-                                      modelData: userVm.listOfWorkouts,
+                                      modelData:
+                                          userVm.listOfWorkouts.reversed
+                                              .toList(),
                                       usermodel: userVm,
                                     );
                                   },
@@ -386,24 +394,28 @@ class _UserModeTabState extends State<UserModeTab> {
                       userVm.listOfWorkouts.length >= 3
                           ? 3
                           : userVm.listOfWorkouts.length,
-                  itemBuilder:
-                      (context, index) => WorkoutVideoItem(
-                        workouts: userVm.listOfWorkouts[index],
-                        image: Assets.playbutt,
-                        onChanged: (value) {},
-                        onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            Routes.trainingscreen,
+                  itemBuilder: (context, index) {
+                    final reversedList =
+                        userVm.listOfWorkouts.reversed.toList();
+                    final workout = reversedList[index];
+                    return WorkoutVideoItem(
+                      workouts: workout,
+                      image: Assets.playbutt,
+                      onChanged: (value) {},
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          Routes.trainingscreen,
 
-                            arguments: {
-                              'workoutData':
-                                  userVm.listOfWorkouts[index], // WorkoutModel
-                              'userModel': userVm, // UserModel
-                            },
-                          );
-                        },
-                      ),
+                          arguments: {
+                            'workoutData':
+                                userVm.listOfWorkouts[index], // WorkoutModel
+                            'userModel': userVm, // UserModel
+                          },
+                        );
+                      },
+                    );
+                  },
                   separatorBuilder: (context, index) => SizedBox(height: 20),
                 ),
                 SizedBox(height: 5),
