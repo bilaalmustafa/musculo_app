@@ -8,6 +8,8 @@ import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/model/programs_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/custom_chip.dart';
 
+import '../add_program/add_program_pageView.dart';
+
 class CreatorListItems extends StatelessWidget {
   const CreatorListItems({super.key, required this.programModel});
   final ProgramModel programModel;
@@ -81,10 +83,63 @@ class CreatorListItems extends StatelessWidget {
             ],
           ),
           Spacer(),
-          SharePicture(
-            imagePath: Assets.editBlack,
-            width: Sizes.s20,
-            height: Sizes.s20,
+
+          Column(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder:
+                          (context) => AddProgramPageview(
+                            programId: programModel.programId,
+                          ),
+                    ),
+                  );
+                  // TODO: Handle Add Later button click
+                  debugPrint("Edit clicked for ${programModel.programName}");
+                  // Example: navigate to workout adding screen
+                  // Navigator.pushNamed(context, Routes.addWorkoutScreen, arguments: programModel);
+                },
+                child: SharePicture(
+                  imagePath: Assets.editBlack,
+                  width: Sizes.s20,
+                  height: Sizes.s20,
+                ),
+              ),
+              SizedBox(height: 5),
+              if (programModel.status == "draft")
+                GestureDetector(
+                  onTap: () {
+                    // First, pop all existing routes until the home screen
+                    Navigator.popUntil(context, (route) => route.isFirst);
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder:
+                            (context) => AddProgramPageview(
+                              initialIndex: 7,
+                              programId: programModel.programId,
+                              shouldPopToHome: true,
+                            ),
+                      ),
+                    );
+                    // TODO: Handle Add Later button click
+                    debugPrint(
+                      "Add Later clicked for ${programModel.programName}",
+                    );
+                    // Example: navigate to workout adding screen
+                    // Navigator.pushNamed(context, Routes.addWorkoutScreen, arguments: programModel);
+                  },
+                  child: CustomChip(
+                    text: "Add Later",
+                    color: ConstColors.black,
+                    textColor: ConstColors.white,
+                  ),
+                ),
+            ],
           ),
         ],
       ),

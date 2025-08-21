@@ -10,7 +10,8 @@ import 'package:musculo_app/model/programs_model.dart';
 import 'package:musculo_app/model/workouts_model.dart';
 
 class AddProgramViewModel extends ChangeNotifier {
-  bool isLoading = false;
+  bool isContinueLoading = false;
+  bool isAddLaterLoading = false;
   final TextEditingController programNameController = TextEditingController();
   final TextEditingController addOwnDuraionController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
@@ -25,6 +26,7 @@ class AddProgramViewModel extends ChangeNotifier {
   String typeofProgram = "";
   String levelofProgram = "";
   int? selectedTime;
+  String? _editingProgramId;
 
   final List<DateTime> _selectedDates = [];
 
@@ -47,6 +49,16 @@ class AddProgramViewModel extends ChangeNotifier {
     }
 
     notifyListeners(); // Notify UI to rebuild
+  }
+
+  void setContinueLoading(bool value) {
+    isContinueLoading = value;
+    notifyListeners();
+  }
+
+  void setAddLaterLoading(bool value) {
+    isAddLaterLoading = value;
+    notifyListeners();
   }
 
   void clearSelectedDates() {
@@ -192,41 +204,128 @@ class AddProgramViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> creatediscoveryPost(
-    String docId,
-    String userId,
-    String creatorName,
-  ) async {
-    isLoading = true;
+  Future<void> loadProgramForEditing(String docId) async {
+    _editingProgramId = docId;
+    try {
+      final docSnapshot =
+          await FirebaseFirestore.instance
+              .collection('discovery') // Correct collection name
+              .doc(docId)
+              .get();
 
-    int programTotalTime = workoutList.fold(
-      0,
-      (sum, workout) => sum + (workout.totalTime ?? 0),
-    );
-    notifyListeners();
+      if (docSnapshot.exists) {
+        final data = docSnapshot.data()!;
+        ProgramModel program = ProgramModel.fromJson(data);
+
+        // Populate your view model's state with the fetched data
+        programNameController.text = program.programName ?? '';
+        intendedoption = program.intended ?? '';
+        typeofProgram = program.typeOf ?? '';
+        levelofProgram = program.levelOf ?? '';
+
+        // Duration
+        if (program.duration != null && program.duration! > 0) {
+          addOwnDuraionController.text = program.duration.toString();
+          sliderValue = 0; // Reset slider if text is used
+          radioOption = null; // Reset radio if text is used
+        }
+        // Time a week
+        if (program.timeAWeek != null) {
+          selectedTime = program.timeAWeek! - 1;
+        }
+        // Day a week
+        _selectedDates.clear();
+        if (program.dayAWeek != null) {
+          // This part requires converting weekday strings back to DateTime objects.
+          // Since the calendar view needs a DateTime object, you can't just use the strings.
+          // A simple approach is to create dummy dates for the week.
+          List<String> weekdays = program.dayAWeek!;
+          DateTime now = DateTime.now();
+          for (int i = 0; i < 7; i++) {
+            DateTime day = now.add(Duration(days: i));
+            if (weekdays.contains(DateFormat('EEE').format(day))) {
+              _selectedDates.add(day);
+            }
+          }
+        }
+
+        // Price
+        priceController.text = program.price?.toString() ?? '0.0';
+
+        // Update the workout list with the existing workouts
+        workoutList = program.listOfWorkouts ?? [];
+
+        // ... populate other fields like duration, dates, etc.
+
+        notifyListeners();
+      }
+    } catch (e) {
+      print("Error loading program for editing: $e");
+      // Handle error gracefully, maybe show a toast
+      Fluttertoast.showToast(msg: "Failed to load program.");
+    }
+  }
+
+  Future<bool> creatediscoveryPost(
+    String userId,
+    String creatorName, {
+    bool addLater = false, // new flag
+  }) async {
+    String? docIdToUse =
+        _editingProgramId ?? DateTime.now().microsecondsSinceEpoch.toString();
+    final bool isUpdate = _editingProgramId != null;
+    DateTime? createdAt =
+        isUpdate
+            ? (await instance<ProgramServices>().getById(
+              _editingProgramId!,
+            ))?.createdAt
+            : DateTime.now();
+    DateTime? updatedAt = DateTime.now(); // Always update this on any change
+    int programTotalTime =
+        addLater
+            ? 0
+            : workoutList.fold(
+              0,
+              (sum, workout) => sum + (workout.totalTime ?? 0),
+            );
+    // notifyListeners();
 
     ProgramModel item = ProgramModel(
       userId: userId,
-      programId: docId,
+      programId: docIdToUse,
       creatorName: creatorName,
       programName: programNameController.text.trim(),
       typeOf: typeofProgram,
       levelOf: levelofProgram,
       intended: intendedoption,
       duration: getFinalDuration(),
-      listOfWorkouts: workoutList,
+      listOfWorkouts: workoutList, // empty when addLater
       timeAWeek: (selectedTime ?? 0) + 1,
       dayAWeek: selectedWeekdays,
       price: double.parse(priceController.text),
       totalTime: programTotalTime,
+      status: addLater ? "draft" : "published",
+      createdAt: createdAt, // Set createdAt
+      updatedAt: updatedAt, // Set updatedAt
     );
-    bool success = await instance<ProgramServices>().createDiscovery(
-      docId,
-      item,
-    );
+    bool success;
+    if (isUpdate) {
+      // If _editingProgramId exists, we are updating.
+      success = await instance<ProgramServices>().updateDiscovery(
+        docIdToUse,
+        item,
+      );
+    } else {
+      // Otherwise, we are creating a new one.
+      success = await instance<ProgramServices>().createDiscovery(
+        docIdToUse,
+        item,
+      );
+    }
 
-    isLoading = false;
-    clearData();
+    if (success) {
+      clearData();
+    }
     return success;
   }
 
@@ -261,7 +360,7 @@ class AddProgramViewModel extends ChangeNotifier {
     isintendedselect = false;
     isTypeofProgramSelect = false;
     isLevelofProgramslect = false;
-
+    _editingProgramId = null;
     // Notify listeners to update the UI
     notifyListeners();
   }
@@ -276,7 +375,4 @@ class AddProgramViewModel extends ChangeNotifier {
 
     return querySnapshot.docs.length;
   }
-
-
 }
-

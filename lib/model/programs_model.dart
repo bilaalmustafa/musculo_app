@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive/hive.dart';
 import 'package:musculo_app/model/workouts_model.dart';
 
@@ -48,6 +49,12 @@ class ProgramModel extends HiveObject {
   final List<String>? review;
   @HiveField(15)
   String? programId;
+  @HiveField(16)
+  String? status; // "draft" or "published"
+  @HiveField(17)
+  DateTime? createdAt;
+  @HiveField(18)
+  DateTime? updatedAt;
 
   ProgramModel({
     this.userId,
@@ -66,6 +73,9 @@ class ProgramModel extends HiveObject {
     this.ratingCount,
     this.review,
     this.listOfWorkouts,
+    this.status = "published", // default
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory ProgramModel.fromJson(Map<String, dynamic> json) {
@@ -93,6 +103,9 @@ class ProgramModel extends HiveObject {
           (json['listOfWorkouts'] as List?)
               ?.map((e) => WorkoutModel.fromJson(e))
               .toList(),
+      status: json["status"] ?? "published",
+      createdAt: (json['createdAt'] as Timestamp?)?.toDate(),
+      updatedAt: (json['updatedAt'] as Timestamp?)?.toDate(),
     );
   }
 
@@ -114,6 +127,9 @@ class ProgramModel extends HiveObject {
       "price": price,
       "totalTime": totalTime,
       'listOfWorkouts': listOfWorkouts?.map((e) => e.toJson()).toList(),
+      "status": status,
+      "createdAt": createdAt,
+      "updatedAt": updatedAt,
     };
   }
 
@@ -134,6 +150,9 @@ class ProgramModel extends HiveObject {
     int? ratingCount,
     List<String>? review,
     List<WorkoutModel>? listOfWorkouts,
+    String? status,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   }) {
     return ProgramModel(
       userId: userId ?? this.userId,
@@ -152,6 +171,9 @@ class ProgramModel extends HiveObject {
       review: review ?? this.review,
       totalTime: totalTime ?? this.totalTime,
       listOfWorkouts: listOfWorkouts ?? this.listOfWorkouts,
+      status: status ?? this.status,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 }

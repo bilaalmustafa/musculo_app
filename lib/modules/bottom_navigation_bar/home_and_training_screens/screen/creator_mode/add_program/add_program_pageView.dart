@@ -23,15 +23,39 @@ import 'package:provider/provider.dart';
 import '../../../../../../core/config/routes.dart';
 
 class AddProgramPageview extends StatefulWidget {
-  const AddProgramPageview({super.key});
+  final int initialIndex;
+  final String? programId;
+  final bool shouldPopToHome;
+  const AddProgramPageview({
+    super.key,
+    this.initialIndex = 0,
+    this.programId,
+    this.shouldPopToHome = false,
+  });
 
   @override
   State<AddProgramPageview> createState() => _AddProgramPageviewState();
 }
 
 class _AddProgramPageviewState extends State<AddProgramPageview> {
-  final PageController _pageController = PageController();
+  late PageController _pageController;
   int _currentPage = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _pageController = PageController(initialPage: widget.initialIndex); // 👈
+    _currentPage = widget.initialIndex;
+
+    if (widget.programId != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        context.read<AddProgramViewModel>().loadProgramForEditing(
+          widget.programId!,
+        );
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -83,10 +107,16 @@ class _AddProgramPageviewState extends State<AddProgramPageview> {
     return PopScope(
       canPop: _currentPage == 0,
       onPopInvokedWithResult: (didPop, result) {
-        if (_currentPage == 0) {
-          context.read<AddProgramViewModel>().clearData();
-        } else {
-          _goToPreviousPage();
+        if (!didPop) {
+          if (widget.shouldPopToHome) {
+            context.read<AddProgramViewModel>().clearData();
+            Navigator.of(context).popUntil((route) => route.isFirst);
+          } else if (_currentPage > 0) {
+            _goToPreviousPage();
+          } else {
+            context.read<AddProgramViewModel>().clearData();
+            Navigator.of(context).pop();
+          }
         }
       },
       child: Scaffold(
@@ -94,7 +124,10 @@ class _AddProgramPageviewState extends State<AddProgramPageview> {
         appBar: SharedAppBar(
           progress: progress,
           onBackPressed: () {
-            if (_currentPage > 0) {
+            if (widget.shouldPopToHome) {
+              context.read<AddProgramViewModel>().clearData();
+              Navigator.of(context).popUntil((route) => route.isFirst);
+            } else if (_currentPage > 0) {
               _goToPreviousPage();
             } else {
               context.read<AddProgramViewModel>().clearData();
@@ -135,26 +168,119 @@ class _AddProgramPageviewState extends State<AddProgramPageview> {
                 visible: _currentPage + 1 == 8,
 
                 child: Expanded(
-                  child: CustomButton(
-                    textColor: ConstColors.black,
-                    buttonColor: ConstColors.secondary,
-                    buttonText: "Add Later",
-                    onTap: () {
-                      Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        Routes.bottomnavigationbarscreen,
-                        (route) => false,
+                  child: Consumer<AddProgramViewModel>(
+                    builder: (context, vm, _) {
+                      return CustomButton(
+                        loading: vm.isAddLaterLoading,
+                        loadingColor: ConstColors.black,
+                        textColor: ConstColors.black,
+                        buttonColor: ConstColors.secondary,
+                        buttonText: "Add Later",
+                        onTap: () async {
+                          vm.setAddLaterLoading(true);
+                          final uservm =
+                              context.read<UserViewModel>().userModel!;
+                          final userPlan = uservm.subPlane ?? 'Basic';
+
+                          // check plan limit
+                          final programCount = await vm.getUserProgramCount(
+                            uservm.userId!,
+                          );
+
+                          if (userPlan == 'Basic' &&
+                              programCount >= 10 &&
+                              context.mounted) {
+                            vm.setAddLaterLoading(false);
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              barrierColor: Colors.black.withValues(alpha: 0.9),
+                              builder: (context) {
+                                return ShowDialogBox(
+                                  title: 'Upgrade Required',
+                                  message:
+                                      "You have reached the limit of 10 programs for Basic creators. Please upgrade to Premium to create more programs.!",
+                                  bottomWidget: Column(
+                                    spacing: 10,
+                                    children: [
+                                      CustomButton(
+                                        buttonText: "Back to home page",
+                                        buttonColor: ConstColors.secondary,
+                                        textColor: ConstColors.black,
+                                        onTap: () {
+                                          Navigator.of(context).pop();
+                                          Navigator.pushNamedAndRemoveUntil(
+                                            context,
+                                            Routes.bottomnavigationbarscreen,
+                                            (Route<dynamic> route) => false,
+                                            arguments: {
+                                              'initialMainTabIndex': 0,
+                                              'initialHomeScreenSubTab': 1,
+                                            },
+                                          );
+                                        },
+                                      ),
+
+                                      CustomButton(
+                                        buttonText: "Upgrade Plan",
+                                        onTap: () {
+                                          // _resetProgramCreation();
+                                          Navigator.pushNamed(
+                                            context,
+                                            Routes.becomeCreatorScreen,
+                                            arguments: {
+                                              'fromUpgradePopup': true,
+                                            },
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                            return;
+                          }
+
+                          bool success = await vm.creatediscoveryPost(
+                            uservm.userId!,
+                            uservm.name!,
+                            addLater: true,
+                          );
+                          vm.setAddLaterLoading(false);
+                          if (success && context.mounted) {
+                            Fluttertoast.showToast(
+                              msg:
+                                  "Program saved as draft. Add workouts later!",
+                            );
+
+                            Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              Routes.bottomnavigationbarscreen,
+                              (route) => false,
+                              arguments: {
+                                'initialMainTabIndex': 0,
+                                'initialHomeScreenSubTab': 1,
+                              },
+                            );
+                          } else {
+                            Fluttertoast.showToast(
+                              msg: "Failed to save program. Please try again.",
+                              backgroundColor: Colors.red,
+                            );
+                          }
+                        },
                       );
                     },
                   ),
-                ), // optional to preserve layout
+                ),
               ),
 
               Expanded(
                 child: Consumer<AddProgramViewModel>(
                   builder: (context, vm, _) {
                     return CustomButton(
-                      loading: vm.isLoading,
+                      loading: vm.isContinueLoading,
                       buttonText: "Continue",
                       onTap: () async {
                         if (_currentPage < 8 - 1) {
@@ -197,6 +323,7 @@ class _AddProgramPageviewState extends State<AddProgramPageview> {
                           }
                         } else {
                           if (vm.sectectedworksvalidation()) {
+                            vm.setContinueLoading(true);
                             final userVm =
                                 context.read<UserViewModel>().userModel!;
                             final userPlan = userVm.subPlane ?? 'Basic';
@@ -208,7 +335,7 @@ class _AddProgramPageviewState extends State<AddProgramPageview> {
                             if (userPlan == 'Basic' &&
                                 programCount >= 10 &&
                                 context.mounted) {
-
+                              vm.setContinueLoading(false);
                               showDialog(
                                 context: context,
                                 barrierDismissible: false,
@@ -245,13 +372,13 @@ class _AddProgramPageviewState extends State<AddProgramPageview> {
                                           buttonText: "Upgrade Plan",
                                           onTap: () {
                                             // _resetProgramCreation();
-                                           Navigator.pushNamed(
-                                            context,
-                                            Routes.becomeCreatorScreen,
-                                            arguments: {
-                                              'fromUpgradePopup': true,
-                                            },
-                                          );
+                                            Navigator.pushNamed(
+                                              context,
+                                              Routes.becomeCreatorScreen,
+                                              arguments: {
+                                                'fromUpgradePopup': true,
+                                              },
+                                            );
                                           },
                                         ),
                                       ],
@@ -262,18 +389,13 @@ class _AddProgramPageviewState extends State<AddProgramPageview> {
                               return; // stop further processing
                             }
 
-                            String id =
-                                DateTime.now().millisecondsSinceEpoch
-                                    .toString();
-
                             bool success = await vm.creatediscoveryPost(
-                              id,
                               userVm.userId!,
                               userVm.name!,
                             );
 
                             log("Success: ${success.toString()}");
-
+                            vm.setContinueLoading(false);
                             if (success && context.mounted) {
                               Fluttertoast.showToast(
                                 msg: "Program Posted Successfully!",
@@ -295,7 +417,6 @@ class _AddProgramPageviewState extends State<AddProgramPageview> {
                                           buttonText: "Create another program",
                                           onTap: () {
                                             _resetProgramCreation();
-                                        
                                           },
                                         ),
                                         CustomButton(

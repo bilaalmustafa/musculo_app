@@ -34,7 +34,7 @@ class _CreatorMyprogramworkoutState extends State<CreatorMyprogramworkout> {
     userVm = context.read<UserViewModel>();
     final String uid = userVm.userModel!.userId ?? "";
     _workoutStream = instance<WorkoutServices>().getCreatorWorkout(uid);
-    _programStream = instance<ProgramServices>().getCreatorPrograms(uid);
+    _programStream = instance<ProgramServices>().getCreatorPrograms(uid, status: 'published');
     super.initState();
   }
 

@@ -27,7 +27,7 @@ class _ProgramTabDisScreenState extends State<ProgramTabDisScreen> {
 
   @override
   void initState() {
-    stream = instance<ProgramServices>().getPrograms();
+    stream = instance<ProgramServices>().getPrograms(status: 'published');
     super.initState();
   }
 

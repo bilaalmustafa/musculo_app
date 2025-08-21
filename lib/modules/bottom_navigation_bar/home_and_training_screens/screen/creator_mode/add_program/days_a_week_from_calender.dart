@@ -46,10 +46,24 @@ class _DurationOfProgramState extends State<DaysAWeeksFromCalender> {
                           : null,
 
                   ondaySelected: (selectedDay, focusedDay) {
-                    setState(() {
-                      _focusedDay = focusedDay;
-                    });
-                    vm.toggleSelectedDate(selectedDay);
+                    final DateTime now = DateTime.now();
+                    final DateTime today = DateTime(
+                      now.year,
+                      now.month,
+                      now.day,
+                    );
+                    final DateTime selectedDayAsDate = DateTime(
+                      selectedDay.year,
+                      selectedDay.month,
+                      selectedDay.day,
+                    );
+                    if (selectedDayAsDate.isAfter(today) ||
+                        selectedDayAsDate.isAtSameMomentAs(today)) {
+                      setState(() {
+                        _focusedDay = focusedDay;
+                      });
+                      vm.toggleSelectedDate(selectedDay);
+                    }
                   },
                 ),
               ],
