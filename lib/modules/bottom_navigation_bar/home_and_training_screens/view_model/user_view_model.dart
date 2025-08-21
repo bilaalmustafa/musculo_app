@@ -22,7 +22,7 @@ class UserViewModel with ChangeNotifier {
     userModel = await instance<UserService>().userById(id);
     isLoading = false;
     notifyListeners();
-    return userModel;
+    return userModel; 
   }
 
   Stream<UserModel?> getUserByIdstream(String id) {
