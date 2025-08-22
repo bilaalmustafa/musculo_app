@@ -26,7 +26,7 @@ class _HistoryTabState extends State<HistoryTab> {
   Widget build(BuildContext context) {
     final data = widget.programModel;
     final List<WorkoutModel> listofworkout =
-        data.listOfWorkouts as List<WorkoutModel>;
+        data.listOfWorkoutIds as List<WorkoutModel>;
     String formatProgramTime(int totalTimeInSeconds) {
       int totalMinutes = totalTimeInSeconds ~/ 60;
 
@@ -74,7 +74,7 @@ class _HistoryTabState extends State<HistoryTab> {
                   children: [
                     HistoryListTile(
                       headingtext: "Overall",
-                      runtext: data.listOfWorkouts?.length.toString() ?? "0",
+                      runtext: data.listOfWorkoutIds?.length.toString() ?? "0",
                       timetext: data.totalTime.toString(),
                     ),
                     Divider(color: ConstColors.dividerColor),

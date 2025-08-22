@@ -18,7 +18,6 @@ class AddProgramViewModel extends ChangeNotifier {
   bool isintendedselect = false;
   bool isTypeofProgramSelect = false;
   bool isLevelofProgramslect = false;
-  List<WorkoutModel> workoutList = [];
   double sliderValue = 0;
   String? radioOption;
   final formKey = GlobalKey<FormState>();
@@ -27,6 +26,8 @@ class AddProgramViewModel extends ChangeNotifier {
   String levelofProgram = "";
   int? selectedTime;
   String? _editingProgramId;
+  List<WorkoutModel> workoutList = [];
+  List<String> get workoutIdList => workoutList.map((w) => w.workoutId!).toList();
 
   final List<DateTime> _selectedDates = [];
 
@@ -253,7 +254,15 @@ class AddProgramViewModel extends ChangeNotifier {
         priceController.text = program.price?.toString() ?? '0.0';
 
         // Update the workout list with the existing workouts
-        workoutList = program.listOfWorkouts ?? [];
+        workoutList.clear();
+      if (program.listOfWorkoutIds != null) {
+        for (String workoutId in program.listOfWorkoutIds!) {
+          final workoutDoc = await FirebaseFirestore.instance.collection('discovery').doc(workoutId).get();
+          if (workoutDoc.exists) {
+            workoutList.add(WorkoutModel.fromJson(workoutDoc.data()!));
+          }
+        }
+      }
 
         // ... populate other fields like duration, dates, etc.
 
@@ -299,7 +308,7 @@ class AddProgramViewModel extends ChangeNotifier {
       levelOf: levelofProgram,
       intended: intendedoption,
       duration: getFinalDuration(),
-      listOfWorkouts: workoutList, // empty when addLater
+      listOfWorkoutIds: workoutIdList, 
       timeAWeek: (selectedTime ?? 0) + 1,
       dayAWeek: selectedWeekdays,
       price: double.parse(priceController.text),

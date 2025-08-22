@@ -7,7 +7,7 @@ import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
-import 'package:musculo_app/core/services/payment_service.dart';
+
 import 'package:musculo_app/core/services/user_service.dart';
 import 'package:musculo_app/model/programs_model.dart';
 import 'package:musculo_app/model/sold_model.dart';
@@ -20,7 +20,7 @@ import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/s
 import 'package:provider/provider.dart';
 
 import '../../../../../core/config/injections.dart';
-import '../../../../../model/user_model.dart';
+
 import '../../component/paragraph_text.dart';
 
 class DescriptionTab extends StatefulWidget {
@@ -205,7 +205,7 @@ class _ProgramDetailScreenState extends State<DescriptionTab> {
                       ),
                       AnalsisContainer(
                         iconImage: Assets.runnerIcon,
-                        digit: data.listOfWorkouts?.length.toString() ?? "0",
+                        digit: data.listOfWorkoutIds?.length.toString() ?? "0",
                         text: "Workout",
                       ),
                       AnalsisContainer(

@@ -40,7 +40,7 @@ class ProgramModel extends HiveObject {
   int? totalTime;
 
   @HiveField(11)
-  List<WorkoutModel>? listOfWorkouts;
+  List<String>? listOfWorkoutIds;
   @HiveField(12)
   final double? rating;
   @HiveField(13)
@@ -72,7 +72,7 @@ class ProgramModel extends HiveObject {
     this.rating,
     this.ratingCount,
     this.review,
-    this.listOfWorkouts,
+    this.listOfWorkoutIds,
     this.status = "published", // default
     this.createdAt,
     this.updatedAt,
@@ -99,10 +99,7 @@ class ProgramModel extends HiveObject {
       intended: json['intended'],
       price: json["price"],
       totalTime: json["totalTime"],
-      listOfWorkouts:
-          (json['listOfWorkouts'] as List?)
-              ?.map((e) => WorkoutModel.fromJson(e))
-              .toList(),
+      listOfWorkoutIds: (json['listOfWorkoutIds'] as List?)?.cast<String>(),
       status: json["status"] ?? "published",
       createdAt: (json['createdAt'] as Timestamp?)?.toDate(),
       updatedAt: (json['updatedAt'] as Timestamp?)?.toDate(),
@@ -126,7 +123,7 @@ class ProgramModel extends HiveObject {
       "intended": intended,
       "price": price,
       "totalTime": totalTime,
-      'listOfWorkouts': listOfWorkouts?.map((e) => e.toJson()).toList(),
+      'listOfWorkouts': listOfWorkoutIds,
       "status": status,
       "createdAt": createdAt,
       "updatedAt": updatedAt,
@@ -149,7 +146,7 @@ class ProgramModel extends HiveObject {
     double? rating,
     int? ratingCount,
     List<String>? review,
-    List<WorkoutModel>? listOfWorkouts,
+    List<String>? listOfWorkoutIds,
     String? status,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -170,7 +167,7 @@ class ProgramModel extends HiveObject {
       ratingCount: ratingCount ?? this.ratingCount,
       review: review ?? this.review,
       totalTime: totalTime ?? this.totalTime,
-      listOfWorkouts: listOfWorkouts ?? this.listOfWorkouts,
+      listOfWorkoutIds: listOfWorkoutIds ?? this.listOfWorkoutIds,
       status: status ?? this.status,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
