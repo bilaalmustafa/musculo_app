@@ -1,10 +1,10 @@
-import 'package:firebase_app_check/firebase_app_check.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:musculo_app/core/config/injections.dart';
-import 'package:musculo_app/core/services/notification_services.dart';
+
 import 'package:musculo_app/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:musculo_app/model/programs_model.dart';

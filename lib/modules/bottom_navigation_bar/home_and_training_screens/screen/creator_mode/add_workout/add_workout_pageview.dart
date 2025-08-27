@@ -116,7 +116,6 @@ class _AddWorkoutPageViewState extends State<AddWorkoutPageView> {
             WarmUp(),
             IntervelTime(),
             ScaleVersion(),
-
             CompleteDetailBelow(),
             ConfirmInformation(),
           ],

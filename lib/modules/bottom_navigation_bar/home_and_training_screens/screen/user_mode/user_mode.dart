@@ -54,7 +54,7 @@ class _UserModeTabState extends State<UserModeTab> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    
     _homeFocusNode.dispose();
     _searchController.dispose();
     super.dispose();
@@ -111,7 +111,7 @@ class _UserModeTabState extends State<UserModeTab> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        // TODO: here we add BottomSheet of top ten Programs;
+                        
 
                         showModalBottomSheet(
                           context: context,
@@ -241,19 +241,6 @@ class _UserModeTabState extends State<UserModeTab> {
                     },
                   ),
                 ),
-
-                // Container(
-                //   color: ConstColors.red,
-                //   width: double.infinity,
-                //   height: 230,
-                //   child: ListView.builder(
-                //     scrollDirection: Axis.horizontal,
-                //     itemCount: 5,
-                //     itemBuilder: (context, index) {
-                //       return
-                //     },
-                //   ),
-                // ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

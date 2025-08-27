@@ -54,20 +54,7 @@ class _WarmUpState extends State<CompleteDetailBelow> {
                           title: "Write it here",
                           validator: (value) => Validator.valueExists(value),
                         ),
-                        PoppinsText(
-                          text: "Workout added to",
-                          fontSize: Sizes.s14,
-                          fontWeight: TextWeight.semiBold,
-                        ),
 
-                        CustomDropdownField(
-                          listITems: ['Warm up', 'Workout', 'Finisher'],
-                          value: vm.selected,
-                          validator: (value) => Validator.valueExists(value),
-                          onChange: (value) {
-                            vm.selectadded(value!);
-                          },
-                        ),
                         PoppinsText(
                           text: "Gender",
                           fontSize: Sizes.s14,

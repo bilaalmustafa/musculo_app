@@ -40,7 +40,7 @@ class AddWorkoutVeiwModel extends ChangeNotifier {
   ];
   final List<String> selectedSections = [];
   double difficulty = 5;
-  String? selected;
+  // String? selected;
   String? gender;
   TextEditingController workoutNameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
@@ -122,10 +122,10 @@ class AddWorkoutVeiwModel extends ChangeNotifier {
     }
   }
 
-  void selectadded(String value) {
-    selected = value;
-    notifyListeners();
-  }
+  // void selectadded(String value) {
+  //   selected = value;
+  //   notifyListeners();
+  // }
 
   void selectgender(String value) {
     gender = value;
@@ -431,7 +431,7 @@ final bool isUpdate = editingWorkoutId != null;
     typeofworkout = "";
     levelofworkout = "";
     gender = null;
-    selected = null;
+    // selected = null;
     selectedDate = null;
     difficulty = 5;
     currentSectionIndex = 0;

@@ -157,25 +157,11 @@ class _TrainingScreenState extends State<TrainingScreen> {
                           );
                         },
                       ),
-                    Container(
-                      width: double.infinity,
-                      height: Sizes.s350,
-                      color: ConstColors.secondary,
-
+                    AspectRatio(
+                      aspectRatio: 16 / 9, // same as 3840/2160
                       child:
                           vm.controller != null && vm.isControllerInitialized
-                              ? vm.selectedbtn <= 0
-                                  ? VideoFrameScreen(
-                                    controller: vm.controller,
-                                    // videourl: allVideos[vm.selectedVideo].url,
-                                  )
-                                  : VideoFrameScreen(
-                                    controller: vm.controller,
-                                    // videourl:
-                                    //     allVideos[vm.selectedVideo]
-                                    //         .versionList[vm.selectedbtn]
-                                    //         .url,
-                                  )
+                              ? VideoFrameScreen(controller: vm.controller)
                               : const Center(
                                 child: CircularProgressIndicator(
                                   color: ConstColors.black,
@@ -183,6 +169,31 @@ class _TrainingScreenState extends State<TrainingScreen> {
                               ),
                     ),
 
+                    // Container(
+                    //   width: double.infinity,
+                    //   height: Sizes.s350,
+                    //   color: ConstColors.secondary,
+
+                    //   child:
+                    //       vm.controller != null && vm.isControllerInitialized
+                    //           ? vm.selectedbtn <= 0
+                    //               ? VideoFrameScreen(
+                    //                 controller: vm.controller,
+                    //                 // videourl: allVideos[vm.selectedVideo].url,
+                    //               )
+                    //               : VideoFrameScreen(
+                    //                 controller: vm.controller,
+                    //                 // videourl:
+                    //                 //     allVideos[vm.selectedVideo]
+                    //                 //         .versionList[vm.selectedbtn]
+                    //                 //         .url,
+                    //               )
+                    //           : const Center(
+                    //             child: CircularProgressIndicator(
+                    //               color: ConstColors.black,
+                    //             ),
+                    //           ),
+                    // ),
                     SizedBox(
                       width: double.infinity,
                       height: 80,
