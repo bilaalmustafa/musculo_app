@@ -20,6 +20,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../core/constants/const_colors.dart';
 import '../../../../core/constants/fonts.dart';
+import '../../../auth/view_model/view_mode_provider.dart';
 import '../../home_and_training_screens/component/congrate_container.dart';
 import '../../programs_and_workout/component/customlisttile.dart';
 
@@ -36,9 +37,12 @@ class _UserProfileState extends State<UserProfile> {
   @override
   Widget build(BuildContext context) {
     final userVm = context.watch<UserViewModel>();
+    final viewModeVm = context.watch<ViewModeProvider>();
     final data = userVm.userModel;
     final uid = FirebaseAuth.instance.currentUser?.uid ?? '';
     final isCreator = data?.role == 'creator';
+    final isCreatorView = viewModeVm.isCreatorView;
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: ConstColors.white,
@@ -70,13 +74,24 @@ class _UserProfileState extends State<UserProfile> {
                             );
                           }
                           final imageUrl = snapshot.data;
+                          //MARK:
                           return CircleAvatar(
                             maxRadius: Sizes.s55,
-                            backgroundColor: ConstColors.greyE0E0,
+                            backgroundColor:
+                                imageUrl == null ? ConstColors.black : null,
                             backgroundImage:
                                 imageUrl != null
                                     ? NetworkImage(imageUrl)
-                                    : AssetImage(Assets.profileDImage),
+                                    : null,
+                            child:
+                                imageUrl == null
+                                    ? PoppinsText(
+                                      text: data!.name![0].toUpperCase(),
+                                      fontSize: 40,
+                                      fontWeight: TextWeight.semiBold,
+                                      color: ConstColors.white,
+                                    )
+                                    : null,
                           );
                         },
                       ),
@@ -106,16 +121,18 @@ class _UserProfileState extends State<UserProfile> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   PoppinsText(
-                    text: isCreator ? "Creator" : "User",
+                    text: isCreatorView ? "Creator" : "User",
                     fontSize: Sizes.s14,
                     fontWeight: TextWeight.semiBold,
                   ),
 
                   NotificationSwitch(
-                    value: isCreator,
+                    value: isCreatorView,
                     useCupertino: true,
                     onChanged: (value) async {
-                      if (!isCreator) {
+                      if (isCreator) {
+                        viewModeVm.toggleView(value);
+                      } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text(
@@ -178,7 +195,7 @@ class _UserProfileState extends State<UserProfile> {
               Divider(height: Sizes.s1, color: ConstColors.greyE5E5),
               SizedBox(height: 10),
 
-              if (!isCreator) ...[
+              if (!isCreatorView) ...[
                 CustomListTile(
                   leading: SharePicture(
                     imagePath: Assets.profileIcon,
@@ -286,7 +303,11 @@ class _UserProfileState extends State<UserProfile> {
                   title: "Earnings",
                   trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
                   onTap: () {
-                    // earning text code here
+                    Navigator.pushNamed(
+                      context,
+                      Routes.creatorProfileScreen,
+                      arguments: 1,
+                    );
                   },
                 ),
                 CustomListTile(
@@ -333,7 +354,8 @@ class _UserProfileState extends State<UserProfile> {
                     if (uid != null) {
                       bool? success = await vm.cancelCreatorPlan(uid);
                       if (success != null && context.mounted) {
-                        Navigator.pushNamed(
+                        await context.read<ViewModeProvider>().setView(false);
+                        Navigator.pushReplacementNamed(
                           context,
                           Routes.bottomnavigationbarscreen,
                         );

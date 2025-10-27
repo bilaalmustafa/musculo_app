@@ -80,10 +80,12 @@ class _MotivationalTextScreenState extends State<MotivationalTextScreen> {
                 fontSize: Sizes.s16,
                 fontWeight: TextWeight.semiBold,
               ),
+              // MARK:
               Feedbackfield(
                 controller: descriptionController,
                 hint: 'Enter description',
                 maxline: 5,
+                textInputAction: TextInputAction.done,
                 validator: (value) => Validator.valueExists(value),
               ),
             ],

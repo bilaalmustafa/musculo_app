@@ -35,9 +35,9 @@ class _WarmUpState extends State<ConfirmInformation> {
     final int minutes = totalSeconds ~/ 60;
     final int seconds = totalSeconds % 60;
     listinfo = [
-      {"Workoutname": vm.workoutNameController.text},
+      {"Workout name": vm.workoutNameController.text},
       {"Type": vm.typeofworkout},
-      {"added to": vm.selectedSections.join("-")},
+      // {"added to": vm.selectedSections.join("-")},
       {"Difficulty": "${vm.difficulty.round()}/10"},
       {"Level": vm.levelofworkout},
       {"Gender": vm.gender},
@@ -52,7 +52,7 @@ class _WarmUpState extends State<ConfirmInformation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ConstColors.secondary,
+      backgroundColor: ConstColors.white,
       body: SingleChildScrollView(
         child: Column(
           spacing: Sizes.s20,
@@ -134,8 +134,13 @@ class _WarmUpState extends State<ConfirmInformation> {
                                     children: [
                                       ReelsItem(
                                         videodata: video,
-
                                         screenintervel: 2,
+                                        onRemoveTap: () {
+                                          vm.removeSelectedVideo(
+                                            sectionTitle,
+                                            video,
+                                          );
+                                        },
                                       ),
                                       Row(
                                         mainAxisAlignment:

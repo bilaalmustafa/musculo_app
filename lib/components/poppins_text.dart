@@ -10,6 +10,7 @@ class PoppinsText extends StatelessWidget {
     this.color,
     this.fontWeight,
     this.textAlign,
+    this.overflow,
   });
 
   final String text;
@@ -17,12 +18,13 @@ class PoppinsText extends StatelessWidget {
   Color? color;
   FontWeight? fontWeight;
   TextAlign? textAlign;
+  final TextOverflow? overflow;
 
   @override
   Widget build(BuildContext context) {
     return Text(
       textAlign: textAlign,
-
+      overflow: overflow,
       text,
       style: GoogleFonts.poppins(
         color: color,

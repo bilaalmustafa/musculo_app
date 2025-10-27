@@ -39,6 +39,26 @@ class _FilterScreenState extends State<FilterScreen> {
   Widget build(BuildContext context) {
     final filtered = context.watch<DiscoverFilter>();
     final userRole = context.read<UserViewModel>().userModel?.role ?? '';
+
+    final ValueChanged<dynamic> handlePremiumTap =
+        userRole == 'creator'
+            ? (
+              _,
+            ) {} // Creator: No function assigned, making the chip non-interactive.
+            : (value) {
+              // User: Toggle the boolean state when the chip is tapped.
+              filtered.setTempPremium(!filtered.tempPremium);
+            };
+
+    // 2. Define the appearance (selectedIndex):
+    final int premiumChipSelectedIndex =
+        userRole == 'creator'
+            ? 0 // Creator: Always appears selected.
+            : filtered.tempPremium
+            ? 0 // User: Selected if tempPremium is TRUE.
+            : -1; // User: Unselected if tempPremium is FALSE.
+
+    // -----------------------------------------------------------
     return Scaffold(
       backgroundColor: ConstColors.white,
       appBar: SharedAppBar(title: "Filter"),
@@ -77,15 +97,9 @@ class _FilterScreenState extends State<FilterScreen> {
                 fontWeight: TextWeight.semiBold,
               ),
               CustomChips(
-                selectedIndex:
-                    userRole == 'creator'
-                        ? 0
-                        : filtered.tempPremium
-                        ? 0
-                        : -1,
+                selectedIndex: premiumChipSelectedIndex,
                 optionslist: premium,
-                onSelect:
-                    (value) => filtered.setTempPremium(filtered.tempPremium),
+                onSelect: handlePremiumTap,
               ),
               PoppinsText(
                 text: "Price",
@@ -105,7 +119,7 @@ class _FilterScreenState extends State<FilterScreen> {
                 fontWeight: TextWeight.semiBold,
               ),
               RangSliders(
-                min: 1.0,
+                min: 0,
                 max: 60,
                 type: "min",
                 currentRange: filtered.tempLength,

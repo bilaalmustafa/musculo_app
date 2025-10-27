@@ -188,12 +188,26 @@ class _CoachProfileState extends State<CoachProfile> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    // MARK:
                     CircleAvatar(
                       radius: 55,
                       backgroundImage:
                           data.profileImageUrl != null
                               ? NetworkImage(data.profileImageUrl!)
-                              : AssetImage(Assets.coachProfile),
+                              : null,
+                      backgroundColor:
+                          data.profileImageUrl == null
+                              ? ConstColors.black
+                              : null,
+                      child:
+                          data.profileImageUrl == null
+                              ? PoppinsText(
+                                text: data.name![0].toUpperCase(),
+                                fontSize: 40,
+                                fontWeight: TextWeight.semiBold,
+                                color: ConstColors.white,
+                              )
+                              : null,
                     ),
                     SizedBox(height: Sizes.s10),
                     PoppinsText(
@@ -207,31 +221,40 @@ class _CoachProfileState extends State<CoachProfile> {
                       spacing: Sizes.s10,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.star, color: ConstColors.orange, size: 20),
-                        PoppinsText(
-                          text: "${data.rating ?? 0.0}",
-                          fontSize: Sizes.s10,
-                        ),
-                        Container(height: 15, width: 1.5, color: Colors.black),
-                        Container(
-                          padding: EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            color: ConstColors.secondary,
-                            borderRadius: BorderRadius.circular(10),
+                        // ⭐ Rating shown for all creators
+                        if (data.role == "creator") ...[
+                          Icon(Icons.star, color: ConstColors.orange, size: 20),
+                          PoppinsText(
+                            text: "${data.rating ?? 0.0}",
+                            fontSize: Sizes.s10,
                           ),
-                          child: Row(
-                            spacing: Sizes.s2,
-                            children: [
-                              data.subPlane != "Free"
-                                  ? SharePicture(imagePath: Assets.daimond)
-                                  : Container(),
-                              PoppinsText(
-                                text: "${data.subPlane ?? ""} Creator",
-                                fontSize: Sizes.s10,
+
+                          // 👇 Show this only for premium creators
+                          if (data.subPlane?.toLowerCase() == 'premium') ...[
+                            Container(
+                              height: 15,
+                              width: 1.5,
+                              color: Colors.black,
+                            ),
+                            Container(
+                              padding: EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                color: ConstColors.secondary,
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                            ],
-                          ),
-                        ),
+                              child: Row(
+                                spacing: Sizes.s2,
+                                children: [
+                                  SharePicture(imagePath: Assets.daimond),
+                                  PoppinsText(
+                                    text: "Premium Creator",
+                                    fontSize: Sizes.s10,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ],
                       ],
                     ),
                   ],

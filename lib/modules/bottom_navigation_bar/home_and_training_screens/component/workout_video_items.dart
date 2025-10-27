@@ -39,6 +39,23 @@ class WorkoutVideoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String formatProgramTime(int totalTimeInSeconds) {
+      int totalMinutes = totalTimeInSeconds ~/ 60;
+
+      if (totalMinutes < 60) {
+        return "$totalMinutes Mins";
+      } else {
+        int hours = totalMinutes ~/ 60;
+        int minutes = totalMinutes % 60;
+
+        if (minutes >= 45) {
+          hours += 1;
+        }
+
+        return "$hours Hr";
+      }
+    }
+
     return Row(
       children: [
         Container(
@@ -78,7 +95,8 @@ class WorkoutVideoItem extends StatelessWidget {
             Row(
               children: [
                 CustomChip(
-                  text: "${workouts?.totalTime ?? "0"} Mins",
+                  text: formatProgramTime(workouts?.totalTime ?? 0),
+                  // text: "${workouts?.totalTime ?? "0"} Mins",
                   color: ConstColors.secondary,
                 ),
                 const SizedBox(width: 10),

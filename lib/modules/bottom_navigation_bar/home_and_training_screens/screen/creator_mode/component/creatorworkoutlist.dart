@@ -8,10 +8,16 @@ import 'package:musculo_app/core/constants/sizes.dart';
 
 import 'package:musculo_app/model/workouts_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/custom_chip.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_workout/add_workout_pageview.dart';
 
 class CreatorWorkoutList extends StatelessWidget {
-  const CreatorWorkoutList({super.key, required this.workoutModel});
+  const CreatorWorkoutList({
+    super.key,
+    required this.workoutModel,
+    this.showEditbutton = true,
+  });
   final WorkoutModel workoutModel;
+  final bool showEditbutton;
   @override
   Widget build(BuildContext context) {
     String formatProgramTime(int totalTimeInSeconds) {
@@ -82,11 +88,28 @@ class CreatorWorkoutList extends StatelessWidget {
             ],
           ),
           Spacer(),
-          SharePicture(
-            imagePath: Assets.editBlack,
-            width: Sizes.s20,
-            height: Sizes.s20,
-          ),
+          if (showEditbutton)
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (_) => AddWorkoutPageView(
+                          workoutId: workoutModel.workoutId,
+                          initialIndex: 6,
+                          shouldPopToHome: true,
+                        ),
+                  ),
+                );
+                debugPrint("Edit clicked for ${workoutModel.workoutName}");
+              },
+              child: SharePicture(
+                imagePath: Assets.editBlack,
+                width: Sizes.s20,
+                height: Sizes.s20,
+              ),
+            ),
         ],
       ),
     );

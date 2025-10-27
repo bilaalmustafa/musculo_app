@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/core/config/validator.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
-import 'package:musculo_app/modules/auth/register/component/show_dialog_box.dart';
+
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/profile_view_model/profile_view_model.dart';
 import 'package:provider/provider.dart';
 

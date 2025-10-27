@@ -4,7 +4,7 @@ import 'package:musculo_app/components/shared_appbar.dart';
 import 'package:musculo_app/core/config/routes.dart';
 import 'package:musculo_app/core/config/validator.dart';
 import 'package:musculo_app/modules/auth/register/component/question_text.dart';
-import 'package:musculo_app/modules/auth/sign_in/screen/resetpassword_screen.dart';
+
 import 'package:musculo_app/modules/auth/view_model/auth_view_model.dart';
 import 'package:musculo_app/modules/auth/view_model/forgot_view_model.dart';
 import 'package:provider/provider.dart';

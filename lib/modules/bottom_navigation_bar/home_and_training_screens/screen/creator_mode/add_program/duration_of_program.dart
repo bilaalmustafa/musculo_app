@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:musculo_app/components/customTextField.dart';
 import 'package:musculo_app/components/poppins_text.dart';
-import 'package:musculo_app/core/config/validator.dart';
+
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
@@ -99,7 +100,22 @@ class _DurationOfProgramState extends State<DurationOfProgram> {
                       controller: vm.priceController,
                       title: "write it here",
                       keyboardType: TextInputType.number,
-                      validator: (value) => Validator.valueExists(value),
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return "Please enter a price";
+                        }
+                        final regex = RegExp(r'^\d*\.?\d*$');
+                        if (!regex.hasMatch(value.trim())) {
+                          return "Enter a valid number (e.g., 12.34)";
+                        }
+                        if (value.endsWith('.') || value.startsWith('.')) {
+                          return "Invalid format";
+                        }
+                        return null;
+                      },
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
+                      ],
                     ),
                   ),
                 ],

@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive/hive.dart';
-import 'package:musculo_app/model/workouts_model.dart';
 
 part 'programs_model.g.dart';
 
@@ -55,6 +54,8 @@ class ProgramModel extends HiveObject {
   DateTime? createdAt;
   @HiveField(18)
   DateTime? updatedAt;
+  @HiveField(19)
+  Map<String, dynamic>? userRatings;
 
   ProgramModel({
     this.userId,
@@ -76,6 +77,7 @@ class ProgramModel extends HiveObject {
     this.status = "published", // default
     this.createdAt,
     this.updatedAt,
+    this.userRatings,
   });
 
   factory ProgramModel.fromJson(Map<String, dynamic> json) {
@@ -103,6 +105,7 @@ class ProgramModel extends HiveObject {
       status: json["status"] ?? "published",
       createdAt: (json['createdAt'] as Timestamp?)?.toDate(),
       updatedAt: (json['updatedAt'] as Timestamp?)?.toDate(),
+      userRatings: json['userRatings'] as Map<String, dynamic>?,
     );
   }
 
@@ -123,10 +126,11 @@ class ProgramModel extends HiveObject {
       "intended": intended,
       "price": price,
       "totalTime": totalTime,
-      'listOfWorkouts': listOfWorkoutIds,
+      'listOfWorkoutIds': listOfWorkoutIds,
       "status": status,
       "createdAt": createdAt,
       "updatedAt": updatedAt,
+      'userRatings': userRatings,
     };
   }
 
@@ -150,6 +154,7 @@ class ProgramModel extends HiveObject {
     String? status,
     DateTime? createdAt,
     DateTime? updatedAt,
+    Map<String, dynamic>? userRatings,
   }) {
     return ProgramModel(
       userId: userId ?? this.userId,
@@ -171,6 +176,7 @@ class ProgramModel extends HiveObject {
       status: status ?? this.status,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      userRatings: userRatings ?? this.userRatings,
     );
   }
 }

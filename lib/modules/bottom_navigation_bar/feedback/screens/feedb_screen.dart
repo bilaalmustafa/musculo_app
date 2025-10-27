@@ -1,3 +1,4 @@
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 
 import 'package:musculo_app/components/shared_appbar.dart';
@@ -64,12 +65,14 @@ class _FeedBScreenState extends State<FeedBScreen> {
                 controller: feedbackController,
                 hint: 'Feedback',
                 maxline: 5,
+                textInputAction: TextInputAction.done,
                 validator: (value) => Validator.valueExists(value),
               ),
               Feedbackfield(
                 controller: suggestionController,
                 hint: 'Suggestion for improvement ( Optional ) ',
                 maxline: 5,
+                textInputAction: TextInputAction.done,
               ),
               CustomTextField(
                 controller: emailController,
@@ -108,6 +111,31 @@ class _FeedBScreenState extends State<FeedBScreen> {
                     userName: userViewModel.name ?? " Anonymous",
                     contentName: widget.contentName ?? "unknown",
                   );
+
+                  final feedbackData = {
+                    "userId": userViewModel.userId ?? "Anonymous",
+                    "userName": userViewModel.name ?? "Anonymous",
+                    "contentId": widget.contentId ?? "unknown",
+                    "contentType": widget.feedbackType,
+                    "contentName": widget.contentName,
+                    "feedbackMessage": feedbackController.text.trim(),
+                    "rating": widget.rating ?? 0.0,
+                    "suggestion": suggestionController.text.trim(),
+                    "email": emailController.text.trim(),
+                  };
+                  try {
+                    // 3️⃣ Call the Cloud Function to send email to creator
+                    final callable = FirebaseFunctions.instance.httpsCallable(
+                      'sendFeedbackEmailToCreator',
+                    );
+                    final result = await callable.call({
+                      "feedbackData": feedbackData,
+                    });
+
+                    debugPrint("📨 Feedback email result: ${result.data}");
+                  } catch (e) {
+                    debugPrint("❌ Failed to send feedback email: $e");
+                  }
 
                   if (context.mounted) {
                     formKey.currentState?.reset();

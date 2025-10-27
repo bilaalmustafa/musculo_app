@@ -67,7 +67,17 @@ class _WarmUpState extends State<ScaleVersion> {
                             child: Column(
                               spacing: 5,
                               children: [
-                                ReelsItem(videodata: video, screenintervel: 2),
+                                ReelsItem(
+                                  videodata: video,
+                                  screenintervel: 2,
+                                  index: index,
+                                  onRemoveTap: () {
+                                    Provider.of<AddWorkoutVeiwModel>(
+                                      context,
+                                      listen: false,
+                                    ).removeSelectedVideo(sectionTitle, video);
+                                  },
+                                ),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,

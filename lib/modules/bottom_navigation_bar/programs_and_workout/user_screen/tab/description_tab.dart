@@ -1,3 +1,4 @@
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:musculo_app/components/custom_button.dart';
@@ -85,7 +86,7 @@ class _ProgramDetailScreenState extends State<DescriptionTab> {
                       ),
                       PoppinsText(
                         text:
-                            "${data.rating?.toStringAsFixed(1) ?? 0} (${data.review?.length ?? 0} review)",
+                            "${data.rating?.toStringAsFixed(1) ?? 0} (${data.ratingCount ?? 0} review)",
                         fontSize: Sizes.s10,
                         fontWeight: TextWeight.regular,
                         color: ConstColors.greyA1A1,
@@ -248,71 +249,196 @@ class _ProgramDetailScreenState extends State<DescriptionTab> {
               flex: 7,
               child: Consumer<DiscoverViewModel>(
                 builder: (context, vm, _) {
-                  UserModel? usermodel =
-                      context.read<UserViewModel>().userModel;
-                  final creatorId = widget.programModel.userId!;
-
                   return CustomButton(
                     loading: vm.isloading,
-                    onTap:
-                        usermodel!.listOfPrograms.contains(data)
-                            ? null
-                            : () async {
-                              UserModel? creatorModel =
-                                  await instance<UserService>().userById(
-                                    creatorId,
-                                  );
+                    onTap: () async {
+                      final userModel = context.read<UserViewModel>().userModel;
+                      if (userModel == null) return;
+                      final creatorId = widget.programModel.userId!;
+                      final creatorModel = await instance<UserService>()
+                          .userById(creatorId);
 
-                              bool response = await vm.payPayment(
-                                usermodel.email ?? "",
-                                data.price?.toDouble() ?? 0.0,
-                              );
-                              if (!response) {
-                                Fluttertoast.showToast(msg: "Payment Failed");
-                                return;
-                              }
+                      if (isPurchased) {
+                        // 🟥 CANCEL PURCHASE LOGIC
+                        final confirm = await showDialog<bool>(
+                          context: context,
 
-                              usermodel.listOfPrograms.add(data);
+                          builder:
+                              (_) => AlertDialog(
+                                title: const Text("Cancel Program"),
+                                content: const Text(
+                                  "Are you sure you want to cancel this Program?",
+                                ),
+                                backgroundColor: Colors.white,
+                                actions: [
+                                  TextButton(
+                                    onPressed:
+                                        () => Navigator.pop(context, false),
+                                    child: const Text("No"),
+                                  ),
+                                  TextButton(
+                                    onPressed:
+                                        () => Navigator.pop(context, true),
+                                    child: const Text("Yes"),
+                                  ),
+                                ],
+                              ),
+                        );
 
-                              UserModel? success = await vm.parchaseProgram(
-                                usermodel.userId!,
-                                usermodel,
-                                usermodel.listOfPrograms,
-                              );
-                              if (creatorModel != null) {
-                                // Ensure sold list is not null
-                                List<SoldModel> updatedSoldList = List.from(
-                                  creatorModel.sold,
-                                );
-                                SoldModel soldItem = SoldModel(
-                                  type: "program",
-                                  packegeMode: true,
-                                  userId: data.userId!,
-                                  contentName: data.programName ?? "unknow",
-                                  contentId: data.programId!,
-                                  contentPrice: data.price?.toDouble() ?? 0.0,
-                                  buyDate: DateTime.now(),
-                                );
-                                updatedSoldList.add(soldItem);
+                        if (confirm != true) return;
 
-                                // 3️⃣ Update Creator Document in Firestore
-                                await vm.addSoldInList(
-                                  creatorModel.userId!,
-                                  creatorModel,
-                                  updatedSoldList,
-                                );
-                              }
-                              if (success != null) {
-                                setState(() {
-                                  isPurchased = usermodel.listOfPrograms
-                                      .contains(data);
-                                  Fluttertoast.showToast(
-                                    msg: "Program Purchased Successfully",
-                                  );
-                                });
-                              }
-                            },
-                    buttonText: isPurchased ? "Purchased" : "Buy",
+                        // Remove from user's list
+                        userModel.listOfPrograms.removeWhere(
+                          (p) => p.programId == data.programId,
+                        );
+
+                        // Remove from creator's sold list
+                        if (creatorModel != null) {
+                          creatorModel.sold.removeWhere(
+                            (s) => s.contentId == data.programId,
+                          );
+                          await vm.addSoldInList(
+                            creatorModel.userId!,
+                            creatorModel,
+                            creatorModel.sold,
+                          );
+                        }
+
+                        // Update user Firestore
+                        await vm.parchaseProgram(
+                          userModel.userId!,
+                          userModel,
+                          userModel.listOfPrograms,
+                        );
+
+                        final functions = FirebaseFunctions.instance;
+                        try {
+                          await functions
+                              .httpsCallable('sendCancelNotification')
+                              .call({
+                                'userId': userModel.userId,
+                                'creatorId': creatorModel!.userId,
+                                'type': 'program',
+                                'itemName': data.programName,
+                              });
+                          print("✅ Cancel notification sent to user & creator");
+                        } catch (e) {
+                          print("❌ Failed to send cancel notification: $e");
+                        }
+
+                        setState(() => isPurchased = false);
+                        Fluttertoast.showToast(
+                          msg: "Program Purchase Cancelled",
+                        );
+                      } else {
+                        // 🟢 BUY LOGIC (same as before)
+                        final paymentSuccess = await vm.payPayment(
+                          userModel.email ?? "",
+                          data.price?.toDouble() ?? 0.0,
+                        );
+
+                        if (!paymentSuccess) {
+                          Fluttertoast.showToast(msg: "Payment Failed");
+                          return;
+                        }
+
+                        userModel.listOfPrograms.add(data);
+
+                        final purchaseResult = await vm.parchaseProgram(
+                          userModel.userId!,
+                          userModel,
+                          userModel.listOfPrograms,
+                        );
+
+                        if (creatorModel != null) {
+                          final updatedSoldList = List<SoldModel>.from(
+                            creatorModel.sold,
+                          );
+                          updatedSoldList.add(
+                            SoldModel(
+                              type: "program",
+                              packegeMode: true,
+                              userId: data.userId!,
+                              contentName: data.programName ?? "unknown",
+                              contentId: data.programId!,
+                              contentPrice: data.price?.toDouble() ?? 0.0,
+                              buyDate: DateTime.now(),
+                            ),
+                          );
+                          await vm.addSoldInList(
+                            creatorModel.userId!,
+                            creatorModel,
+                            updatedSoldList,
+                          );
+                        }
+
+                        if (purchaseResult != null) {
+                          setState(() => isPurchased = true);
+                          Fluttertoast.showToast(
+                            msg: "Program Purchased Successfully",
+                          );
+                        }
+                      }
+                    },
+                    // onTap:
+                    //     usermodel!.listOfPrograms.contains(data)
+                    //         ? null
+                    //         : () async {
+                    //           UserModel? creatorModel =
+                    //               await instance<UserService>().userById(
+                    //                 creatorId,
+                    //               );
+
+                    //           bool response = await vm.payPayment(
+                    //             usermodel.email ?? "",
+                    //             data.price?.toDouble() ?? 0.0,
+                    //           );
+                    //           if (!response) {
+                    //             Fluttertoast.showToast(msg: "Payment Failed");
+                    //             return;
+                    //           }
+
+                    //           usermodel.listOfPrograms.add(data);
+
+                    //           UserModel? success = await vm.parchaseProgram(
+                    //             usermodel.userId!,
+                    //             usermodel,
+                    //             usermodel.listOfPrograms,
+                    //           );
+                    //           if (creatorModel != null) {
+                    //             // Ensure sold list is not null
+                    //             List<SoldModel> updatedSoldList = List.from(
+                    //               creatorModel.sold,
+                    //             );
+                    //             SoldModel soldItem = SoldModel(
+                    //               type: "program",
+                    //               packegeMode: true,
+                    //               userId: data.userId!,
+                    //               contentName: data.programName ?? "unknow",
+                    //               contentId: data.programId!,
+                    //               contentPrice: data.price?.toDouble() ?? 0.0,
+                    //               buyDate: DateTime.now(),
+                    //             );
+                    //             updatedSoldList.add(soldItem);
+
+                    //             // 3️⃣ Update Creator Document in Firestore
+                    //             await vm.addSoldInList(
+                    //               creatorModel.userId!,
+                    //               creatorModel,
+                    //               updatedSoldList,
+                    //             );
+                    //           }
+                    //           if (success != null) {
+                    //             setState(() {
+                    //               isPurchased = usermodel.listOfPrograms
+                    //                   .contains(data);
+                    //               Fluttertoast.showToast(
+                    //                 msg: "Program Purchased Successfully",
+                    //               );
+                    //             });
+                    //           }
+                    //         },
+                    buttonText: isPurchased ? "Cancel Purchased" : "Buy",
                   );
                 },
               ),

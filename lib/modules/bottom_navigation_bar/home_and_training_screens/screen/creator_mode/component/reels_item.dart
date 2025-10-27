@@ -28,6 +28,7 @@ class ReelsItem extends StatelessWidget {
     required this.videodata,
     this.sectionTitle,
     this.index,
+    this.onRemoveTap,
   });
   final bool selected;
   int screenintervel;
@@ -37,6 +38,8 @@ class ReelsItem extends StatelessWidget {
 
   final VideoModel videodata;
   final Function()? onTap;
+  final VoidCallback? onRemoveTap;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -95,6 +98,7 @@ class ReelsItem extends StatelessWidget {
                 PoppinsText(
                   text: videodata.name,
                   fontSize: Sizes.s12,
+                  overflow: TextOverflow.ellipsis,
                   fontWeight: TextWeight.semiBold,
                 ),
                 if (screenintervel == 1)
@@ -136,15 +140,41 @@ class ReelsItem extends StatelessWidget {
                   ),
               ],
             ),
+            //MARK:
             Spacer(),
             Align(
               alignment: Alignment.topRight,
-              child: SharePicture(
-                imagePath:
-                    screenintervel == 0
-                        ? Assets.heartIcon
-                        : Assets.moreHrizontal,
-              ),
+              child:
+                  screenintervel == 0
+                      ? const SizedBox.shrink()
+                      : PopupMenuButton<String>(
+                        padding: EdgeInsets.zero,
+                        elevation: 3,
+                        color: ConstColors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        onSelected: (value) {
+                          if (value == 'remove' && onRemoveTap != null) {
+                            onRemoveTap!();
+                          }
+                        },
+                        itemBuilder:
+                            (context) => [
+                              const PopupMenuItem(
+                                value: 'remove',
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.delete_outline, size: 20),
+                                    SizedBox(width: 8),
+                                    Text('Remove'),
+                                  ],
+                                ),
+                              ),
+                            ],
+
+                        child: SharePicture(imagePath: Assets.moreHrizontal),
+                      ),
             ),
           ],
         ),

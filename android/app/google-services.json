@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "332527150538-kh4am4skcvd8ejg17heb5r8npkl76b0j.apps.googleusercontent.com",
+          "client_id": "332527150538-veoqv4o8uio0lhj45p6dcf5p21gfek09.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.dartsync.musculo",
-            "certificate_hash": "e0400708de5fc6d6b96b98d181b831c213ce8fba"
+            "certificate_hash": "58fdf43c3e0eea0b651c64c5ece645816bec1adb"
           }
         },
         {

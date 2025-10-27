@@ -57,16 +57,19 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
               spacing: Sizes.s20,
               children: [
                 SizedBox(height: 10),
+                // MARK:
                 Feedbackfield(
                   controller: feedbackController,
                   hint: 'Feedback',
                   maxline: 5,
+                  textInputAction: TextInputAction.done,
                   validator: (value) => Validator.valueExists(value),
                 ),
                 Feedbackfield(
                   controller: suggestionController,
                   hint: 'Suggestion for improvement ( Optional ) ',
                   maxline: 5,
+                  textInputAction: TextInputAction.done,
                 ),
 
                 CustomTextField(

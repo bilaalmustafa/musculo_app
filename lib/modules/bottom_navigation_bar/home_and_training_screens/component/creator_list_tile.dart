@@ -8,7 +8,6 @@ import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 
-
 import '../../../../model/user_model.dart';
 
 class CreatorListTile extends StatelessWidget {
@@ -27,7 +26,17 @@ class CreatorListTile extends StatelessWidget {
         backgroundImage:
             creator.profileImageUrl != null
                 ? NetworkImage(creator.profileImageUrl ?? "")
-                : AssetImage(Assets.maskgroup),
+                : null,
+        backgroundColor: creator.profileImageUrl == null ? Colors.black : null,
+        child:
+            creator.profileImageUrl == null
+                ? PoppinsText(
+                  text: creator.name![0].toUpperCase(),
+                  fontSize: 30,
+                  fontWeight: TextWeight.semiBold,
+                  color: ConstColors.white,
+                )
+                : null,
       ),
       title: Wrap(
         spacing: Sizes.s0_5,
@@ -40,7 +49,7 @@ class CreatorListTile extends StatelessWidget {
             fontWeight: TextWeight.semiBold,
           ),
 
-          creator.subPlane == "free"
+          creator.subPlane == "Basic"
               ? Container()
               : SharePicture(imagePath: Assets.official),
         ],

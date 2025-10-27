@@ -59,6 +59,9 @@ class WorkoutModel extends HiveObject {
   @HiveField(18) // New field
   final DateTime? updatedAt;
 
+  @HiveField(19)
+  final Map<String, dynamic>? userRatings;
+
   WorkoutModel({
     this.workoutId,
     this.userId,
@@ -79,6 +82,7 @@ class WorkoutModel extends HiveObject {
     this.ratingCount,
     this.createdAt,
     this.updatedAt,
+    this.userRatings,
   });
 
   factory WorkoutModel.fromJson(Map<String, dynamic> json) {
@@ -118,6 +122,7 @@ class WorkoutModel extends HiveObject {
       // Add conversion for the new timestamps
       createdAt: (json['createdAt'] as Timestamp?)?.toDate(),
       updatedAt: (json['updatedAt'] as Timestamp?)?.toDate(),
+      userRatings: json['userRatings'] as Map<String, dynamic>?,
     );
   }
 
@@ -145,6 +150,7 @@ class WorkoutModel extends HiveObject {
       // Add the new timestamps
       "createdAt": createdAt,
       "updatedAt": updatedAt,
+      'userRatings': userRatings,
     };
   }
 
@@ -168,6 +174,7 @@ class WorkoutModel extends HiveObject {
     Map<String, List<VideoModel>>? categorizedVideos,
     DateTime? createdAt,
     DateTime? updatedAt,
+    Map<String, dynamic>? userRatings,
   }) {
     return WorkoutModel(
       workoutId: workoutId ?? this.workoutId,
@@ -189,6 +196,7 @@ class WorkoutModel extends HiveObject {
       categorizedVideos: categorizedVideos ?? this.categorizedVideos,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      userRatings: userRatings ?? this.userRatings,
     );
   }
 }

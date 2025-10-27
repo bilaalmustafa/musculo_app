@@ -1,5 +1,5 @@
 import 'package:musculo_app/model/programs_model.dart';
-import 'package:musculo_app/model/workouts_model.dart';
+
 
 import '../../modules/bottom_navigation_bar/programs_and_workout/screen/view_model/discover_filter_provider.dart';
 
@@ -33,7 +33,6 @@ class ProgramFilterUtil {
     if (filter.planType != 0) {
       final planTypeOptions = [
         "All",
-        "With Equipment",
         "Without Equipment",
         "Stretching",
       ];
@@ -43,8 +42,6 @@ class ProgramFilterUtil {
           filtered.where((p) {
             final typeOf = p.typeOf?.toLowerCase() ?? '';
             switch (selectedPlanType) {
-              case "with equipment":
-                return typeOf.contains("with equipment");
               case "without equipment":
                 return typeOf.contains("without equipment");
               case "stretching":

@@ -1,9 +1,9 @@
 import 'dart:developer';
 
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_functions/cloud_functions.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
 
 class PasswordResetProvider with ChangeNotifier {
   bool isloading = false;
@@ -89,13 +89,13 @@ class PasswordResetProvider with ChangeNotifier {
       return false;
     }
 
-    try {
-      await FirebaseAuth.instance.currentUser?.updatePassword(newPassword);
-      print('Password updated successfully');
-      return true;
-    } catch (e) {
-      print('Failed to update password: $e');
-      return false;
-    }
+    // try {
+    //   await FirebaseAuth.instance.currentUser?.updatePassword(newPassword);
+    //   print('Password updated successfully');
+    //   return true;
+    // } catch (e) {
+    //   print('Failed to update password: $e');
+    //   return false;
+    // }
   }
 }

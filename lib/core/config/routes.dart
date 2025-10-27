@@ -189,7 +189,11 @@ class RouteGenerator {
           builder: (_) => PaymentScreen(planType: planType),
         );
       case Routes.creatorProfileScreen:
-        return MaterialPageRoute(builder: (_) => const CreatorProfileScreen());
+        final int? selectedIndex = routeSitting.arguments as int?;
+        return MaterialPageRoute(
+          builder:
+              (_) => CreatorProfileScreen(initialTabIndex: selectedIndex ?? 0),
+        );
       case Routes.feedbScreen:
         final args = routeSitting.arguments as Map<String, dynamic>;
         final feedbackType = args['feedbackType'] as String;
