@@ -225,7 +225,7 @@ class _CoachProfileState extends State<CoachProfile> {
                         if (data.role == "creator") ...[
                           Icon(Icons.star, color: ConstColors.orange, size: 20),
                           PoppinsText(
-                            text: "${data.rating ?? 0.0}",
+                            text: "${data.rating!.toStringAsFixed(1) ?? 0.0}",
                             fontSize: Sizes.s10,
                           ),
 

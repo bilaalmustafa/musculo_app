@@ -61,7 +61,8 @@ class CreatorListTile extends StatelessWidget {
         children: [
           Icon(Icons.star, color: ConstColors.orange, size: Sizes.s20),
           PoppinsText(
-            text: "${creator.rating ?? 0.0} (${creator.review.length} review)",
+            text:
+                "${creator.rating!.toStringAsFixed(1)} (${creator.review.length} review)",
             fontSize: Sizes.s10,
             fontWeight: TextWeight.regular,
             color: ConstColors.greyA1A1,
