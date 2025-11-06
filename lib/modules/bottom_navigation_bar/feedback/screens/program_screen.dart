@@ -3,10 +3,7 @@ import 'package:musculo_app/components/shared_appbar.dart';
 import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/program_video_item.dart';
-import 'package:flutter/material.dart';
-import 'package:musculo_app/components/shared_appbar.dart';
-import 'package:musculo_app/core/constants/assets.dart';
-import 'package:musculo_app/core/constants/const_colors.dart';
+
 
 import '../../../../components/customTextField.dart';
 import '../../../../components/custom_button.dart';

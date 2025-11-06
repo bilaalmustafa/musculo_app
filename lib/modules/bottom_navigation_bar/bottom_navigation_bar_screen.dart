@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:musculo_app/components/share_picture.dart';
 import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
+import 'package:musculo_app/core/services/notification_services.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/feedback/screens/feedback.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/user_mode/home_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/user_profile_screens/user_profile.dart';
@@ -26,23 +27,27 @@ class BottomNavigationScreen extends StatefulWidget {
 }
 
 class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
-  List<Widget> get _screens {
-    return [
-      HomeScreen(
-        initialTabIndex:
-            widget.initialMainTabIndex == 0
-                ? widget.initialHomeScreenSubTab
-                : 0,
-      ),
+  late List<Widget> _screens;
+  NotificationService notificationServices = NotificationService();
+  @override
+  void initState() {
+    super.initState();
+    notificationServices.requestNotificationPermission();
+    notificationServices.firebaseInit(context);
+    notificationServices.setupInteractMessage(context);
+    notificationServices.isTokenRefresh();
+    notificationServices.getDevcieToken().then((value) {
+      print('Device Token');
+      print(value);
+    });
+
+    _screens = [
+      HomeScreen(),
       DiscoverScreen(),
       FeedbackScreen(),
       UserProfile(),
     ];
-  }
 
-  @override
-  void initState() {
-    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Get the provider instance (listen: false because we are only calling methods)
       final bottomProvider = Provider.of<BottomNavigationProvider>(

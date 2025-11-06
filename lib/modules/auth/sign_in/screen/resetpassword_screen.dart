@@ -27,7 +27,7 @@ class _ResetpasswordScreenState extends State<ResetpasswordScreen> {
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<PasswordResetProvider>(context);
+    // final provider = Provider.of<PasswordResetProvider>(context);
     return Scaffold(
       backgroundColor: ConstColors.white,
       appBar: SharedAppBar(),

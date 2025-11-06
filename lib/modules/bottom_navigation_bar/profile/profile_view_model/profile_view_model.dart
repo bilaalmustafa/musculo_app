@@ -1,20 +1,26 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+
+import 'package:hive/hive.dart';
+import 'package:musculo_app/model/programs_model.dart';
+import 'package:musculo_app/model/user_model.dart';
+
 import 'dart:developer';
 
 import 'package:cloud_functions/cloud_functions.dart';
 
-import 'package:flutter/material.dart';
-
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:hive/hive.dart';
+
 import 'package:musculo_app/core/config/injections.dart';
 import 'package:musculo_app/core/services/creator_plane_service.dart';
 import 'package:musculo_app/model/creator_premium.dart';
-import 'package:musculo_app/model/programs_model.dart';
+
 import 'package:musculo_app/model/user_model.dart' as u;
 
 import 'package:musculo_app/model/user_model.dart';
 
 import 'package:musculo_app/model/workouts_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileProvider extends ChangeNotifier {
   UserModel? _user;
@@ -49,16 +55,19 @@ class ProfileProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> creatorPremiumPlane(
-    String id,
-    String email,
-    String card,
-    double payment,
-  ) async {
+  Future<bool> creatoPlan({
+    required String id,
+    required String email,
+    required String planType, // 'free' or 'premium'
+    String card = "N/A",
+    double payment = 0.0,
+  }) async {
     log("creatorId: $id");
-log("email: $email");
-log("card: $card");
-log("payment: $payment");
+    log("email: $email");
+    log("card: $card");
+    log("payment: $payment");
+    log("planType: $planType");
+
     try {
       CreatorPremium premium = CreatorPremium(
         creatorId: id,
@@ -67,22 +76,31 @@ log("payment: $payment");
         email: email,
         card: card,
         payment: payment,
-        paymentStatus: "Compeleted",
+        paymentStatus: planType == "premium" ? "Compeleted" : "free",
+        planType: planType,
       );
-      log('Sending to backend: ${premium.toJson()}');
+      log('Sending to backend ($planType Creator): ${premium.toJson()}');
 
       final created = await instance<CreatorPlaneService>()
           .createCreatorPremium(id, premium);
+
+      if (created) {
+        // ✅ Also update user role & subPlan in Firestore
+        await FirebaseFirestore.instance.collection('users').doc(id).update({
+          'role': 'creator',
+          'subPlane': planType, // 'Basic' or 'premium'
+        });
+      }
       return created;
     } catch (e) {
-      print(e);
+      log("error : $e");
       Fluttertoast.showToast(msg: "Error: $e");
       log("error: $e");
       return false;
     }
   }
 
-  Future<UserModel?> getCreatorPlan(String uid) async {
+  Future<UserModel?> getCreatorPlan(String uid, String planType) async {
     try {
       isLoading = true;
       notifyListeners();
@@ -97,12 +115,33 @@ log("payment: $payment");
       final HttpsCallableResult response = await creatorPlane.call({
         ...userModel.toJson(),
         "userid": uid,
+        "planType": planType,
       });
+      log('this is the plan type $planType');
 
       if (response.data['success'] == true) {
+
+        final firestore = FirebaseFirestore.instance;
+      final batch = firestore.batch();
+       final discoveryQuery = await firestore
+          .collection('discovery')
+          .where('userId', isEqualTo: uid)
+          .get();
+      for (var doc in discoveryQuery.docs) {
+        batch.update(doc.reference, {'creatorName': userModel.name});
+      }
+
+      await batch.commit();
+
         isLoading = false;
         notifyListeners();
-        Fluttertoast.showToast(msg: "Become creator successful");
+        
+        Fluttertoast.showToast(
+          msg:
+              planType == "premium"
+                  ? "Become premium creator successful"
+                  : "Become free creator successful",
+        );
         nameController.clear();
         overviewController.clear();
         goalController.clear();
@@ -133,6 +172,8 @@ log("payment: $payment");
       });
 
       if (response.data['success'] == true) {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.remove('isSwitch');
         isLoading = false;
         notifyListeners();
         Fluttertoast.showToast(msg: "Cancel cretor subcribtion");

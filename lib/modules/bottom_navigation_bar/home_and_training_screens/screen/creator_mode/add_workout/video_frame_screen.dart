@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/core/config/extensions.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
-import 'package:musculo_app/modules/auth/register/component/customVideoPlayer.dart';
+
 import 'package:video_player/video_player.dart';
 
 class VideoFrameScreen extends StatefulWidget {

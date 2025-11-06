@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:musculo_app/components/custom_button.dart';
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/components/shared_appbar.dart';
@@ -8,6 +8,7 @@ import 'package:musculo_app/core/config/extensions.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/view_model/user_view_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/chips.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/rang_slider.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/screen/view_model/discover_filter_provider.dart';
@@ -21,12 +22,7 @@ class FilterScreen extends StatefulWidget {
 }
 
 class _FilterScreenState extends State<FilterScreen> {
-  final List<String> options = [
-    "All",
-    "With Equipment",
-    "Without Equipment",
-    "Stretching",
-  ];
+  final List<String> options = ["All", "Without Equipment", "Stretching"];
   final List<String> gender = ["All", "Male", "Female"];
   final List<String> premium = ["Premium only "];
 
@@ -42,6 +38,27 @@ class _FilterScreenState extends State<FilterScreen> {
   @override
   Widget build(BuildContext context) {
     final filtered = context.watch<DiscoverFilter>();
+    final userRole = context.read<UserViewModel>().userModel?.role ?? '';
+
+    final ValueChanged<dynamic> handlePremiumTap =
+        userRole == 'creator'
+            ? (
+              _,
+            ) {} // Creator: No function assigned, making the chip non-interactive.
+            : (value) {
+              // User: Toggle the boolean state when the chip is tapped.
+              filtered.setTempPremium(!filtered.tempPremium);
+            };
+
+    // 2. Define the appearance (selectedIndex):
+    final int premiumChipSelectedIndex =
+        userRole == 'creator'
+            ? 0 // Creator: Always appears selected.
+            : filtered.tempPremium
+            ? 0 // User: Selected if tempPremium is TRUE.
+            : -1; // User: Unselected if tempPremium is FALSE.
+
+    // -----------------------------------------------------------
     return Scaffold(
       backgroundColor: ConstColors.white,
       appBar: SharedAppBar(title: "Filter"),
@@ -80,10 +97,9 @@ class _FilterScreenState extends State<FilterScreen> {
                 fontWeight: TextWeight.semiBold,
               ),
               CustomChips(
-                selectedIndex: filtered.tempPremium ? 0 : -1,
+                selectedIndex: premiumChipSelectedIndex,
                 optionslist: premium,
-                onSelect:
-                    (value) => filtered.setTempPremium(filtered.tempPremium),
+                onSelect: handlePremiumTap,
               ),
               PoppinsText(
                 text: "Price",
@@ -103,7 +119,7 @@ class _FilterScreenState extends State<FilterScreen> {
                 fontWeight: TextWeight.semiBold,
               ),
               RangSliders(
-                min: 1.0,
+                min: 0,
                 max: 60,
                 type: "min",
                 currentRange: filtered.tempLength,

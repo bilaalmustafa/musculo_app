@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musculo_app/components/shared_appbar.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:video_player/video_player.dart';
 
@@ -38,6 +39,7 @@ class _VedioplayercreenState extends State<Vedioplayercreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ConstColors.white,
+      appBar: SharedAppBar(),
       body: Center(
         child:
             _isInitialized
@@ -63,7 +65,7 @@ class _VedioplayercreenState extends State<Vedioplayercreen> {
                           width: 80,
                           height: 80,
                           decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.5),
+                            color: Colors.black.withValues(alpha: .5),
                             shape: BoxShape.circle,
                           ),
                           child: const Icon(

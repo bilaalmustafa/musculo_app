@@ -29,7 +29,7 @@ class _DaysAWeeksState extends State<DaysAWeeks> {
               horizontal: 20.0,
             ).copyWith(top: 20),
             child: PoppinsText(
-              text: "How many day’s a week ?",
+              text: "How many days a week?",
               fontSize: Sizes.s24,
               fontWeight: TextWeight.semiBold,
             ),

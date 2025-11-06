@@ -12,22 +12,39 @@ import 'package:musculo_app/model/workouts_model.dart';
 
 class DiscoverViewModel extends ChangeNotifier {
   bool isloading = false;
-  int selectedRating = 2;
+  int selectedRating = 0;
+
   Future<ProgramModel?> postProgramRatingAndReview(
     String docId,
-    double rating,
-    int newCount,
+    double newRating,
     ProgramModel model,
-    List<String> reviewList,
+    String userId,
+    String reviewList,
   ) async {
     try {
       isloading = true;
       notifyListeners();
+      // get current review detail
+      final userRatings = Map<String, dynamic>.from(model.userRatings ?? {});
+      // check  if user already reviewed
+      final bool alreadyReviewed = userRatings.containsKey(userId);
+
+      userRatings[userId] = {'rating': newRating, 'review': reviewList};
+      final ratings =
+          userRatings.values.map((e) => e['rating'] as double).toList();
+      final double averageRating =
+          ratings.reduce((a, b) => a + b) / ratings.length;
+
+      final int newRatingCount =
+          alreadyReviewed
+              ? (model.ratingCount ?? ratings.length) // keep count same
+              : ratings.length; // only increases when it's new
 
       ProgramModel item = model.copyWith(
-        rating: rating,
-        review: reviewList,
-        ratingCount: newCount,
+        rating: averageRating,
+        ratingCount: newRatingCount,
+        userRatings: userRatings,
+        updatedAt: DateTime.now(),
       );
 
       await instance<ProgramServices>().ratingCreate(docId, item);
@@ -36,7 +53,7 @@ class DiscoverViewModel extends ChangeNotifier {
       notifyListeners();
       return item;
     } catch (e) {
-      log("discoveError $e");
+      log("program rating error: $e");
       isloading = false;
       notifyListeners();
       return null;
@@ -56,19 +73,36 @@ class DiscoverViewModel extends ChangeNotifier {
 
   Future<WorkoutModel?> postWorkoutRatingAndReview(
     String docId,
-    double rating,
-    int newCount,
+    double newRating,
+    // int newCount,
     WorkoutModel model,
-    List<String> reviewList,
+    String userId,
+    String reviewList,
   ) async {
     try {
       isloading = true;
       notifyListeners();
+      // get current review detail
+      final userRatings = Map<String, dynamic>.from(model.userRatings ?? {});
+      // check  if user already reviewed
+      final bool alreadyReviewed = userRatings.containsKey(userId);
+
+      userRatings[userId] = {'rating': newRating, 'review': reviewList};
+      final ratings =
+          userRatings.values.map((e) => e['rating'] as double).toList();
+      final double averageRating =
+          ratings.reduce((a, b) => a + b) / ratings.length;
+
+      final int newRatingCount =
+          alreadyReviewed
+              ? (model.ratingCount ?? ratings.length) // keep count same
+              : ratings.length; // only increases when it's new
 
       WorkoutModel item = model.copyWith(
-        rating: rating,
-        review: reviewList,
-        ratingCount: newCount,
+        rating: averageRating,
+        ratingCount: newRatingCount,
+        userRatings: userRatings,
+        updatedAt: DateTime.now(),
       );
 
       await instance<WorkoutServices>().workoutratingCreate(docId, item);
@@ -77,7 +111,7 @@ class DiscoverViewModel extends ChangeNotifier {
       notifyListeners();
       return item;
     } catch (e) {
-      log("discoveError $e");
+      log("workout rating error: $e");
       isloading = false;
       notifyListeners();
       return null;

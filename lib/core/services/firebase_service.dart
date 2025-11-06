@@ -45,6 +45,10 @@ class FirebaseService<T> {
     }
   }
 
+
+
+  
+
   Stream<T?> getByIdstream(String id) {
     try {
       return FirebaseFirestore.instance
@@ -85,26 +89,50 @@ class FirebaseService<T> {
   }
 
   // get all discovery function code
-  Stream<List<T>> getAllDiscovery(String type) {
-    return FirebaseFirestore.instance
-        .collection(collectionName)
-        .where('type', isEqualTo: type)
-        .snapshots()
-        .map((snapshot) {
-          return snapshot.docs.map((doc) => fromJson(doc.data())).toList();
-        });
+  Stream<List<T>> getAllDiscovery(String type, {String? status}) {
+    Query query = FirebaseFirestore.instance.collection(collectionName);
+
+    // Apply the 'type' filter
+    query = query.where('type', isEqualTo: type);
+
+    // Conditionally apply the 'status' filter if it's provided
+    if (status != null) {
+      query = query.where('status', isEqualTo: status);
+    }
+
+    // Order the results by 'createdAt' in descending order
+    query = query.orderBy('createdAt', descending: true);
+
+    return query.snapshots().map((snapshot) {
+      return snapshot.docs
+          .map((doc) => fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+    });
   }
 
   // get all creator excercise code
-  Stream<List<T>> getAllcreatorExercise(String type, String uid) {
-    return FirebaseFirestore.instance
+  Stream<List<T>> getAllcreatorExercise(
+    String type,
+    String uid, {
+    String? status,
+  }) {
+    Query query = FirebaseFirestore.instance
         .collection(collectionName)
         .where("userId", isEqualTo: uid)
-        .where('type', isEqualTo: type)
-        .snapshots()
-        .map((snapshot) {
-          return snapshot.docs.map((doc) => fromJson(doc.data())).toList();
-        });
+        .where("type", isEqualTo: type);
+
+    if (status != null) {
+      query = query.where("status", isEqualTo: status);
+    }
+
+    // Add the orderBy clause at the end
+    query = query.orderBy('createdAt', descending: true);
+
+    return query.snapshots().map((snapshot) {
+      return snapshot.docs
+          .map((doc) => fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+    });
   }
 
   // upload images function code

@@ -8,11 +8,8 @@ import 'package:musculo_app/model/user_model.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../components/customTextField.dart';
-import '../../../../components/share_picture.dart';
-import '../../../../core/constants/assets.dart';
-import '../../../../core/constants/sizes.dart';
+
 import '../../home_and_training_screens/view_model/user_view_model.dart';
-import '../component/customdropdown.dart';
 
 class Informationtab extends StatefulWidget {
   const Informationtab({super.key});
@@ -134,29 +131,34 @@ class _InformationtabState extends State<Informationtab> {
                     const SizedBox(height: 15),
                     CustomTextField(controller: goalController, title: "Goal"),
                     const SizedBox(height: 15),
-                    CustomDropdown(
-                      value: _selectExcercise,
-                      items: const [
-                        'Incline Dumbbell Press',
-                        'Bench Press',
-                        'Push-Ups',
-                        'Upper Body',
-                      ],
-                      hint: 'Select Favorite Excersice',
-                      onChanged: (value) {
-                        setState(() {
-                          _selectExcercise = value;
-                        });
-                      },
-                    ),
+                    // CustomDropdown(
+                    //   value: _selectExcercise,
+                    //   items: const [
+                    //     'Incline Dumbbell Press',
+                    //     'Bench Press',
+                    //     'Push-Ups',
+                    //     'Upper Body',
+                    //   ],
+                    //   hint: 'Select Favorite Excersice',
+                    //   onChanged: (value) {
+                    //     setState(() {
+                    //       _selectExcercise = value;
+                    //     });
+                    //   },
+                    // ),
                     const SizedBox(height: 15),
-                    CustomDropdown(
-                      value: _selectPlan,
-                      textColor: ConstColors.greyA1A1,
-                      items: const [],
-                      //  hint: 'Select Plan',
-                      onChanged: (value) {},
-                    ),
+                    // CustomDropdown(
+                    //   value: _selectPlan,
+                    //   items: const ['Free', 'Premium'],
+                    //   hint: 'Select Plan',
+                    //   onChanged: (value) {
+                    //     setState(() {
+                    //       _selectPlan = value;
+                    //     });
+                    //   },
+
+                    //   // textColor: ConstColors.greyA1A1,
+                    // ),
                     const SizedBox(height: 110), // reserve space above button
                   ],
                 ),

@@ -1,14 +1,14 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:musculo_app/components/poppins_text.dart';
-import 'package:musculo_app/components/share_picture.dart';
-import 'package:musculo_app/core/constants/assets.dart';
+import 'package:musculo_app/components/custom_shimmer.dart';
+
 import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/model/user_model.dart';
-import 'package:musculo_app/modules/auth/view_model/auth_view_model.dart';
+
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/view_model/user_view_model.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/profile/profile_view_model/profile_view_model.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +21,8 @@ import '../../../auth/register/component/show_dialog_box.dart';
 import 'package:pay/pay.dart';
 
 class PaymentScreen extends StatefulWidget {
-  const PaymentScreen({super.key});
+   final String planType;
+  const PaymentScreen({super.key, required this.planType});
 
   @override
   State<PaymentScreen> createState() => _PaymentScreenState();
@@ -41,14 +42,23 @@ class _PaymentScreenState extends State<PaymentScreen> {
   @override
   void initState() {
     super.initState();
+    if (widget.planType == 'Basic') {
+       WidgetsBinding.instance.addPostFrameCallback((_) {
+      _handlePostPaymentFlow(planType: "Basic");
+    });
+    } else {
+      
     _loadGPayConfig();
     _loadApplePayConfig();
+    }
   }
 
   Future<void> _loadGPayConfig() async {
     try {
       final jsonString = await rootBundle.loadString('assets/gPay.json');
+      log(jsonString);
       final config = PaymentConfiguration.fromJsonString(jsonString);
+
       setState(() {
         gpayConfig = config;
       });
@@ -60,6 +70,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   Future<void> _loadApplePayConfig() async {
     try {
       final jsonString = await rootBundle.loadString('assets/applePay.json');
+      log(jsonString);
       final config = PaymentConfiguration.fromJsonString(jsonString);
       setState(() {
         applepayConfig = config;
@@ -74,13 +85,16 @@ class _PaymentScreenState extends State<PaymentScreen> {
     return Scaffold(
       backgroundColor: ConstColors.white,
       appBar: SharedAppBar(title: 'Payment Method'),
-      body: Padding(
+      
+      body:widget.planType == 'Basic'?  const Center(child: Text("Activating free plan...")):
+
+       Padding(
         padding: EdgeInsets.all(Sizes.s16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           spacing: Sizes.s20,
           children: [
-            if (gpayConfig != null)
+            if (Platform.isAndroid && gpayConfig != null)
               GooglePayButton(
                 paymentConfiguration: gpayConfig!,
                 paymentItems: _paymentItems,
@@ -91,19 +105,19 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   setState(() {
                     _gpaySuccess = true;
                   });
-                  _handlePostPaymentFlow(data);
+                  _handlePostPaymentFlow(planType: "premium", data: data);
                 },
-                loadingIndicator: const CircularProgressIndicator(),
+                loadingIndicator: CustomShimmer(height: 50),
                 margin: const EdgeInsets.only(top: 15),
                 height: 80,
                 width: double.infinity,
               )
             else
               const Padding(
-                padding: EdgeInsets.all(16),
-                child: CircularProgressIndicator(),
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: CustomShimmer(height: 80),
               ),
-            if (applepayConfig != null)
+            if (Platform.isIOS && applepayConfig != null)
               ApplePayButton(
                 paymentConfiguration: applepayConfig!,
                 paymentItems: _paymentItems,
@@ -114,14 +128,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 width: double.infinity,
                 onPaymentResult: (data) {
                   log('Apple Pay Result: $data');
-                  _handlePostPaymentFlow(data);
+                  _handlePostPaymentFlow(planType: "premium", data: data);
                 },
-                loadingIndicator: const CircularProgressIndicator(),
+                loadingIndicator: const CustomShimmer(height: 50),
               )
             else
               const Padding(
-                padding: EdgeInsets.all(16),
-                child: CircularProgressIndicator(),
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: CustomShimmer(height: 80),
               ),
             // GestureDetector(
             //   onTap: () {
@@ -170,47 +184,60 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
   }
 
-  Future<void> _handlePostPaymentFlow(Map<String, dynamic> data) async {
+  Future<void> _handlePostPaymentFlow({
+    required String planType,
+    Map<String, dynamic>? data,
+  }) async {
     final creator = context.read<UserViewModel>().userModel;
-    if (creator != null) {
-      final profileProvider = context.read<ProfileProvider>();
+    if (creator == null) return;
+    final profileProvider = context.read<ProfileProvider>();
 
-      final createdsuccess = await profileProvider.creatorPremiumPlane(
-        creator.userId!,
-        creator.email!,
-        data['paymentMethodData']['info']['cardNetwork'] ?? 'N/A',
-        9.99,
-      );
-      if (!createdsuccess) {
-        Fluttertoast.showToast(msg: "Failed to record premium plan.");
-        return;
-      }
-      final UserModel? success = await profileProvider.getCreatorPlan(
-        creator.userId!,
-      );
-      if (success != null && context.mounted) {
-        showDialog(
-          barrierDismissible: false,
-          context: context,
-          barrierColor: Colors.black.withAlpha(230),
-          builder:
-              (_) => ShowDialogBox(
-                message:
-                    'You are now a creator, start selling workouts and programs.',
-                bottomWidget: CustomButton(
-                  buttonText: 'Back',
-                  textColor: ConstColors.black,
-                  buttonColor: ConstColors.secondary,
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      Routes.bottomnavigationbarscreen,
-                    );
-                  },
-                ),
+    String card = 'N/A';
+    double payment = 0.0;
+    if (planType.toLowerCase() == "premium" && data != null) {
+      card = data['paymentMethodData']['info']['cardNetwork'] ?? 'N/A';
+      payment = 9.99;
+    }
+
+
+    final createdsuccess = await profileProvider.creatoPlan(
+      id: creator.userId!,
+      email: creator.email!,
+      planType: planType,
+      card: card,
+      payment: payment
+    );
+    if (!createdsuccess) {
+      Fluttertoast.showToast(msg: "Failed to record ${planType=="premium" ? "premium":"Basic"} plan.");
+      return;
+    }
+
+    final UserModel? success = await profileProvider.getCreatorPlan(
+      creator.userId!,
+      planType
+    );
+    if (success != null && context.mounted) {
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        barrierColor: Colors.black.withAlpha(230),
+        builder:
+            (_) => ShowDialogBox(
+              message:
+                  'You are now a creator, start selling workouts and programs.',
+              bottomWidget: CustomButton(
+                buttonText: 'Back',
+                textColor: ConstColors.black,
+                buttonColor: ConstColors.secondary,
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    Routes.bottomnavigationbarscreen,
+                  );
+                },
               ),
-        );
-      }
+            ),
+      );
     }
   }
 }

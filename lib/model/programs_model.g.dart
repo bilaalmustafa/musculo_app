@@ -32,7 +32,7 @@ class ProgramModelAdapter extends TypeAdapter<ProgramModel> {
       rating: fields[12] as double?,
       ratingCount: fields[13] as int?,
       review: (fields[14] as List?)?.cast<String>(),
-      listOfWorkouts: (fields[11] as List?)?.cast<WorkoutModel>(),
+      listOfWorkoutIds: (fields[11] as List?)?.cast<String>(),
     );
   }
 
@@ -63,7 +63,7 @@ class ProgramModelAdapter extends TypeAdapter<ProgramModel> {
       ..writeByte(10)
       ..write(obj.totalTime)
       ..writeByte(11)
-      ..write(obj.listOfWorkouts)
+      ..write(obj.listOfWorkoutIds)
       ..writeByte(12)
       ..write(obj.rating)
       ..writeByte(13)

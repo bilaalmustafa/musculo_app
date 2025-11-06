@@ -7,13 +7,12 @@ import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
-import 'package:musculo_app/core/services/auth_services.dart';
+
 import 'package:musculo_app/modules/bottom_navigation_bar/feedback/components/feedbackfield.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/feedback/view_model/report_view_model.dart';
 import 'package:provider/provider.dart';
-
 import '../../../../components/custom_button.dart';
-import '../../../../components/logo_title_appbar.dart';
+import '../../../../components/shared_appbar.dart';
 import '../../../auth/register/component/show_dialog_box.dart';
 import '../../home_and_training_screens/view_model/user_view_model.dart';
 
@@ -60,7 +59,7 @@ class _ReportstabState extends State<Reportstab> {
   Widget build(BuildContext context) {
     final userViewModel = context.read<UserViewModel>().userModel;
     return Scaffold(
-      appBar: LogoTitleAppBar(title: widget.reportType),
+      appBar: SharedAppBar(title: widget.reportType),
       backgroundColor: ConstColors.white,
       body: SingleChildScrollView(
         child: Padding(
@@ -113,6 +112,7 @@ class _ReportstabState extends State<Reportstab> {
                               hint: 'Give Other Reason',
                               height: Sizes.s90,
                               maxline: 3,
+                              textInputAction: TextInputAction.done,
                               validator:
                                   (value) => Validator.valueExists(value),
                             ),
@@ -147,6 +147,7 @@ class _ReportstabState extends State<Reportstab> {
                       hint: 'Note ( Optional )',
                       height: Sizes.s90,
                       maxline: 3,
+                      textInputAction: TextInputAction.done,
                     ),
                     SizedBox(height: Sizes.s20),
                   ],

@@ -11,7 +11,7 @@ class Assets {
   static const String lock = "$_icons/Lock.svg";
   static const String message = "$_icons/Message.svg";
   static const String show = "$_icons/Show.svg";
-  static const String male = "$_icons/male.svg"; // not used
+  // static const String male = "$_icons/male.svg"; // not used
   static const String female = "$_icons/female.svg";
   static const String filterIcon = "$_icons/Filter.svg";
   static const String searchIcon = "$_icons/Search.svg";
@@ -37,7 +37,7 @@ class Assets {
   static const String chartBlack = "$_icons/ChartBlack.svg";
   static const String star1 = "$_icons/Star1.svg";
   static const String upload1 = "$_icons/Upload1.svg";
-  static const String sqaure1 = "$_icons/Close Square1.png"; // not used
+  // static const String sqaure1 = "$_icons/Close Square1.png"; // not used
   static const String arrowUp = "$_icons/ArrowUp2.svg";
   static const String reportIcon = "$_icons/Shield Fail.svg";
   static const String deleteIcon = "$_icons/Delete.svg";
@@ -50,13 +50,13 @@ class Assets {
   static const String group = "$_assets/Group.png";
   static const String bgimage = "$_assets/bgimage.png";
   static const String man = "$_assets/man.png";
-  static const String discovery = "$_assets/Discovery.png"; // not used
-  static const String playbutton = "$_assets/PlayButton.png"; // not used
+  // static const String discovery = "$_assets/Discovery.png"; // not used
+  // static const String playbutton = "$_assets/PlayButton.png"; // not used
   static const String workout = "$_assets/workuot.png";
   static const String profilebgpng = "$_assets/profilebg.png";
   static const String gpayment = "$_assets/gpayment.png";
   static const String ellipse = "$_assets/Ellipse.png";
-  static const String monog = "$_assets/monog.png"; // not used
+  // static const String monog = "$_assets/monog.png"; // not used
   static const String whatsappimage = "$_assets/Mask Group.png";
   static const String twitterImage = "$_assets/twitterImage.png";
   static const String instagramImage = "$_assets/instagramImage.png";
@@ -73,11 +73,11 @@ class Assets {
   static const String next = "$_svgs/next.svg";
   static const String swap = "$_svgs/Swap.svg";
   static const String congrate = "$_svgs/cong.svg";
-  static const String whatsapp = "$_svgs/whatsApp.svg"; // not used
-  static const String twitter = "$_svgs/x.svg"; // not used
-  static const String insta = "$_svgs/meta.svg"; // not used
+  // static const String whatsapp = "$_svgs/whatsApp.svg"; // not used
+  // static const String twitter = "$_svgs/x.svg"; // not used
+  // static const String insta = "$_svgs/meta.svg"; // not used
   static const String official = "$_svgs/official.svg";
-  static const String monugram = "$_svgs/monugram.svg"; // not used
+  // static const String monugram = "$_svgs/monugram.svg"; // not used
   static const String addUser = "$_svgs/Add User.svg";
   static const String switchUser = "$_svgs/switch_user.svg";
   static const String notification = "$_svgs/Notification.svg";
@@ -88,17 +88,17 @@ class Assets {
   static const String heartIcon = "$_svgs/Heart.svg";
   static const String calendarIcon = "$_svgs/Calendar.svg";
   static const String documentIcon = "$_svgs/Document.svg";
-  static const String empty = "$_svgs/empty.svg"; // not used
+  static const String empty = "$_svgs/empty.svg";
 
-  static const String profilebg = "$_svgs/profilebg.svg"; // not used
+  // static const String profilebg = "$_svgs/profilebg.svg"; // not used
   static const String tWallet = "$_svgs/tWallet.svg";
   static const String downSquare = "$_svgs/Down Square.svg";
   static const String rdownSquare = "$_svgs/RDown Square.svg";
   static const String mailDraw = "$_svgs/mailDraw.svg";
   static const String arrowleft = "$_svgs/ArrowLeft.svg";
   static const String playbutt = "$_svgs/Play Button.svg";
-  static const String dumbellImage = "$_svgs/dumbell.svg"; // not used
+  // static const String dumbellImage = "$_svgs/dumbell.svg"; // not used
   static const String closeSquare = "$_svgs/Close Square.svg";
-  static const String whatsappIcon = "$_svgs/whatsapp icon.svg"; // not used
+  // static const String whatsappIcon = "$_svgs/whatsapp icon.svg"; // not used
   static const String eidtSquare = "$_svgs/Edit Square.svg";
 }

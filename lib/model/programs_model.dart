@@ -1,5 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive/hive.dart';
-import 'package:musculo_app/model/workouts_model.dart';
 
 part 'programs_model.g.dart';
 
@@ -39,7 +39,7 @@ class ProgramModel extends HiveObject {
   int? totalTime;
 
   @HiveField(11)
-  List<WorkoutModel>? listOfWorkouts;
+  List<String>? listOfWorkoutIds;
   @HiveField(12)
   final double? rating;
   @HiveField(13)
@@ -48,6 +48,14 @@ class ProgramModel extends HiveObject {
   final List<String>? review;
   @HiveField(15)
   String? programId;
+  @HiveField(16)
+  String? status; // "draft" or "published"
+  @HiveField(17)
+  DateTime? createdAt;
+  @HiveField(18)
+  DateTime? updatedAt;
+  @HiveField(19)
+  Map<String, dynamic>? userRatings;
 
   ProgramModel({
     this.userId,
@@ -65,7 +73,11 @@ class ProgramModel extends HiveObject {
     this.rating,
     this.ratingCount,
     this.review,
-    this.listOfWorkouts,
+    this.listOfWorkoutIds,
+    this.status = "published", // default
+    this.createdAt,
+    this.updatedAt,
+    this.userRatings,
   });
 
   factory ProgramModel.fromJson(Map<String, dynamic> json) {
@@ -89,10 +101,11 @@ class ProgramModel extends HiveObject {
       intended: json['intended'],
       price: json["price"],
       totalTime: json["totalTime"],
-      listOfWorkouts:
-          (json['listOfWorkouts'] as List?)
-              ?.map((e) => WorkoutModel.fromJson(e))
-              .toList(),
+      listOfWorkoutIds: (json['listOfWorkoutIds'] as List?)?.cast<String>(),
+      status: json["status"] ?? "published",
+      createdAt: (json['createdAt'] as Timestamp?)?.toDate(),
+      updatedAt: (json['updatedAt'] as Timestamp?)?.toDate(),
+      userRatings: json['userRatings'] as Map<String, dynamic>?,
     );
   }
 
@@ -113,7 +126,11 @@ class ProgramModel extends HiveObject {
       "intended": intended,
       "price": price,
       "totalTime": totalTime,
-      'listOfWorkouts': listOfWorkouts?.map((e) => e.toJson()).toList(),
+      'listOfWorkoutIds': listOfWorkoutIds,
+      "status": status,
+      "createdAt": createdAt,
+      "updatedAt": updatedAt,
+      'userRatings': userRatings,
     };
   }
 
@@ -133,7 +150,11 @@ class ProgramModel extends HiveObject {
     double? rating,
     int? ratingCount,
     List<String>? review,
-    List<WorkoutModel>? listOfWorkouts,
+    List<String>? listOfWorkoutIds,
+    String? status,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    Map<String, dynamic>? userRatings,
   }) {
     return ProgramModel(
       userId: userId ?? this.userId,
@@ -151,7 +172,11 @@ class ProgramModel extends HiveObject {
       ratingCount: ratingCount ?? this.ratingCount,
       review: review ?? this.review,
       totalTime: totalTime ?? this.totalTime,
-      listOfWorkouts: listOfWorkouts ?? this.listOfWorkouts,
+      listOfWorkoutIds: listOfWorkoutIds ?? this.listOfWorkoutIds,
+      status: status ?? this.status,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      userRatings: userRatings ?? this.userRatings,
     );
   }
 }

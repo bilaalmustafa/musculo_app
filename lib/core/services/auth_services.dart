@@ -4,7 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+// import 'package:google_sign_in/google_sign_in.dart';
+import 'package:musculo_app/core/services/google_signin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
@@ -69,10 +70,13 @@ class AuthService {
   Future<bool> signOut() async {
     try {
       await _firebaseAuth.signOut();
-      final googleSignIn = GoogleSignIn();
-      if (await googleSignIn.isSignedIn()) {
-        await googleSignIn.signOut();
-      }
+       await GoogleSigninService.signOut();
+      // final googleSignIn = GoogleSignIn();
+      // if (await googleSignIn.isSignedIn()) {
+      //   await googleSignIn.signOut();
+      // }
+
+      
 
       await FacebookAuth.instance.logOut();
       // Clear shared preferences

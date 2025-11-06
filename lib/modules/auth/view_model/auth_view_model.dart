@@ -6,13 +6,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+// import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:musculo_app/core/config/injections.dart';
 import 'package:musculo_app/core/config/routes.dart';
 
 import 'package:musculo_app/core/services/account_storage.dart';
 import 'package:musculo_app/core/services/auth_services.dart';
+import 'package:musculo_app/core/services/google_signin.dart';
 import 'package:musculo_app/main.dart';
 
 import 'package:musculo_app/model/user_model.dart' as u;
@@ -33,7 +34,8 @@ class AuthViewModel with ChangeNotifier {
   bool isMale = true;
   int selectedage = 18;
   String fitnessLevel = "Beginner";
-  bool isLoading = false;
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
 
   User? currentUser;
 
@@ -67,7 +69,7 @@ class AuthViewModel with ChangeNotifier {
 
   Future<UserModel?> signUp() async {
     try {
-      isLoading = true;
+      _isLoading = true;
       notifyListeners();
 
       final HttpsCallable registerUser = FirebaseFunctions.instance
@@ -88,7 +90,7 @@ class AuthViewModel with ChangeNotifier {
       });
 
       // Always set loading to false
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
 
       if (response.data['success'] == true) {
@@ -121,7 +123,7 @@ class AuthViewModel with ChangeNotifier {
         return null;
       }
     } on FirebaseFunctionsException catch (e) {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
 
       log("Cloud Function Errorrrr: ${e.code} - ${e.message}");
@@ -131,11 +133,11 @@ class AuthViewModel with ChangeNotifier {
         );
       }
 
-      Fluttertoast.showToast(msg: e.message ?? 'Something went wrong');
+      Fluttertoast.showToast(msg: e.details ?? 'Something went wrong');
       return null;
     } catch (e) {
       // Handle any other unexpected errors
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
 
       log("Unexpected error: $e");
@@ -150,7 +152,7 @@ class AuthViewModel with ChangeNotifier {
 
   Future<User?> signIn(String email, String pass) async {
     //   show loading
-    isLoading = true;
+    _isLoading = true;
     notifyListeners();
 
     //   sign in with email and password
@@ -196,21 +198,21 @@ class AuthViewModel with ChangeNotifier {
       await prefs.setString('uid', user.uid);
     }
 
-    isLoading = false;
+    _isLoading = false;
     notifyListeners();
     return user;
   }
 
   Future<void> logout() async {
     // show loading
-    isLoading = true;
+    _isLoading = true;
     notifyListeners();
 
     // signout current user
     await _authServices.signOut();
     currentUser = null;
 
-    isLoading = false;
+    _isLoading = false;
     notifyListeners();
   }
 
@@ -370,83 +372,102 @@ class AuthViewModel with ChangeNotifier {
     }
   }
 
+  //   Future<void> loginWithGoogle(BuildContext context) async {
+  //     try {
+  //       //    Start and get all google user
+  //       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+  //       //    If the user cancels, googleUser will be null
+  //       if (googleUser == null) {
+  //         log('Google Sign-In was canceled by the user.');
+  //         Fluttertoast.showToast(msg: "Sign-in canceled");
+  //         return;
+  //       }
+
+  //       //    Request authentication details
+  //       final GoogleSignInAuthentication googleAuth =
+  //           await googleUser.authentication;
+
+  //       //    Create a new credential for Firebase
+  //       final AuthCredential credential = GoogleAuthProvider.credential(
+  //         accessToken: googleAuth.accessToken,
+  //         idToken: googleAuth.idToken,
+  //       );
+
+  //       //    Sign in to Firebase with the credential
+  //       final UserCredential userCredential = await _auth.signInWithCredential(
+  //         credential,
+  //       );
+  //       final User? user = userCredential.user;
+
+  //       // if user not equall to null then store data in firestore through UserModel
+  //       if (user != null) {
+  //         final userModel = u.UserModel(
+  //           userId: user.uid,
+  //           email: user.email ?? '',
+  //           name: user.displayName ?? '',
+  //           profileImageUrl: user.photoURL ?? '',
+  //           gender: '',
+  //           age: 0,
+  //           levelOfFitness: '',
+  //         );
+  //         await FirebaseFirestore.instance
+  //             .collection('users')
+  //             .doc(user.uid)
+  //             .set(userModel.toJson(), SetOptions(merge: true));
+  //         currentUser = user;
+  //         notifyListeners();
+  //       }
+
+  //       // Save UID and login state to SharedPreferences
+  //       final prefs = await SharedPreferences.getInstance();
+  //       await prefs.setBool('isLoggedIn', true);
+  //       await prefs.setString('uid', user!.uid);
+
+  //       // if Email not null then save data in Account Storage
+  //       if (user.email != null) {
+  //         await AccountStorage.saveCredentials(
+  //           user.email!,
+  //           '',
+  //           'google',
+  //           user.photoURL,
+  //           user.displayName,
+  //         );
+  //       }
+
+  //       // Navigate to BottomNavigation screen
+  //       if (context.mounted) {
+  //         Navigator.pushReplacementNamed(
+  //           context,
+  //           Routes.bottomnavigationbarscreen,
+  //         );
+  //       }
+
+  //       Fluttertoast.showToast(msg: "Successfully signed in!");
+  //     } catch (e) {
+  //       log('Error during Google Sign-In: $e');
+  //       Fluttertoast.showToast(msg: 'An error occurred during sign-in.');
+  //     } finally {
+  //       log('googleSign() → finished');
+  //     }
+  //   }
+
   Future<void> loginWithGoogle(BuildContext context) async {
+    // _isLoading = true;
+    // notifyListeners();
     try {
-      //    Start and get all google user
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      final userCredential = 
+          await GoogleSigninService.signInWithGoogle(context);
 
-      //    If the user cancels, googleUser will be null
-      if (googleUser == null) {
-        log('Google Sign-In was canceled by the user.');
-        Fluttertoast.showToast(msg: "Sign-in canceled");
-        return;
+           if (userCredential != null && userCredential.user != null) {
+        currentUser  = userCredential.user;
       }
-
-      //    Request authentication details
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
-
-      //    Create a new credential for Firebase
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-
-      //    Sign in to Firebase with the credential
-      final UserCredential userCredential = await _auth.signInWithCredential(
-        credential,
-      );
-      final User? user = userCredential.user;
-
-      // if user not equall to null then store data in firestore through UserModel
-      if (user != null) {
-        final userModel = u.UserModel(
-          userId: user.uid,
-          email: user.email ?? '',
-          name: user.displayName ?? '',
-          profileImageUrl: user.photoURL ?? '',
-          gender: '',
-          age: 0,
-          levelOfFitness: '',
-        );
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .set(userModel.toJson(), SetOptions(merge: true));
-        currentUser = user;
-        notifyListeners();
-      }
-
-      // Save UID and login state to SharedPreferences
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('isLoggedIn', true);
-      await prefs.setString('uid', user!.uid);
-
-      // if Email not null then save data in Account Storage
-      if (user.email != null) {
-        await AccountStorage.saveCredentials(
-          user.email!,
-          '',
-          'google',
-          user.photoURL,
-          user.displayName,
-        );
-      }
-
-      // Navigate to BottomNavigation screen
-      if (context.mounted) {
-        Navigator.pushReplacementNamed(
-          context,
-          Routes.bottomnavigationbarscreen,
-        );
-      }
-
-      Fluttertoast.showToast(msg: "Successfully signed in!");
     } catch (e) {
-      log('Error during Google Sign-In: $e');
-      Fluttertoast.showToast(msg: 'An error occurred during sign-in.');
-    } finally {
-      log('googleSign() → finished');
+       print("Provider Google Sign-in Error: $e");
+       Fluttertoast.showToast(msg: "Google Sign-in failed.");
+    }finally{
+       _isLoading = false;
+      notifyListeners();
     }
   }
 }

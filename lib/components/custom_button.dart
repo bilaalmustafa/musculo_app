@@ -20,6 +20,7 @@ class CustomButton extends StatelessWidget {
     this.postIconData,
     this.postSvgPath,
     this.loading = false,
+    this.loadingColor = ConstColors.white,
   });
 
   final String buttonText;
@@ -29,6 +30,7 @@ class CustomButton extends StatelessWidget {
   final IconData? preIconData, postIconData;
   final String? preSvgPath, postSvgPath;
   final bool loading;
+  final Color loadingColor;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +46,7 @@ class CustomButton extends StatelessWidget {
         child: Center(
           child:
               loading
-                  ? CircularProgressIndicator(color: ConstColors.white)
+                  ? CircularProgressIndicator(color: loadingColor)
                   : Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [

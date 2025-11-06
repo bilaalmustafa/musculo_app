@@ -10,7 +10,7 @@ import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/core/services/user_service.dart';
 import 'package:musculo_app/model/video_model.dart';
-import 'package:musculo_app/model/workouts_model.dart';
+
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/congrate_container.dart';
 
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/show_share_bottom_sheet.dart';
@@ -36,18 +36,26 @@ class CongratulationScreen extends StatefulWidget {
 class _CongratulationScreenState extends State<CongratulationScreen> {
   final GlobalKey _shareKey = GlobalKey();
   late UserModeViewmodel userMode;
-  late List<VideoModel> allVideos;
-
+  List<VideoModel>? allVideos;
+  bool _isLoading = true;
   @override
   void initState() {
+    super.initState();
     userMode = context.read<UserModeViewmodel>();
-    allVideos = userMode.extractAllVideos(widget.vedioData);
+    _loadVideosAndStates();
+  }
+
+  Future<void> _loadVideosAndStates() async {
+    final videos = await userMode.extractAllVideos(widget.vedioData);
+    setState(() {
+      allVideos = videos;
+      _isLoading = false;
+    });
     userMode.updateUserWorkoutStats(
       userId: widget.creator.userId ?? '',
-      finishedWorkoutCount: allVideos.length,
+      finishedWorkoutCount: allVideos!.length,
       minutesSpent: widget.vedioData.totalTime ?? 0,
     );
-    super.initState();
   }
 
   @override
@@ -57,6 +65,14 @@ class _CongratulationScreenState extends State<CongratulationScreen> {
     //         .expand((v) => v)
     //         .toList() ??
     //     [];
+    if (_isLoading) {
+       return Scaffold(
+        backgroundColor: ConstColors.white,
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       body: StreamBuilder(
@@ -107,7 +123,7 @@ class _CongratulationScreenState extends State<CongratulationScreen> {
                               children: [
                                 CongrateContainer(
                                   imagePath: Assets.runnerIcon,
-                                  digit: "${allVideos.length}",
+                                  digit: "${allVideos?.length??0}",
                                   text: "Finished Workout",
                                 ),
                                 CongrateContainer(

@@ -6,13 +6,14 @@ class DiscoverFilter extends ChangeNotifier {
   int gender = 0;
   bool premium = false;
   RangeValues price = const RangeValues(0, 500);
-  RangeValues length = const RangeValues(1, 60);
-  double difficulty = 0;
+  RangeValues length = const RangeValues(0, 60);
+  double difficulty = 10;
   bool isFilterApplied = false;
 
   // ------------- “search” -------------
   String _query = '';
   String get query => _query;
+
   void setQuery(String value) {
     final cleaned = value.trim();
     if (cleaned == _query) return;
@@ -25,8 +26,8 @@ class DiscoverFilter extends ChangeNotifier {
   int tempGender = 0;
   bool tempPremium = false;
   RangeValues tempPrice = const RangeValues(0, 500);
-  RangeValues tempLength = const RangeValues(1, 60);
-  double tempDifficulty = 0;
+  RangeValues tempLength = const RangeValues(0, 60);
+  double tempDifficulty = 10;
   String tempQuery = '';
 
   // ------------- setters for temp values -------------
@@ -40,8 +41,8 @@ class DiscoverFilter extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setTempPremium(bool v) {
-    tempPremium = !v;
+  void setTempPremium(bool value) {
+    tempPremium = value;
     notifyListeners();
   }
 
@@ -65,6 +66,11 @@ class DiscoverFilter extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setTemQuery(String value) {
+    tempQuery = value.trim();
+    notifyListeners();
+  }
+
   // ------------- Apply temporary values to actual filters -------------
   void applyFilters() {
     planType = tempPlanType;
@@ -73,7 +79,19 @@ class DiscoverFilter extends ChangeNotifier {
     price = tempPrice;
     length = tempLength;
     difficulty = tempDifficulty;
+    _query = tempQuery;
+    isFilterApplied = _isAnyFilterActive();
     notifyListeners();
+  }
+
+  bool _isAnyFilterActive() {
+    return planType != 0 ||
+        gender != 0 ||
+        premium != false ||
+        price != const RangeValues(0, 500) ||
+        length != const RangeValues(0, 60) ||
+        difficulty != 10 ||
+        _query.isNotEmpty;
   }
 
   // ------------- Reset temporary values from applied filters -------------
@@ -84,6 +102,7 @@ class DiscoverFilter extends ChangeNotifier {
     tempPrice = price;
     tempLength = length;
     tempDifficulty = difficulty;
+    tempQuery = _query;
   }
 
   // ------------- clear -------------
@@ -91,8 +110,8 @@ class DiscoverFilter extends ChangeNotifier {
     planType = gender = 0;
     premium = false;
     price = const RangeValues(0, 500);
-    length = const RangeValues(1, 60);
-    difficulty = 0;
+    length = const RangeValues(0, 60);
+    difficulty = 10;
     _query = '';
     isFilterApplied = false;
     resetTemp();

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/poppins_text.dart';
 import 'package:musculo_app/components/share_picture.dart';
@@ -7,9 +9,12 @@ import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/model/programs_model.dart';
 import 'package:musculo_app/model/workouts_model.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/custom_chip.dart';
+
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/calender.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/history_list_tile.dart';
+
+import '../../../../../core/services/exercise_services.dart';
+import '../../../home_and_training_screens/screen/creator_mode/component/creatorworkoutlist.dart';
 
 class HistoryTab extends StatefulWidget {
   const HistoryTab({super.key, required this.programModel});
@@ -21,151 +26,157 @@ class HistoryTab extends StatefulWidget {
 
 class _HistoryTabState extends State<HistoryTab> {
   DateTime _focusedDay = DateTime.now();
-  DateTime? _selectedDay;
+
+  late WorkoutServices _workoutServices;
+  List<String> selectedDaysOfWeek = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _workoutServices = WorkoutServices();
+    selectedDaysOfWeek = widget.programModel.dayAWeek ?? [];
+    log(
+      'Program ID: ${widget.programModel.programId}, Workout IDs: ${widget.programModel.listOfWorkoutIds}',
+    );
+  }
+
+  List<DateTime> _getDatesFromDays(List<String> days) {
+    final now = DateTime.now();
+    // Monday = 1, Sunday = 7
+    final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
+
+    final Map<String, int> dayMap = {
+      'Mon': 1,
+      'Tue': 2,
+      'Wed': 3,
+      'Thu': 4,
+      'Fri': 5,
+      'Sat': 6,
+      'Sun': 7,
+    };
+
+    return days.map((day) {
+      final weekday = dayMap[day];
+      if (weekday == null) return now;
+      return startOfWeek.add(Duration(days: weekday - 1));
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     final data = widget.programModel;
-    final List<WorkoutModel> listofworkout =
-        data.listOfWorkouts as List<WorkoutModel>;
-    String formatProgramTime(int totalTimeInSeconds) {
-      int totalMinutes = totalTimeInSeconds ~/ 60;
+    final workoutIds = data.listOfWorkoutIds ?? [];
+    log('Fetching workouts for IDs: $workoutIds');
 
-      if (totalMinutes < 60) {
-        return "$totalMinutes Mins";
-      } else {
-        int hours = totalMinutes ~/ 60;
-        int minutes = totalMinutes % 60;
-
-        // Round up to the next hour if minutes >= 45
-        if (minutes >= 45) {
-          hours += 1;
-        }
-
-        return "$hours Hr";
-      }
-    }
+    final List<DateTime> highlightedDates = _getDatesFromDays(
+      selectedDaysOfWeek,
+    );
 
     return Scaffold(
       backgroundColor: ConstColors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          spacing: Sizes.s20,
-          children: [
-            CalenderWidget(
-              focusedDay: _focusedDay,
-              selectedDay: _selectedDay,
-              // selectedDates:data.dayAWeek ,
-              ondaySelected: (selectedDay, focusedDay) {
-                setState(() {
-                  _selectedDay = selectedDay;
-                  _focusedDay = focusedDay;
-                });
-              },
-            ),
+      body: FutureBuilder<List<WorkoutModel>>(
+        future: Future.wait(
+          workoutIds.map((id) => _workoutServices.getById(id)).toList(),
+        ).then(
+          (results) =>
+              results.where((w) => w != null).cast<WorkoutModel>().toList(),
+        ),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(Sizes.s8),
-                border: Border.all(color: ConstColors.dividerColor),
+          if (snapshot.hasError) {
+            return Center(
+              child: PoppinsText(
+                text: 'Error loading workouts: ${snapshot.error}',
+                fontSize: Sizes.s14,
+                color: ConstColors.red,
               ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: Sizes.s10),
-                child: Column(
-                  children: [
-                    HistoryListTile(
-                      headingtext: "Overall",
-                      runtext: data.listOfWorkouts?.length.toString() ?? "0",
-                      timetext: data.totalTime.toString(),
-                    ),
-                    Divider(color: ConstColors.dividerColor),
-                    HistoryListTile(
-                      headingtext: (data.dayAWeek ?? []).join(","),
-                      runtext: "01",
-                      timetext: "20",
-                    ),
+            );
+          }
 
-                    // Padding(
-                    //   padding: const EdgeInsets.symmetric(vertical: Sizes.s8),
-                    //   child: Column(
-                    //     spacing: Sizes.s10,
-                    //     children: [
-                    //       Divider(color: ConstColors.dividerColor),
-                    //       SharePicture(imagePath: Assets.empty),
-                    //       PoppinsText(
-                    //         text: "Empty",
-                    //         fontSize: Sizes.s16,
-                    //         fontWeight: TextWeight.semiBold,
-                    //       ),
-                    //       PoppinsText(
-                    //         text: "You did't exercise on this date",
-                    //         fontSize: Sizes.s12,
-                    //         color: ConstColors.greyA1A1,
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-                  ],
+          final workouts = snapshot.data ?? [];
+          log('Fetched workouts count: ${workouts.length}');
+          return SingleChildScrollView(
+            child: Column(
+              spacing: Sizes.s20,
+              children: [
+                CalenderWidget(
+                  focusedDay: _focusedDay,
+                  selectedDay: _focusedDay,
+                  selectedDates: highlightedDates,
+                  ondaySelected: (_, _) {},
                 ),
-              ),
-            ),
-            SizedBox(
-              width: double.infinity,
-              // color: ConstColors.secondary,
-              child: ListView.separated(
-                shrinkWrap: true,
 
-                itemBuilder: (_, index) {
-                  return ListTile(
-                    contentPadding: EdgeInsets.symmetric(
-                      vertical: Sizes.s5,
-                      horizontal: Sizes.s10,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    tileColor: ConstColors.white,
-
-                    leading: SharePicture(imagePath: Assets.workout),
-                    title: PoppinsText(
-                      text: listofworkout[index].workoutName ?? "unknown",
-                      fontSize: Sizes.s14,
-                      fontWeight: TextWeight.semiBold,
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(Sizes.s8),
+                    border: Border.all(color: ConstColors.dividerColor),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: Sizes.s10),
+                    child: Column(
                       children: [
-                        // PoppinsText(
-                        //   text: "08:20 - 08:40 AM",
-                        //   fontSize: Sizes.s10,
-                        // ),
-                        SizedBox(height: 3),
-                        Row(
-                          spacing: Sizes.s10,
-                          children: [
-                            CustomChip(
-                              text: formatProgramTime(
-                                listofworkout[index].totalTime!,
-                              ),
-                              color: ConstColors.secondary,
-                            ),
-                            CustomChip(
-                              text: listofworkout[index].levelOf ?? "unknown",
-                              color: ConstColors.secondary,
-                            ),
-                          ],
+                        HistoryListTile(
+                          headingtext: "Overall",
+                          runtext: workoutIds.length.toString(),
+                          timetext: data.totalTime.toString(),
+                        ),
+                        Divider(color: ConstColors.dividerColor),
+                        HistoryListTile(
+                          headingtext: (data.dayAWeek ?? []).join(","),
+                          runtext: workoutIds.length.toString(),
+                          timetext: data.totalTime.toString(),
                         ),
                       ],
                     ),
-                  );
-                },
-                separatorBuilder: (_, idex) {
-                  return SizedBox(height: Sizes.s8);
-                },
-                itemCount: listofworkout.length ?? 0,
-              ),
+                  ),
+                ),
+
+                SizedBox(
+                  width: double.infinity,
+                  child:
+                      workouts.isEmpty
+                          ? Padding(
+                            padding: const EdgeInsets.all(Sizes.s20),
+                            child: Column(
+                              children: [
+                                SharePicture(imagePath: Assets.empty),
+                                PoppinsText(
+                                  text: "Empty",
+                                  fontSize: Sizes.s16,
+                                  fontWeight: TextWeight.semiBold,
+                                ),
+                                PoppinsText(
+                                  text: "No workouts found for this program.",
+                                  fontSize: Sizes.s12,
+                                  color: ConstColors.greyA1A1,
+                                ),
+                              ],
+                            ),
+                          )
+                          : ListView.separated(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemBuilder: (_, index) {
+                              final workout = workouts[index];
+
+                              return CreatorWorkoutList(
+                                workoutModel: workout,
+                                showEditbutton: false,
+                              );
+                            },
+                            separatorBuilder:
+                                (_, index) => SizedBox(height: Sizes.s8),
+                            itemCount: workouts.length,
+                          ),
+                ),
+                SizedBox(height: 20),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

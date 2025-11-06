@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:musculo_app/components/customTextField.dart';
 import 'package:musculo_app/components/custom_dropdownField.dart';
 import 'package:musculo_app/components/poppins_text.dart';
@@ -9,11 +10,11 @@ import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/add_workout/view_model/add_workout_veiw_model.dart';
 
-import 'package:musculo_app/modules/bottom_navigation_bar/profile/component/customdropdown.dart';
 import 'package:provider/provider.dart';
 
 class CompleteDetailBelow extends StatefulWidget {
-  const CompleteDetailBelow({super.key});
+  final bool isEditing;
+  const CompleteDetailBelow({super.key, this.isEditing = false});
 
   @override
   State<CompleteDetailBelow> createState() => _WarmUpState();
@@ -40,7 +41,10 @@ class _WarmUpState extends State<CompleteDetailBelow> {
                       spacing: 20,
                       children: [
                         PoppinsText(
-                          text: "Complete the details below",
+                          text:
+                              widget.isEditing
+                                  ? 'Update the details below'
+                                  : "Complete the details below",
                           fontSize: Sizes.s24,
                           fontWeight: TextWeight.semiBold,
                         ),
@@ -55,20 +59,7 @@ class _WarmUpState extends State<CompleteDetailBelow> {
                           title: "Write it here",
                           validator: (value) => Validator.valueExists(value),
                         ),
-                        PoppinsText(
-                          text: "Workout added to",
-                          fontSize: Sizes.s14,
-                          fontWeight: TextWeight.semiBold,
-                        ),
 
-                        CustomDropdownField(
-                          listITems: ['Warm up', 'Workout', 'Finisher'],
-                          value: vm.selected,
-                          validator: (value) => Validator.valueExists(value),
-                          onChange: (value) {
-                            vm.selectadded(value!);
-                          },
-                        ),
                         PoppinsText(
                           text: "Gender",
                           fontSize: Sizes.s14,
@@ -173,7 +164,7 @@ class _WarmUpState extends State<CompleteDetailBelow> {
                           ],
                         ),
                         PoppinsText(
-                          text: "Price",
+                          text: "Price (€)",
                           fontSize: Sizes.s14,
                           fontWeight: TextWeight.semiBold,
                         ),
@@ -181,7 +172,27 @@ class _WarmUpState extends State<CompleteDetailBelow> {
                         CustomTextField(
                           controller: vm.priceController,
                           title: "Write it here",
-                          validator: (value) => Validator.valueExists(value),
+                          keyboardType: TextInputType.numberWithOptions(
+                            decimal: true,
+                            signed: false,
+                          ),
+                          textInputAction: TextInputAction.done,
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return "Please enter a price";
+                            }
+                            final regex = RegExp(r'^\d+(\.\d+)?$');
+                            if (!regex.hasMatch(value.trim())) {
+                              return "Enter a valid number (e.g., 12.34)";
+                            }
+
+                            return null;
+                          },
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                              RegExp(r'[0-9.]'),
+                            ),
+                          ],
                         ),
                       ],
                     ),

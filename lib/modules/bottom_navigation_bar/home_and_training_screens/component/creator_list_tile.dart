@@ -7,8 +7,6 @@ import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
-import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/view_model/user_view_model.dart';
-import 'package:provider/provider.dart';
 
 import '../../../../model/user_model.dart';
 
@@ -28,7 +26,17 @@ class CreatorListTile extends StatelessWidget {
         backgroundImage:
             creator.profileImageUrl != null
                 ? NetworkImage(creator.profileImageUrl ?? "")
-                : AssetImage(Assets.maskgroup),
+                : null,
+        backgroundColor: creator.profileImageUrl == null ? Colors.black : null,
+        child:
+            creator.profileImageUrl == null
+                ? PoppinsText(
+                  text: creator.name![0].toUpperCase(),
+                  fontSize: 30,
+                  fontWeight: TextWeight.semiBold,
+                  color: ConstColors.white,
+                )
+                : null,
       ),
       title: Wrap(
         spacing: Sizes.s0_5,
@@ -41,7 +49,7 @@ class CreatorListTile extends StatelessWidget {
             fontWeight: TextWeight.semiBold,
           ),
 
-          creator.subPlane == "free"
+          creator.subPlane == "Basic"
               ? Container()
               : SharePicture(imagePath: Assets.official),
         ],
@@ -53,7 +61,8 @@ class CreatorListTile extends StatelessWidget {
         children: [
           Icon(Icons.star, color: ConstColors.orange, size: Sizes.s20),
           PoppinsText(
-            text: "${creator.rating ?? 0.0} (${creator.review.length} review)",
+            text:
+                "${creator.rating!.toStringAsFixed(1)} (${creator.review.length} review)",
             fontSize: Sizes.s10,
             fontWeight: TextWeight.regular,
             color: ConstColors.greyA1A1,

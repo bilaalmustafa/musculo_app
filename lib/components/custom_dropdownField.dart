@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musculo_app/components/poppins_text.dart';
-import 'package:musculo_app/core/config/validator.dart';
+
 import 'package:musculo_app/core/constants/const_colors.dart';
 
 class CustomDropdownField extends StatelessWidget {

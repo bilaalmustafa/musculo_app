@@ -143,7 +143,7 @@ class _AccountinfoScreenState extends State<AccountinfoScreen> {
             // Level dropdown
             CustomDropdown(
               value: selectedLevel,
-              items: const ['Beginner', 'Intermediate', 'Advanced', 'Expert'],
+              items: const ['Beginner', 'Intermediate', 'Advanced'],
               hint: 'select Level',
               onChanged: (value) {
                 setState(() {

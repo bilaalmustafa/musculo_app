@@ -38,6 +38,23 @@ class ProgramVideoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String formatProgramTime(int totalTimeInSeconds) {
+      int totalMinutes = totalTimeInSeconds ~/ 60;
+
+      if (totalMinutes < 60) {
+        return "$totalMinutes Mins";
+      } else {
+        int hours = totalMinutes ~/ 60;
+        int minutes = totalMinutes % 60;
+
+        if (minutes >= 45) {
+          hours += 1;
+        }
+
+        return "$hours Hr";
+      }
+    }
+
     return Row(
       children: [
         Container(
@@ -77,7 +94,8 @@ class ProgramVideoItem extends StatelessWidget {
             Row(
               children: [
                 CustomChip(
-                  text: "${program?.duration ?? "0"} Mins",
+                  text: formatProgramTime(program?.duration ?? 0),
+                  // text: "${program?.duration ?? "0"} Mins",
                   color: ConstColors.secondary,
                 ),
                 const SizedBox(width: 10),

@@ -7,6 +7,8 @@ import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/modules/auth/view_model/auth_view_model.dart';
 import 'package:provider/provider.dart';
 
+import '../../../auth/view_model/view_mode_provider.dart';
+
 class LogoutBottomSheet extends StatelessWidget {
   const LogoutBottomSheet({super.key});
 
@@ -78,7 +80,7 @@ class LogoutBottomSheet extends StatelessWidget {
                         onTap: () async {
                           // logout Logic here
                           await vm.logout();
-
+                          await context.read<ViewModeProvider>().clearMode();
                           // Navigate to SignIn screen and remove all previous routes
                           if (context.mounted) {
                             Navigator.pushNamedAndRemoveUntil(

@@ -38,27 +38,27 @@ class _TypeOfProgramState extends State<TypeOfProgram> {
                         ? ConstColors.red
                         : ConstColors.black,
                   ),
-                  activeColor: Colors.black,
-                  title: PoppinsText(
-                    text: "With equipment",
-                    fontSize: Sizes.s14,
-                    fontWeight: TextWeight.medium,
-                    color: ConstColors.black,
-                  ),
-                  value: "With equipment",
-                  groupValue: vm.typeofProgram,
-                  onChanged: (String? value) {
-                    vm.typeofProgrmslect(value!);
-                  },
-                ),
-                Divider(color: ConstColors.dividerColor),
-                RadioListTile(
-                  fillColor: WidgetStateProperty.all(
-                    vm.isTypeofProgramSelect
-                        ? ConstColors.red
-                        : ConstColors.black,
-                  ),
 
+                  //   activeColor: Colors.black,
+                  //   title: PoppinsText(
+                  //     text: "With equipment",
+                  //     fontSize: Sizes.s14,
+                  //     fontWeight: TextWeight.medium,
+                  //     color: ConstColors.black,
+                  //   ),
+                  //   value: "With equipment",
+                  //   groupValue: vm.typeofProgram,
+                  //   onChanged: (String? value) {
+                  //     vm.typeofProgrmslect(value!);
+                  //   },
+                  // ),
+                  // Divider(color: ConstColors.dividerColor),
+                  // RadioListTile(
+                  //   fillColor: WidgetStateProperty.all(
+                  //     vm.isTypeofProgramSelect
+                  //         ? ConstColors.red
+                  //         : ConstColors.black,
+                  //   ),
                   activeColor: Colors.black,
                   title: PoppinsText(
                     text: "Without equipment",

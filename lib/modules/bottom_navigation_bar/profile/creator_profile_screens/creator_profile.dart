@@ -7,20 +7,22 @@ import 'package:musculo_app/modules/bottom_navigation_bar/profile/creator_profil
 import '../../../../core/constants/const_colors.dart';
 import '../../../../core/constants/sizes.dart';
 
-class CreatorProfileScreen extends StatefulWidget {
-  const CreatorProfileScreen({super.key});
+class CreatorProfileScreen extends StatefulWidget { final int initialTabIndex;
+
+  const CreatorProfileScreen({super.key,  this.initialTabIndex = 0,});
 
   @override
   State<CreatorProfileScreen> createState() => _CreatorProfileScreenState();
 }
 
 class _CreatorProfileScreenState extends State<CreatorProfileScreen> {
-  int _selectIndex = 0;
+ late int _selectIndex;
   late PageController _pageController;
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
+    _selectIndex = widget.initialTabIndex;
+    _pageController = PageController(initialPage: widget.initialTabIndex);
   }
 
   @override

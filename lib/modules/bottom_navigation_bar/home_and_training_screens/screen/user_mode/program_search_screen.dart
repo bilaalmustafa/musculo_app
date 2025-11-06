@@ -32,7 +32,7 @@ class _ProgramSearchScreenState extends State<ProgramSearchScreen> {
   @override
   void initState() {
     super.initState();
-    stream = instance<ProgramServices>().getPrograms();
+    stream = instance<ProgramServices>().getPrograms(status: 'published');
 
     // Focus the text field after first frame
     WidgetsBinding.instance.addPostFrameCallback((_) {

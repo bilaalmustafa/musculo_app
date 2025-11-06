@@ -1,4 +1,5 @@
 // 1. First, update your WorkoutModel to include an ID field for favorites
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:musculo_app/model/video_model.dart';
 import 'package:hive/hive.dart';
 part 'workouts_model.g.dart';
@@ -52,6 +53,15 @@ class WorkoutModel extends HiveObject {
   final List<String>? review;
   @HiveField(16)
   final int? ratingCount;
+  @HiveField(17) // New field
+  final DateTime? createdAt;
+
+  @HiveField(18) // New field
+  final DateTime? updatedAt;
+
+  @HiveField(19)
+  final Map<String, dynamic>? userRatings;
+
   WorkoutModel({
     this.workoutId,
     this.userId,
@@ -70,6 +80,9 @@ class WorkoutModel extends HiveObject {
     this.rating,
     this.review,
     this.ratingCount,
+    this.createdAt,
+    this.updatedAt,
+    this.userRatings,
   });
 
   factory WorkoutModel.fromJson(Map<String, dynamic> json) {
@@ -106,6 +119,10 @@ class WorkoutModel extends HiveObject {
                   .toList(),
             ),
           ),
+      // Add conversion for the new timestamps
+      createdAt: (json['createdAt'] as Timestamp?)?.toDate(),
+      updatedAt: (json['updatedAt'] as Timestamp?)?.toDate(),
+      userRatings: json['userRatings'] as Map<String, dynamic>?,
     );
   }
 
@@ -130,6 +147,10 @@ class WorkoutModel extends HiveObject {
       'categorizedVideos': categorizedVideos?.map(
         (key, value) => MapEntry(key, value.map((v) => v.toJson()).toList()),
       ),
+      // Add the new timestamps
+      "createdAt": createdAt,
+      "updatedAt": updatedAt,
+      'userRatings': userRatings,
     };
   }
 
@@ -151,6 +172,9 @@ class WorkoutModel extends HiveObject {
     double? rating,
     List<String>? review,
     Map<String, List<VideoModel>>? categorizedVideos,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    Map<String, dynamic>? userRatings,
   }) {
     return WorkoutModel(
       workoutId: workoutId ?? this.workoutId,
@@ -170,6 +194,9 @@ class WorkoutModel extends HiveObject {
       rating: rating ?? this.rating,
       review: review ?? this.review,
       categorizedVideos: categorizedVideos ?? this.categorizedVideos,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      userRatings: userRatings ?? this.userRatings,
     );
   }
 }
