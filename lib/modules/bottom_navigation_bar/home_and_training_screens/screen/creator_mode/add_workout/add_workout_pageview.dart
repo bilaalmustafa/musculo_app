@@ -26,15 +26,38 @@ import 'package:provider/provider.dart';
 import '../../../../../../core/config/routes.dart';
 
 class AddWorkoutPageView extends StatefulWidget {
-  const AddWorkoutPageView({super.key});
+  final String? workoutId;
+  final int initialIndex;
+  final bool shouldPopToHome;
+  const AddWorkoutPageView({
+    super.key,
+    this.workoutId,
+    this.initialIndex = 0,
+    this.shouldPopToHome = false,
+  });
 
   @override
   State<AddWorkoutPageView> createState() => _AddWorkoutPageViewState();
 }
 
 class _AddWorkoutPageViewState extends State<AddWorkoutPageView> {
-  final PageController _pageController = PageController();
+  late PageController _pageController = PageController();
   int _currentPage = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: widget.initialIndex); // 👈
+    _currentPage = widget.initialIndex;
+
+    if (widget.workoutId != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final vm = context.read<AddWorkoutVeiwModel>();
+        // Call a new method in view model to load data (see Step 3.3 below)
+        vm.loadWorkoutData(widget.workoutId!);
+      });
+    }
+  }
 
   void _goToNextPage() {
     if (_currentPage < 8 - 1) {
@@ -86,10 +109,16 @@ class _AddWorkoutPageViewState extends State<AddWorkoutPageView> {
     return PopScope(
       canPop: _currentPage == 0,
       onPopInvokedWithResult: (didPop, result) {
-        if (_currentPage == 0) {
-          context.read<AddWorkoutVeiwModel>().clearData();
-        } else {
-          _goToPreviousPage();
+        if (!didPop) {
+          if (widget.shouldPopToHome) {
+            context.read<AddWorkoutVeiwModel>().clearData();
+            Navigator.of(context).popUntil((route) => route.isFirst);
+          } else if (_currentPage > 0) {
+            _goToPreviousPage();
+          } else {
+            context.read<AddWorkoutVeiwModel>().clearData();
+            Navigator.of(context).pop();
+          }
         }
       },
       child: Scaffold(
@@ -97,7 +126,10 @@ class _AddWorkoutPageViewState extends State<AddWorkoutPageView> {
         appBar: SharedAppBar(
           progress: progress,
           onBackPressed: () {
-            if (_currentPage > 0) {
+            if (widget.shouldPopToHome) {
+              context.read<AddWorkoutVeiwModel>().clearData();
+              Navigator.of(context).popUntil((route) => route.isFirst);
+            } else if (_currentPage > 0) {
               _goToPreviousPage();
             } else {
               context.read<AddWorkoutVeiwModel>().clearData();
@@ -116,8 +148,7 @@ class _AddWorkoutPageViewState extends State<AddWorkoutPageView> {
             WarmUp(),
             IntervelTime(),
             ScaleVersion(),
-
-            CompleteDetailBelow(),
+            CompleteDetailBelow(isEditing: widget.workoutId != null),
             ConfirmInformation(),
           ],
 
@@ -181,8 +212,67 @@ class _AddWorkoutPageViewState extends State<AddWorkoutPageView> {
                   Expanded(
                     child: CustomButton(
                       loading: vm.isLoading,
-                      buttonText: "Continue",
+                      buttonText:
+                          widget.workoutId != null
+                              ? "Update Workout"
+                              : "Continue",
                       onTap: () async {
+                        if (widget.workoutId != null) {
+                          if (_currentPage == 6) {
+                            if (vm.validateAndSaveForm()) {
+                              vm.editingWorkoutId = widget.workoutId;
+
+                              bool success = await vm.updateWorkoutFields(
+                                widget.workoutId!,
+                              );
+                              if (success && context.mounted) {
+                                showDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  barrierColor: Colors.black.withValues(
+                                    alpha: 0.9,
+                                  ),
+                                  builder: (context) {
+                                    return ShowDialogBox(
+                                      message:
+                                          "Workout details updated successfully!",
+                                      bottomWidget: Column(
+                                        spacing: 10,
+                                        children: [
+                                          CustomButton(
+                                            buttonText: "Back to home page",
+                                            buttonColor: ConstColors.secondary,
+                                            textColor: ConstColors.black,
+                                            onTap: () {
+                                              Navigator.pushNamedAndRemoveUntil(
+                                                context,
+                                                Routes
+                                                    .bottomnavigationbarscreen,
+                                                (Route<dynamic> route) => false,
+                                                arguments: {
+                                                  'initialMainTabIndex': 0,
+                                                  'initialHomeScreenSubTab': 1,
+                                                },
+                                              );
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                );
+                              } else {
+                                Fluttertoast.showToast(
+                                  msg:
+                                      "Failed to update workout. Please try again.",
+                                  backgroundColor: Colors.red,
+                                );
+                              }
+                            }
+                            return;
+                          }
+                        }
+
                         if (_currentPage < 8 - 1) {
                           switch (_currentPage) {
                             case 0:

@@ -1,3 +1,4 @@
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:musculo_app/components/custom_button.dart';
@@ -9,7 +10,7 @@ import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
-import 'package:musculo_app/core/services/payment_service.dart';
+
 import 'package:musculo_app/model/sold_model.dart';
 import 'package:musculo_app/model/user_model.dart';
 import 'package:musculo_app/model/workouts_model.dart';
@@ -25,8 +26,10 @@ import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/u
 import 'package:provider/provider.dart';
 
 import '../../../../components/custom_shimmer.dart';
-import '../../../../core/config/routes.dart';
+
 import '../../../../core/services/user_service.dart';
+import '../../feedback/screens/feedb_screen.dart';
+import '../../feedback/screens/reportstab.dart';
 
 class TraningPreviewScreen extends StatefulWidget {
   const TraningPreviewScreen({super.key, required this.workoutModel});
@@ -38,8 +41,10 @@ class TraningPreviewScreen extends StatefulWidget {
 
 class _TraningPreviewScreenState extends State<TraningPreviewScreen> {
   bool isExpanded = false, isPurchased = false;
+  late WorkoutModel _currentWorkoutModel;
   @override
   void initState() {
+    _currentWorkoutModel = widget.workoutModel;
     final usermodel = context.read<UserViewModel>().userModel;
     Future.delayed(Duration.zero, () {
       final alreadyPurchased = usermodel!.listOfWorkouts.any(
@@ -54,7 +59,7 @@ class _TraningPreviewScreenState extends State<TraningPreviewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final data = widget.workoutModel;
+    final data = _currentWorkoutModel;
     Map<String, String> formatProgramTimeParts(int totalTimeInSeconds) {
       int totalMinutes = totalTimeInSeconds ~/ 60;
 
@@ -129,9 +134,9 @@ class _TraningPreviewScreenState extends State<TraningPreviewScreen> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  onSelected: (value) {
+                  onSelected: (value) async {
                     if (value == 'Rate') {
-                      showModalBottomSheet(
+                      final updatedWorkoutModel = await showModalBottomSheet(
                         isScrollControlled: true,
                         barrierColor: ConstColors.black.withValues(alpha: .8),
                         constraints: BoxConstraints(
@@ -141,34 +146,44 @@ class _TraningPreviewScreenState extends State<TraningPreviewScreen> {
                         context: context,
                         builder: (context) {
                           return ShowrateSheet(
-                            workoutModel: widget.workoutModel,
+                            workoutModel: _currentWorkoutModel,
                           );
                         },
                       );
+                      if (updatedWorkoutModel != null &&
+                          updatedWorkoutModel is WorkoutModel) {
+                        setState(() {
+                          _currentWorkoutModel = updatedWorkoutModel;
+                        });
+                      }
                     }
 
                     if (value == "feedback") {
-                      Navigator.pushNamed(
+                      Navigator.push(
                         context,
-                        Routes.feedbScreen,
-                        arguments: {
-                          'feedbackType': 'WorkOut',
-                          'contentId': widget.workoutModel.workoutId,
-                          'rating': widget.workoutModel.rating,
-                          'contentName': widget.workoutModel.workoutName,
-                        },
+                        MaterialPageRoute(
+                          builder:
+                              (_) => FeedBScreen(
+                                feedbackType: 'Workout',
+                                contentId: widget.workoutModel.workoutId,
+                                rating: widget.workoutModel.rating,
+                                contentName: widget.workoutModel.workoutName,
+                              ),
+                        ),
                       );
                     }
                     if (value == "report") {
-                      Navigator.pushNamed(
+                      Navigator.push(
                         context,
-                        Routes.reportScreen,
-                        arguments: {
-                          'reportType': 'Report workOut',
-                          'contentId': widget.workoutModel.workoutId,
-                          'rating': widget.workoutModel.rating,
-                          'contentName': widget.workoutModel.workoutName,
-                        },
+                        MaterialPageRoute(
+                          builder:
+                              (_) => Reportstab(
+                                reportType: 'Report Workout',
+                                contentId: widget.workoutModel.workoutId,
+                                rating: widget.workoutModel.rating,
+                                contentName: widget.workoutModel.workoutName,
+                              ),
+                        ),
                       );
                     }
                   },
@@ -260,10 +275,10 @@ class _TraningPreviewScreenState extends State<TraningPreviewScreen> {
                         ),
                         PoppinsText(
                           text:
-                              "${data.rating ?? 0} (${data.review?.length ?? 0} review)",
+                              "${data.rating ?? 0} (${data.ratingCount ?? 0} review)",
                           fontSize: Sizes.s10,
                           fontWeight: TextWeight.regular,
-                          color: ConstColors.greyA1A1,
+                          color: ConstColors.greyA1A1,  
                         ),
                       ],
                     ),
@@ -383,72 +398,201 @@ class _TraningPreviewScreenState extends State<TraningPreviewScreen> {
                 builder: (context, vm, _) {
                   return CustomButton(
                     loading: vm.isloading,
-                    onTap:
-                        isPurchased
-                            ? null
-                            : () async {
-                              final usermodel =
-                                  context.read<UserViewModel>().userModel;
-                              if (usermodel == null) return;
+                    onTap: () async {
+                      final userModel = context.read<UserViewModel>().userModel;
+                      if (userModel == null) return;
+                      final creatorId = widget.workoutModel.userId!;
+                      final creatorModel = await instance<UserService>()
+                          .userById(creatorId);
 
-                              final creatorId = widget.workoutModel.userId!;
-                              final creatorModel = await instance<UserService>()
-                                  .userById(creatorId);
+                      if (isPurchased) {
+                        // 🟥 CANCEL PURCHASE LOGIC
+                        final confirm = await showDialog<bool>(
+                          context: context,
 
-                              final paymentSuccess = await vm.payPayment(
-                                usermodel.email ?? "",
-                                data.price?.toDouble() ?? 0.0,
-                              );
-
-                              if (!paymentSuccess) {
-                                Fluttertoast.showToast(msg: "Payment Failed");
-                                return;
-                              }
-
-                              // 🟢 Payment succeeded — proceed
-                              usermodel.listOfWorkouts.add(data);
-
-                              final purchaseResult = await vm.parchaseWorkout(
-                                usermodel.userId!,
-                                usermodel,
-                                usermodel.listOfWorkouts,
-                              );
-
-                              if (creatorModel != null) {
-                                final updatedSoldList = List<SoldModel>.from(
-                                  creatorModel.sold,
-                                );
-                                updatedSoldList.add(
-                                  SoldModel(
-                                    type: "workout",
-                                    packegeMode: true,
-                                    userId: data.userId!,
-                                    contentName: data.workoutName ?? "unknown",
-                                    contentId: data.workoutId!,
-                                    contentPrice: data.price?.toDouble() ?? 0.0,
-                                    buyDate: DateTime.now(),
+                          builder:
+                              (_) => AlertDialog(
+                                title: const Text("Cancel Workout"),
+                                content: const Text(
+                                  "Are you sure you want to cancel this workout?",
+                                ),
+                                backgroundColor: Colors.white,
+                                actions: [
+                                  TextButton(
+                                    onPressed:
+                                        () => Navigator.pop(context, false),
+                                    child: const Text("No"),
                                   ),
-                                );
+                                  TextButton(
+                                    onPressed:
+                                        () => Navigator.pop(context, true),
+                                    child: const Text("Yes"),
+                                  ),
+                                ],
+                              ),
+                        );
 
-                                await vm.addSoldInList(
-                                  creatorModel.userId!,
-                                  creatorModel,
-                                  updatedSoldList,
-                                );
-                              }
+                        if (confirm != true) return;
 
-                              if (purchaseResult != null) {
-                                setState(() {
-                                  isPurchased = usermodel.listOfWorkouts
-                                      .contains(data);
-                                });
+                        // Remove from user's list
+                        userModel.listOfWorkouts.removeWhere(
+                          (w) => w.workoutId == data.workoutId,
+                        );
 
-                                Fluttertoast.showToast(
-                                  msg: "Workout Purchased Successfully",
-                                );
-                              }
-                            },
-                    buttonText: isPurchased ? "Purchased" : "Buy",
+                        // Remove from creator's sold list
+                        if (creatorModel != null) {
+                          creatorModel.sold.removeWhere(
+                            (s) => s.contentId == data.workoutId,
+                          );
+                          await vm.addSoldInList(
+                            creatorModel.userId!,
+                            creatorModel,
+                            creatorModel.sold,
+                          );
+                        }
+
+                        // Update user Firestore
+                        await vm.parchaseWorkout(
+                          userModel.userId!,
+                          userModel,
+                          userModel.listOfWorkouts,
+                        );
+
+                        final functions = FirebaseFunctions.instance;
+                        try {
+                          await functions
+                              .httpsCallable('sendCancelNotification')
+                              .call({
+                                'userId': userModel.userId,
+                                'creatorId': creatorModel!.userId,
+                                'type': 'workout',
+                                'itemName': data.workoutName,
+                              });
+                          print("✅ Cancel notification sent to user & creator");
+                        } catch (e) {
+                          print("❌ Failed to send cancel notification: $e");
+                        }
+
+                        setState(() => isPurchased = false);
+                        Fluttertoast.showToast(
+                          msg: "Workout Purchase Cancelled",
+                        );
+                      } else {
+                        // 🟢 BUY LOGIC (same as before)
+                        final paymentSuccess = await vm.payPayment(
+                          userModel.email ?? "",
+                          data.price?.toDouble() ?? 0.0,
+                        );
+
+                        if (!paymentSuccess) {
+                          Fluttertoast.showToast(msg: "Payment Failed");
+                          return;
+                        }
+
+                        userModel.listOfWorkouts.add(data);
+
+                        final purchaseResult = await vm.parchaseWorkout(
+                          userModel.userId!,
+                          userModel,
+                          userModel.listOfWorkouts,
+                        );
+
+                        if (creatorModel != null) {
+                          final updatedSoldList = List<SoldModel>.from(
+                            creatorModel.sold,
+                          );
+                          updatedSoldList.add(
+                            SoldModel(
+                              type: "workout",
+                              packegeMode: true,
+                              userId: data.userId!,
+                              contentName: data.workoutName ?? "unknown",
+                              contentId: data.workoutId!,
+                              contentPrice: data.price?.toDouble() ?? 0.0,
+                              buyDate: DateTime.now(),
+                            ),
+                          );
+                          await vm.addSoldInList(
+                            creatorModel.userId!,
+                            creatorModel,
+                            updatedSoldList,
+                          );
+                        }
+
+                        if (purchaseResult != null) {
+                          setState(() => isPurchased = true);
+                          Fluttertoast.showToast(
+                            msg: "Workout Purchased Successfully",
+                          );
+                        }
+                      }
+                    },
+
+                    // isPurchased
+                    //     ? null
+                    //     : () async {
+                    //       final usermodel =
+                    //           context.read<UserViewModel>().userModel;
+                    //       if (usermodel == null) return;
+
+                    //       final creatorId = widget.workoutModel.userId!;
+                    //       final creatorModel = await instance<UserService>()
+                    //           .userById(creatorId);
+
+                    //       final paymentSuccess = await vm.payPayment(
+                    //         usermodel.email ?? "",
+                    //         data.price?.toDouble() ?? 0.0,
+                    //       );
+
+                    //       if (!paymentSuccess) {
+                    //         Fluttertoast.showToast(msg: "Payment Failed");
+                    //         return;
+                    //       }
+
+                    //       // 🟢 Payment succeeded — proceed
+                    //       usermodel.listOfWorkouts.add(data);
+
+                    //       final purchaseResult = await vm.parchaseWorkout(
+                    //         usermodel.userId!,
+                    //         usermodel,
+                    //         usermodel.listOfWorkouts,
+                    //       );
+
+                    //       if (creatorModel != null) {
+                    //         final updatedSoldList = List<SoldModel>.from(
+                    //           creatorModel.sold,
+                    //         );
+                    //         updatedSoldList.add(
+                    //           SoldModel(
+                    //             type: "workout",
+                    //             packegeMode: true,
+                    //             userId: data.userId!,
+                    //             contentName: data.workoutName ?? "unknown",
+                    //             contentId: data.workoutId!,
+                    //             contentPrice: data.price?.toDouble() ?? 0.0,
+                    //             buyDate: DateTime.now(),
+                    //           ),
+                    //         );
+
+                    //         await vm.addSoldInList(
+                    //           creatorModel.userId!,
+                    //           creatorModel,
+                    //           updatedSoldList,
+                    //         );
+                    //       }
+
+                    //       if (purchaseResult != null) {
+                    //         setState(() {
+                    //           isPurchased = usermodel.listOfWorkouts
+                    //               .contains(data);
+                    //         });
+
+                    //         Fluttertoast.showToast(
+                    //           msg: "Workout Purchased Successfully",
+                    //         );
+                    //       }
+                    //     },
+                    buttonText: isPurchased ? "Cancel Purchased" : "Buy",
                   );
                 },
               ),

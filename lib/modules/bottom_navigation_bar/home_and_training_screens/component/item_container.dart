@@ -6,8 +6,10 @@ import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/custom_chip.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../model/programs_model.dart';
+import '../../programs_and_workout/bottom_navigation_view_model.dart';
 
 class ItemContainer extends StatelessWidget {
   final ProgramModel program;
@@ -79,10 +81,19 @@ class ItemContainer extends StatelessWidget {
                 ],
               ),
             ),
+            //MARK:
             Expanded(
               child: Align(
                 alignment: Alignment.centerRight,
-                child: SharePicture(imagePath: Assets.discovery2),
+                child: InkWell(
+                  onTap: () {
+                    Provider.of<BottomNavigationProvider>(
+                      context,
+                      listen: false,
+                    ).setIndex(1);
+                  },
+                  child: SharePicture(imagePath: Assets.discovery2),
+                ),
               ),
             ),
           ],

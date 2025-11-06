@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:musculo_app/core/constants/assets.dart';
+
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 
@@ -28,8 +28,8 @@ class VideoListItem extends StatelessWidget {
       child: Stack(
         children: [
           Container(
-            width: Sizes.s80,
-            height: Sizes.s80,
+            width: 78,
+            height: Sizes.s72,
             decoration: BoxDecoration(
               color: ConstColors.secondary,
               borderRadius: BorderRadius.circular(Sizes.s10),

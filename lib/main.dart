@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:musculo_app/core/config/myApp.dart';
 
@@ -7,5 +8,6 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   MainMethod.init();
 
+  
   runApp(const MyApp());
 }

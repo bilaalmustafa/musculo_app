@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart'
     show FirebaseStorage, Reference;
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:musculo_app/core/config/injections.dart';
 import 'package:musculo_app/core/services/exercise_services.dart';
 
@@ -18,19 +19,21 @@ import 'package:video_thumbnail/video_thumbnail.dart';
 class AddWorkoutVeiwModel extends ChangeNotifier {
   StreamSubscription<VideoModel>? _videoSubscription;
   List<VideoModel> addVersionList = [];
-  Map<String, List<VideoModel>> selectedVideos = {};
   final List<VideoModel> storagevideos = [];
   bool isvedioLoading = true;
   String? errorMessage;
   bool isLoading = false;
-  List<VideoModel> selectedList = [];
   int currentSectionIndex = 0;
+
+  // workout data .............
   String typeofworkout = "";
   String levelofworkout = "";
-  bool isTypeofworkoutSelect = false;
-  bool isLevelofworkoutslect = false;
-  bool isSectionofWorkout = false;
   List<bool> sectionofWorkout = [false, false, false, false, false];
+  List<VideoModel> selectedList = [];
+  Map<String, List<VideoModel>> selectedVideos = {};
+  bool isLevelofworkoutslect = false;
+  bool isTypeofworkoutSelect = false;
+  bool isSectionofWorkout = false;
   final List<String> _sectionTitles = [
     "Warm up",
     "Extended warm up",
@@ -38,9 +41,9 @@ class AddWorkoutVeiwModel extends ChangeNotifier {
     "Finisher",
     "Cool down",
   ];
-  final List<String> selectedSections = [];
-  double difficulty = 5;
-  String? selected;
+  List<String> selectedSections = [];
+  double difficulty = 1.0;
+  // String? selected;
   String? gender;
   TextEditingController workoutNameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
@@ -48,6 +51,37 @@ class AddWorkoutVeiwModel extends ChangeNotifier {
   TextEditingController dateController = TextEditingController();
   DateTime? selectedDate;
   final formKey = GlobalKey<FormState>();
+  String? editingWorkoutId;
+
+  Future<void> loadWorkoutData(String workoutId) async {
+    editingWorkoutId = workoutId;
+
+    try {
+      final WorkoutModel? workout = await instance<WorkoutServices>().getById(
+        workoutId,
+      );
+      if (workout != null) {
+        workoutNameController.text = workout.workoutName ?? '';
+        descriptionController.text = workout.description ?? '';
+        priceController.text = (workout.price ?? 0).toString();
+        gender = workout.gender;
+        difficulty = double.tryParse(workout.difficulty ?? '1.0') ?? 1.0;
+
+        if (workout.dateTime != null) {
+          selectedDate = workout.dateTime;
+          dateController.text = DateFormat('dd/MM/yyyy').format(selectedDate!);
+        }
+      } else {
+        Fluttertoast.showToast(msg: "Workout not found.");
+      }
+    } catch (e) {
+      log('Error loading workout: $e');
+      Fluttertoast.showToast(msg: "Failed to load workout data.");
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
 
   WorkoutModel? workoutModel;
   ////////  vesdioselecrtes
@@ -122,10 +156,10 @@ class AddWorkoutVeiwModel extends ChangeNotifier {
     }
   }
 
-  void selectadded(String value) {
-    selected = value;
-    notifyListeners();
-  }
+  // void selectadded(String value) {
+  //   selected = value;
+  //   notifyListeners();
+  // }
 
   void selectgender(String value) {
     gender = value;
@@ -214,22 +248,23 @@ class AddWorkoutVeiwModel extends ChangeNotifier {
   Future<bool> creatediscoveryPost(
     String docId,
     String userId,
-    String creatorName,{
-      String? editingWorkoutId,
-    }
+    String creatorName,
   ) async {
     log('AddWorkoutVeiwModel: creatediscoveryPost called');
     isLoading = true;
     notifyListeners();
-final bool isUpdate = editingWorkoutId != null;
- DateTime? createdAt;
-    if (isUpdate) {
-      // If updating, fetch the existing workout to get its original createdAt timestamp.
-      final existingWorkout = await instance<WorkoutServices>().getById(editingWorkoutId!);
-      createdAt = existingWorkout?.createdAt;
-    } else {
-      // If creating, set createdAt to the current time.
-      createdAt = DateTime.now();
+
+    if (workoutNameController.text.isEmpty ||
+        typeofworkout.isEmpty ||
+        levelofworkout.isEmpty ||
+        selectedSections.isEmpty) {
+      // Add more as needed
+      Fluttertoast.showToast(
+        msg: "Required fields (name, type, level, sections) cannot be empty.",
+      );
+      isLoading = false;
+      notifyListeners();
+      return false;
     }
     WorkoutModel item = WorkoutModel(
       workoutId: docId,
@@ -246,35 +281,63 @@ final bool isUpdate = editingWorkoutId != null;
       addedTo: selectedSections,
       totalTime: getTotalIntervalTimeInSeconds(),
       categorizedVideos: selectedVideos,
-      createdAt: createdAt,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
     );
 
     log(
       'AddWorkoutVeiwModel: Preparing to send WorkoutModel to WorkoutServices.createDiscovery',
     );
     log('AddWorkoutVeiwModel: WorkoutModel ID: $docId');
-    bool success; 
-    if (isUpdate) {
-       success= await instance<WorkoutServices>().updateDiscovery(
+    bool success = await instance<WorkoutServices>().createDiscovery(
       docId,
       item,
     );
-    }else{
-      success= await instance<WorkoutServices>().createDiscovery(
-      docId,
-      item,
-    );
-    }
-   
+
     isLoading = false;
     if (success) {
       log('AddWorkoutVeiwModel: Workout created successfully. Clearing data.');
       clearData();
-    } else {
-      log('AddWorkoutVeiwModel: Failed to create workout.');
+    }
+    notifyListeners();
+    return success;
+  }
+
+  Future<bool> updateWorkoutFields(String workoutId) async {
+    log('AddWorkoutViewModel: updateWorkoutFields called');
+    isLoading = true;
+    notifyListeners();
+    try {
+      Map<String, dynamic> updatedData = {
+        'workoutName': workoutNameController.text.trim(),
+        'description': descriptionController.text.trim(),
+        'price': int.tryParse(priceController.text.trim()) ?? 0,
+        'gender': gender,
+        'difficulty': difficulty.round().toString(),
+        'dateTime': (selectedDate ?? DateTime.now()).toIso8601String(),
+        'updatedAt': DateTime.now(),
+      };
+
+      bool success = await instance<WorkoutServices>().updateSpecificFields(
+        workoutId,
+        updatedData,
+      );
+
+      if (success) {
+        Fluttertoast.showToast(msg: "Workout updated successfully!");
+      } else {
+        Fluttertoast.showToast(msg: "Failed to update workout.");
+      }
+
+      return success;
+    } catch (e) {
+      log("Error updating workout fields: $e");
+      Fluttertoast.showToast(msg: "Error updating workout.");
+      return false;
+    } finally {
+      isLoading = false;
       notifyListeners();
     }
-    return success;
   }
 
   void addVersionToVideo(VideoModel targetVideo) {
@@ -419,6 +482,20 @@ final bool isUpdate = editingWorkoutId != null;
         .toList();
   }
 
+  // added for remove video
+  void removeSelectedVideo(String sectionTitle, VideoModel video) {
+    if (selectedVideos.containsKey(sectionTitle)) {
+      selectedVideos[sectionTitle]!.remove(video);
+
+      // Optional: if the section becomes empty, remove it completely
+      if (selectedVideos[sectionTitle]!.isEmpty) {
+        selectedVideos.remove(sectionTitle);
+      }
+
+      notifyListeners(); // Refresh UI
+    }
+  }
+
   // this method clear data here
   void clearData() {
     // Reset controllers
@@ -431,7 +508,7 @@ final bool isUpdate = editingWorkoutId != null;
     typeofworkout = "";
     levelofworkout = "";
     gender = null;
-    selected = null;
+    // selected = null;
     selectedDate = null;
     difficulty = 5;
     currentSectionIndex = 0;

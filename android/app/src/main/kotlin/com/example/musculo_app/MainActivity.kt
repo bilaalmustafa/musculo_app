@@ -1,4 +1,4 @@
-package com.example.musculo_app
+package com.dartsync.musculo
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 

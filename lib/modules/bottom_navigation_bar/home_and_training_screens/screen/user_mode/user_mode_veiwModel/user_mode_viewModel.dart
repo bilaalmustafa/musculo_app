@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:musculo_app/core/config/injections.dart';
-import 'package:musculo_app/core/config/routes.dart';
+
 import 'package:musculo_app/core/services/user_service.dart';
 import 'package:musculo_app/model/programs_model.dart';
 import 'package:musculo_app/model/user_model.dart';
@@ -143,23 +144,26 @@ class UserModeViewmodel extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<VideoModel> extractAllVideos(dynamic modelData) {
+Future  <List<VideoModel>> extractAllVideos(dynamic modelData) async{
     if (modelData is WorkoutModel) {
       return modelData.categorizedVideos?.values.expand((v) => v).toList() ??
           [];
     } else if (modelData is ProgramModel) {
       List<VideoModel> allVideos = [];
-
-      for (WorkoutModel workout in modelData.listOfWorkouts ?? []) {
+    // Check if the list of workout IDs exists and is not empty
+      if (modelData.listOfWorkoutIds != null && modelData.listOfWorkoutIds!.isNotEmpty) {
+         for (String workoutId in modelData.listOfWorkoutIds!) {
+       final workoutDoc= await FirebaseFirestore.instance.collection('discovery').doc(workoutId).get();
+               // If the document exists, convert it to a WorkoutModel and extract its videos
+       if (workoutDoc.exists) {
+         final workout = WorkoutModel.fromJson(workoutDoc.data()!);
         final categorized = workout.categorizedVideos;
-
-        if (categorized != null) {
-          for (List<VideoModel> videoList in categorized.values) {
-            for (VideoModel video in videoList) {
-              allVideos.add(video);
-            }
+         if (categorized != null) {
+            allVideos.addAll(categorized.values.expand((v) => v).toList());
           }
-        }
+       }
+      }
+
       }
 
       return allVideos;

@@ -33,7 +33,7 @@ class _AddProgramNameState extends State<AddProgramName> {
             ),
             SizedBox(height: Sizes.s10),
             PoppinsText(
-              text: "program Name",
+              text: "Program Name",
               fontSize: Sizes.s14,
               fontWeight: TextWeight.semiBold,
             ),
@@ -43,10 +43,11 @@ class _AddProgramNameState extends State<AddProgramName> {
                   key: vm.formKey,
                   child: CustomTextField(
                     controller: vm.programNameController,
-                    validator: (value) =>Validator.valueExists(value)  ,
-                    title: "write it here"),
+                    validator: (value) => Validator.valueExists(value),
+                    title: "write it here",
+                  ),
                 );
-              }
+              },
             ),
           ],
         ),

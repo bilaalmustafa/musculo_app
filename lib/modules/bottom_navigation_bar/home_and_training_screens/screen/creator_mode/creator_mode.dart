@@ -100,7 +100,7 @@ class _CreatorModeTabState extends State<CreatorModeTab> {
                         children: [
                           AnalysisLisTile(
                             heading1: "Ratings",
-                            heading2: "${creatorVm?.rating ?? 0.0}",
+                            heading2: "${creatorVm?.rating!.toStringAsFixed(1) ?? 0.0}",
                             iconImage: Assets.star1,
                           ),
 

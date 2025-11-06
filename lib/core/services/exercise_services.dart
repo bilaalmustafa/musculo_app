@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:musculo_app/core/services/firebase_service.dart';
@@ -65,17 +66,37 @@ class WorkoutServices extends FirebaseService<WorkoutModel> {
   Future<bool> createDiscovery(String id, WorkoutModel item) async {
     return create(id, item);
   }
+
   Future<bool> updateDiscovery(String id, WorkoutModel item) async {
     try {
       await update(id, item);
       return true;
     } catch (e, strc) {
-      Fluttertoast.showToast(msg: "Error while updating program: $e");
+      Fluttertoast.showToast(msg: "Error while updating workout: $e");
       log("Error $e\nStacktrace $strc");
       return false;
     }
   }
 
+  /// ✅ NEW: Update only specific editable fields
+  Future<bool> updateSpecificFields(
+    String id,
+    Map<String, dynamic> updatedFields,
+  ) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection(collectionName)
+          .doc(id)
+          .update(updatedFields);
+
+      log("Workout $id updated with fields: $updatedFields");
+      return true;
+    } catch (e, strc) {
+      Fluttertoast.showToast(msg: "Error updating workout fields: $e");
+      log("Error $e\nStacktrace $strc");
+      return false;
+    }
+  }
 
   Stream<List<WorkoutModel>> getWorkout() => getAllDiscovery("Workout");
   Stream<List<WorkoutModel>> getCreatorWorkout(String uid) =>

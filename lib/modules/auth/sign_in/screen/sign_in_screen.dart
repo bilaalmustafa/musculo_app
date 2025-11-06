@@ -29,6 +29,7 @@ class SignInScreen extends StatefulWidget {
 
 class _SignInScreenState extends State<SignInScreen> {
   final _formKey = GlobalKey<FormState>();
+  bool isObscure = true;
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
@@ -81,9 +82,15 @@ class _SignInScreenState extends State<SignInScreen> {
                               controller: _passController,
                               title: "Password",
                               preIcon: Assets.lock,
-                              sufIcon: Assets.hide,
+                              sufIcon: isObscure ? Assets.hide : Assets.show,
+
                               validator:
                                   (value) => Validator.passwordCorrect(value),
+                              obscureText: isObscure,
+                              onTap:
+                                  () => setState(() {
+                                    isObscure = !isObscure;
+                                  }),
                             ),
                             CustomButton(
                               loading: vm.isLoading,

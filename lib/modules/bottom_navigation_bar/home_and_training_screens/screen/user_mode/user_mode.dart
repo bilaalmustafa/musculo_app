@@ -10,6 +10,7 @@ import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/fonts.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/core/services/exercise_services.dart';
+import 'package:musculo_app/core/services/notification_services.dart';
 
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/carasoul_container.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/component/item_container.dart';
@@ -34,6 +35,7 @@ class UserModeTab extends StatefulWidget {
 class _UserModeTabState extends State<UserModeTab> {
   Stream<List<ProgramModel>>? stream;
   final TextEditingController _searchController = TextEditingController();
+  NotificationService notificationService = NotificationService();
 
   FocusNode _homeFocusNode = FocusNode();
   // final AuthService _authservces = instance<AuthService>();
@@ -54,7 +56,6 @@ class _UserModeTabState extends State<UserModeTab> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _homeFocusNode.dispose();
     _searchController.dispose();
     super.dispose();
@@ -63,6 +64,7 @@ class _UserModeTabState extends State<UserModeTab> {
   List<ProgramModel> _topTenPrograms = [];
   @override
   Widget build(BuildContext context) {
+   
     // final usermodeldata = authViewModel.userModel;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15),
@@ -110,9 +112,7 @@ class _UserModeTabState extends State<UserModeTab> {
                       color: ConstColors.black,
                     ),
                     GestureDetector(
-                      onTap: () {
-                        // TODO: here we add BottomSheet of top ten Programs;
-
+                      onTap: () async {
                         showModalBottomSheet(
                           context: context,
                           backgroundColor: ConstColors.secondary,
@@ -241,19 +241,6 @@ class _UserModeTabState extends State<UserModeTab> {
                     },
                   ),
                 ),
-
-                // Container(
-                //   color: ConstColors.red,
-                //   width: double.infinity,
-                //   height: 230,
-                //   child: ListView.builder(
-                //     scrollDirection: Axis.horizontal,
-                //     itemCount: 5,
-                //     itemBuilder: (context, index) {
-                //       return
-                //     },
-                //   ),
-                // ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

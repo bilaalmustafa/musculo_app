@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:hive/hive.dart';
@@ -65,6 +66,8 @@ class ProfileProvider extends ChangeNotifier {
     log("email: $email");
     log("card: $card");
     log("payment: $payment");
+    log("planType: $planType");
+
     try {
       CreatorPremium premium = CreatorPremium(
         creatorId: id,
@@ -80,6 +83,14 @@ class ProfileProvider extends ChangeNotifier {
 
       final created = await instance<CreatorPlaneService>()
           .createCreatorPremium(id, premium);
+
+      if (created) {
+        // ✅ Also update user role & subPlan in Firestore
+        await FirebaseFirestore.instance.collection('users').doc(id).update({
+          'role': 'creator',
+          'subPlane': planType, // 'Basic' or 'premium'
+        });
+      }
       return created;
     } catch (e) {
       log("error : $e");
@@ -106,10 +117,25 @@ class ProfileProvider extends ChangeNotifier {
         "userid": uid,
         "planType": planType,
       });
+      log('this is the plan type $planType');
 
       if (response.data['success'] == true) {
+
+        final firestore = FirebaseFirestore.instance;
+      final batch = firestore.batch();
+       final discoveryQuery = await firestore
+          .collection('discovery')
+          .where('userId', isEqualTo: uid)
+          .get();
+      for (var doc in discoveryQuery.docs) {
+        batch.update(doc.reference, {'creatorName': userModel.name});
+      }
+
+      await batch.commit();
+
         isLoading = false;
         notifyListeners();
+        
         Fluttertoast.showToast(
           msg:
               planType == "premium"

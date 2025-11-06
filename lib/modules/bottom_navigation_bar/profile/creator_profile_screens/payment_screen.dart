@@ -85,7 +85,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
     return Scaffold(
       backgroundColor: ConstColors.white,
       appBar: SharedAppBar(title: 'Payment Method'),
-      body:widget.planType == 'Basic'?  const Center(child: Text("Activating free plan...")): Padding(
+      
+      body:widget.planType == 'Basic'?  const Center(child: Text("Activating free plan...")):
+
+       Padding(
         padding: EdgeInsets.all(Sizes.s16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -191,7 +194,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
     String card = 'N/A';
     double payment = 0.0;
-    if (planType == "premium" && data != null) {
+    if (planType.toLowerCase() == "premium" && data != null) {
       card = data['paymentMethodData']['info']['cardNetwork'] ?? 'N/A';
       payment = 9.99;
     }

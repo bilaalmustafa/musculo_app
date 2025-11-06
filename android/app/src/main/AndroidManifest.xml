@@ -37,12 +37,18 @@
             android:name="flutterEmbedding"
             android:value="2" />
 
+<!--Start Notification meta-Data -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="high_importance_channel" />
+
+        
 <!--Start facebook configuration-->
    	<meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
    	<meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
-  <meta-data
+  <!-- <meta-data
     android:name="com.google.firebase.messaging.default_notification_channel_id"
-    android:value="default_channel" />
+    android:value="default_channel" /> -->
     <activity android:name="com.facebook.FacebookActivity"
         android:configChanges=
                 "keyboard|keyboardHidden|screenLayout|screenSize|orientation"

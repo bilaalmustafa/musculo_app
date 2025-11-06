@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:musculo_app/core/config/injections.dart';
 import 'package:musculo_app/core/services/exercise_services.dart';
@@ -22,7 +23,7 @@ class UserViewModel with ChangeNotifier {
     userModel = await instance<UserService>().userById(id);
     isLoading = false;
     notifyListeners();
-    return userModel; 
+    return userModel;
   }
 
   Stream<UserModel?> getUserByIdstream(String id) {
@@ -56,24 +57,43 @@ class UserViewModel with ChangeNotifier {
     String? cExercise,
     String? cPlan,
   }) async {
-    isLoading = true;
-    notifyListeners();
-    userModel = userModel!.copyWith(
-      name: uname,
-      dateOfBirth: udob,
-      gender: ugenger,
-      levelOfFitness: ulevel,
-      overviewText: cOveriew,
-      experienceText: cExperience,
-      goalText: cGoal,
-      favExercise: cExercise,
-      subPlane: cPlan,
-    );
-    await instance<UserService>().update(id!, userModel!);
+    try {
+      isLoading = true;
+      notifyListeners();
 
-    isLoading = false;
-    notifyListeners();
-    return userModel;
+      userModel = userModel!.copyWith(
+        name: uname,
+        dateOfBirth: udob,
+        gender: ugenger,
+        levelOfFitness: ulevel,
+        overviewText: cOveriew,
+        experienceText: cExperience,
+        goalText: cGoal,
+        favExercise: cExercise,
+        subPlane: cPlan,
+      );
+      await instance<UserService>().update(id!, userModel!);
+      final firestore = FirebaseFirestore.instance;
+      final batch = firestore.batch();
+      final discoveryQuery =
+          await firestore
+              .collection('discovery')
+              .where('userId', isEqualTo: id)
+              .get();
+      for (var doc in discoveryQuery.docs) {
+        batch.update(doc.reference, {'creatorName': uname});
+      }
+      await batch.commit();
+
+      isLoading = false;
+      notifyListeners();
+      return userModel;
+    } catch (e) {
+      print('Error updating user and related data: $e');
+      isLoading = false;
+      notifyListeners();
+      return null;
+    }
   }
 
   int cancelCount(UserModel? creatorVm) {

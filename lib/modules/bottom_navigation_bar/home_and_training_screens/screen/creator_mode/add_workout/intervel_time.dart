@@ -10,7 +10,6 @@ import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_scre
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/screen/creator_mode/component/reels_item.dart';
 import 'package:provider/provider.dart';
 
-
 class IntervelTime extends StatefulWidget {
   const IntervelTime({super.key});
 
@@ -80,6 +79,15 @@ class _WarmUpState extends State<IntervelTime> {
                                       screenintervel: 1,
                                       index: index,
                                       sectionTitle: sectionTitle,
+                                      onRemoveTap: () {
+                                        Provider.of<AddWorkoutVeiwModel>(
+                                          context,
+                                          listen: false,
+                                        ).removeSelectedVideo(
+                                          sectionTitle,
+                                          video,
+                                        );
+                                      },
                                     ),
                                     Row(
                                       mainAxisAlignment:

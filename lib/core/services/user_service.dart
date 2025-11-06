@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:musculo_app/core/services/firebase_service.dart';
 import 'package:musculo_app/model/user_model.dart';

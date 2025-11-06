@@ -30,20 +30,13 @@ class WorkoutFilterUtil {
 
     // ...........Apply Plan Type filter...........
     if (filter.planType != 0) {
-      final planTypeOptions = [
-        "All",
-        "With Equipment",
-        "Without Equipment",
-        "Stretching",
-      ];
+      final planTypeOptions = ["All", "Without Equipment", "Stretching"];
       final selectedPlanType = planTypeOptions[filter.planType].toLowerCase();
 
       filtered =
           filtered.where((w) {
             final workoutType = w.workoutType?.toLowerCase() ?? '';
             switch (selectedPlanType) {
-              case "with equipment":
-                return workoutType.contains("with equipment");
               case "without equipment":
                 return workoutType.contains("without equipment");
               case "stretching":
@@ -87,6 +80,7 @@ class WorkoutFilterUtil {
           return price >= filter.price.start && price <= filter.price.end;
         }).toList();
     print('After price filter: ${filtered.length}');
+    print('Workout Price: ${workouts.map((w) => w.price).toList()}');
 
     // ...........Apply Time Length filter..........
     filtered =
@@ -99,7 +93,7 @@ class WorkoutFilterUtil {
     print('Workout durations: ${workouts.map((w) => w.totalTime).toList()}');
 
     // ...........Apply Difficulty filter..........
-    if (filter.difficulty > 0) {
+     {
       filtered =
           filtered.where((w) {
             // Convert difficulty string to numeric value for comparison
@@ -118,16 +112,10 @@ class WorkoutFilterUtil {
 
     switch (difficulty.toLowerCase()) {
       case 'beginner':
-      case 'easy':
-        return 2.0;
+        return 4.0;
       case 'intermediate':
-      case 'medium':
-        return 5.0;
+        return 7.0;
       case 'advanced':
-      case 'hard':
-        return 8.0;
-      case 'expert':
-      case 'very hard':
         return 10.0;
       default:
         // Try to parse as number if it's already numeric

@@ -8,12 +8,14 @@ import 'package:musculo_app/core/constants/assets.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
 import 'package:musculo_app/model/programs_model.dart';
+import 'package:musculo_app/modules/bottom_navigation_bar/feedback/screens/feedb_screen.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/component/show_rating_bottomsheet.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/tab/description_tab.dart';
 import 'package:musculo_app/modules/bottom_navigation_bar/programs_and_workout/user_screen/tab/history_tab.dart';
 
 import '../../../../components/poppins_text.dart';
-import '../../../../core/config/routes.dart';
+
+import '../../feedback/screens/reportstab.dart';
 
 class ProgramDetailPageView extends StatefulWidget {
   const ProgramDetailPageView({super.key, required this.programModel});
@@ -25,12 +27,14 @@ class ProgramDetailPageView extends StatefulWidget {
 
 class _ProgramDetailPageViewState extends State<ProgramDetailPageView> {
   late PageController _pageController;
+  late ProgramModel _currentProgramModel;
 
   int selecttab = 0;
   @override
   void initState() {
     super.initState();
     _pageController = PageController();
+    _currentProgramModel = widget.programModel;
   }
 
   @override
@@ -95,9 +99,9 @@ class _ProgramDetailPageViewState extends State<ProgramDetailPageView> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  onSelected: (value) {
+                  onSelected: (value) async {
                     if (value == "rate") {
-                      showModalBottomSheet(
+                      final updatedProgramModel = await showModalBottomSheet(
                         isScrollControlled: true,
                         barrierColor: ConstColors.black.withValues(alpha: .8),
                         constraints: BoxConstraints(
@@ -107,34 +111,67 @@ class _ProgramDetailPageViewState extends State<ProgramDetailPageView> {
                         context: context,
                         builder: (context) {
                           return ShowrateBottomSheet(
-                            programModel: widget.programModel,
+                            programModel: _currentProgramModel,
                           );
                         },
                       );
+                      if (updatedProgramModel != null &&
+                          updatedProgramModel is ProgramModel) {
+                        setState(() {
+                          _currentProgramModel = updatedProgramModel;
+                        });
+                      }
                     }
                     if (value == "feedback") {
-                      Navigator.pushNamed(
+                      // Navigator.pushNamed(
+                      //   context,
+                      //   Routes.feedbScreen,
+                      //   arguments: {
+                      //     'feedbackType': 'Program',
+                      //     'contentId': widget.programModel.programId,
+                      //     'rating': widget.programModel.rating,
+                      //     'contentName': widget.programModel.programName,
+                      //   },
+                      // );
+                      Navigator.push(
                         context,
-                        Routes.feedbScreen,
-                        arguments: {
-                          'feedbackType': 'Program',
-                          'contentId': widget.programModel.programId,
-                          'rating': widget.programModel.rating,
-                          'contentName': widget.programModel.programName,
-                        },
+                        MaterialPageRoute(
+                          builder:
+                              (_) => FeedBScreen(
+                                feedbackType: 'Program',
+                                contentId: widget.programModel.programId,
+                                rating: widget.programModel.rating,
+                                contentName: widget.programModel.programName,
+                              ),
+                        ),
                       );
                     }
                     if (value == "report") {
-                      Navigator.pushNamed(
+                      // Navigator.pushNamed(
+                      //   context,
+                      // Routes.reportScreen,
+                      //   arguments: {
+                      //     'reportType': 'Report Program',
+                      //     'contentId': widget.programModel.programId,
+                      //     'rating': widget.programModel.rating,
+                      //     'contentName': widget.programModel.programName,
+                      //   },
+                      // );
+                      Navigator.push(
                         context,
-                        Routes.reportScreen,
-                        arguments: {
-                          'reportType': 'Report Program',
-                          'contentId': widget.programModel.programId,
-                          'rating': widget.programModel.rating,
-                          'contentName': widget.programModel.programName,
-                        },
+                        MaterialPageRoute(
+                          builder:
+                              (_) => Reportstab(
+                                reportType: 'Report Program',
+                                contentId: widget.programModel.programId,
+                                rating: widget.programModel.rating,
+                                contentName: widget.programModel.programName,
+                              ),
+                        ),
                       );
+                    }
+                    if (value == "cancel") {
+                      Navigator.popUntil(context, (route) => route.isFirst);
                     }
                   },
                   itemBuilder:
@@ -152,7 +189,7 @@ class _ProgramDetailPageViewState extends State<ProgramDetailPageView> {
                           ),
                         ),
                         PopupMenuItem(
-                          value: 'feedback',
+                          value: "feedback",
                           child: Row(
                             children: [
                               SharePicture(
@@ -168,7 +205,7 @@ class _ProgramDetailPageViewState extends State<ProgramDetailPageView> {
                           ),
                         ),
                         PopupMenuItem(
-                          value: 'report',
+                          value: "report",
                           child: Row(
                             children: [
                               SharePicture(
@@ -240,7 +277,7 @@ class _ProgramDetailPageViewState extends State<ProgramDetailPageView> {
                 physics: NeverScrollableScrollPhysics(),
                 controller: _pageController,
                 children: [
-                  DescriptionTab(programModel: widget.programModel),
+                  DescriptionTab(programModel: _currentProgramModel),
                   HistoryTab(programModel: widget.programModel),
                 ],
               ),

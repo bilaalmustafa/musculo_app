@@ -45,6 +45,10 @@ class FirebaseService<T> {
     }
   }
 
+
+
+  
+
   Stream<T?> getByIdstream(String id) {
     try {
       return FirebaseFirestore.instance
@@ -85,24 +89,26 @@ class FirebaseService<T> {
   }
 
   // get all discovery function code
-Stream<List<T>> getAllDiscovery(String type, {String? status}) {
-  Query query = FirebaseFirestore.instance.collection(collectionName);
+  Stream<List<T>> getAllDiscovery(String type, {String? status}) {
+    Query query = FirebaseFirestore.instance.collection(collectionName);
 
-  // Apply the 'type' filter
-  query = query.where('type', isEqualTo: type);
+    // Apply the 'type' filter
+    query = query.where('type', isEqualTo: type);
 
-  // Conditionally apply the 'status' filter if it's provided
-  if (status != null) {
-    query = query.where('status', isEqualTo: status);
+    // Conditionally apply the 'status' filter if it's provided
+    if (status != null) {
+      query = query.where('status', isEqualTo: status);
+    }
+
+    // Order the results by 'createdAt' in descending order
+    query = query.orderBy('createdAt', descending: true);
+
+    return query.snapshots().map((snapshot) {
+      return snapshot.docs
+          .map((doc) => fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+    });
   }
-
-  // Order the results by 'createdAt' in descending order
-  query = query.orderBy('createdAt', descending: true);
-
-  return query.snapshots().map((snapshot) {
-    return snapshot.docs.map((doc) => fromJson(doc.data() as Map<String, dynamic>)).toList();
-  });
-}
 
   // get all creator excercise code
   Stream<List<T>> getAllcreatorExercise(

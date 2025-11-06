@@ -35,7 +35,8 @@ class TrainingScreen extends StatefulWidget {
 
 class _TrainingScreenState extends State<TrainingScreen> {
   late UserModeViewmodel userMode;
-  late List<VideoModel> allVideos;
+  List<VideoModel>? allVideos;
+  bool _isLoading = true;
   // bool _isControllerInitialized = false;
   // bool isPlayed = false;
 
@@ -44,30 +45,47 @@ class _TrainingScreenState extends State<TrainingScreen> {
     super.initState();
 
     userMode = context.read<UserModeViewmodel>();
-    allVideos = userMode.extractAllVideos(widget.modelData);
+    _loadVideos();
+  }
 
-    if (allVideos.isNotEmpty) {
+  Future<void> _loadVideos() async {
+    final videos = await userMode.extractAllVideos(widget.modelData);
+
+    if (mounted) {
+      setState(() {
+        allVideos = videos;
+        _isLoading = false;
+      });
+    }
+
+    // Now that the list is populated, you can call these functions safely.
+    if (allVideos != null && allVideos!.isNotEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Provider.of<UserModeViewmodel>(
           context,
           listen: false,
-        ).initializeController(allVideos[0].url);
+        ).initializeController(allVideos![0].url);
+        Provider.of<UserModeViewmodel>(
+          context,
+          listen: false,
+        ).preloadThumbnails(allVideos!);
       });
     }
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<UserModeViewmodel>(
-        context,
-        listen: false,
-      ).preloadThumbnails(allVideos);
-    });
-
     userMode.startTimer(10);
   }
 
   int elapsedSeconds = 0;
   @override
   Widget build(BuildContext context) {
-    final List<VideoModel> allVideos = this.allVideos;
+    if (allVideos == null || allVideos!.isEmpty) {
+      return const Scaffold(
+        backgroundColor: ConstColors.white,
+        body: Center(
+          child: CircularProgressIndicator(color: ConstColors.black),
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: ConstColors.white,
       body: SafeArea(
@@ -93,7 +111,7 @@ class _TrainingScreenState extends State<TrainingScreen> {
                             onTap: () {
                               vm.previousVideo();
                               vm.initializeController(
-                                allVideos[vm.selectedVideo].url,
+                                allVideos![vm.selectedVideo].url,
                               );
                               // vm.startTimer(
                               //   allVideos[vm.selectedVideo].restTime,
@@ -113,9 +131,9 @@ class _TrainingScreenState extends State<TrainingScreen> {
                             postSvgPath: Assets.next,
 
                             onTap: () {
-                              vm.nextVideo(allVideos, context);
+                              vm.nextVideo(allVideos!, context);
                               vm.initializeController(
-                                allVideos[vm.selectedVideo].url,
+                                allVideos![vm.selectedVideo].url,
                               );
                               // vm.startTimer(
                               //   allVideos[vm.selectedVideo].restTime,
@@ -126,38 +144,24 @@ class _TrainingScreenState extends State<TrainingScreen> {
                       ],
                     ),
 
-                    if (allVideos[vm.selectedVideo].versionList.isNotEmpty)
+                    if (allVideos![vm.selectedVideo].versionList.isNotEmpty)
                       VersionChipsRow(
-                        length: allVideos[vm.selectedVideo].versionList.length,
+                        length: allVideos![vm.selectedVideo].versionList.length,
                         selectedindex: vm.selectedbtn,
                         onSelected: (index) {
                           vm.selectVersionChip(index);
                           vm.initializeController(
-                            allVideos[vm.selectedVideo]
+                            allVideos![vm.selectedVideo]
                                 .versionList[vm.selectedbtn]
                                 .url,
                           );
                         },
                       ),
-                    Container(
-                      width: double.infinity,
-                      height: Sizes.s350,
-                      color: ConstColors.secondary,
-
+                    AspectRatio(
+                      aspectRatio: 16 / 9, // same as 3840/2160
                       child:
                           vm.controller != null && vm.isControllerInitialized
-                              ? vm.selectedbtn <= 0
-                                  ? VideoFrameScreen(
-                                    controller: vm.controller,
-                                    // videourl: allVideos[vm.selectedVideo].url,
-                                  )
-                                  : VideoFrameScreen(
-                                    controller: vm.controller,
-                                    // videourl:
-                                    //     allVideos[vm.selectedVideo]
-                                    //         .versionList[vm.selectedbtn]
-                                    //         .url,
-                                  )
+                              ? VideoFrameScreen(controller: vm.controller)
                               : const Center(
                                 child: CircularProgressIndicator(
                                   color: ConstColors.black,
@@ -165,15 +169,41 @@ class _TrainingScreenState extends State<TrainingScreen> {
                               ),
                     ),
 
+                    // Container(
+                    //   width: double.infinity,
+                    //   height: Sizes.s350,
+                    //   color: ConstColors.secondary,
+
+                    //   child:
+                    //       vm.controller != null && vm.isControllerInitialized
+                    //           ? vm.selectedbtn <= 0
+                    //               ? VideoFrameScreen(
+                    //                 controller: vm.controller,
+                    //                 // videourl: allVideos[vm.selectedVideo].url,
+                    //               )
+                    //               : VideoFrameScreen(
+                    //                 controller: vm.controller,
+                    //                 // videourl:
+                    //                 //     allVideos[vm.selectedVideo]
+                    //                 //         .versionList[vm.selectedbtn]
+                    //                 //         .url,
+                    //               )
+                    //           : const Center(
+                    //             child: CircularProgressIndicator(
+                    //               color: ConstColors.black,
+                    //             ),
+                    //           ),
+                    // ),
                     SizedBox(
                       width: double.infinity,
                       height: 80,
                       child: ListView.separated(
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
-                        itemCount: allVideos.length,
+                        itemCount: allVideos!.length,
                         itemBuilder: (context, index) {
-                          final thumb = vm.thumbnailCache[allVideos[index].url];
+                          final thumb =
+                              vm.thumbnailCache[allVideos![index].url];
 
                           return VideoListItem(
                             tumbnail: thumb,
@@ -182,7 +212,7 @@ class _TrainingScreenState extends State<TrainingScreen> {
                             onTap: () {
                               vm.selectVideoItem(index);
                               vm.initializeController(
-                                allVideos[vm.selectedVideo].url,
+                                allVideos![vm.selectedVideo].url,
                               );
 
                               // vm.startTimer(
@@ -229,7 +259,8 @@ class _TrainingScreenState extends State<TrainingScreen> {
                                     buttonText: "END",
                                     textColor: ConstColors.white,
                                     buttonColor:
-                                        vm.selectedVideo == allVideos.length - 1
+                                        vm.selectedVideo ==
+                                                allVideos!.length - 1
                                             ? ConstColors.redF52
                                             : ConstColors.redF52.withValues(
                                               alpha: 0.3,
@@ -237,7 +268,7 @@ class _TrainingScreenState extends State<TrainingScreen> {
                                     preSvgPath: Assets.closeSquare,
                                     onTap: () {
                                       if (vm.selectedVideo ==
-                                              allVideos.length - 1 &&
+                                              allVideos!.length - 1 &&
                                           vm.remainingSeconds == 0) {
                                         Navigator.pushNamed(
                                           context,
@@ -259,7 +290,7 @@ class _TrainingScreenState extends State<TrainingScreen> {
                               spacing: Sizes.s10,
                               children: [
                                 PoppinsText(
-                                  text: allVideos[vm.selectedVideo].name,
+                                  text: allVideos![vm.selectedVideo].name,
                                   fontSize: Sizes.s16,
                                   fontWeight: TextWeight.semiBold,
                                 ),

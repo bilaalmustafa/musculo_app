@@ -13,6 +13,8 @@ import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_scre
 
 import 'package:provider/provider.dart';
 
+import '../../../../core/config/validator.dart';
+
 class ShowRatingBottomSheet extends StatefulWidget {
   final UserModel creator;
   const ShowRatingBottomSheet({super.key, required this.creator});
@@ -23,6 +25,7 @@ class ShowRatingBottomSheet extends StatefulWidget {
 
 class _ShowRatingBottomSheetState extends State<ShowRatingBottomSheet> {
   TextEditingController reviewController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     final creator = widget.creator;
@@ -36,107 +39,116 @@ class _ShowRatingBottomSheetState extends State<ShowRatingBottomSheet> {
           bottom: MediaQuery.of(context).viewInsets.bottom,
         ),
         child: SingleChildScrollView(
-          child: Column(
-            spacing: Sizes.s16,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Container(
-                  height: 5,
-                  width: 40,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              spacing: Sizes.s16,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Container(
+                    height: 5,
+                    width: 40,
 
-                  decoration: BoxDecoration(
-                    color: ConstColors.dividerColor,
-                    borderRadius: BorderRadius.circular(8),
+                    decoration: BoxDecoration(
+                      color: ConstColors.dividerColor,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                 ),
-              ),
-              PoppinsText(
-                text: "Leave a Review",
-                fontSize: Sizes.s20,
-                fontWeight: TextWeight.semiBold,
-              ),
-              Divider(color: ConstColors.secondary, height: 2),
-              CreatorListTile(creator: creator),
-              Divider(color: ConstColors.secondary, height: 2),
-              PoppinsText(
-                text: "Rate The Creator?",
-                fontSize: Sizes.s20,
-                fontWeight: TextWeight.semiBold,
-              ),
-              PoppinsText(
-                text: "Give your rating of the creator & your review.",
-                fontSize: Sizes.s13,
-                fontWeight: TextWeight.regular,
-                color: ConstColors.greyA1A1,
-                textAlign: TextAlign.center,
-              ),
+                PoppinsText(
+                  text: "Leave a Review",
+                  fontSize: Sizes.s20,
+                  fontWeight: TextWeight.semiBold,
+                ),
+                Divider(color: ConstColors.secondary, height: 2),
+                CreatorListTile(creator: creator),
+                Divider(color: ConstColors.secondary, height: 2),
+                PoppinsText(
+                  text: "Rate The Creator?",
+                  fontSize: Sizes.s20,
+                  fontWeight: TextWeight.semiBold,
+                ),
+                PoppinsText(
+                  text: "Give your rating of the creator & your review.",
+                  fontSize: Sizes.s13,
+                  fontWeight: TextWeight.regular,
+                  color: ConstColors.greyA1A1,
+                  textAlign: TextAlign.center,
+                ),
 
-              Consumer<UserViewModel>(
-                builder: (context, vm, _) {
-                  return RatingStars(
-                    selectedRating: vm.selectedRating,
-                    onRatingSelected: (newvalue) {
-                      vm.selectStart(newvalue);
-                    },
-                  );
-                },
-              ),
-              CustomTextField(controller: reviewController, title: "Amazing"),
-              Divider(color: ConstColors.secondary, height: 2),
-              Row(
-                spacing: Sizes.s10,
-                children: [
-                  Expanded(
-                    child: CustomButton(
-                      buttonText: "Cancel",
-                      buttonColor: ConstColors.secondary,
-                      textColor: ConstColors.black,
-                      onTap: () {
-                        Navigator.pop(context);
+                Consumer<UserViewModel>(
+                  builder: (context, vm, _) {
+                    return RatingStars(
+                      selectedRating: vm.selectedRating,
+                      onRatingSelected: (newvalue) {
+                        vm.selectStart(newvalue);
                       },
+                    );
+                  },
+                ),
+                CustomTextField(
+                  controller: reviewController,
+                  title: "Amazing",
+                  validator: Validator.valueExists,
+                ),
+                Divider(color: ConstColors.secondary, height: 2),
+                Row(
+                  spacing: Sizes.s10,
+                  children: [
+                    Expanded(
+                      child: CustomButton(
+                        buttonText: "Cancel",
+                        buttonColor: ConstColors.secondary,
+                        textColor: ConstColors.black,
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: Consumer<UserViewModel>(
-                      builder: (context, vm, _) {
-                        return CustomButton(
-                          loading: vm.isLoading,
-                          onTap: () async {
-                            double newRating = vm.getingRating(
-                              creator.rating ?? 0.0,
-                              creator.countRating ?? 0,
-                            );
-                            final List<String> reviewList = List.from(
-                              creator.review,
-                            );
-                            if (reviewController.text.isNotEmpty) {
-                              reviewList.add(reviewController.text);
-                            }
-                            UserModel? success = await vm
-                                .postCreatorRatingAndReview(
-                                  creator.userId ?? "",
-                                  newRating,
-                                  (creator.countRating ?? 0) + 1,
-                                  creator,
-                                  reviewList,
-                                );
-                            if (success != null && context.mounted) {
-                              Navigator.popUntil(
-                                context,
-                                (route) => route.isFirst,
+                    Expanded(
+                      child: Consumer<UserViewModel>(
+                        builder: (context, vm, _) {
+                          return CustomButton(
+                            loading: vm.isLoading,
+                            onTap: () async {
+                              if (!_formKey.currentState!.validate()) return;
+
+                              double newRating = vm.getingRating(
+                                creator.rating ?? 0.0,
+                                creator.countRating ?? 0,
                               );
-                            }
-                          },
-                          buttonText: "Submit",
-                        );
-                      },
+                              final List<String> reviewList = List.from(
+                                creator.review,
+                              );
+                              if (reviewController.text.isNotEmpty) {
+                                reviewList.add(reviewController.text);
+                              }
+                              UserModel? success = await vm
+                                  .postCreatorRatingAndReview(
+                                    creator.userId ?? "",
+                                    newRating,
+                                    (creator.countRating ?? 0) + 1,
+                                    creator,
+                                    reviewList,
+                                  );
+                              if (success != null && context.mounted) {
+                                Navigator.popUntil(
+                                  context,
+                                  (route) => route.isFirst,
+                                );
+                              }
+                            },
+                            buttonText: "Submit",
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 5),
-            ],
+                  ],
+                ),
+                SizedBox(height: 5),
+              ],
+            ),
           ),
         ),
       ),

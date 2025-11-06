@@ -26,6 +26,7 @@ class Feedbackfield extends StatelessWidget {
   final String? sufixIcon;
   final String? prefixIcon;
   final Function(String)? onchange;
+  final TextInputAction? textInputAction;
 
   const Feedbackfield({
     super.key,
@@ -50,6 +51,7 @@ class Feedbackfield extends StatelessWidget {
     this.sufixIcon,
     this.prefixIcon,
     this.onchange,
+    this.textInputAction,
   });
 
   @override
@@ -70,6 +72,7 @@ class Feedbackfield extends StatelessWidget {
         obscuringCharacter: obsecureCharacter ?? '●',
         maxLines: maxline ?? 1,
         validator: validator,
+        textInputAction: textInputAction,
         cursorColor: cursorColor ?? ConstColors.gre9E9E,
         onChanged: onchange,
 

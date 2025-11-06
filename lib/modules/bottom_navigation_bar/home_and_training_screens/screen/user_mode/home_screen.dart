@@ -67,6 +67,8 @@ import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_scre
 import 'package:musculo_app/modules/bottom_navigation_bar/home_and_training_screens/view_model/user_view_model.dart';
 import 'package:musculo_app/core/config/injections.dart';
 
+import '../../../../auth/view_model/view_mode_provider.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -77,6 +79,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late PageController _pageController;
   final AuthService _authService = instance<AuthService>();
+    bool _isInitialized = false;
 
   @override
   void initState() {
@@ -90,12 +93,9 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  void _onRoleChange(bool isCreator) {
-    _pageController.jumpToPage(isCreator ? 1 : 0);
-  }
-
   @override
   Widget build(BuildContext context) {
+    final viewModeVm = context.watch<ViewModeProvider>();
     return StreamBuilder<UserModel?>(
       stream: context.read<UserViewModel>().getUserByIdstream(
         _authService.currentUser!.uid,
@@ -112,20 +112,34 @@ class _HomeScreenState extends State<HomeScreen> {
         }
 
         final user = snapshot.data;
-        final isCreator = (user?.role ?? 'user') == 'creator';
+         if (user == null) {
+          return const Scaffold(
+            body: Center(child: Text('User not found')),
+          );
+        }
+
+         if (!_isInitialized) {
+          _isInitialized = true;
+          if (user.userId != null) {
+            viewModeVm.loadViewMode(user.userId!);
+          }
+        }
+
+        final isCreator = (user.role ?? 'user') == 'creator';
+        final isCreatorView = viewModeVm.isCreatorView;
+        if (!isCreator && isCreatorView) {
+  viewModeVm.setView(false);
+}
+
 
         // Ensure correct page shows when role changes
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          _pageController.jumpToPage(isCreator ? 1 : 0);
+          _pageController.jumpToPage(isCreatorView ? 1 : 0);
         });
 
         return Scaffold(
           backgroundColor: ConstColors.white,
-          appBar: HomeAppBar(
-            isSwitch: isCreator,
-            // This callback is only for PageView sync, not role update
-            onSwitchChanged: _onRoleChange,
-          ),
+          appBar: HomeAppBar(),
           body: PageView(
             physics: const NeverScrollableScrollPhysics(),
             controller: _pageController,

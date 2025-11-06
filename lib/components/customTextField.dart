@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:musculo_app/components/share_picture.dart';
 import 'package:musculo_app/core/constants/const_colors.dart';
 import 'package:musculo_app/core/constants/sizes.dart';
@@ -22,6 +23,8 @@ class CustomTextField extends StatelessWidget {
     this.readOnly,
     this.onclick,
     this.focusNode,
+    this.textInputAction,
+     this.inputFormatters
   });
   final String title;
   final IconData? suffexicon;
@@ -38,6 +41,8 @@ class CustomTextField extends StatelessWidget {
   final String? sufIcon;
   final bool? readOnly;
   final FocusNode? focusNode;
+  final TextInputAction? textInputAction;
+    final List<TextInputFormatter>? inputFormatters;
 
   @override
   Widget build(BuildContext context) {
@@ -48,9 +53,12 @@ class CustomTextField extends StatelessWidget {
       obscureText: obscureText,
       onChanged: onChanged,
       onTap: onclick,
+     
       focusNode: focusNode,
       keyboardType: keyboardType,
+      textInputAction: textInputAction,
       readOnly: readOnly ?? false,
+      inputFormatters: inputFormatters,
       decoration: InputDecoration(
         hintText: title,
         hintStyle: const TextStyle(
