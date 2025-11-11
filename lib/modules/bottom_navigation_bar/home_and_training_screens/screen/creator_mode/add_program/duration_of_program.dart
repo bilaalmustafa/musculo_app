@@ -99,7 +99,8 @@ class _DurationOfProgramState extends State<DurationOfProgram> {
                     child: CustomTextField(
                       controller: vm.priceController,
                       title: "write it here",
-                      keyboardType: TextInputType.number,
+                      keyboardType: TextInputType.numberWithOptions(decimal: true, signed: false),
+                      textInputAction: TextInputAction.done,
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
                           return "Please enter a price";

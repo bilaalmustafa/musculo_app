@@ -163,6 +163,7 @@ class _WarmUpState extends State<CompleteDetailBelow> {
                             ),
                           ],
                         ),
+                        
                         PoppinsText(
                           text: "Price (€)",
                           fontSize: Sizes.s14,

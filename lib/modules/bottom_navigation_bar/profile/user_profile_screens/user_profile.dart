@@ -50,282 +50,291 @@ class _UserProfileState extends State<UserProfile> {
 
         body: Padding(
           padding: EdgeInsets.all(Sizes.s16),
-          child: Column(
-            children: [
-              Center(
-                child: SizedBox(
-                  height: Sizes.s120,
-                  width: Sizes.s300,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      SharePicture(imagePath: Assets.groupCircle),
-                      StreamBuilder(
-                        stream: _profileImageService.userProfileImageStream(
-                          uid,
-                        ),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const CircleAvatar(
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Column(
+              children: [
+                Center(
+                  child: SizedBox(
+                    height: Sizes.s120,
+                    width: Sizes.s300,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        SharePicture(imagePath: Assets.groupCircle),
+                        StreamBuilder(
+                          stream: _profileImageService.userProfileImageStream(
+                            uid,
+                          ),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const CircleAvatar(
+                                maxRadius: Sizes.s55,
+                                backgroundColor: ConstColors.greyE0E0,
+                                child: CustomShimmer(height: 0),
+                              );
+                            }
+                            final imageUrl = snapshot.data;
+                            //MARK:
+                            return CircleAvatar(
                               maxRadius: Sizes.s55,
-                              backgroundColor: ConstColors.greyE0E0,
-                              child: CustomShimmer(height: 0),
+                              backgroundColor:
+                                  imageUrl == null ? ConstColors.black : null,
+                              backgroundImage:
+                                  imageUrl != null
+                                      ? NetworkImage(imageUrl)
+                                      : null,
+                              child:
+                                  imageUrl == null
+                                      ? PoppinsText(
+                                        text: data!.name![0].toUpperCase(),
+                                        fontSize: 40,
+                                        fontWeight: TextWeight.semiBold,
+                                        color: ConstColors.white,
+                                      )
+                                      : null,
                             );
-                          }
-                          final imageUrl = snapshot.data;
-                          //MARK:
-                          return CircleAvatar(
-                            maxRadius: Sizes.s55,
-                            backgroundColor:
-                                imageUrl == null ? ConstColors.black : null,
-                            backgroundImage:
-                                imageUrl != null
-                                    ? NetworkImage(imageUrl)
-                                    : null,
-                            child:
-                                imageUrl == null
-                                    ? PoppinsText(
-                                      text: data!.name![0].toUpperCase(),
-                                      fontSize: 40,
-                                      fontWeight: TextWeight.semiBold,
-                                      color: ConstColors.white,
-                                    )
-                                    : null,
-                          );
-                        },
-                      ),
-
-                      Transform.translate(
-                        offset: Offset(Sizes.s40, Sizes.s40),
-                        child: InkWell(
-                          onTap: () {
-                            ProfileHelper.showImagePickerBottomSheet(context);
                           },
-
-                          child: SharePicture(imagePath: Assets.eidtSquare),
                         ),
-                      ),
-                    ],
+
+                        Transform.translate(
+                          offset: Offset(Sizes.s40, Sizes.s40),
+                          child: InkWell(
+                            onTap: () {
+                              ProfileHelper.showImagePickerBottomSheet(context);
+                            },
+
+                            child: SharePicture(imagePath: Assets.eidtSquare),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(height: Sizes.s10),
+                SizedBox(height: Sizes.s10),
 
-              PoppinsText(
-                text: data?.name ?? "User name",
-                fontSize: Sizes.s24,
-                fontWeight: FontWeight.w600,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  PoppinsText(
-                    text: isCreatorView ? "Creator" : "User",
-                    fontSize: Sizes.s14,
-                    fontWeight: TextWeight.semiBold,
-                  ),
+                PoppinsText(
+                  text: data?.name ?? "User name",
+                  fontSize: Sizes.s24,
+                  fontWeight: FontWeight.w600,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    PoppinsText(
+                      text: isCreatorView ? "Creator" : "User",
+                      fontSize: Sizes.s14,
+                      fontWeight: TextWeight.semiBold,
+                    ),
 
-                  NotificationSwitch(
-                    value: isCreatorView,
-                    useCupertino: true,
-                    onChanged: (value) async {
-                      if (isCreator) {
-                        viewModeVm.toggleView(value);
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              'You must become a creator to switch modes.',
+                    NotificationSwitch(
+                      value: isCreatorView,
+                      useCupertino: true,
+                      onChanged: (value) async {
+                        if (isCreator) {
+                          viewModeVm.toggleView(value);
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'You must become a creator to switch modes.',
+                              ),
                             ),
-                          ),
-                        );
-                      }
+                          );
+                        }
+                      },
+                    ),
+                  ],
+                ),
+                SizedBox(height: 15),
+                CustomButton(
+                  buttonText:
+                      data!.subPlane != null && data.subPlane == "free"
+                          ? 'Become a Creator'
+                          : "Cancel Creator Subcription",
+                  buttonColor:
+                      data.subPlane == "free"
+                          ? ConstColors.sky22B
+                          : ConstColors.redFF4,
+                  onTap: () {
+                    if (data.subPlane == "free") {
+                      Navigator.pushNamed(
+                        context,
+                        Routes.becomeCreatorScreen,
+                        arguments: {'fromUpgradePopup': false},
+                      );
+                    } else {
+                      showCancelSubscriptionDialog(context);
+                    }
+                  },
+                ),
+                SizedBox(height: 5),
+
+                Row(
+                  children: [
+                    CongrateContainer(
+                      imagePath:
+                          isCreator ? Assets.runnerIcon : Assets.runnerIcon,
+                      digit:
+                          isCreator
+                              ? userVm.soldProgram(data).toString()
+                              : data.finishedWorkouts.toString(),
+                      text: isCreator ? "Programs Sold" : "Finished Workout",
+                    ),
+                    CongrateContainer(
+                      imagePath:
+                          isCreator ? Assets.walletIcon : Assets.timeCircle,
+                      digit:
+                          isCreator
+                              ? ' ${userVm.getBalance(data).toStringAsFixed(1)}€'
+                              : data.spentMinutes.toString(),
+                      text: isCreator ? "Earnings" : "Minutes Spent",
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10),
+                Divider(height: Sizes.s1, color: ConstColors.greyE5E5),
+                SizedBox(height: 10),
+
+                if (!isCreatorView) ...[
+                  CustomListTile(
+                    leading: SharePicture(
+                      imagePath: Assets.profileIcon,
+                      width: Sizes.s24,
+                      height: Sizes.s24,
+                    ),
+                    title: "Account Information",
+                    trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
+                    onTap: () {
+                      // Add Account information code here
+                      Navigator.pushNamed(context, Routes.accountInfoScreen);
+                    },
+                  ),
+                  CustomListTile(
+                    leading: SharePicture(
+                      imagePath: Assets.calendarIcon,
+                      width: Sizes.s24,
+                      height: Sizes.s24,
+                    ),
+                    title: "My Programs/Workouts",
+
+                    trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
+                    onTap: () {
+                      Navigator.pushNamed(context, Routes.myProgramWorkout);
+                      // program workout code here
+                    },
+                  ),
+                  CustomListTile(
+                    leading: SharePicture(
+                      imagePath: Assets.heartIcon,
+                      width: Sizes.s24,
+                      height: Sizes.s24,
+                    ),
+                    title: "Favorites",
+
+                    trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
+                    onTap: () {
+                      // faverate code here
+                      Navigator.pushNamed(context, Routes.favoriteScreen);
+                    },
+                  ),
+                  CustomListTile(
+                    leading: SharePicture(
+                      imagePath: Assets.documentIcon,
+                      width: Sizes.s24,
+                      height: Sizes.s24,
+                    ),
+                    title: "Motivational Text",
+                    trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
+                    onTap: () {
+                      // motivvational text code here
+                      Navigator.pushNamed(
+                        context,
+                        Routes.motivationalListScreen,
+                      );
+                    },
+                  ),
+                ] else ...[
+                  CustomListTile(
+                    leading: SharePicture(
+                      imagePath: Assets.editIcon,
+                      width: Sizes.s24,
+                      height: Sizes.s24,
+                    ),
+                    title: "Modify creator profile",
+                    trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
+                    onTap: () {
+                      // Add modify creator profile  code here
+                      Navigator.pushNamed(context, Routes.creatorProfileScreen);
+                    },
+                  ),
+                  CustomListTile(
+                    leading: SharePicture(
+                      imagePath: Assets.documentIcon,
+                      width: Sizes.s24,
+                      height: Sizes.s24,
+                    ),
+                    title: "Motivational Text",
+                    trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
+                    onTap: () {
+                      // motivvational text code here
+                      Navigator.pushNamed(
+                        context,
+                        Routes.motivationalListScreen,
+                      );
+                    },
+                  ),
+                  CustomListTile(
+                    leading: SharePicture(
+                      imagePath: Assets.calendarIcon,
+                      width: Sizes.s24,
+                      height: Sizes.s24,
+                    ),
+                    title: "My Programs/Workouts",
+
+                    trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        Routes.creatorMyProgramWorkout,
+                      );
+                      // program workout code here
+                    },
+                  ),
+                  CustomListTile(
+                    leading: SharePicture(
+                      imagePath: Assets.walletIcon,
+                      width: Sizes.s24,
+                      height: Sizes.s24,
+                    ),
+                    title: "Earnings",
+                    trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        Routes.creatorProfileScreen,
+                        arguments: 1,
+                      );
+                    },
+                  ),
+                  CustomListTile(
+                    leading: SharePicture(
+                      imagePath: Assets.heartIcon,
+                      width: Sizes.s24,
+                      height: Sizes.s24,
+                    ),
+                    title: "Favorites",
+
+                    trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
+                    onTap: () {
+                      // faverate code here
+                      Navigator.pushNamed(context, Routes.favoriteScreen);
                     },
                   ),
                 ],
-              ),
-              SizedBox(height: 15),
-              CustomButton(
-                buttonText:
-                    data!.subPlane != null && data.subPlane == "free"
-                        ? 'Become a Creator'
-                        : "Cancel Creator Subcription",
-                buttonColor:
-                    data.subPlane == "free"
-                        ? ConstColors.sky22B
-                        : ConstColors.redFF4,
-                onTap: () {
-                  if (data.subPlane == "free") {
-                    Navigator.pushNamed(
-                      context,
-                      Routes.becomeCreatorScreen,
-                      arguments: {'fromUpgradePopup': false},
-                    );
-                  } else {
-                    showCancelSubscriptionDialog(context);
-                  }
-                },
-              ),
-              SizedBox(height: 5),
-
-              Row(
-                children: [
-                  CongrateContainer(
-                    imagePath:
-                        isCreator ? Assets.runnerIcon : Assets.runnerIcon,
-                    digit:
-                        isCreator
-                            ? userVm.soldProgram(data).toString()
-                            : data?.finishedWorkouts.toString() ?? "0",
-                    text: isCreator ? "Programs Sold" : "Finished Workout",
-                  ),
-                  CongrateContainer(
-                    imagePath:
-                        isCreator ? Assets.walletIcon : Assets.timeCircle,
-                    digit:
-                        isCreator
-                            ? ' ${userVm.getBalance(data).toStringAsFixed(1)}€'
-                            : data?.spentMinutes.toString() ?? "0",
-                    text: isCreator ? "Earnings" : "Minutes Spent",
-                  ),
-                ],
-              ),
-              SizedBox(height: 10),
-              Divider(height: Sizes.s1, color: ConstColors.greyE5E5),
-              SizedBox(height: 10),
-
-              if (!isCreatorView) ...[
-                CustomListTile(
-                  leading: SharePicture(
-                    imagePath: Assets.profileIcon,
-                    width: Sizes.s24,
-                    height: Sizes.s24,
-                  ),
-                  title: "Account Information",
-                  trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
-                  onTap: () {
-                    // Add Account information code here
-                    Navigator.pushNamed(context, Routes.accountInfoScreen);
-                  },
-                ),
-                CustomListTile(
-                  leading: SharePicture(
-                    imagePath: Assets.calendarIcon,
-                    width: Sizes.s24,
-                    height: Sizes.s24,
-                  ),
-                  title: "My Programs/Workouts",
-
-                  trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
-                  onTap: () {
-                    Navigator.pushNamed(context, Routes.myProgramWorkout);
-                    // program workout code here
-                  },
-                ),
-                CustomListTile(
-                  leading: SharePicture(
-                    imagePath: Assets.heartIcon,
-                    width: Sizes.s24,
-                    height: Sizes.s24,
-                  ),
-                  title: "Favorites",
-
-                  trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
-                  onTap: () {
-                    // faverate code here
-                    Navigator.pushNamed(context, Routes.favoriteScreen);
-                  },
-                ),
-                CustomListTile(
-                  leading: SharePicture(
-                    imagePath: Assets.documentIcon,
-                    width: Sizes.s24,
-                    height: Sizes.s24,
-                  ),
-                  title: "Motivational Text",
-                  trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
-                  onTap: () {
-                    // motivvational text code here
-                    Navigator.pushNamed(context, Routes.motivationalListScreen);
-                  },
-                ),
-              ] else ...[
-                CustomListTile(
-                  leading: SharePicture(
-                    imagePath: Assets.editIcon,
-                    width: Sizes.s24,
-                    height: Sizes.s24,
-                  ),
-                  title: "Modify creator profile",
-                  trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
-                  onTap: () {
-                    // Add modify creator profile  code here
-                    Navigator.pushNamed(context, Routes.creatorProfileScreen);
-                  },
-                ),
-                CustomListTile(
-                  leading: SharePicture(
-                    imagePath: Assets.documentIcon,
-                    width: Sizes.s24,
-                    height: Sizes.s24,
-                  ),
-                  title: "Motivational Text",
-                  trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
-                  onTap: () {
-                    // motivvational text code here
-                    Navigator.pushNamed(context, Routes.motivationalListScreen);
-                  },
-                ),
-                CustomListTile(
-                  leading: SharePicture(
-                    imagePath: Assets.calendarIcon,
-                    width: Sizes.s24,
-                    height: Sizes.s24,
-                  ),
-                  title: "My Programs/Workouts",
-
-                  trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      Routes.creatorMyProgramWorkout,
-                    );
-                    // program workout code here
-                  },
-                ),
-                CustomListTile(
-                  leading: SharePicture(
-                    imagePath: Assets.walletIcon,
-                    width: Sizes.s24,
-                    height: Sizes.s24,
-                  ),
-                  title: "Earnings",
-                  trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      Routes.creatorProfileScreen,
-                      arguments: 1,
-                    );
-                  },
-                ),
-                CustomListTile(
-                  leading: SharePicture(
-                    imagePath: Assets.heartIcon,
-                    width: Sizes.s24,
-                    height: Sizes.s24,
-                  ),
-                  title: "Favorites",
-
-                  trailing: Icon(Icons.arrow_forward_ios, size: Sizes.s16),
-                  onTap: () {
-                    // faverate code here
-                    Navigator.pushNamed(context, Routes.favoriteScreen);
-                  },
-                ),
               ],
-            ],
+            ),
           ),
         ),
       ),
